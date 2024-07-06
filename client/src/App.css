@@ -1,0 +1,100 @@
+.app {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background-color: rgba(1, 0, 80, 0.815);
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 1020px) {
+  .app {
+    flex-direction: row;
+  }
+}
+
+.tabOption {
+  border: 1px solid black;
+  border-radius: 2%;
+  border-width: 0.2rem;
+
+  padding: 2.6rem 1.2rem;
+  min-width: 4rem;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: rgba(7, 4, 41, 0.959);
+  background-color: rgba(212, 223, 189, 0.336);
+}
+
+@media (max-width: 1020px) {
+  .tabOption {
+    max-width: 7.5rem;
+    padding: 1.4rem 1.2rem;
+    margin: 1rem 0;
+  }
+}
+
+.tabSelector {
+  background-color: rgba(58, 110, 145, 0.637);
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+  width: 100vw;
+  height: min-content;
+
+  padding: 1rem 0;
+}
+
+@media (max-width: 1020px) {
+  .tabSelector {
+    flex-direction: column;
+    justify-content: start;
+
+    padding: 0 1rem;
+
+    width: min-content;
+    height: 100vh;
+    flex-grow: 0;
+  }
+}
+
+
+.currentTab {
+  color: rgba(0, 0, 0, 0.863);
+  background-color: rgba(180, 181, 202, 0.89);
+
+  flex-grow: 1;
+}
+
+.tabHeading {
+  font-size: 2.6rem;
+  margin-top: 1rem;
+  margin-left: 1rem;
+}
+
+.flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-justify-around {
+  justify-content: space-around;
+}
+
+/* TODO: Check if this can still be used */
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
