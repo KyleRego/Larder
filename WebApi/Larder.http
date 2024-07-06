@@ -1,0 +1,6 @@
+@Larder_HostAddress = http://localhost:5275
+
+GET {{Larder_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

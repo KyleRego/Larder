@@ -1,2 +1,6 @@
 bin/
 obj/
+
+larder.db
+larder.db-shm
+larder.db-wal

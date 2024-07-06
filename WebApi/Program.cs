@@ -1,6 +1,17 @@
+using Microsoft.EntityFrameworkCore;
+using Larder.Data;
+
 string corsPolicyName = "corsPolicy";
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlite(builder.Configuration.GetConnectionString("LarderContextSQLite")));
+
+    builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+}
 
 builder.Services.AddCors(options =>
 {
@@ -23,6 +34,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
+    app.UseMigrationsEndPoint();
 }
 
 app.UseHttpsRedirection();
@@ -55,6 +68,20 @@ app.MapGet("/units", () =>
 });
 
 app.UseCors(corsPolicyName);
+
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    AppDbContext? dbContext = scope.ServiceProvider.GetService<AppDbContext>();
+
+    if (dbContext == null)
+    {
+        throw new ApplicationException();
+    }
+    else
+    {
+        dbContext.Database.Migrate();    
+    }
+}
 
 app.Run();
 
