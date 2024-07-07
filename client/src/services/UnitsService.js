@@ -4,7 +4,7 @@ export default class UnitsService extends ApiServiceBase
 {
     async getUnits()
     {
-        const url = `${this.backendOrigin}/units`;
+        const url = `${this.backendOrigin}/api/Units`;
 
         try
         {

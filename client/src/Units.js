@@ -5,8 +5,9 @@ import "./Units.css"
 function TableRow(unit)
 {
     return (
-        <tr>
-            {unit}
+        <tr key={unit.id}>
+            <td>{unit.id}</td>
+            <td>{unit.name}</td>
         </tr>
     )
 }
@@ -24,8 +25,8 @@ function Table({data: data})
                 </caption>
                 <thead>
                     <tr>
-                        <th>Unit</th>
-                        <th>Type</th>
+                        <th>Id</th>
+                        <th>Name</th>
                     </tr>
                     
                 </thead>
@@ -48,7 +49,7 @@ export default function Units()
         service.getUnits().then(result => {
             setUnits(result);
         })
-    }, []);
+    }, [service]);
 
     return (
         (

@@ -1,9 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Larder.Data;
+using Larder.Repository;
 
 string corsPolicyName = "corsPolicy";
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+builder.Services.AddScoped<IUnitRepository, UnitRepository>();
 
 if (builder.Environment.IsDevelopment())
 {
@@ -28,6 +32,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 WebApplication app = builder.Build();
+
+app.MapControllers();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

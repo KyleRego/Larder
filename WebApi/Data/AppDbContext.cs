@@ -11,4 +11,16 @@ public class AppDbContext : DbContext
         }
 
     public DbSet<Unit> Units { get; set; } = default!;
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+
+        Unit[] unitsData = [
+            new() { Name = "Liters" },
+            new() { Name = "Pounds" },
+            new() { Name = "Grams" },
+            new() { Name = "Milliliters" }
+        ];
+        modelBuilder.Entity<Unit>().HasData(unitsData);
+    }
 }
