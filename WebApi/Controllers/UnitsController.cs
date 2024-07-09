@@ -11,8 +11,16 @@ public class UnitsController(IUnitRepository repository) : ControllerBase
     private readonly IUnitRepository _repository = repository;
 
     [HttpGet]
-    public async Task<List<Unit>> Index()
+    public async Task<List<Unit>> Index(string? sortOrder)
     {
-        return await _repository.GetUnits();
+        if (sortOrder == "Name_Desc")
+        {
+            return await _repository.GetUnits("Name_Desc");
+        }
+        else
+        {
+            return await _repository.GetUnits("Name");
+        }
+        
     }
 }

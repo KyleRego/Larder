@@ -2,9 +2,14 @@ import ApiServiceBase from "./ApiServiceBase";
 
 export default class UnitsService extends ApiServiceBase
 {
-    async getUnits()
+    async getUnits(sortOrder)
     {
-        const url = `${this.backendOrigin}/api/Units`;
+        let url = `${this.backendOrigin}/api/Units`;
+
+        if (sortOrder !== null)
+        {
+            url += `?sortOrder=${sortOrder}`
+        }
 
         try
         {
