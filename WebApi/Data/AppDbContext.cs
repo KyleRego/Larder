@@ -16,10 +16,10 @@ public class AppDbContext : DbContext
     {
 
         Unit[] unitsData = [
-            new() { Name = "Liters" },
-            new() { Name = "Pounds" },
-            new() { Name = "Grams" },
-            new() { Name = "Milliliters" }
+            new() { Name = "Liters", Type = UnitType.Volume },
+            new() { Name = "Pounds", Type = UnitType.Weight },
+            new() { Name = "Grams", Type = UnitType.Mass },
+            new() { Name = "Milliliters", Type = UnitType.Volume }
         ];
         modelBuilder.Entity<Unit>().HasData(unitsData);
     }

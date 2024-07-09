@@ -75,20 +75,6 @@
   margin-left: 1rem;
 }
 
-.flex {
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-}
-
-.flex-col {
-  flex-direction: column;
-}
-
-.flex-justify-around {
-  justify-content: space-around;
-}
-
 /* TODO: Check if this can still be used */
 @keyframes App-logo-spin {
   from {

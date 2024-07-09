@@ -1,6 +1,7 @@
 using Larder.Models;
 using Larder.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Matching;
 
 namespace Larder.Controllers;
 
@@ -13,14 +14,16 @@ public class UnitsController(IUnitRepository repository) : ControllerBase
     [HttpGet]
     public async Task<List<Unit>> Index(string? sortOrder)
     {
-        if (sortOrder == "Name_Desc")
+        if (sortOrder == null) return await _repository.GetUnits(UnitsSortOrder.Name);
+
+        try
         {
-            return await _repository.GetUnits("Name_Desc");
+            UnitsSortOrder sortOrderEnum = (UnitsSortOrder)Enum.Parse(typeof(UnitsSortOrder), sortOrder, true);
+            return await _repository.GetUnits(sortOrderEnum);
         }
-        else
+        catch (ArgumentException)
         {
-            return await _repository.GetUnits("Name");
+            return await _repository.GetUnits(UnitsSortOrder.Name);
         }
-        
     }
 }

@@ -1,8 +1,23 @@
 .unitsTable {
-    display: block;
+    table-layout: fixed;
+    border-collapse: collapse;
     background-color: white;
     border: 1px solid black;
+    width: calc(100% - 2rem);
 
     padding: 1rem;
     margin: 1rem;
+}
+
+.unitsTable thead th:nth-child(1) {
+    width: 60%;
+}
+
+.unitsTable thead th:nth-child(2) {
+    width: 40%;
+}
+
+.unitsTable th, .unitsTable td {
+    padding: 0.75rem;
+    border: 1px solid black;
 }

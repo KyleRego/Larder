@@ -1,29 +1,24 @@
 import { useState, useEffect } from "react";
+import { TiArrowUnsorted } from "react-icons/ti";
+import { TiArrowSortedUp } from "react-icons/ti";
+import { TiArrowSortedDown } from "react-icons/ti";
 import UnitsService from "./services/UnitsService"
 import "./Units.css"
+import "./Utility.css"
 
 export default function Units()
 {
     const [units, setUnits] = useState([]);
-
-    function updateUnitsData(sortOrder)
-    {
-        console.log("hello world");
-        const service = new UnitsService();
-
-        service.getUnits(sortOrder).then(result => {
-            setUnits(result);
-        })
-    }
+    const [sortOrder, setSortOrder] = useState("Name");
 
     useEffect(() =>
     {
         const service = new UnitsService();
 
-        service.getUnits().then(result => {
+        service.getUnits(sortOrder).then(result => {
             setUnits(result);
         })
-    }, []);
+    }, [sortOrder]);
 
     return (
         <>
@@ -31,12 +26,12 @@ export default function Units()
                 Units
             </h1>
 
-            <UnitsTable data={units} updateUnitsData={updateUnitsData} />
+            <UnitsTable data={units} sortOrder={sortOrder} setSortOrder={setSortOrder} />
         </>
     )
 }
 
-function UnitsTable({data, updateUnitsData})
+function UnitsTable({data, sortOrder, setSortOrder})
 {
     const tableRows = data.map(unit => TableRow(unit));
 
@@ -45,13 +40,14 @@ function UnitsTable({data, updateUnitsData})
             <caption>
                 Units
             </caption>
+
             <thead>
                 <tr>
-                    <th>Id</th>
-                    <th onClick={() => updateUnitsData("Name_Desc")}>Name</th>
+                    <NameHeaderCell sortOrder={sortOrder} setSortOrder={setSortOrder} />
+                    <TypeHeaderCell sortOrder={sortOrder} setSortOrder={setSortOrder} />
                 </tr>
-                
             </thead>
+
             <tbody>
                 {tableRows}
             </tbody>
@@ -60,12 +56,90 @@ function UnitsTable({data, updateUnitsData})
     );
 }
 
+function NameHeaderCell({sortOrder, setSortOrder})
+{
+    function handleClick()
+    {
+        if (sortOrder === "Name")
+        {
+            setSortOrder("Name_Desc")
+        }
+        else
+        {
+            setSortOrder("Name");
+        }
+    }
+
+    let icon;
+
+    if (sortOrder === "Name")
+    {
+        icon = <TiArrowSortedUp />
+    }
+    else if (sortOrder === "Name_Desc")
+    {
+        icon = <TiArrowSortedDown />
+    }
+    else
+    {
+        icon = <TiArrowUnsorted />
+    }
+
+    return (
+        <th scope="col" onClick={handleClick}>
+            <div class="flex justify-around cursor-pointer">
+                Name
+                {icon}
+            </div>
+        </th>
+    )
+}
+
+function TypeHeaderCell({sortOrder, setSortOrder})
+{
+    function handleClick()
+    {
+        if (sortOrder === "Type")
+        {
+            setSortOrder("Type_Desc")
+        }
+        else
+        {
+            setSortOrder("Type");
+        }
+    }
+
+    let icon;
+
+    if (sortOrder === "Type")
+    {
+        icon = <TiArrowSortedUp />
+    }
+    else if (sortOrder === "Type_Desc")
+    {
+        icon = <TiArrowSortedDown />
+    }
+    else
+    {
+        icon = <TiArrowUnsorted />
+    }
+
+    return (
+        <th scope="col" onClick={handleClick}>
+            <div class="flex justify-around cursor-pointer">
+                Type
+                {icon}
+            </div>
+        </th>
+    )
+}
+
 function TableRow(unit)
 {
     return (
         <tr key={unit.id}>
-            <td>{unit.id}</td>
-            <td>{unit.name}</td>
+            <td scope="row">{unit.name}</td>
+            <td>{unit.type}</td>
         </tr>
     )
 }
