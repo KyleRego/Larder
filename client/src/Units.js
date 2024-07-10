@@ -22,7 +22,7 @@ export default function Units()
 
     return (
         <>
-            <h1 className="tabHeading">
+            <h1>
                 Units
             </h1>
 

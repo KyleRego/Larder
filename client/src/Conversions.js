@@ -2,7 +2,7 @@ export default function Conversions()
 {
     return (
         (
-            <h1 className="tabHeading">
+            <h1>
                 Conversions
             </h1>
         )

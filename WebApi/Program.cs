@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Larder.Data;
 using Larder.Repository;
+using Larder.Models;
 
 string corsPolicyName = "corsPolicy";
 
@@ -8,6 +9,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUnitRepository, UnitRepository>();
+builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
 
 if (builder.Environment.IsDevelopment())
 {

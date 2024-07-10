@@ -6,14 +6,15 @@ public enum UnitType
 {
     Mass,
     Volume,
-    Weight
+    Weight,
+    Quantity
 }
 
 public class Unit : EntityBase
 {
-    [Required]
-    public string Name { get; set; } = "";
+    [Required(AllowEmptyStrings = false)]
+    public required string Name { get; set; }
 
     [Required]
-    public UnitType Type { get; set; }
+    public required UnitType Type { get; set; }
 }

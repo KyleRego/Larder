@@ -16,8 +16,9 @@
 
 import { useState } from 'react';
 import './App.css';
-import Units from './Units'
-import Conversions from './Conversions'
+import Units from './Units';
+import Conversions from './Conversions';
+import Recipes from './Recipes';
 
 export default function App()
 {
@@ -25,6 +26,7 @@ export default function App()
 
   const handleChooseUnits = () => { setCurrentTab("units"); };
   const handleChooseConversions = () => { setCurrentTab("conversions"); };
+  const handleChooseRecipes = () => { setCurrentTab("recipes") };
 
   return (
     <div className="app">
@@ -35,7 +37,7 @@ export default function App()
         <span className="tabOption" onClick={handleChooseConversions}>
           Conversions
         </span>
-        <span className="tabOption">
+        <span className="tabOption" onClick={handleChooseRecipes}>
           Recipes
         </span>
         <span className="tabOption">
@@ -51,6 +53,7 @@ export default function App()
       <div className="currentTab">
         {(currentTab === "units") && <Units />}
         {(currentTab === "conversions") && <Conversions />}
+        {(currentTab === "recipes") && <Recipes /> }
       </div>
     </div>
   );
