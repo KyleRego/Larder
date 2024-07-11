@@ -1,0 +1,45 @@
+.appNav {
+  background-color: rgba(98, 185, 243, 0.637);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+
+  min-width: 10rem;
+  height: 100vh;
+
+  padding: 0 1rem;
+  border-right: 1px solid black;
+}
+
+.navHeading {
+    text-align: center;
+    color: black;
+    font-size: 1.8rem;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+
+    border-bottom: 2px solid black;
+}
+
+.navList {
+    list-style: none;
+    padding: 0;
+}
+
+.navOption {
+  padding: 0.25rem;
+  text-align: left;
+  font-size: 1.2rem;
+}
+
+.navLink {
+    color: black;
+}
+
+.activeNavLink {
+    color: black;
+    font-weight: bold;
+    text-decoration: underline;
+}

@@ -87,7 +87,7 @@ function NameHeaderCell({sortOrder, setSortOrder})
 
     return (
         <th scope="col" onClick={handleClick}>
-            <div class="flex justify-around cursor-pointer">
+            <div className="flex justify-around cursor-pointer">
                 Name
                 {icon}
             </div>
@@ -126,7 +126,7 @@ function TypeHeaderCell({sortOrder, setSortOrder})
 
     return (
         <th scope="col" onClick={handleClick}>
-            <div class="flex justify-around cursor-pointer">
+            <div className="flex justify-around cursor-pointer">
                 Type
                 {icon}
             </div>

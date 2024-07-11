@@ -28,7 +28,7 @@ function RecipesTable({recipes})
     let rows = recipes.map(recipe => RecipeRow(recipe));
 
     return <>
-        <table class="recipesTable">
+        <table className="recipesTable">
             <thead>
                 <tr>
                     <th scope="col">
@@ -46,7 +46,7 @@ function RecipesTable({recipes})
 
 function RecipeRow(recipe)
 {
-    return <tr>
+    return <tr key={recipe.id}>
         <td>
             {recipe.name}
         </td>
