@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Larder.Models;
 
@@ -9,6 +10,7 @@ public class RecipeIngredient : EntityBase
     public string? RecipeId { get; set; }
 
     [ForeignKey(nameof(RecipeId))]
+    [JsonIgnore]
     public Recipe? Recipe { get; set; }
 
     [Required]

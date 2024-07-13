@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import RecipesService from "./services/RecipesService";
 import "./Recipes.css"
@@ -20,6 +21,8 @@ export default function Recipes()
         <h1>Recipes</h1>
 
         <RecipesTable recipes={recipes} />
+
+        <Link to="/recipes/new">New recipe</Link>
     </>
 }
 
@@ -46,9 +49,16 @@ function RecipesTable({recipes})
 
 function RecipeRow(recipe)
 {
-    return <tr key={recipe.id}>
-        <td>
-            {recipe.name}
-        </td>
-    </tr>
+    return (
+        <tr key={recipe.id}>
+            <td>
+                {recipe.name}
+            </td>
+            <td className="text-center">
+                <Link to={`/recipes/${recipe.id}`}>
+                    Details
+                </Link>
+            </td>
+        </tr>
+    );
 }

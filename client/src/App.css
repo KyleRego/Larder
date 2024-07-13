@@ -1,6 +1,18 @@
 h1, h2 {
+  margin: 1rem 0;
+}
+
+h1 {
   font-size: 2rem;
-  margin: 1rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+input[type="text"], input[type="number"], select {
+  padding: 0.25rem;
 }
 
 .app {
@@ -12,11 +24,14 @@ h1, h2 {
   flex-direction: row;
 }
 
-.currentTab {
-  color: rgba(0, 0, 0, 0.863);
-  background-color: rgba(180, 181, 202, 0.89);
+.app > :first-child {
+  flex-grow: 0;
+  padding: 0 1rem;
+}
 
+.app > :last-child {
   flex-grow: 1;
+  padding: 0 1rem;
 }
 
 /* TODO: Check if this can still be used */

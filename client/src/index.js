@@ -5,6 +5,8 @@ import App from './App';
 import Conversions from './Conversions';
 import Units from "./Units";
 import Recipes from "./Recipes";
+import Recipe from "./Recipe";
+import NewRecipe from "./NewRecipe";
 import reportWebVitals from './reportWebVitals';
 
 import {
@@ -20,6 +22,8 @@ const router = createBrowserRouter(
       <Route path="conversions" element={<Conversions />} />
       <Route path="units" element={<Units />} />
       <Route path="recipes" element={<Recipes />} />
+      <Route path="recipes/:id" element = {<Recipe />} />
+      <Route path="recipes/new" element = {<NewRecipe />} />
     </Route>
   )
 )
