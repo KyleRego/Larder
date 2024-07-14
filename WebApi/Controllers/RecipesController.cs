@@ -25,4 +25,12 @@ public class RecipesController(IRecipeRepository repository) : ControllerBase
 
         return recipe;
     }
+
+    [HttpPost("{id}")]
+    public async Task<ActionResult<Recipe>> Update([FromBody]Recipe recipe, string id)
+    {
+        if (recipe.Id != id) return BadRequest();
+
+        return await _repository.UpdateRecipe(recipe);
+    }
 }

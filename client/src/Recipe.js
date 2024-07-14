@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 import RecipesService from "./services/RecipesService";
 import "./Recipe.css"
@@ -30,6 +30,8 @@ export default function Recipe()
         <ul>
             {ingredientListItems}
         </ul>
+
+        <Link to={`/recipes/${id}/edit`}>Edit recipe</Link>
 
     </>)
 }

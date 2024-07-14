@@ -7,6 +7,7 @@ import Units from "./Units";
 import Recipes from "./Recipes";
 import Recipe from "./Recipe";
 import NewRecipe from "./NewRecipe";
+import EditRecipe from "./EditRecipe";
 import reportWebVitals from './reportWebVitals';
 
 import {
@@ -22,8 +23,10 @@ const router = createBrowserRouter(
       <Route path="conversions" element={<Conversions />} />
       <Route path="units" element={<Units />} />
       <Route path="recipes" element={<Recipes />} />
-      <Route path="recipes/:id" element = {<Recipe />} />
       <Route path="recipes/new" element = {<NewRecipe />} />
+      <Route path="recipes/:id" element = {<Recipe />} />
+      <Route path="recipes/:id/edit" element = {<EditRecipe />} />
+      
     </Route>
   )
 )

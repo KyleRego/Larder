@@ -9,6 +9,8 @@ public interface IRecipeRepository
     public Task<List<Recipe>> GetRecipes();
 
     public Task<Recipe?> GetRecipe(string id);
+
+    public Task<Recipe> UpdateRecipe(Recipe recipe);
 }
 
 public class RecipeRepository(AppDbContext dbContext) : IRecipeRepository
@@ -28,5 +30,12 @@ public class RecipeRepository(AppDbContext dbContext) : IRecipeRepository
                                 .Include(r => r.RecipeIngredients)
                                 .ThenInclude(ri => ri.Unit)
                                 .FirstOrDefaultAsync(r => r.Id == id);
+    }
+
+    public async Task<Recipe> UpdateRecipe(Recipe recipe)
+    {
+        _dbContext.Entry(recipe).State = EntityState.Modified;
+        await _dbContext.SaveChangesAsync();
+        return recipe;
     }
 }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import "./NewRecipe.css";
 
 export default function NewRecipe()
@@ -56,6 +57,8 @@ export default function NewRecipe()
         </div>
 
         </form>
+
+        <Link to={"/recipes"}>Back to recipes</Link>
     </>);
 }
 
