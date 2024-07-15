@@ -1,5 +1,7 @@
 using Larder.Models;
 using Larder.Repository;
+using Larder.Dtos;
+using Larder.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Larder.Controllers;
@@ -26,11 +28,9 @@ public class RecipesController(IRecipeRepository repository) : ControllerBase
         return recipe;
     }
 
-    [HttpPost("{id}")]
-    public async Task<ActionResult<Recipe>> Update([FromBody]Recipe recipe, string id)
+    [HttpPut("{recipeId}")]
+    public ActionResult Update([FromBody]RecipeDto recipeDto, string recipeId)
     {
-        if (recipe.Id != id) return BadRequest();
-
-        return await _repository.UpdateRecipe(recipe);
+        return Ok();
     }
 }

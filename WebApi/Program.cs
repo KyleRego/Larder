@@ -1,15 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Larder.Data;
 using Larder.Repository;
-using Larder.Models;
-
-string corsPolicyName = "corsPolicy";
+using Larder.Services;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUnitRepository, UnitRepository>();
 builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
+builder.Services.AddScoped<IRecipeService, RecipeService>();
 
 if (builder.Environment.IsDevelopment())
 {
@@ -19,13 +18,16 @@ if (builder.Environment.IsDevelopment())
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 }
 
+string corsPolicyName = "corsPolicy";
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: corsPolicyName,
-                      policy  =>
-                      {
-                          policy.WithOrigins("http://localhost:3000").AllowAnyHeader();
-                      });
+    options.AddPolicy(name: corsPolicyName, policy  =>
+        { // TODO: move the client origin into config
+            policy.AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithOrigins("http://localhost:3000");
+        });
 });
 
 // Add services to the container.

@@ -46,10 +46,53 @@ export default function EditRecipe()
     async function handleSubmit(e)
     {
         e.preventDefault();
-    
+
+        const formData = new FormData(e.target);
+
+        const recipeData = {recipeId: recipe.id};
+        const ingredientsData = [];
+
+        formData.entries().forEach(entry => {
+            const key = entry[0];
+            const val = entry[1];
+
+            if (key === "recipeName")
+            {
+                recipeData["recipeName"] = val;
+            }
+            else if (key.startsWith("ingredient"))
+            {
+                const index = key.substring(key.length - 1);
+
+                if (!ingredientsData[index])
+                {
+                    ingredientsData[index] = {};
+                }
+
+                const restOfKey = key.substring("ingredient".length)
+
+                if (restOfKey.startsWith("Name"))
+                {
+                    ingredientsData[index]["ingredientName"] = val;
+                }
+                else if (restOfKey.startsWith("Amount"))
+                {
+                    ingredientsData[index]["amount"] = val;
+                }
+                else if (restOfKey.startsWith("Unit"))
+                {
+                    ingredientsData[index]["unitId"] = val;
+                }
+            }
+        });
+
+        recipeData["ingredients"] = ingredientsData;
+
+        console.log(recipeData);
+
         const recipesService = new RecipesService();
 
-        await recipesService.putRecipe(recipe);
+        await recipesService.putRecipe(recipeData);
     }
 
     let { id } = useParams();
@@ -98,7 +141,7 @@ function RecipeForm({recipe, units, removeRecipeIngredient, addRecipeIngredient,
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="recipeName"><strong>Recipe:</strong></label>
-                    <input id="recipeName" type="text" defaultValue={recipe.name} />
+                    <input id="recipeName" name="recipeName" type="text" defaultValue={recipe.name} />
                 </div>
     
                 {recipeIngredientFormItems}
@@ -110,8 +153,6 @@ function RecipeForm({recipe, units, removeRecipeIngredient, addRecipeIngredient,
                 <div>
                     <button type="submit">Submit</button>
                 </div>
-                
-                
             </form>
         </>
     );
@@ -119,7 +160,7 @@ function RecipeForm({recipe, units, removeRecipeIngredient, addRecipeIngredient,
 
 function RecipeIngredientFormItem({ri, i, units, removeRecipeIngredient})
 {
-    const nameId = `ingredient${i}`;
+    const nameId = `ingredientName${i}`;
     const amountId = `ingredientAmount${i}`;
     const unitId = `ingredientUnit${i}`;
 
@@ -131,21 +172,20 @@ function RecipeIngredientFormItem({ri, i, units, removeRecipeIngredient})
         <div>
             <div>
                 <label htmlFor={nameId}>Name:</label>
-                <input id={nameId} type="text" defaultValue={ri.ingredient.name} />
+                <input id={nameId} name={nameId} type="text" defaultValue={ri.ingredient.name} />
             </div>
 
             <div>
                 <label htmlFor={amountId}>Amount:</label>
-                <input id={amountId} type="number" defaultValue={ri.amount} />
+                <input id={amountId} name={amountId} type="number" defaultValue={ri.amount} />
             </div>
 
             <div>
                 <label htmlFor={unitId}>Unit:</label>
-                <select id={unitId} defaultValue={ri.unit.name}>
+                <select id={unitId} name={unitId} defaultValue={ri.unit.name}>
                     {unitOptions}
                 </select>
             </div>
-
             
             <button type="button" onClick={() => removeRecipeIngredient(i)}>Remove</button>
             
@@ -158,7 +198,7 @@ function UnitOptions(units)
     if (units === null) return;
 
     return units.map(u => {
-        return <option>
+        return <option value={u.id}>
             {u.name}
         </option>
     })
