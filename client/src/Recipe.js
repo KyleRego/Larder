@@ -20,10 +20,10 @@ export default function Recipe()
 
     if (recipe === null) return <h1>Loading...</h1>
 
-    let ingredientListItems = recipe.recipeIngredients.map(ri => IngredientListItem(ri));
+    let ingredientListItems = recipe.ingredients.map(ri => IngredientListItem(ri));
 
     return (<>
-        <h1>{recipe.name}</h1>
+        <h1>{recipe.recipeName}</h1>
 
         <h2>Ingredients</h2>
 
@@ -36,9 +36,9 @@ export default function Recipe()
     </>)
 }
 
-function IngredientListItem(data)
+function IngredientListItem(recipeIngredient)
 {
-    return <li key={data.id}>
-        {data.amount} {data.unit.name} {data.ingredient.name} 
+    return <li key={recipeIngredient.ingredientId}>
+        {recipeIngredient.amount} {recipeIngredient.unitName} {recipeIngredient.ingredientName} 
     </li>
 }

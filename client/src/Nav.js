@@ -8,7 +8,7 @@ export default function Nav()
         ["Units", "units"],
         ["Conversions", "conversions"],
         ["Recipes", "recipes"],
-        ["Ingredients", ""],
+        ["Ingredients", "ingredients"],
         ["Notes", "notes"]
     ]
 

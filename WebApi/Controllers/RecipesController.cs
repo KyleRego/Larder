@@ -1,5 +1,3 @@
-using Larder.Models;
-using Larder.Repository;
 using Larder.Dtos;
 using Larder.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -8,20 +6,20 @@ namespace Larder.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class RecipesController(IRecipeRepository repository) : ControllerBase
+public class RecipesController(IRecipeService recipeService) : ControllerBase
 {
-    private readonly IRecipeRepository _repository = repository;
+    private readonly IRecipeService _recipeService = recipeService;
 
     [HttpGet]
-    public async Task<List<Recipe>> Index()
+    public async Task<List<RecipeDto>> Index()
     {
-        return await _repository.GetRecipes();
+        return await _recipeService.GetRecipes();
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Recipe>> Show(string id)
+    [HttpGet("{recipeId}")]
+    public async Task<ActionResult<RecipeDto>> Show(string recipeId)
     {
-        Recipe? recipe = await _repository.GetRecipe(id);
+        RecipeDto? recipe = await _recipeService.GetRecipe(recipeId);
 
         if (recipe == null) return NotFound();
 
@@ -29,8 +27,14 @@ public class RecipesController(IRecipeRepository repository) : ControllerBase
     }
 
     [HttpPut("{recipeId}")]
-    public ActionResult Update([FromBody]RecipeDto recipeDto, string recipeId)
+    public async Task<ActionResult<RecipeDto>> Update([FromBody]RecipeDto recipeDto, string recipeId)
     {
-        return Ok();
+        if (recipeDto.RecipeId != recipeId) return BadRequest();
+
+        RecipeDto? result = await _recipeService.UpdateRecipe(recipeDto);
+
+        if (result == null) { return UnprocessableEntity(); }
+
+        return result;
     }
 }

@@ -8,7 +8,7 @@ public interface IRecipeRepository
 {
     public Task<List<Recipe>> GetRecipes();
 
-    public Task<Recipe?> GetRecipe(string id);
+    public Task<Recipe?> GetRecipe(string recipeId);
 
     public Task<Recipe> UpdateRecipe(Recipe recipe);
 }
@@ -22,14 +22,14 @@ public class RecipeRepository(AppDbContext dbContext) : IRecipeRepository
         return await _dbContext.Recipes.ToListAsync();
     }
 
-    public async Task<Recipe?> GetRecipe(string id)
+    public async Task<Recipe?> GetRecipe(string recipeId)
     {
         return await _dbContext.Recipes
                                 .Include(r => r.RecipeIngredients)
                                 .ThenInclude(ri => ri.Ingredient)
                                 .Include(r => r.RecipeIngredients)
                                 .ThenInclude(ri => ri.Unit)
-                                .FirstOrDefaultAsync(r => r.Id == id);
+                                .FirstOrDefaultAsync(r => r.Id == recipeId);
     }
 
     public async Task<Recipe> UpdateRecipe(Recipe recipe)

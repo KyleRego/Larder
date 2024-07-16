@@ -50,12 +50,12 @@ function RecipesTable({recipes})
 function RecipeRow(recipe)
 {
     return (
-        <tr key={recipe.id}>
+        <tr key={recipe.recipeId}>
             <td>
-                {recipe.name}
+                {recipe.recipeName}
             </td>
             <td className="text-center">
-                <Link to={`/recipes/${recipe.id}`}>
+                <Link to={`/recipes/${recipe.recipeId}`}>
                     Details
                 </Link>
             </td>
