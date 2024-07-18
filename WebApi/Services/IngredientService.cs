@@ -7,11 +7,23 @@ namespace Larder.Services;
 public interface IIngredientService
 {
     public Task<List<IngredientDto>> GetIngredients();
+
+    public Task<IngredientDto?> GetIngredient(string id);
+
+    public Task<IngredientDto?> UpdateQuantity(IngredientQuantityDto ingredient);
 }
 
 public class IngredientService(IIngredientRepository ingredientRepository) : IIngredientService
 {
     private readonly IIngredientRepository _ingredientRepository = ingredientRepository;
+
+    public async Task<IngredientDto?> GetIngredient(string id)
+    {
+        Ingredient? ingredient = await _ingredientRepository.GetIngredient(id, true);
+        if (ingredient == null) return null;
+
+        return IngredientDtoAssembler.Assemble(ingredient);
+    }
 
     public async Task<List<IngredientDto>> GetIngredients()
     {
@@ -25,5 +37,18 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
         }
 
         return ingredientDtos;
+    }
+
+    public async Task<IngredientDto?> UpdateQuantity(IngredientQuantityDto ingredientDto)
+    {
+        Ingredient? ingredient = await _ingredientRepository.GetIngredient(ingredientDto.Id, false);
+
+        if (ingredient == null) return null;
+
+        ingredient.Quantity = ingredientDto.Quantity;
+
+        ingredient = await _ingredientRepository.Update(ingredient);
+
+        return IngredientDtoAssembler.Assemble(ingredient);
     }
 }

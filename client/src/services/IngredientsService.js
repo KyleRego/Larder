@@ -28,4 +28,55 @@ export default class IngredientsService extends ApiServiceBase
             console.error(error.message);
         }
     }
+
+    async getIngredient(id)
+    {
+        let url = `${this.ingredientsBaseUrl}/${id}`;
+
+        try
+        {
+            const response = await fetch(url);
+
+            if (!response.ok)
+            {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            return await response.json();
+        }
+        catch (error)
+        {
+            console.error(error.message);
+        }
+    }
+
+    async patchQuantity(ingredient)
+    {
+        let url = `${this.ingredientsBaseUrl}/${ingredient.id}`;
+
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+
+        const request = new Request(url, {
+            method: "PATCH",
+            body: JSON.stringify(ingredient) ,
+            headers: headers
+        });
+
+        try
+        {
+            const response = await fetch(request);
+
+            if (!response.ok)
+            {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            return response.json();
+        }
+        catch (error)
+        {
+            console.error(error);
+        }
+    }
 }

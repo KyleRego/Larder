@@ -7,7 +7,7 @@ public enum UnitType
     Mass,
     Volume,
     Weight,
-    Quantity
+    Count
 }
 
 public class Unit : EntityBase

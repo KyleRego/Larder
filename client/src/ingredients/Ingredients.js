@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
-import IngredientsService from "./services/IngredientsService";
+import IngredientsService from "../services/IngredientsService";
+import IngredientsTable from "./IngredientsTable";
 
 export default function Ingredients()
 {
@@ -17,19 +18,11 @@ export default function Ingredients()
 
     if (ingredients === null) return <h1>Loading...</h1>;
 
-    const ingredientListItems = ingredients.map(ingredient => {
-        return <li key={ingredient.id}>
-            {ingredient.name}
-        </li>
-    })
-
     return (
         <>
             <h1>Ingredients</h1>
 
-            <ol>
-                {ingredientListItems}
-            </ol>
+            <IngredientsTable ingredients={ingredients} />
         </>
     )
 }

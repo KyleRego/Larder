@@ -15,7 +15,7 @@ export default function Recipe()
 
         service.getRecipe(id).then(result => {
             setRecipe(result);
-        })
+        });
     }, [id]);
 
     if (recipe === null) return <h1>Loading...</h1>

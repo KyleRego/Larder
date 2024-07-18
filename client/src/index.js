@@ -4,7 +4,8 @@ import './index.css';
 import App from './App';
 import Conversions from './Conversions';
 import Units from "./Units";
-import Ingredients from './Ingredients';
+import Ingredients from './ingredients/Ingredients';
+import Ingredient from './ingredients/Ingredient';
 import Recipes from "./Recipes";
 import Recipe from "./Recipe";
 import NewRecipe from "./NewRecipe";
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
       <Route path="conversions" element={<Conversions />} />
       <Route path="units" element={<Units />} />
       <Route path="ingredients" element={<Ingredients />} />
+      <Route path="ingredients/:id" element={<Ingredient />} />
       <Route path="recipes" element={<Recipes />} />
       <Route path="recipes/new" element = {<NewRecipe />} />
       <Route path="recipes/:id" element = {<Recipe />} />

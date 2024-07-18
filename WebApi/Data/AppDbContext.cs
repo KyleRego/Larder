@@ -19,7 +19,7 @@ public class AppDbContext : DbContext
     {
         Unit tablespoons = new() { Name = "Tablespoons", Type = UnitType.Volume };
         Unit cups = new() { Name = "Cups", Type = UnitType.Volume };
-        Unit quantity = new() { Name = "Quantity", Type = UnitType.Quantity };
+        Unit quantity = new() { Name = "Quantity", Type = UnitType.Count };
 
         Unit[] unitsData = [
             new() { Name = "Liters", Type = UnitType.Volume },
