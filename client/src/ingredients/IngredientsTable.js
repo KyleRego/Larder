@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { TfiExchangeVertical } from "react-icons/tfi";
+
+import { CiEdit } from "react-icons/ci";
 import { MdDone } from "react-icons/md";
 
 import "./IngredientsTable.css";
@@ -77,17 +78,18 @@ function IngredientAmountCell({editing, ingredient, editQuantity, updateQuantity
 {
     if (editing === false)
     {
-        return <td>
+        return <td className="flex align-items-center">
             <span className="mr-2">{ingredient.quantity}</span>
-            <span className="mr-2">{ingredient.unit}</span>
-            <TfiExchangeVertical onClick={editQuantity} />
+            <CiEdit className="mr-2" onClick={editQuantity} />
+            <span>{ingredient.unitName}</span>
         </td>
     }
     else
     {
         return <td>
-            <form onSubmit={updateQuantity}>
-                <input name="quantity" type="number" defaultValue={ingredient.quantity}></input>
+            <form className="" onSubmit={updateQuantity}>
+                <input className="mr-2" name="quantity" type="number" defaultValue={ingredient.quantity}></input>
+                <span className="mr-2">{ingredient.unitName}</span>
                 <button type="submit">
                     <MdDone />
                 </button>

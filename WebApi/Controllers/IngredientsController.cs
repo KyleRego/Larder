@@ -25,8 +25,18 @@ public class IngredientsController(IIngredientService ingredientService) : Contr
         return (ingredientDto != null) ? ingredientDto : NotFound();
     }
 
+    [HttpPost]
+    public async Task<ActionResult<IngredientDto>> Create(IngredientDto ingredientDto)
+    {
+        if (ingredientDto.Id != null) return BadRequest();
+
+        await _ingredientService.CreateIngredient(ingredientDto);
+
+        return ingredientDto;
+    }
+
     [HttpPatch("{id}")]
-    public async Task<ActionResult<IngredientDto>> Patch(IngredientQuantityDto ingredient, string id)
+    public async Task<ActionResult<IngredientDto>> UpdateQuantity(IngredientQuantityDto ingredient, string id)
     {
         if (ingredient.Id != id) return BadRequest();
 

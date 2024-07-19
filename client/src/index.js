@@ -4,12 +4,16 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import Conversions from './Conversions';
 import Units from "./units/Units";
-import Ingredients from './ingredients/Ingredients';
-import Ingredient from './ingredients/Ingredient';
+
+import Ingredients from "./ingredients/Ingredients";
+import Ingredient from "./ingredients/Ingredient";
+import NewIngredient from "./ingredients/NewIngredient";
+
 import Recipes from "./recipes/Recipes";
 import Recipe from "./recipes/Recipe";
 import NewRecipe from "./recipes/NewRecipe";
 import EditRecipe from "./recipes/EditRecipe";
+
 import reportWebVitals from './reportWebVitals';
 
 import "./index.css";
@@ -23,6 +27,13 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 
+import UnitsService from "./services/UnitsService";
+import EditIngredient from './ingredients/EditIngredient';
+
+const unitsService = new UnitsService();
+
+const units = await unitsService.getUnits();
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -30,10 +41,12 @@ const router = createBrowserRouter(
       <Route path="units" element={<Units />} />
       <Route path="ingredients" element={<Ingredients />} />
       <Route path="ingredients/:id" element={<Ingredient />} />
+      <Route path="ingredients/:id/edit" element={<EditIngredient units={units} />} />
+      <Route path="ingredients/new" element={<NewIngredient units={units} />} />
       <Route path="recipes" element={<Recipes />} />
       <Route path="recipes/new" element = {<NewRecipe />} />
       <Route path="recipes/:id" element = {<Recipe />} />
-      <Route path="recipes/:id/edit" element = {<EditRecipe />} />
+      <Route path="recipes/:id/edit" element = {<EditRecipe units={units} />} />
       
     </Route>
   )

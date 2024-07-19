@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import IngredientsService from "../services/IngredientsService";
 import IngredientsTable from "./IngredientsTable";
@@ -23,6 +24,8 @@ export default function Ingredients()
             <h1>Ingredients</h1>
 
             <IngredientsTable ingredients={ingredients} />
+
+            <Link to="/ingredients/new">New ingredient</Link>
         </>
     )
 }

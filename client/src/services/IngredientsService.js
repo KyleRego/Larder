@@ -50,6 +50,34 @@ export default class IngredientsService extends ApiServiceBase
         }
     }
 
+    async postIngredient(ingredient)
+    {
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+
+        const request = new Request(this.ingredientsBaseUrl, {
+            method: "POST",
+            body: JSON.stringify(ingredient) ,
+            headers: headers
+        });
+
+        try
+        {
+            const response = await fetch(request);
+
+            if (!response.ok)
+            {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            return response.json();
+        }
+        catch (error)
+        {
+            console.error(error);
+        }
+    }
+
     async patchQuantity(ingredient)
     {
         let url = `${this.ingredientsBaseUrl}/${ingredient.id}`;

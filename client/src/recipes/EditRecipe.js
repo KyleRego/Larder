@@ -8,7 +8,7 @@ import RecipeForm from "./RecipeForm";
 
 import "./EditRecipe.css";
 
-export default function EditRecipe()
+export default function EditRecipe({units})
 {
     async function handleSubmit(e)
     {
@@ -63,7 +63,6 @@ export default function EditRecipe()
 
     let { id } = useParams();
     const [recipe, setRecipe] = useState(null);
-    const [units, setUnits] = useState(null);
 
     useEffect(() =>
     {
@@ -73,12 +72,6 @@ export default function EditRecipe()
             setRecipe(result);
         });
 
-        // TODO: Units data can be pulled way up in the state of the app
-        const unitsService = new UnitsService();
-
-        unitsService.getUnits().then(result => {
-            setUnits(result);
-        })
     }, [id]);
 
     if (recipe === null || units === null) return <h1>Loading...</h1>;

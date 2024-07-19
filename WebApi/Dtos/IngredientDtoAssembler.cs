@@ -15,7 +15,8 @@ public static class IngredientDtoAssembler
 
         if (ingredient.Unit != null)
         {
-            ingredientDto.Unit = ingredient.Unit.Name;
+            ingredientDto.UnitName = ingredient.Unit.Name;
+            ingredientDto.UnitId = ingredient.Unit.Id;
         }
 
         foreach (RecipeIngredient recipeIngredient in ingredient.RecipeIngredients)

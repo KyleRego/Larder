@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
+import UnitSelectOptions from "../units/UnitSelectOptions";
+
 import "./RecipeForm.css";
 
 export default function RecipeForm({initialRecipe, units, handleSubmit})
@@ -71,8 +73,6 @@ function RecipeIngredientFormItem({recipeIngredient, i, units, removeIngredient}
     const amountId = `ingredientAmount${i}`;
     const unitId = `ingredientUnit${i}`;
 
-    const unitOptions = UnitOptions(units);
-
     return (<>
         <strong>Ingredient {i}:</strong>
 
@@ -90,7 +90,7 @@ function RecipeIngredientFormItem({recipeIngredient, i, units, removeIngredient}
             <div>
                 <label htmlFor={unitId}>Unit:</label>
                 <select defaultValue={recipeIngredient.unitId} id={unitId} name={unitId}>
-                    {unitOptions}
+                    <UnitSelectOptions units={units} />
                 </select>
             </div>
 
@@ -98,11 +98,4 @@ function RecipeIngredientFormItem({recipeIngredient, i, units, removeIngredient}
 
         </div>
     </>);
-}
-
-function UnitOptions(units)
-{
-    return units.map(u => {
-        return <option key={u.id} value={u.id}>{u.name}</option>
-    });
 }

@@ -18,27 +18,51 @@ export default function Ingredient()
 
     if (ingredient === null) return <h1>Loading...</h1>;
 
-    const recipeListItems = ingredient.recipes.map(recipe => {
-        return <li key={recipe.id}>
-            <Link to={`/recipes/${recipe.id}`}>{recipe.name}</Link>
-        </li>
-    });
-
     return (
         <>
             <h1>
                 {ingredient.name}
             </h1>
 
-            <h2>
-                Recipes
-            </h2>
+            Stock: {ingredient.quantity} {ingredient.unitName}
 
-            <ul>
-                {recipeListItems}
-            </ul>
+            <IngredientRecipes recipes={ingredient.recipes} />
+
+            <div>
+                <Link to={`/ingredients/${ingredient.id}/edit`}>Edit ingredient</Link>
+            </div>
 
             <Link to="/ingredients">Back to ingredients</Link>
         </>
     )
+}
+
+function IngredientRecipes({recipes})
+{
+    if (recipes.length === 0)
+    {
+        return <p>
+            This ingredient is not currently used in any recipes.
+        </p>
+    }
+    else
+    {
+        const recipeListItems = recipes.map(recipe => {
+            return <li key={recipe.id}>
+                <Link to={`/recipes/${recipe.id}`}>{recipe.name}</Link>
+            </li>
+        });
+
+        return (
+            <>
+                <h2>
+                    Used in recipes:
+                </h2>
+
+                <ul>
+                    {recipeListItems}
+                </ul>
+            </>
+        )
+    }
 }

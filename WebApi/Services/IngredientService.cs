@@ -10,6 +10,8 @@ public interface IIngredientService
 
     public Task<IngredientDto?> GetIngredient(string id);
 
+    public Task<IngredientDto> CreateIngredient(IngredientDto ingredientDto);
+
     public Task<IngredientDto?> UpdateQuantity(IngredientQuantityDto ingredient);
 }
 
@@ -37,6 +39,20 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
         }
 
         return ingredientDtos;
+    }
+
+    public async Task<IngredientDto> CreateIngredient(IngredientDto ingredientDto)
+    {
+        Ingredient ingredient = new()
+        {
+            Name = ingredientDto.Name,
+            Quantity = ingredientDto.Quantity,
+            UnitId = ingredientDto.UnitId
+        };
+
+        await _ingredientRepository.InsertIngredient(ingredient);
+
+        return ingredientDto;
     }
 
     public async Task<IngredientDto?> UpdateQuantity(IngredientQuantityDto ingredientDto)

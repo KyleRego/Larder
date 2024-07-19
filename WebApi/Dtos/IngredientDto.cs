@@ -8,7 +8,9 @@ public class IngredientDto
 
     public required double Quantity { get; set; }
 
-    public string? Unit { get; set; }
+    public string? UnitName { get; set; }
+
+    public string? UnitId { get; set; }
 
     public List<IngredientRecipeDto> Recipes { get; set; } = [];
 }
