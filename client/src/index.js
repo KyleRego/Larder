@@ -1,16 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+
 import App from './App';
 import Conversions from './Conversions';
-import Units from "./Units";
+import Units from "./units/Units";
 import Ingredients from './ingredients/Ingredients';
 import Ingredient from './ingredients/Ingredient';
-import Recipes from "./Recipes";
-import Recipe from "./Recipe";
-import NewRecipe from "./NewRecipe";
-import EditRecipe from "./EditRecipe";
+import Recipes from "./recipes/Recipes";
+import Recipe from "./recipes/Recipe";
+import NewRecipe from "./recipes/NewRecipe";
+import EditRecipe from "./recipes/EditRecipe";
 import reportWebVitals from './reportWebVitals';
+
+import "./index.css";
+import "./utility.css";
+import "./tables.css";
 
 import {
   createBrowserRouter,

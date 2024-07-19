@@ -12,7 +12,7 @@ export default function IngredientsTable({ingredients})
 
     return (
         <>
-            <table>
+            <table className="ingredientsTable">
                 <caption>
                     Ingredients on hand
                 </caption>

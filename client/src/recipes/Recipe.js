@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 
-import RecipesService from "./services/RecipesService";
+import RecipesService from "../services/RecipesService";
 import "./Recipe.css"
 
 export default function Recipe()

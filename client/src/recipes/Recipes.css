@@ -1,0 +1,7 @@
+.recipesTable thead th:nth-child(1) {
+    width: 75%;
+}
+
+.recipesTable thead th:nth-child(2) {
+    width: 25%;
+}

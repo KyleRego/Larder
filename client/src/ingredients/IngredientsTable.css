@@ -1,38 +1,7 @@
-table {
-    table-layout: fixed;
-    width: 100%;
-    border-collapse: collapse;
-    border: 3px solid rgb(0, 60, 18);
-}
-
-caption {
-    font-size: 1.5rem;
-    padding: 20px;
-    font-style: italic;
-    caption-side: bottom;
-    color: #000000;
-    text-align: center;
-    letter-spacing: 1px;
-}
-
-thead th:nth-child(1) {
+.ingredientTable thead th:nth-child(1) {
     width: 60%;
 }
 
-thead th:nth-child(2) {
+.ingredientsTable thead th:nth-child(2) {
     width: 40%;
-}
-
-tbody tr:nth-child(odd) {
-    background-color: #aaaaab;
-}
-
-table,
-tbody tr:nth-child(even) {
-    background-color: #e8e8e8;
-}
-
-th,
-td {
-    padding: 20px;
 }

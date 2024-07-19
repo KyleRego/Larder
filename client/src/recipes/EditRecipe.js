@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 
-import RecipesService from "./services/RecipesService";
-import UnitsService from "./services/UnitsService";
+import RecipesService from "../services/RecipesService";
+import UnitsService from "../services/UnitsService";
 
-import RecipeForm from "./recipes/RecipeForm";
+import RecipeForm from "./RecipeForm";
 
-import "./EditRecipe.css"
+import "./EditRecipe.css";
 
 export default function EditRecipe()
 {

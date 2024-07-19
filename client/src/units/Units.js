@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { TiArrowUnsorted } from "react-icons/ti";
 import { TiArrowSortedUp } from "react-icons/ti";
 import { TiArrowSortedDown } from "react-icons/ti";
-import UnitsService from "./services/UnitsService"
+
+import UnitsService from "../services/UnitsService"
+
 import "./Units.css"
-import "./Utility.css"
 
 export default function Units()
 {
@@ -138,7 +139,7 @@ function TableRow(unit)
 {
     return (
         <tr key={unit.id}>
-            <td scope="row">{unit.name}</td>
+            <th scope="row">{unit.name}</th>
             <td>{unit.type}</td>
         </tr>
     )

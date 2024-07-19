@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import RecipesService from "./services/RecipesService";
+import RecipesService from "../services/RecipesService";
 import "./Recipes.css"
 
 export default function Recipes()
@@ -32,6 +32,7 @@ function RecipesTable({recipes})
 
     return <>
         <table className="recipesTable">
+            <caption>Recipes</caption>
             <thead>
                 <tr>
                     <th scope="col">
