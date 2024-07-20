@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 
 import RecipesService from "../services/RecipesService";
-import UnitsService from "../services/UnitsService";
+import recipeFormDataMapper from "./recipeFormDataMapper";
 
 import RecipeForm from "./RecipeForm";
 
@@ -16,46 +16,9 @@ export default function EditRecipe({units})
 
         const formData = new FormData(e.target);
 
-        const recipeData = {recipeId: recipe.recipeId};
-        const ingredientsData = [];
+        const recipeData = recipeFormDataMapper.map(formData);
+        recipeData.recipeId = recipe.recipeId;
 
-        formData.entries().forEach(entry => {
-            const key = entry[0];
-            const val = entry[1];
-
-            if (key === "recipeName")
-            {
-                recipeData["recipeName"] = val;
-            }
-            else if (key.startsWith("ingredient"))
-            {
-                const index = key.substring(key.length - 1);
-
-                if (!ingredientsData[index])
-                {
-                    ingredientsData[index] = {};
-                }
-
-                const restOfKey = key.substring("ingredient".length)
-
-                if (restOfKey.startsWith("Name"))
-                {
-                    ingredientsData[index]["ingredientName"] = val;
-                }
-                else if (restOfKey.startsWith("Amount"))
-                {
-                    ingredientsData[index]["amount"] = val;
-                }
-                else if (restOfKey.startsWith("Unit"))
-                {
-                    ingredientsData[index]["unitId"] = val;
-                }
-            }
-        });
-
-        recipeData["ingredients"] = ingredientsData;
-
-        // TODO: Use DI for this?
         const recipesService = new RecipesService();
 
         await recipesService.putRecipe(recipeData);

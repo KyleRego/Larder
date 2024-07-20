@@ -52,6 +52,32 @@ export default class RecipesService extends ApiServiceBase
         }
     }
 
+    async postRecipe(recipe)
+    {
+        const headers = new Headers({"Content-Type": "application/json"});
+        const request = new Request(this.recipesBaseUrl, {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(recipe)
+        });
+
+        try
+        {
+            const response = await fetch(request);
+
+            if (!response.ok)
+            {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            return response.json();
+        }
+        catch(error)
+        {
+            console.error(error);
+        }
+    }
+
     async putRecipe(recipeDto)
     {
         let url = `${this.recipesBaseUrl}/${recipeDto.recipeId}`;

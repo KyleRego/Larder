@@ -19,7 +19,6 @@ public class AppDbContext : DbContext
     {
         Unit tablespoons = new() { Name = "Tablespoons", Type = UnitType.Volume };
         Unit cups = new() { Name = "Cups", Type = UnitType.Volume };
-        Unit quantity = new() { Name = "Quantity", Type = UnitType.Count };
 
         Unit[] unitsData = [
             new() { Name = "Liters", Type = UnitType.Volume },
@@ -27,8 +26,7 @@ public class AppDbContext : DbContext
             new() { Name = "Grams", Type = UnitType.Mass },
             new() { Name = "Milliliters", Type = UnitType.Volume },
             tablespoons,
-            cups,
-            quantity
+            cups
         ];
         modelBuilder.Entity<Unit>().HasData(unitsData);
 
@@ -48,11 +46,11 @@ public class AppDbContext : DbContext
             Name = "Rice Roni Low Sodium Chicken Rice"
         };
         modelBuilder.Entity<Recipe>().HasData([lowSodiumChickenRice]);
-    
+
         List<RecipeIngredient> lowSodiumChickenRiceIngredients = [
             new() { RecipeId = lowSodiumChickenRice.Id, IngredientId = butter.Id, UnitId = tablespoons.Id, Amount = 1 },
             new() { RecipeId = lowSodiumChickenRice.Id, IngredientId = water.Id, UnitId = cups.Id, Amount = 2.5 },
-            new() { RecipeId = lowSodiumChickenRice.Id, IngredientId = boxRice.Id, UnitId = quantity.Id, Amount = 1 }
+            new() { RecipeId = lowSodiumChickenRice.Id, IngredientId = boxRice.Id, UnitId = null, Amount = 1 }
         ];
         modelBuilder.Entity<RecipeIngredient>().HasData(lowSodiumChickenRiceIngredients);
     }

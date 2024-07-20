@@ -31,8 +31,11 @@ export default function Recipe()
             {ingredientListItems}
         </ul>
 
-        <Link to={`/recipes/${id}/edit`}>Edit recipe</Link>
-
+        <div>
+            <Link to={`/recipes/${id}/edit`}>Edit recipe</Link>
+        </div>
+        
+        <Link to="/recipes">Back to recipes</Link>
     </>)
 }
 

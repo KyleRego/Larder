@@ -6,11 +6,28 @@ import IngredientForm from "./IngredientForm";
 
 export default function EditIngredient({units})
 {
-    function handleFormSubmit(e)
+    async function handleFormSubmit(e)
     {
         e.preventDefault();
 
         const formData = new FormData(e.target);
+
+        const ingredientData = {
+            id: id,
+            name: formData.get("name"),
+            quantity: formData.get("quantity")
+        };
+
+        const unitValue = formData.get("unit");
+
+        if (unitValue !== "")
+        {
+            ingredientData.unitId = unitValue;
+        }
+
+        const ingredientsService = new IngredientsService();
+
+        await ingredientsService.putIngredient(ingredientData);
     }
 
     let { id } = useParams();

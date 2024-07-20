@@ -78,6 +78,33 @@ export default class IngredientsService extends ApiServiceBase
         }
     }
 
+    async putIngredient(ingredient)
+    {
+        const headers = new Headers({"Content-Type": "application/json"});
+    
+        const request = new Request(`${this.ingredientsBaseUrl}/${ingredient.id}`, {
+            method: "PUT",
+            headers: headers,
+            body: JSON.stringify(ingredient)
+        });
+
+        try
+        {
+            const response = await fetch(request);
+
+            if (!response.ok)
+            {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            return response.json();
+        }
+        catch (error)
+        {
+            console.error(error);
+        }
+    }
+
     async patchQuantity(ingredient)
     {
         let url = `${this.ingredientsBaseUrl}/${ingredient.id}`;
@@ -101,6 +128,34 @@ export default class IngredientsService extends ApiServiceBase
             }
 
             return response.json();
+        }
+        catch (error)
+        {
+            console.error(error);
+        }
+    }
+
+    async deleteIngredient(id)
+    {
+        const url = `${this.ingredientsBaseUrl}/${id}`;
+
+        const headers = new Headers({"Content-Type": "application/json"});
+
+        const request = new Request(url, {
+            method: "DELETE",
+            headers: headers
+        });
+
+        try
+        {
+            const response = await fetch(request);
+
+            if (!response.ok)
+            {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            return;
         }
         catch (error)
         {

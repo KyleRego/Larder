@@ -12,7 +12,11 @@ public interface IIngredientService
 
     public Task<IngredientDto> CreateIngredient(IngredientDto ingredientDto);
 
+    public Task<IngredientDto> UpdateIngredient(IngredientDto ingredientDto);
+
     public Task<IngredientDto?> UpdateQuantity(IngredientQuantityDto ingredient);
+
+    public Task DeleteIngredient(string id);
 }
 
 public class IngredientService(IIngredientRepository ingredientRepository) : IIngredientService
@@ -21,7 +25,7 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
 
     public async Task<IngredientDto?> GetIngredient(string id)
     {
-        Ingredient? ingredient = await _ingredientRepository.GetIngredient(id, true);
+        Ingredient? ingredient = await _ingredientRepository.Get(id);
         if (ingredient == null) return null;
 
         return IngredientDtoAssembler.Assemble(ingredient);
@@ -29,7 +33,7 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
 
     public async Task<List<IngredientDto>> GetIngredients()
     {
-        List<Ingredient> ingredients = await _ingredientRepository.GetIngredients();
+        List<Ingredient> ingredients = await _ingredientRepository.GetAll();
 
         List<IngredientDto> ingredientDtos = [];
 
@@ -50,14 +54,35 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
             UnitId = ingredientDto.UnitId
         };
 
-        await _ingredientRepository.InsertIngredient(ingredient);
+        await _ingredientRepository.Insert(ingredient);
+
+        return ingredientDto;
+    }
+
+    public async Task<IngredientDto> UpdateIngredient(IngredientDto ingredientDto)
+    {
+        ArgumentNullException.ThrowIfNull(ingredientDto.Id);
+
+        Ingredient? ingredient = await _ingredientRepository.Get(ingredientDto.Id);
+        // TODO: Different exception types and handling in controller
+        ArgumentNullException.ThrowIfNull(ingredient);
+
+        ingredient.Name = ingredientDto.Name;
+        ingredient.Quantity = ingredientDto.Quantity;
+
+        if (!string.IsNullOrWhiteSpace(ingredientDto.UnitId))
+        {
+            ingredient.UnitId = ingredientDto.UnitId;
+        }
+
+        await _ingredientRepository.Update(ingredient);
 
         return ingredientDto;
     }
 
     public async Task<IngredientDto?> UpdateQuantity(IngredientQuantityDto ingredientDto)
     {
-        Ingredient? ingredient = await _ingredientRepository.GetIngredient(ingredientDto.Id, false);
+        Ingredient? ingredient = await _ingredientRepository.Get(ingredientDto.Id);
 
         if (ingredient == null) return null;
 
@@ -66,5 +91,13 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
         ingredient = await _ingredientRepository.Update(ingredient);
 
         return IngredientDtoAssembler.Assemble(ingredient);
+    }
+
+    public async Task DeleteIngredient(string id)
+    {
+        Ingredient? ingredient = await _ingredientRepository.Get(id);
+        ArgumentNullException.ThrowIfNull(ingredient);
+
+        await _ingredientRepository.Delete(ingredient);
     }
 }

@@ -26,7 +26,7 @@ export default function Ingredient()
 
             Stock: {ingredient.quantity} {ingredient.unitName}
 
-            <IngredientRecipes recipes={ingredient.recipes} />
+            <IngredientDetails ingredient={ingredient} />
 
             <div>
                 <Link to={`/ingredients/${ingredient.id}/edit`}>Edit ingredient</Link>
@@ -37,13 +37,21 @@ export default function Ingredient()
     )
 }
 
-function IngredientRecipes({recipes})
+function IngredientDetails({ingredient})
 {
+    const recipes = ingredient.recipes
+
     if (recipes.length === 0)
     {
-        return <p>
-            This ingredient is not currently used in any recipes.
-        </p>
+        return (
+            <>
+                <p>
+                    This ingredient is not currently used in any recipes.
+                </p>
+
+                <DeleteButton ingredient={ingredient} />
+            </>
+        )
     }
     else
     {
@@ -65,4 +73,18 @@ function IngredientRecipes({recipes})
             </>
         )
     }
+}
+
+function DeleteButton({ingredient})
+{
+    function handleOnClick(e)
+    {
+        const service = new IngredientsService();
+
+        service.deleteIngredient(ingredient.id);
+    }
+
+    return <button onClick={handleOnClick} type="button">
+        Delete ingredient
+    </button>
 }

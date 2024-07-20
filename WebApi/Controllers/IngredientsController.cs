@@ -11,12 +11,6 @@ public class IngredientsController(IIngredientService ingredientService) : Contr
 {
     private readonly IIngredientService _ingredientService = ingredientService;
 
-    [HttpGet]
-    public async Task<ActionResult<List<IngredientDto>>> Index()
-    {
-        return await _ingredientService.GetIngredients();
-    }
-
     [HttpGet("{id}")]
     public async Task<ActionResult<IngredientDto>> Show(string id)
     {
@@ -25,12 +19,29 @@ public class IngredientsController(IIngredientService ingredientService) : Contr
         return (ingredientDto != null) ? ingredientDto : NotFound();
     }
 
+    [HttpGet]
+    public async Task<ActionResult<List<IngredientDto>>> Index()
+    {
+        return await _ingredientService.GetIngredients();
+    }
+    
+
     [HttpPost]
     public async Task<ActionResult<IngredientDto>> Create(IngredientDto ingredientDto)
     {
         if (ingredientDto.Id != null) return BadRequest();
 
-        await _ingredientService.CreateIngredient(ingredientDto);
+        ingredientDto = await _ingredientService.CreateIngredient(ingredientDto);
+
+        return ingredientDto;
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<IngredientDto>> Update(IngredientDto ingredientDto, string id)
+    {
+        if (ingredientDto.Id != id) return BadRequest();
+
+        ingredientDto = await _ingredientService.UpdateIngredient(ingredientDto);
 
         return ingredientDto;
     }
@@ -50,5 +61,12 @@ public class IngredientsController(IIngredientService ingredientService) : Contr
         {
             return UnprocessableEntity();
         }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(string id)
+    {
+        await _ingredientService.DeleteIngredient(id);
+        return Ok();
     }
 }

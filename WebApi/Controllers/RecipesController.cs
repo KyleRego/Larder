@@ -10,12 +10,6 @@ public class RecipesController(IRecipeService recipeService) : ControllerBase
 {
     private readonly IRecipeService _recipeService = recipeService;
 
-    [HttpGet]
-    public async Task<List<RecipeDto>> Index()
-    {
-        return await _recipeService.GetRecipes();
-    }
-
     [HttpGet("{recipeId}")]
     public async Task<ActionResult<RecipeDto>> Show(string recipeId)
     {
@@ -24,6 +18,18 @@ public class RecipesController(IRecipeService recipeService) : ControllerBase
         if (recipe == null) return NotFound();
 
         return recipe;
+    }
+
+    [HttpGet]
+    public async Task<List<RecipeDto>> Index()
+    {
+        return await _recipeService.GetRecipes();
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<RecipeDto>> Create(RecipeDto recipeDto)
+    {
+        return await _recipeService.CreateRecipe(recipeDto);
     }
 
     [HttpPut("{recipeId}")]

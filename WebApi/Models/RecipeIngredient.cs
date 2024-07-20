@@ -19,7 +19,6 @@ public class RecipeIngredient : EntityBase
     [ForeignKey(nameof(IngredientId))]
     public Ingredient? Ingredient { get; set; }
 
-    [Required]
     public string? UnitId { get; set; }
 
     [ForeignKey(nameof(UnitId))]

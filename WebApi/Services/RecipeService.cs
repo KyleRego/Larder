@@ -10,6 +10,8 @@ public interface IRecipeService
 
     public Task<List<RecipeDto>> GetRecipes();
 
+    public Task<RecipeDto> CreateRecipe(RecipeDto recipeDto);
+
     public Task<RecipeDto?> UpdateRecipe(RecipeDto recipeDto);
 }
 
@@ -19,9 +21,43 @@ public class RecipeService( IRecipeRepository recipeRepository,
     private readonly IRecipeRepository _recipeRepository = recipeRepository;
     private readonly IIngredientRepository _ingredientRepository = ingredientRepository;
 
+    public async Task<RecipeDto> CreateRecipe(RecipeDto recipeDto)
+    {
+        Recipe recipe = new()
+        {
+            Name = recipeDto.RecipeName
+        };
+
+        List<RecipeIngredient> recipeIngredients = [];
+
+        foreach (RecipeIngredientDto ingredientDto in recipeDto.Ingredients)
+        {
+            Ingredient ingredient = await _ingredientRepository.FindOrCreateBy(ingredientDto.IngredientName);
+
+            RecipeIngredient recipeIngredient = new()
+            {
+                IngredientId = ingredient.Id,
+                Amount = ingredientDto.Amount
+            };
+
+            if (!string.IsNullOrWhiteSpace(ingredientDto.UnitId))
+            {
+                recipeIngredient.UnitId = ingredientDto.UnitId;
+            }
+
+            recipeIngredients.Add(recipeIngredient);
+        }
+
+        recipe.RecipeIngredients = recipeIngredients;
+
+        await _recipeRepository.Insert(recipe);
+
+        return recipeDto;
+    }
+
     public async Task<RecipeDto?> GetRecipe(string recipeId)
     {
-        Recipe? recipe = await _recipeRepository.GetRecipe(recipeId);
+        Recipe? recipe = await _recipeRepository.Get(recipeId);
 
         if (recipe == null) return null;
 
@@ -30,7 +66,7 @@ public class RecipeService( IRecipeRepository recipeRepository,
 
     public async Task<List<RecipeDto>> GetRecipes()
     {
-        List<Recipe> recipes = await _recipeRepository.GetRecipes();
+        List<Recipe> recipes = await _recipeRepository.GetAll();
         List<RecipeDto> recipeDtos = [];
 
         foreach (Recipe recipe in recipes)
@@ -49,7 +85,7 @@ public class RecipeService( IRecipeRepository recipeRepository,
         string? recipeId = recipeDto.RecipeId;
         if (recipeId == null) { return null; }
 
-        Recipe? recipe = await _recipeRepository.GetRecipe(recipeId);
+        Recipe? recipe = await _recipeRepository.Get(recipeId);
         if (recipe == null) { return null; }
 
         recipe.Name = recipeDto.RecipeName;
@@ -71,7 +107,6 @@ public class RecipeService( IRecipeRepository recipeRepository,
             string ingredientName = recipeIngredientDto.IngredientName;
             Ingredient ingredient = await _ingredientRepository.FindOrCreateBy(ingredientName);
             double amount = recipeIngredientDto.Amount;
-            string? unitId = recipeIngredientDto.UnitId;
 
             if (recipeIngredient == null)
             {
@@ -79,8 +114,7 @@ public class RecipeService( IRecipeRepository recipeRepository,
                 {
                     RecipeId = recipe.Id,
                     IngredientId = ingredient.Id,
-                    Amount = amount,
-                    UnitId = unitId
+                    Amount = amount
                 };
                 recipe.RecipeIngredients.Add(recipeIngredient);
             }
@@ -88,7 +122,11 @@ public class RecipeService( IRecipeRepository recipeRepository,
             {
                 recipeIngredient.IngredientId = ingredient.Id;
                 recipeIngredient.Amount = amount;
-                recipeIngredient.UnitId = unitId;
+            }
+
+            if (!string.IsNullOrWhiteSpace(recipeIngredientDto.UnitId))
+            {
+                recipeIngredient.UnitId = recipeIngredientDto.UnitId;
             }
 
             currentRecipeIngredientIds.Add(recipeIngredient.Id);
@@ -106,6 +144,6 @@ public class RecipeService( IRecipeRepository recipeRepository,
 
         recipe.RecipeIngredients = resultingRecipeIngredients;
 
-        return RecipeDtoAssembler.Assemble(await _recipeRepository.UpdateRecipe(recipe));
+        return RecipeDtoAssembler.Assemble(await _recipeRepository.Update(recipe));
     }
 }

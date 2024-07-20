@@ -4,22 +4,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Larder.Repository;
 
-public interface IIngredientRepository
+public interface IIngredientRepository : IRepositoryBase<Ingredient>
 {
-    public Task<List<Ingredient>> GetIngredients();
-
-    public Task<Ingredient?> GetIngredient(string id, bool withMore);
-
-    public Task<Ingredient> InsertIngredient(Ingredient ingredient);
-
-    public Task<Ingredient> Update(Ingredient ingredient);
-
     public Task<Ingredient> FindOrCreateBy(string name);
 }
 
 public class IngredientRepository(AppDbContext dbContext) : IIngredientRepository
 {
     private readonly AppDbContext _dbContext = dbContext;
+
+    public async Task Delete(Ingredient t)
+    {
+        _dbContext.Entry(t).State = EntityState.Deleted;
+
+        await _dbContext.SaveChangesAsync();
+    }
 
     public async Task<Ingredient> FindOrCreateBy(string name)
     {
@@ -33,33 +32,23 @@ public class IngredientRepository(AppDbContext dbContext) : IIngredientRepositor
         return ingredient;
     }
 
-    // TODO: Think about design of repository with eager loading not always
-    public async Task<Ingredient?> GetIngredient(string id, bool withMore)
+    public async Task<Ingredient?> Get(string id)
     {
-        if (withMore == true)
-        {
-            return await _dbContext.Ingredients
-                                .Include(ing => ing.Unit)
-                                .Include(ing => ing.RecipeIngredients)
-                                .ThenInclude(ri => ri.Recipe)
-                                .FirstOrDefaultAsync(ing => ing.Id == id);
-        }
-        else
-        {
-            return await _dbContext.Ingredients
-                                .Include(ing => ing.Unit)
-                                .FirstOrDefaultAsync(ing => ing.Id == id);
-        }
+        return await _dbContext.Ingredients
+                            .Include(ing => ing.Unit)
+                            .Include(ing => ing.RecipeIngredients)
+                            .ThenInclude(ri => ri.Recipe)
+                            .FirstOrDefaultAsync(ing => ing.Id == id);
     }
 
-    public async Task<List<Ingredient>> GetIngredients()
+    public async Task<List<Ingredient>> GetAll()
     {
         return await _dbContext.Ingredients
                                 .Include(ing => ing.Unit)
                                 .ToListAsync();
     }
 
-    public async Task<Ingredient> InsertIngredient(Ingredient ingredient)
+    public async Task<Ingredient> Insert(Ingredient ingredient)
     {
         _dbContext.Ingredients.Add(ingredient);
 
