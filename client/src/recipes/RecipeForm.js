@@ -47,7 +47,7 @@ export default function RecipeForm({initialRecipe, units, handleSubmit})
 
     return (
         <>
-            <form onSubmit={handleSubmit}>
+            <form className="recipeForm" onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="recipeName"><strong>Recipe:</strong></label>
                     <input id="recipeName" name="recipeName" type="text" defaultValue={recipe.recipeName} />

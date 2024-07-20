@@ -78,21 +78,25 @@ function IngredientAmountCell({editing, ingredient, editQuantity, updateQuantity
 {
     if (editing === false)
     {
-        return <td className="flex align-items-center">
-            <span className="mr-2">{ingredient.quantity}</span>
-            <CiEdit className="mr-2" onClick={editQuantity} />
-            <span>{ingredient.unitName}</span>
+        return <td>
+            <div className="flex align-items-center">
+                <span className="mr-2">{ingredient.quantity}</span>
+                <CiEdit className="mr-2" onClick={editQuantity} />
+                <span>{ingredient.unitName}</span>
+            </div>
         </td>
     }
     else
     {
         return <td>
             <form className="" onSubmit={updateQuantity}>
-                <input className="mr-2" name="quantity" type="number" defaultValue={ingredient.quantity}></input>
-                <span className="mr-2">{ingredient.unitName}</span>
-                <button type="submit">
-                    <MdDone />
-                </button>
+                <div className="flex align-items-center">
+                    <input className="mr-2" name="quantity" type="number" defaultValue={ingredient.quantity}></input>
+                    <span className="mr-2">{ingredient.unitName}</span>
+                    <button type="submit">
+                        <MdDone />
+                    </button>
+                </div>
             </form>
         </td>
     }

@@ -1,21 +1,21 @@
-form > div {
+form.recipeForm > div {
     margin: 0.5rem 0;
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
 }
 
-form > div > div {
+form.recipeForm > div > div {
     flex: 1;
     padding: 0.25rem;
     display: flex;
     align-items: baseline;
 }
 
-form label {
+form.recipeForm label {
     margin-right: 0.5rem;
 }
 
-form input, form select {
+form.recipeForm input, form.recipeForm select {
     flex: 1;
 }

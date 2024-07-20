@@ -19,6 +19,7 @@ import reportWebVitals from './reportWebVitals';
 import "./index.css";
 import "./utility.css";
 import "./tables.css";
+import "./forms.css";
 
 import {
   createBrowserRouter,
