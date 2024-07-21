@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Larder.Dtos;
 using Larder.Services;
+using Larder.Repository;
 
 namespace Larder.Controllers;
 
@@ -20,9 +21,16 @@ public class IngredientsController(IIngredientService ingredientService) : Contr
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<IngredientDto>>> Index()
+    public async Task<ActionResult<List<IngredientDto>>> Index(string? sortOrder)
     {
-        return await _ingredientService.GetIngredients();
+        if (sortOrder != null && Enum.TryParse(sortOrder, out IngredientSortOptions sortBy))
+        {
+            return await _ingredientService.GetIngredients(sortBy);
+        }
+        else
+        {
+            return await _ingredientService.GetIngredients(IngredientSortOptions.AnyOrder);
+        }
     }
     
 

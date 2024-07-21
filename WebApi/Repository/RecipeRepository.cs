@@ -1,24 +1,26 @@
 using Microsoft.EntityFrameworkCore;
+
 using Larder.Data;
 using Larder.Models;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace Larder.Repository;
 
-public interface IRecipeRepository : IRepositoryBase<Recipe>
+public enum RecipeSortOptions
+{
+    AnyOrder,
+    Name,
+    Name_Desc
+}
+
+public interface IRecipeRepository : IRepositoryBase<Recipe, RecipeSortOptions>
 {
 
 }
 
-public class RecipeRepository(AppDbContext dbContext) : IRecipeRepository
+public class RecipeRepository(AppDbContext dbContext) : RepositoryBase<Recipe, RecipeSortOptions>(dbContext), IRecipeRepository
 {
-    private readonly AppDbContext _dbContext = dbContext;
-
-    public async Task<List<Recipe>> GetAll()
-    {
-        return await _dbContext.Recipes.ToListAsync();
-    }
-
-    public async Task<Recipe?> Get(string id)
+    public override async Task<Recipe?> Get(string id)
     {
         return await _dbContext.Recipes
                                 .Include(r => r.RecipeIngredients)
@@ -28,27 +30,20 @@ public class RecipeRepository(AppDbContext dbContext) : IRecipeRepository
                                 .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public async Task<Recipe> Update(Recipe recipe)
+    public override async Task<List<Recipe>> GetAll(RecipeSortOptions sortBy)
     {
-        _dbContext.Entry(recipe).State = EntityState.Modified;
+        var baseQuery = _dbContext.Recipes;
 
-        await _dbContext.SaveChangesAsync();
+        switch (sortBy)
+        {
+            case RecipeSortOptions.Name:
+                return await baseQuery.OrderBy(rec => rec.Name).ToListAsync();
 
-        return recipe;
-    }
+            case RecipeSortOptions.Name_Desc:
+                return await baseQuery.OrderByDescending(rec => rec.Name).ToListAsync();
 
-    public async Task<Recipe> Insert(Recipe newRecipe)
-    {
-        
-        _dbContext.Recipes.Add(newRecipe);
-
-        await _dbContext.SaveChangesAsync();
-
-        return newRecipe;
-    }
-
-    public Task Delete(Recipe t)
-    {
-        throw new NotImplementedException();
+            default:
+                return await baseQuery.ToListAsync();
+        }
     }
 }

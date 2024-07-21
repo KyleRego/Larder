@@ -8,7 +8,7 @@ public interface IRecipeService
 {
     public Task<RecipeDto?> GetRecipe(string recipeId);
 
-    public Task<List<RecipeDto>> GetRecipes();
+    public Task<List<RecipeDto>> GetRecipes(RecipeSortOptions sortBy);
 
     public Task<RecipeDto> CreateRecipe(RecipeDto recipeDto);
 
@@ -64,9 +64,9 @@ public class RecipeService( IRecipeRepository recipeRepository,
         return RecipeDtoAssembler.Assemble(recipe);
     }
 
-    public async Task<List<RecipeDto>> GetRecipes()
+    public async Task<List<RecipeDto>> GetRecipes(RecipeSortOptions sortBy)
     {
-        List<Recipe> recipes = await _recipeRepository.GetAll();
+        List<Recipe> recipes = await _recipeRepository.GetAll(sortBy);
         List<RecipeDto> recipeDtos = [];
 
         foreach (Recipe recipe in recipes)

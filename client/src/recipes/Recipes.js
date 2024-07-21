@@ -1,65 +1,30 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+import RecipesTable from "./RecipesTable";
+
 import RecipesService from "../services/RecipesService";
 import "./Recipes.css"
 
 export default function Recipes()
 {
     const [recipes, setRecipes] = useState([]);
+    const [sortOrder, setSortOrder] = useState("Name");
 
     useEffect(() =>
     {
         const service = new RecipesService();
 
-        service.getRecipes().then(result => {
+        service.getRecipes(sortOrder).then(result => {
             setRecipes(result);
         })
-    }, []);
+    }, [sortOrder]);
 
     return <>
         <h1>Recipes</h1>
 
-        <RecipesTable recipes={recipes} />
+        <RecipesTable recipes={recipes} sortOrder={sortOrder} setSortOrder={setSortOrder} />
 
         <Link to="/recipes/new">New recipe</Link>
     </>
-}
-
-function RecipesTable({recipes})
-{
-    let rows = recipes.map(recipe => RecipeRow(recipe));
-
-    return <>
-        <table className="recipesTable">
-            <caption>Recipes</caption>
-            <thead>
-                <tr>
-                    <th scope="col">
-                        Name
-                    </th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {rows}
-            </tbody>
-        </table>
-    </>
-}
-
-function RecipeRow(recipe)
-{
-    return (
-        <tr key={recipe.recipeId}>
-            <td>
-                {recipe.recipeName}
-            </td>
-            <td className="text-center">
-                <Link to={`/recipes/${recipe.recipeId}`}>
-                    Details
-                </Link>
-            </td>
-        </tr>
-    );
 }

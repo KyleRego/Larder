@@ -1,4 +1,5 @@
 using Larder.Dtos;
+using Larder.Repository;
 using Larder.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +11,10 @@ public class RecipesController(IRecipeService recipeService) : ControllerBase
 {
     private readonly IRecipeService _recipeService = recipeService;
 
-    [HttpGet("{recipeId}")]
-    public async Task<ActionResult<RecipeDto>> Show(string recipeId)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<RecipeDto>> Show(string id)
     {
-        RecipeDto? recipe = await _recipeService.GetRecipe(recipeId);
+        RecipeDto? recipe = await _recipeService.GetRecipe(id);
 
         if (recipe == null) return NotFound();
 
@@ -21,9 +22,16 @@ public class RecipesController(IRecipeService recipeService) : ControllerBase
     }
 
     [HttpGet]
-    public async Task<List<RecipeDto>> Index()
+    public async Task<List<RecipeDto>> Index(string? sortOrder)
     {
-        return await _recipeService.GetRecipes();
+        if (sortOrder != null && Enum.TryParse(sortOrder, out RecipeSortOptions sortBy))
+        {
+            return await _recipeService.GetRecipes(sortBy);
+        }
+        else
+        {
+            return await _recipeService.GetRecipes(RecipeSortOptions.AnyOrder);
+        }
     }
 
     [HttpPost]

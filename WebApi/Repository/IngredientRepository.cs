@@ -1,25 +1,26 @@
+using Microsoft.EntityFrameworkCore;
+
 using Larder.Data;
 using Larder.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Larder.Repository;
 
-public interface IIngredientRepository : IRepositoryBase<Ingredient>
+public enum IngredientSortOptions
+{
+    AnyOrder,
+    Name,
+    Name_Desc,
+    Quantity,
+    Quantity_Desc
+}
+
+public interface IIngredientRepository : IRepositoryBase<Ingredient, IngredientSortOptions>
 {
     public Task<Ingredient> FindOrCreateBy(string name);
 }
 
-public class IngredientRepository(AppDbContext dbContext) : IIngredientRepository
+public class IngredientRepository(AppDbContext dbContext) : RepositoryBase<Ingredient, IngredientSortOptions>(dbContext), IIngredientRepository
 {
-    private readonly AppDbContext _dbContext = dbContext;
-
-    public async Task Delete(Ingredient t)
-    {
-        _dbContext.Entry(t).State = EntityState.Deleted;
-
-        await _dbContext.SaveChangesAsync();
-    }
-
     public async Task<Ingredient> FindOrCreateBy(string name)
     {
         Ingredient? ingredient = _dbContext.Ingredients.FirstOrDefault(ing => ing.Name == name);
@@ -32,7 +33,7 @@ public class IngredientRepository(AppDbContext dbContext) : IIngredientRepositor
         return ingredient;
     }
 
-    public async Task<Ingredient?> Get(string id)
+    public override async Task<Ingredient?> Get(string id)
     {
         return await _dbContext.Ingredients
                             .Include(ing => ing.Unit)
@@ -41,28 +42,27 @@ public class IngredientRepository(AppDbContext dbContext) : IIngredientRepositor
                             .FirstOrDefaultAsync(ing => ing.Id == id);
     }
 
-    public async Task<List<Ingredient>> GetAll()
+    public override async Task<List<Ingredient>> GetAll(IngredientSortOptions sortBy)
     {
-        return await _dbContext.Ingredients
-                                .Include(ing => ing.Unit)
-                                .ToListAsync();
-    }
+        var baseQuery = _dbContext.Ingredients.Include(ingredient => ingredient.Unit);
 
-    public async Task<Ingredient> Insert(Ingredient ingredient)
-    {
-        _dbContext.Ingredients.Add(ingredient);
+        switch (sortBy)
+        {
+            case IngredientSortOptions.Name:
+                return await baseQuery.OrderBy(ing => ing.Name).ToListAsync();
 
-        await _dbContext.SaveChangesAsync();
+            case IngredientSortOptions.Name_Desc:
+                return await baseQuery.OrderByDescending(ing => ing.Name).ToListAsync();
 
-        return ingredient;
-    }
+            case IngredientSortOptions.Quantity:
+                return await baseQuery.OrderBy(ing => ing.Quantity).ToListAsync();
 
-    public async Task<Ingredient> Update(Ingredient ingredient)
-    {
-        _dbContext.Entry(ingredient).State = EntityState.Modified;
+            case IngredientSortOptions.Quantity_Desc:
+                return await baseQuery.OrderByDescending(ing => ing.Quantity).ToListAsync();
 
-        await _dbContext.SaveChangesAsync();
-
-        return ingredient;
+            default:
+                return await baseQuery.ToListAsync();
+        }
+        
     }
 }

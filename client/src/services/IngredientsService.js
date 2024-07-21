@@ -8,11 +8,18 @@ export default class IngredientsService extends ApiServiceBase
         this.ingredientsBaseUrl = `${this.backendOrigin}/api/Ingredients`;
     }
 
-    async getIngredients()
+    async getIngredients(sortOrder)
     {
+        let url = this.ingredientsBaseUrl;
+
+        if (sortOrder !== null)
+        {
+            url += `?sortOrder=${sortOrder}`
+        }
+
         try
         {
-            const response = await fetch(this.ingredientsBaseUrl);
+            const response = await fetch(url);
 
             if (!response.ok)
             {

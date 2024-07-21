@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import SortingTableHeader from "../components/OrderableTableHeader";
+
 import { CiEdit } from "react-icons/ci";
 import { MdDone } from "react-icons/md";
 
 import "./IngredientsTable.css";
 import IngredientsService from "../services/IngredientsService";
 
-export default function IngredientsTable({ingredients})
+export default function IngredientsTable({ingredients, sortOrder, setSortOrder})
 {
     const ingredientRows = ingredients.map(ingredient => <IngredientRow key={ingredient.id} ingredientProp={ingredient} />);
 
@@ -19,8 +21,8 @@ export default function IngredientsTable({ingredients})
                 </caption>
                 <thead>
                     <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Quantity</th>
+                        <SortingTableHeader columnName="Name" sortOrder={sortOrder} setSortOrder={setSortOrder} />
+                        <SortingTableHeader columnName="Quantity" sortOrder={sortOrder} setSortOrder={setSortOrder} />
                     </tr>
                 </thead>
                 <tbody>

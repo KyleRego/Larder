@@ -4,51 +4,47 @@ using Larder.Models;
 
 namespace Larder.Repository;
 
-public interface IUnitRepository
+public enum UnitSortOptions
 {
-    public Task<List<Unit>> GetUnits(UnitsSortOrder? sortOrder);
-}
-
-public enum UnitsSortOrder
-{
+    AnyOrder,
     Name,
     Name_Desc,
     Type,
     Type_Desc
 }
 
-public class UnitRepository(AppDbContext dbContext) : IUnitRepository
+public interface IUnitRepository : IRepositoryBase<Unit, UnitSortOptions>
 {
-    private readonly AppDbContext _dbContext = dbContext;
+    
+}
 
-    public async Task<List<Unit>> GetUnits(UnitsSortOrder? sortOrder)
+public class UnitRepository(AppDbContext dbContext) : RepositoryBase<Unit, UnitSortOptions>(dbContext), IUnitRepository
+{
+    public override Task<Unit?> Get(string id)
     {
-        sortOrder ??= UnitsSortOrder.Name;
+        throw new NotImplementedException();
+    }
 
-        switch (sortOrder)
+    public override async Task<List<Unit>> GetAll(UnitSortOptions sortBy)
+    {
+        var baseQuery = _dbContext.Units;
+
+        switch (sortBy)
         {
-            case UnitsSortOrder.Name:
-                return await _dbContext.Units.OrderBy(
-                    u => u.Name
-                ).ToListAsync();
+            case UnitSortOptions.Name:
+                return await baseQuery.OrderBy(u => u.Name).ToListAsync();
 
-            case UnitsSortOrder.Name_Desc:
-                return await _dbContext.Units.OrderByDescending(
-                    u => u.Name
-                ).ToListAsync();
+            case UnitSortOptions.Name_Desc:
+                return await baseQuery.OrderByDescending(u => u.Name).ToListAsync();
 
-            case UnitsSortOrder.Type:
-                return await _dbContext.Units.OrderBy(
-                    u => u.Type
-                ).ToListAsync();
+            case UnitSortOptions.Type:
+                return await baseQuery.OrderBy(u => u.Type).ToListAsync();
 
-            case UnitsSortOrder.Type_Desc:
-                return await _dbContext.Units.OrderByDescending(
-                    u => u.Type
-                ).ToListAsync();
+            case UnitSortOptions.Type_Desc:
+                return await baseQuery.OrderByDescending(u => u.Type).ToListAsync();
 
             default:
-                throw new ApplicationException();
+                return await baseQuery.ToListAsync();
         }
     }
 }

@@ -8,11 +8,18 @@ export default class RecipesService extends ApiServiceBase
         this.recipesBaseUrl = `${this.backendOrigin}/api/Recipes`;
     }
 
-    async getRecipes()
+    async getRecipes(sortOrder)
     {
+        let url = this.recipesBaseUrl;
+
+        if (sortOrder !== null)
+        {
+            url += `?sortOrder=${sortOrder}`
+        }
+
         try
         {
-            const response = await fetch(this.recipesBaseUrl);
+            const response = await fetch(url);
 
             if (!response.ok)
             {

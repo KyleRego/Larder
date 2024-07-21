@@ -6,6 +6,10 @@ table {
     letter-spacing: 0.5px;
 }
 
+th {
+    text-align: left;
+}
+
 caption {
     font-size: 1.5rem;
     padding: 1rem;
