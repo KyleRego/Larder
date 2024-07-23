@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import SortingTableHeader from "../components/OrderableTableHeader";
+import SortingTableHeader from "../components/SortingTableHeader";
 
 import { CiEdit } from "react-icons/ci";
 import { MdDone } from "react-icons/md";

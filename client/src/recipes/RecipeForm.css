@@ -1,21 +1,20 @@
-form.recipeForm > div {
+.recipeForm {
+    padding: 1rem;
+    background-color: pink;
+}
+
+.recipeForm > div {
     margin: 0.5rem 0;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
 }
 
-form.recipeForm > div > div {
-    flex: 1;
-    padding: 0.25rem;
-    display: flex;
-    align-items: baseline;
+.recipeForm label {
+    margin-right: 0.25rem;
 }
 
-form.recipeForm label {
-    margin-right: 0.5rem;
-}
-
-form.recipeForm input, form.recipeForm select {
-    flex: 1;
+.ingredientChip {
+    text-align: center;
+    min-width: 5rem;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid black;
+    padding: 0.25rem 0.5rem;
 }

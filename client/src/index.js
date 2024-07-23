@@ -17,6 +17,7 @@ import EditRecipe from "./recipes/EditRecipe";
 import reportWebVitals from './reportWebVitals';
 
 import "./index.css";
+import "./buttons.css";
 import "./utility.css";
 import "./tables.css";
 import "./forms.css";

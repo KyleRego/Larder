@@ -1,4 +1,4 @@
-import SortingTableHeader from "../components/OrderableTableHeader";
+import SortingTableHeader from "../components/SortingTableHeader";
 
 export default function UnitsTable({data, sortOrder, setSortOrder})
 {

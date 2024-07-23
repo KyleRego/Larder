@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import SortingTableHeader from "../components/OrderableTableHeader";
+import SortingTableHeader from "../components/SortingTableHeader";
 
 export default function RecipesTable({recipes, sortOrder, setSortOrder})
 {

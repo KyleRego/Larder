@@ -8,13 +8,21 @@ export default class IngredientsService extends ApiServiceBase
         this.ingredientsBaseUrl = `${this.backendOrigin}/api/Ingredients`;
     }
 
-    async getIngredients(sortOrder)
+    async getIngredients(sortOrder = null, name = null)
     {
         let url = this.ingredientsBaseUrl;
 
-        if (sortOrder !== null)
+        if (sortOrder !== null && name !== null)
         {
-            url += `?sortOrder=${sortOrder}`
+            url += `?sortOrder=${sortOrder}&name=${name}`;
+        }
+        else if (sortOrder !== null)
+        {
+            url += `?sortOrder=${sortOrder}`;
+        }
+        else if (name !== null)
+        {
+            url += `?name=${name}`;
         }
 
         try
