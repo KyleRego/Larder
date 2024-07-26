@@ -25,7 +25,7 @@ public class UnitRepository(AppDbContext dbContext) : RepositoryBase<Unit, UnitS
         throw new NotImplementedException();
     }
 
-    public override async Task<List<Unit>> GetAll(UnitSortOptions sortBy)
+    public override async Task<List<Unit>> GetAll(UnitSortOptions sortBy, string? search)
     {
         var baseQuery = _dbContext.Units;
 

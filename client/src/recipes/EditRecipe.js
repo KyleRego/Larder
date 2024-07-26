@@ -45,7 +45,9 @@ export default function EditRecipe({units})
 
             <RecipeForm initialRecipe={recipe} units={units} handleSubmit={handleSubmit} />
 
-            <Link to={`/recipes/${id}`}>Back to recipe</Link>
+            <div>
+                <Link to={`/recipes/${id}`}>Back to recipe</Link>
+            </div>
         </>
     );
 }

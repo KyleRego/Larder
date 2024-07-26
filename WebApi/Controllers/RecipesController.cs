@@ -1,7 +1,8 @@
+using Microsoft.AspNetCore.Mvc;
+
 using Larder.Dtos;
 using Larder.Repository;
 using Larder.Services;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Larder.Controllers;
 
@@ -26,26 +27,26 @@ public class RecipesController(IRecipeService recipeService) : ControllerBase
     {
         if (sortOrder != null && Enum.TryParse(sortOrder, out RecipeSortOptions sortBy))
         {
-            return await _recipeService.GetRecipes(sortBy);
+            return await _recipeService.GetRecipes(sortBy, null);
         }
         else
         {
-            return await _recipeService.GetRecipes(RecipeSortOptions.AnyOrder);
+            return await _recipeService.GetRecipes(RecipeSortOptions.AnyOrder, null);
         }
     }
 
     [HttpPost]
-    public async Task<ActionResult<RecipeDto>> Create(RecipeDto recipeDto)
+    public async Task<ActionResult<RecipeDto>> Create(RecipeDto recipe)
     {
-        return await _recipeService.CreateRecipe(recipeDto);
+        return await _recipeService.CreateRecipe(recipe);
     }
 
     [HttpPut("{recipeId}")]
-    public async Task<ActionResult<RecipeDto>> Update([FromBody]RecipeDto recipeDto, string recipeId)
+    public async Task<ActionResult<RecipeDto>> Update([FromBody]RecipeDto recipe, string recipeId)
     {
-        if (recipeDto.RecipeId != recipeId) return BadRequest();
+        if (recipe.RecipeId != recipeId) return BadRequest();
 
-        RecipeDto? result = await _recipeService.UpdateRecipe(recipeDto);
+        RecipeDto? result = await _recipeService.UpdateRecipe(recipe);
 
         if (result == null) { return UnprocessableEntity(); }
 

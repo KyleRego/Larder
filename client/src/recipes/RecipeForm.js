@@ -10,6 +10,7 @@ import "./RecipeForm.css";
 export default function RecipeForm({initialRecipe, units, handleSubmit})
 {
     const [recipe, setRecipe] = useState(initialRecipe);
+    const [addingIngredient, setAddingIngredient] = useState(false);
 
     function removeIngredient(index)
     {
@@ -25,22 +26,20 @@ export default function RecipeForm({initialRecipe, units, handleSubmit})
         setRecipe(newRecipe);
     }
 
-    function addRecipeIngredient()
+    function addIngredient(ingredient)
     {
         const newRecipe = structuredClone(recipe);
-        newRecipe.ingredients.push({
-            ingredientName: "",
-            recipeIngredientId: uuidv4(),
-            amount: 0,
-            unitName: "",
-            unitId: null
-        });
+        newRecipe.ingredients.push(ingredient);
         setRecipe(newRecipe);
     }
 
-    let recipeIngredientFormItems = recipe.ingredients.map((recipeIngredient, i) => {
+    function showNewRecipeFormIngredient()
+    {
+        setAddingIngredient(true);
+    }
 
-        return <RecipeIngredientFormItem    key={recipeIngredient.recipeIngredientId}
+    let recipeIngredients = recipe.ingredients.map((recipeIngredient, i) => {
+        return <RecipeFormIngredient    key={recipeIngredient.recipeIngredientId}
                                             initialIngredient={recipeIngredient}
                                             i={i}
                                             units={units}
@@ -48,34 +47,56 @@ export default function RecipeForm({initialRecipe, units, handleSubmit})
     });
 
     return (
-        <>
-            <form className="recipeForm" onSubmit={handleSubmit}>
-                <div className="flex align-items-center">
-                    <label htmlFor="recipeName"><strong>Recipe name:</strong></label>
-                    <input className="flex-grow-1" id="recipeName" name="recipeName" type="text" defaultValue={recipe.recipeName} />
-                </div>
-    
-                {recipeIngredientFormItems}
+        <form className="recipeForm" onSubmit={handleSubmit}>
+            <div className="flex align-items-center">
+                <label htmlFor="recipeName"><strong>Recipe name:</strong></label>
+                <input className="flex-grow-1" id="recipeName" name="recipeName" type="text" defaultValue={recipe.recipeName} />
+            </div>
 
-                <div>
-                    <button type="button" onClick={addRecipeIngredient}>New ingredient</button>
-                </div>
+            <div className="flex column-gap-5">
+                {recipeIngredients}
+            </div>
 
-                <div>
-                    <button type="submit">Submit</button>
-                </div>
-            </form>
-        </>
+            {addingIngredient === false && 
+            <div>
+                <button type="button" onClick={showNewRecipeFormIngredient}>New ingredient</button>
+            </div>
+            }
+
+            {addingIngredient === true &&
+            <div>
+                <NewRecipeFormIngredient setAddingIngredient={setAddingIngredient} addIngredient={addIngredient} />
+            </div>
+            }
+
+            <div>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
     );
 }
 
-function RecipeIngredientFormItem({initialIngredient, i, units, removeIngredient})
+function NewRecipeFormIngredient({setAddingIngredient, addIngredient})
 {
     const [fetchedIngredients, setFetchedIngredients] = useState([]);
     const [fetchIngredientName, setFetchIngredientName] = useState(null);
 
-    const initialLockedIngredientName = (initialIngredient.ingredientName === "") ? null : initialIngredient.ingredientName;
-    const [lockedIngredientName, setLockedIngredientName] = useState(initialLockedIngredientName);
+    const startFetchingExistingIngredientOptions = (e) => setFetchIngredientName(e.target.value);
+
+    function handleAddNewIngredient(inputId)
+    {
+        const value = document.getElementById(inputId).value;
+        if (value === "") return;
+
+        addIngredient({id: uuidv4(), ingredientName: value});
+        setAddingIngredient(false);
+    }
+
+    function handleChooseIngredient(id, name)
+    {
+        addIngredient({id: id, ingredientName: name});
+        setAddingIngredient(false);
+    }
 
     useEffect(() =>
     {
@@ -88,16 +109,7 @@ function RecipeIngredientFormItem({initialIngredient, i, units, removeIngredient
         })
     }, [fetchIngredientName]);
 
-    function handleEnteringIngredientName(e)
-    {
-        setFetchIngredientName(e.target.value)
-    }
-
-    const nameId = `ingredientName${i}`;
-    const amountId = `ingredientAmount${i}`;
-    const unitId = `ingredientUnit${i}`;
-
-    const fetchedIngredientList = (fetchedIngredients.length !== 0) ? <ul>
+    const fetchedIngredientItems = (fetchedIngredients.length !== 0) ? <ul className="ingredientOptionsList">
         {fetchedIngredients.map(ing => {
             return <li key={ing.id} onClick={() => handleChooseIngredient(ing.id, ing.name)}>
                 {ing.name}
@@ -105,56 +117,41 @@ function RecipeIngredientFormItem({initialIngredient, i, units, removeIngredient
         })}
     </ul> : "";
 
-    function handleAddNewIngredient(inputId)
-    {
-        const value = document.getElementById(inputId).value;
-        if (value === "") return;
+    const inputId = "newIngredient";
 
-        setLockedIngredientName(value);
-    }
+    return <div>
+                <label htmlFor={inputId}>Name:</label>
+                <input id={inputId} type="text" className="mr-2" onInput={startFetchingExistingIngredientOptions} />
+                <button type="button" onClick={() => handleAddNewIngredient(inputId)}>Add ingredient</button>
+                {fetchedIngredientItems}
+            </div>
+} 
 
-    function handleChooseIngredient(id, name)
-    {
-        setLockedIngredientName(name);
-    }
+function RecipeFormIngredient({initialIngredient, i, units, removeIngredient})
+{
+    const nameId = `ingredientName${i}`;
+    const amountId = `ingredientAmount${i}`;
+    const unitId = `ingredientUnit${i}`;
 
     return (<>
-        <div>
-            {lockedIngredientName === null && (<>
+        <div className="recipeFormIngredient">
             <div>
-                <label htmlFor={nameId}>Name:</label>
-                <input id={nameId} name={nameId} type="text" className="mr-2"
-                        defaultValue={initialIngredient.ingredientName}
-                        onInput={handleEnteringIngredientName} />
-                <button type="button" onClick={() => handleAddNewIngredient(nameId)}>Add</button>
-                {fetchedIngredientList}
+                <input hidden id={nameId} name={nameId} type="text" defaultValue={initialIngredient.ingredientName} />
+                {initialIngredient.ingredientName}
             </div>
-            </>)}
 
-            {lockedIngredientName !== null && (<>
-            <input hidden id={nameId} name={nameId} type="text" defaultValue={lockedIngredientName} />
+            <div>
+                <label htmlFor={amountId}>Amount:</label>
+                <input id={amountId} name={amountId} type="number" defaultValue={initialIngredient.amount} />
+                <label hidden htmlFor={unitId}>Unit:</label>
+                <select defaultValue={initialIngredient.unitId} id={unitId} name={unitId}>
+                    <UnitSelectOptions units={units} />
+                </select>
+            </div>
 
-            <div className="flex justify-content-between align-items-center">
-                <span className="ingredientChip">
-                    {lockedIngredientName}
-                </span>
-            
-                <div>
-                    <label htmlFor={amountId}>Amount:</label>
-                    <input id={amountId} name={amountId} type="number" defaultValue={initialIngredient.amount} />
-                </div>
-
-                <div>
-                    <label htmlFor={unitId}>Unit:</label>
-                    <select defaultValue={initialIngredient.unitId} id={unitId} name={unitId}>
-                        <UnitSelectOptions units={units} />
-                    </select>
-                </div>
-
+            <div>
                 <button type="button" onClick={() => removeIngredient(i)}>Remove</button>
             </div>
-
-            </>)}
 
         </div>
     </>);

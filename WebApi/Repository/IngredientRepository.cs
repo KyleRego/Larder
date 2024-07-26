@@ -23,6 +23,11 @@ public class IngredientRepository(AppDbContext dbContext) : RepositoryBase<Ingre
 {
     public async Task<Ingredient> FindOrCreateBy(string name)
     {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            throw new ApplicationException("Ingredient name cannot be null or whitespace");
+        }
+
         Ingredient? ingredient = _dbContext.Ingredients.FirstOrDefault(ing => ing.Name == name);
         if (ingredient != null) return ingredient;
 
@@ -42,26 +47,28 @@ public class IngredientRepository(AppDbContext dbContext) : RepositoryBase<Ingre
                             .FirstOrDefaultAsync(ing => ing.Id == id);
     }
 
-    public override async Task<List<Ingredient>> GetAll(IngredientSortOptions sortBy)
+    public override async Task<List<Ingredient>> GetAll(IngredientSortOptions sortBy, string? search)
     {
         var baseQuery = _dbContext.Ingredients.Include(ingredient => ingredient.Unit);
+
+        var baseSearchQuery = (search == null) ? baseQuery : baseQuery.Where(ingredient => ingredient.Name.Contains(search));
 
         switch (sortBy)
         {
             case IngredientSortOptions.Name:
-                return await baseQuery.OrderBy(ing => ing.Name).ToListAsync();
+                return await baseSearchQuery.OrderBy(ing => ing.Name).ToListAsync();
 
             case IngredientSortOptions.Name_Desc:
-                return await baseQuery.OrderByDescending(ing => ing.Name).ToListAsync();
+                return await baseSearchQuery.OrderByDescending(ing => ing.Name).ToListAsync();
 
             case IngredientSortOptions.Quantity:
-                return await baseQuery.OrderBy(ing => ing.Quantity).ToListAsync();
+                return await baseSearchQuery.OrderBy(ing => ing.Quantity).ToListAsync();
 
             case IngredientSortOptions.Quantity_Desc:
-                return await baseQuery.OrderByDescending(ing => ing.Quantity).ToListAsync();
+                return await baseSearchQuery.OrderByDescending(ing => ing.Quantity).ToListAsync();
 
             default:
-                return await baseQuery.ToListAsync();
+                return await baseSearchQuery.ToListAsync();
         }
         
     }

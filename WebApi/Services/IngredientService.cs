@@ -6,7 +6,7 @@ namespace Larder.Services;
 
 public interface IIngredientService
 {
-    public Task<List<IngredientDto>> GetIngredients(IngredientSortOptions sortBy);
+    public Task<List<IngredientDto>> GetIngredients(IngredientSortOptions sortBy, string? searchName);
 
     public Task<IngredientDto?> GetIngredient(string id);
 
@@ -31,9 +31,9 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
         return IngredientDtoAssembler.Assemble(ingredient);
     }
 
-    public async Task<List<IngredientDto>> GetIngredients(IngredientSortOptions sortBy)
+    public async Task<List<IngredientDto>> GetIngredients(IngredientSortOptions sortBy, string? searchName)
     {
-        List<Ingredient> ingredients = await _ingredientRepository.GetAll(sortBy);
+        List<Ingredient> ingredients = await _ingredientRepository.GetAll(sortBy, searchName);
 
         List<IngredientDto> ingredientDtos = [];
 

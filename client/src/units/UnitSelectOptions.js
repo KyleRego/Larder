@@ -1,6 +1,6 @@
 export default function UnitSelectOptions({units})
 {
-    const noUnitOption = <option value="">None</option>
+    const noUnitOption = <option value="">No unit</option>
 
     return (
         <>

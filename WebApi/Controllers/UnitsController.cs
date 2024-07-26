@@ -16,11 +16,11 @@ public class UnitsController(IUnitRepository repository) : ControllerBase
     {
         if (sortOrder != null && Enum.TryParse(sortOrder, out UnitSortOptions sortBy))
         {
-            return await _repository.GetAll(sortBy);
+            return await _repository.GetAll(sortBy, null);
         }
         else
         {
-            return await _repository.GetAll(UnitSortOptions.AnyOrder);
+            return await _repository.GetAll(UnitSortOptions.AnyOrder, null);
         }
     }
 }

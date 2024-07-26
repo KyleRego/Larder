@@ -41,7 +41,9 @@ export default function Recipe()
 
 function IngredientListItem(recipeIngredient)
 {
-    return <li key={recipeIngredient.ingredientId}>
+    console.log(recipeIngredient);
+
+    return <li key={recipeIngredient.recipeIngredientId}>
         {recipeIngredient.amount} {recipeIngredient.unitName} {recipeIngredient.ingredientName} 
     </li>
 }

@@ -30,7 +30,7 @@ public class RecipeRepository(AppDbContext dbContext) : RepositoryBase<Recipe, R
                                 .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public override async Task<List<Recipe>> GetAll(RecipeSortOptions sortBy)
+    public override async Task<List<Recipe>> GetAll(RecipeSortOptions sortBy, string? search)
     {
         var baseQuery = _dbContext.Recipes;
 
