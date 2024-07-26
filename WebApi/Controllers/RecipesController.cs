@@ -46,10 +46,13 @@ public class RecipesController(IRecipeService recipeService) : ControllerBase
     {
         if (recipe.Id != id) return BadRequest();
 
-        RecipeDto? result = await _recipeService.UpdateRecipe(recipe);
-
-        if (result == null) { return UnprocessableEntity(); }
-
-        return result;
+        try
+        {
+            return await _recipeService.UpdateRecipe(recipe);
+        }
+        catch (ApplicationException)
+        {
+            return NotFound();
+        }
     }
 }

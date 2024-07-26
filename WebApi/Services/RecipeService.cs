@@ -12,7 +12,7 @@ public interface IRecipeService
 
     public Task<RecipeDto> CreateRecipe(RecipeDto recipeDto);
 
-    public Task<RecipeDto?> UpdateRecipe(RecipeDto recipeDto);
+    public Task<RecipeDto> UpdateRecipe(RecipeDto recipeDto);
 }
 
 public class RecipeService( IRecipeRepository recipeRepository,
@@ -77,16 +77,18 @@ public class RecipeService( IRecipeRepository recipeRepository,
         return recipeDtos;
     }
 
-    public async Task<RecipeDto?> UpdateRecipe(RecipeDto recipeDto)
+    public async Task<RecipeDto> UpdateRecipe(RecipeDto recipeDto)
     {
-        // TODO: Rather than returning null, throw 
-        // exception types specific to what happened
-        // so controller can return appropriate responses
-        string? id = recipeDto.Id;
-        if (id == null) { return null; }
+        if (recipeDto.Id == null)
+        {
+            throw new ApplicationException("Id was missing");
+        }
 
-        Recipe? recipe = await _recipeRepository.Get(id);
-        if (recipe == null) { return null; }
+        Recipe? recipe = await _recipeRepository.Get(recipeDto.Id);
+        if (recipe == null)
+        {
+            throw new ApplicationException("Recipe was not found");
+        }
 
         recipe.Name = recipeDto.Name;
 

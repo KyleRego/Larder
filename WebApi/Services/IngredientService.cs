@@ -61,11 +61,16 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
 
     public async Task<IngredientDto> UpdateIngredient(IngredientDto ingredientDto)
     {
-        ArgumentNullException.ThrowIfNull(ingredientDto.Id);
+        if (ingredientDto.Id == null)
+        {
+            throw new ApplicationException("Id was missing");
+        }
 
         Ingredient? ingredient = await _ingredientRepository.Get(ingredientDto.Id);
-        // TODO: Different exception types and handling in controller
-        ArgumentNullException.ThrowIfNull(ingredient);
+        if (ingredient == null)
+        {
+            throw new ApplicationException("Ingredient was not found");
+        }
 
         ingredient.Name = ingredientDto.Name;
         ingredient.Quantity = ingredientDto.Quantity;
