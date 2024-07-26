@@ -50,7 +50,7 @@ export default function RecipeForm({initialRecipe, units, handleSubmit})
         <form className="recipeForm" onSubmit={handleSubmit}>
             <div className="flex align-items-center">
                 <label htmlFor="recipeName"><strong>Recipe name:</strong></label>
-                <input className="flex-grow-1" id="recipeName" name="recipeName" type="text" defaultValue={recipe.recipeName} />
+                <input className="flex-grow-1" id="recipeName" name="recipeName" type="text" defaultValue={recipe.name} />
             </div>
 
             <div className="flex column-gap-5">

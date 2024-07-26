@@ -17,7 +17,7 @@ export default function EditRecipe({units})
         const formData = new FormData(e.target);
 
         const recipeData = recipeFormDataMapper.map(formData);
-        recipeData.recipeId = recipe.recipeId;
+        recipeData.id = recipe.id;
 
         const recipesService = new RecipesService();
 
@@ -41,7 +41,7 @@ export default function EditRecipe({units})
 
     return (
         <>
-            <h1>Editing recipe: {recipe.recipeName}</h1>
+            <h1>Editing recipe: {recipe.name}</h1>
 
             <RecipeForm initialRecipe={recipe} units={units} handleSubmit={handleSubmit} />
 

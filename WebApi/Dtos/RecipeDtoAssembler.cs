@@ -8,8 +8,8 @@ public static class RecipeDtoAssembler
     {
         RecipeDto recipeDto = new()
         {
-            RecipeId = recipe.Id,
-            RecipeName = recipe.Name,
+            Id = recipe.Id,
+            Name = recipe.Name,
             Ingredients = []
         };
 

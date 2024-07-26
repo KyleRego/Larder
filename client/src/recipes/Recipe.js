@@ -23,7 +23,7 @@ export default function Recipe()
     let ingredientListItems = recipe.ingredients.map(ri => IngredientListItem(ri));
 
     return (<>
-        <h1>{recipe.recipeName}</h1>
+        <h1>{recipe.name}</h1>
 
         <h2>Ingredients</h2>
 
@@ -41,8 +41,6 @@ export default function Recipe()
 
 function IngredientListItem(recipeIngredient)
 {
-    console.log(recipeIngredient);
-
     return <li key={recipeIngredient.recipeIngredientId}>
         {recipeIngredient.amount} {recipeIngredient.unitName} {recipeIngredient.ingredientName} 
     </li>

@@ -25,12 +25,12 @@ export default function RecipesTable({recipes, sortOrder, setSortOrder})
 function RecipeRow(recipe)
 {
     return (
-        <tr key={recipe.recipeId}>
+        <tr key={recipe.id}>
             <th scope="col">
-                {recipe.recipeName}
+                {recipe.name}
             </th>
             <td className="text-center">
-                <Link to={`/recipes/${recipe.recipeId}`}>
+                <Link to={`/recipes/${recipe.id}`}>
                     Details
                 </Link>
             </td>

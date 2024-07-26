@@ -6,7 +6,7 @@ namespace Larder.Services;
 
 public interface IRecipeService
 {
-    public Task<RecipeDto?> GetRecipe(string recipeId);
+    public Task<RecipeDto?> GetRecipe(string id);
 
     public Task<List<RecipeDto>> GetRecipes(RecipeSortOptions sortBy, string? searchName);
 
@@ -25,7 +25,7 @@ public class RecipeService( IRecipeRepository recipeRepository,
     {
         Recipe recipe = new()
         {
-            Name = recipeDto.RecipeName
+            Name = recipeDto.Name
         };
 
         List<RecipeIngredient> recipeIngredients = [];
@@ -55,9 +55,9 @@ public class RecipeService( IRecipeRepository recipeRepository,
         return recipeDto;
     }
 
-    public async Task<RecipeDto?> GetRecipe(string recipeId)
+    public async Task<RecipeDto?> GetRecipe(string id)
     {
-        Recipe? recipe = await _recipeRepository.Get(recipeId);
+        Recipe? recipe = await _recipeRepository.Get(id);
 
         if (recipe == null) return null;
 
@@ -82,13 +82,13 @@ public class RecipeService( IRecipeRepository recipeRepository,
         // TODO: Rather than returning null, throw 
         // exception types specific to what happened
         // so controller can return appropriate responses
-        string? recipeId = recipeDto.RecipeId;
-        if (recipeId == null) { return null; }
+        string? id = recipeDto.Id;
+        if (id == null) { return null; }
 
-        Recipe? recipe = await _recipeRepository.Get(recipeId);
+        Recipe? recipe = await _recipeRepository.Get(id);
         if (recipe == null) { return null; }
 
-        recipe.Name = recipeDto.RecipeName;
+        recipe.Name = recipeDto.Name;
 
         RecipeIngredient? FindRecipeIngredient(string? recipeIngredientId, List<RecipeIngredient> recipeIngredients)
         {
@@ -112,7 +112,7 @@ public class RecipeService( IRecipeRepository recipeRepository,
             {
                 recipeIngredient = new()
                 {
-                    RecipeId = recipe.Id,
+                    Id = recipe.Id,
                     IngredientId = ingredient.Id,
                     Amount = amount
                 };

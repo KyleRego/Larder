@@ -11,7 +11,7 @@ export default class recipeFormDataMapper
 
             if (key === "recipeName")
             {
-                recipeData["recipeName"] = val;
+                recipeData["name"] = val;
             }
             else if (key.startsWith("ingredient"))
             {

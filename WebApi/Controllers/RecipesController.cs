@@ -41,10 +41,10 @@ public class RecipesController(IRecipeService recipeService) : ControllerBase
         return await _recipeService.CreateRecipe(recipe);
     }
 
-    [HttpPut("{recipeId}")]
-    public async Task<ActionResult<RecipeDto>> Update([FromBody]RecipeDto recipe, string recipeId)
+    [HttpPut("{id}")]
+    public async Task<ActionResult<RecipeDto>> Update([FromBody]RecipeDto recipe, string id)
     {
-        if (recipe.RecipeId != recipeId) return BadRequest();
+        if (recipe.Id != id) return BadRequest();
 
         RecipeDto? result = await _recipeService.UpdateRecipe(recipe);
 

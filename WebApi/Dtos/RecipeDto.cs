@@ -2,9 +2,9 @@ namespace Larder.Dtos;
 
 public class RecipeDto
 {
-    public string? RecipeId { get; set; }
+    public string? Id { get; set; }
 
-    public required string RecipeName { get; set; }
+    public required string Name { get; set; }
 
     public required List<RecipeIngredientDto> Ingredients { get; set; }
 }

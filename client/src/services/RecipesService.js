@@ -85,16 +85,16 @@ export default class RecipesService extends ApiServiceBase
         }
     }
 
-    async putRecipe(recipeDto)
+    async putRecipe(recipe)
     {
-        let url = `${this.recipesBaseUrl}/${recipeDto.recipeId}`;
+        let url = `${this.recipesBaseUrl}/${recipe.id}`;
 
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
 
         const request = new Request(url, {
             method: "PUT",
-            body: JSON.stringify(recipeDto) ,
+            body: JSON.stringify(recipe) ,
             headers: headers
         });
 
