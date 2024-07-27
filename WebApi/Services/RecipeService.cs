@@ -23,8 +23,17 @@ public class RecipeService( IRecipeRepository recipeRepository,
 
     public async Task<RecipeDto> CreateRecipe(RecipeDto recipeDto)
     {
+        string name = recipeDto.Name;
+
+        Food food = new()
+        {
+            Name = name,
+        };
+
         Recipe recipe = new()
         {
+            Food = food,
+            FoodId = food.Id,
             Name = recipeDto.Name
         };
 
@@ -90,7 +99,10 @@ public class RecipeService( IRecipeRepository recipeRepository,
             throw new ApplicationException("Recipe was not found");
         }
 
-        recipe.Name = recipeDto.Name;
+        string name = recipeDto.Name;
+
+        recipe.Name = name;
+        recipe.Food.Name = name;
 
         RecipeIngredient? FindRecipeIngredient(string? recipeIngredientId, List<RecipeIngredient> recipeIngredients)
         {

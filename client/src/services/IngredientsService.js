@@ -25,44 +25,14 @@ export default class IngredientsService extends ApiServiceBase
             url += `?name=${name}`;
         }
 
-        try
-        {
-            const response = await fetch(url);
-
-            if (!response.ok)
-            {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            const json = await response.json();
-
-            return json;
-        }
-        catch (error)
-        {
-            console.error(error.message);
-        }
+        return await this.tryGetJson(url);
     }
 
     async getIngredient(id)
     {
         let url = `${this.ingredientsBaseUrl}/${id}`;
 
-        try
-        {
-            const response = await fetch(url);
-
-            if (!response.ok)
-            {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            return await response.json();
-        }
-        catch (error)
-        {
-            console.error(error.message);
-        }
+        return await this.tryGetJson(url);
     }
 
     async postIngredient(ingredient)

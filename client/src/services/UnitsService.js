@@ -11,22 +11,6 @@ export default class UnitsService extends ApiServiceBase
             url += `?sortOrder=${sortOrder}`
         }
 
-        try
-        {
-            const response = await fetch(url);
-
-            if (!response.ok)
-            {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            const json = await response.json();
-
-            return json;
-        }
-        catch (error)
-        {
-            console.error(error.message);
-        }
+        return await this.tryGetJson(url);
     }
 }

@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Larder.Models;
 
-public class Ingredient : EntityBase
+/// <summary>
+/// An ingredient is used in cooking a food
+/// </summary>
+public class Ingredient : Item
 {
-    [Required(AllowEmptyStrings = false)]
-    public required string Name { get; set; }
-
     public double Quantity { get; set; }
 
     [ForeignKey(nameof(UnitId))]
@@ -16,4 +16,6 @@ public class Ingredient : EntityBase
     public string? UnitId { get; set; }
 
     public List<RecipeIngredient> RecipeIngredients { get; set; } = [];
+
+    public List<Recipe> Recipes { get; set; } = [];
 }

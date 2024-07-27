@@ -5,6 +5,7 @@ import "./Nav.css";
 export default function Nav()
 {
     const navData = [
+        ["Foods", "foods"],
         ["Units", "units"],
         ["Conversions", "conversions"],
         ["Recipes", "recipes"],

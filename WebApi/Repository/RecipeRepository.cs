@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 
 using Larder.Data;
 using Larder.Models;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace Larder.Repository;
 
@@ -23,6 +22,7 @@ public class RecipeRepository(AppDbContext dbContext) : RepositoryBase<Recipe, R
     public override async Task<Recipe?> Get(string id)
     {
         return await _dbContext.Recipes
+                                .Include(r => r.Food)
                                 .Include(r => r.RecipeIngredients)
                                 .ThenInclude(ri => ri.Ingredient)
                                 .Include(r => r.RecipeIngredients)

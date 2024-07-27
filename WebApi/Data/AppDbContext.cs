@@ -10,10 +10,13 @@ public class AppDbContext : DbContext
         {
         }
 
+    public DbSet<Item> Items { get; set; } = default!;
+    public DbSet<Food> Foods { get; set; } = default!;
     public DbSet<Ingredient> Ingredients { get; set; } = default!;
     public DbSet<Recipe> Recipes { get; set; } = default!;
     public DbSet<RecipeIngredient> RecipeIngredients { get; set; } = default!;
     public DbSet<Unit> Units { get; set; } = default!;
+    public DbSet<Utensil> Utensils { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -41,17 +44,24 @@ public class AppDbContext : DbContext
         ];
         modelBuilder.Entity<Ingredient>().HasData(ingredientsData);
 
-        Recipe lowSodiumChickenRice = new()
+        Food chickenAndRice = new()
         {
-            Name = "Rice Roni Low Sodium Chicken Rice"
+            Name = "Chicken and rice"
         };
-        modelBuilder.Entity<Recipe>().HasData([lowSodiumChickenRice]);
+        modelBuilder.Entity<Food>().HasData([chickenAndRice]);
 
-        List<RecipeIngredient> lowSodiumChickenRiceIngredients = [
-            new() { RecipeId = lowSodiumChickenRice.Id, IngredientId = butter.Id, UnitId = tablespoons.Id, Amount = 1 },
-            new() { RecipeId = lowSodiumChickenRice.Id, IngredientId = water.Id, UnitId = cups.Id, Amount = 2.5 },
-            new() { RecipeId = lowSodiumChickenRice.Id, IngredientId = boxRice.Id, UnitId = null, Amount = 1 }
+        Recipe chickenAndRiceRecipe = new()
+        {
+            Name = "Rice Roni Low Sodium Chicken Rice",
+            FoodId = chickenAndRice.Id
+        };
+        modelBuilder.Entity<Recipe>().HasData([chickenAndRiceRecipe]);
+
+        List<RecipeIngredient> chickenAndRiceRecipeIngredients = [
+            new() { RecipeId = chickenAndRiceRecipe.Id, IngredientId = butter.Id, UnitId = tablespoons.Id, Amount = 1 },
+            new() { RecipeId = chickenAndRiceRecipe.Id, IngredientId = water.Id, UnitId = cups.Id, Amount = 2.5 },
+            new() { RecipeId = chickenAndRiceRecipe.Id, IngredientId = boxRice.Id, UnitId = null, Amount = 1 }
         ];
-        modelBuilder.Entity<RecipeIngredient>().HasData(lowSodiumChickenRiceIngredients);
+        modelBuilder.Entity<RecipeIngredient>().HasData(chickenAndRiceRecipeIngredients);
     }
 }

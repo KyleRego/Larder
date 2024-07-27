@@ -6,16 +6,23 @@ using Larder.Services;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+
 builder.Services.AddScoped<IUnitRepository, UnitRepository>();
 builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
 builder.Services.AddScoped<IIngredientRepository, IngredientRepository>();
+builder.Services.AddScoped<IFoodRepository, FoodRepository>();
+
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<IIngredientService, IngredientService>();
+builder.Services.AddScoped<IFoodService, FoodService>();
 
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlite(builder.Configuration.GetConnectionString("LarderContextSQLite")));
+    {
+        options.UseSqlite(builder.Configuration.GetConnectionString("LarderContextSQLite"));
+        options.EnableSensitiveDataLogging();  
+    });
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 }
