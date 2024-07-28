@@ -14,7 +14,7 @@ public interface IIngredientService
 
     public Task<IngredientDto> UpdateIngredient(IngredientDto ingredientDto);
 
-    public Task<IngredientDto?> UpdateQuantity(IngredientQuantityDto ingredient);
+    public Task<IngredientDto?> UpdateQuantity(QuantityDto ingredient);
 
     public Task DeleteIngredient(string id);
 }
@@ -85,13 +85,13 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
         return ingredientDto;
     }
 
-    public async Task<IngredientDto?> UpdateQuantity(IngredientQuantityDto ingredientDto)
+    public async Task<IngredientDto?> UpdateQuantity(QuantityDto quantity)
     {
-        Ingredient? ingredient = await _ingredientRepository.Get(ingredientDto.Id);
+        Ingredient? ingredient = await _ingredientRepository.Get(quantity.Id);
 
         if (ingredient == null) return null;
 
-        ingredient.Quantity = ingredientDto.Quantity;
+        ingredient.Quantity = quantity.Quantity;
 
         ingredient = await _ingredientRepository.Update(ingredient);
 

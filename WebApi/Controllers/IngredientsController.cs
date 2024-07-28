@@ -54,11 +54,11 @@ public class IngredientsController(IIngredientService ingredientService) : Contr
     }
 
     [HttpPatch("{id}")]
-    public async Task<ActionResult<IngredientDto>> UpdateQuantity(IngredientQuantityDto ingredient, string id)
+    public async Task<ActionResult<IngredientDto>> UpdateQuantity(QuantityDto quantity, string id)
     {
-        if (ingredient.Id != id) return BadRequest();
+        if (quantity.Id != id) return BadRequest();
 
-        IngredientDto? updatedIngredient = await _ingredientService.UpdateQuantity(ingredient);
+        IngredientDto? updatedIngredient = await _ingredientService.UpdateQuantity(quantity);
 
         if (updatedIngredient != null)
         {

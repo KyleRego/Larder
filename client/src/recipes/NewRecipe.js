@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import RecipeForm from "./RecipeForm";
 
 import RecipesService from "../services/RecipesService";
-import recipeFormDataMapper from "./recipeFormDataMapper";
+import RecipeFormDataMapper from "./RecipeFormDataMapper";
 
 import "./NewRecipe.css";
 
@@ -15,7 +15,7 @@ export default function NewRecipe({units})
 
         const formData = new FormData(e.target);
 
-        const recipeData = recipeFormDataMapper.map(formData);
+        const recipeData = RecipeFormDataMapper.map(formData);
 
         const recipesService = new RecipesService();
 

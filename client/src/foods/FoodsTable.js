@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 
 import SortingTableHeader from "../components/SortingTableHeader";
+import EditableQuantityTableCell from "../components/EditableQuantityTableCell";
+import FoodsService from "../services/FoodsService";
 
 export default function FoodsTable({foods, sortOrder, setSortOrder})
 {
@@ -13,10 +15,7 @@ export default function FoodsTable({foods, sortOrder, setSortOrder})
                 <tr>
                     <SortingTableHeader columnName="Name" sortOrder={sortOrder} setSortOrder={setSortOrder} />
                     <th>
-                        Servings
-                    </th>
-                    <th>
-                        Calories
+                        Quantity
                     </th>
                 </tr>
             </thead>
@@ -30,29 +29,40 @@ export default function FoodsTable({foods, sortOrder, setSortOrder})
 
 function FoodRow(food)
 {
-    let links = <Link to={`/foods/${food.id}`}>Details</Link>;
+    let links = <Link className="ml-2" to={`/foods/${food.id}`}>Details</Link>;
 
-    if (food.recipeId !== undefined)
+    if (food.recipeId !== null)
     {
         const recipeLink = <Link className="ml-2" to={`/recipes/${food.recipeId}`}>Recipe</Link>
 
         links = <>{links} {recipeLink}</>
     }
 
+    async function handleSubmitQuantity(e)
+    {
+        e.preventDefault();
+
+        const newQuantity = (new FormData(e.target)).get("quantity");
+
+        const patchFood = {
+            id: food.id,
+            quantity: newQuantity
+        };
+
+        const service = new FoodsService();
+
+        await service.patchFood(patchFood);
+    }
+
     return (
         <tr key={food.id}>
             <th scope="col">
                 {food.name}
-            </th>
-            <td>
-                {food.servings}
-            </td>
-            <td>
-                {food.calories}
-            </td>
-            <td className="text-center">
+
                 {links}
-            </td>
+            </th>
+
+            <EditableQuantityTableCell quantity={food.quantity} handleSubmit={handleSubmitQuantity} />
         </tr>
     );
 }

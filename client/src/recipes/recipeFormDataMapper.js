@@ -1,4 +1,4 @@
-export default class recipeFormDataMapper
+export default class RecipeFormDataMapper
 {
     static map(formData)
     {

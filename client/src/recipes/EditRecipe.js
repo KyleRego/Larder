@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 
 import RecipesService from "../services/RecipesService";
-import recipeFormDataMapper from "./recipeFormDataMapper";
+import RecipeFormDataMapper from "./RecipeFormDataMapper";
 
 import RecipeForm from "./RecipeForm";
 
@@ -16,7 +16,7 @@ export default function EditRecipe({units})
 
         const formData = new FormData(e.target);
 
-        const recipeData = recipeFormDataMapper.map(formData);
+        const recipeData = RecipeFormDataMapper.map(formData);
         recipeData.id = recipe.id;
 
         const recipesService = new RecipesService();

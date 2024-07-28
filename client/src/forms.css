@@ -1,3 +1,18 @@
+form > div {
+    margin: 0.5rem 0;
+}
+
+form label {
+    padding-right: 0.25rem;
+}
+
 input {
     min-width: 0;
+}
+
+textarea {
+    margin-top: 0.25rem;
+    padding: 0.25rem;
+    display: block;
+    width: 100%;
 }
