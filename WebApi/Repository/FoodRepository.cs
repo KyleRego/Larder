@@ -1,7 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+
 using Larder.Data;
 using Larder.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Any;
 
 namespace Larder.Repository;
 
