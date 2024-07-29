@@ -22,5 +22,5 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
+          key: ${{ secrets.PRIVATE_SSH_KEY }}
           script: echo 'hello world'
