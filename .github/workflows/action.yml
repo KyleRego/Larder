@@ -3,6 +3,25 @@ name: my-github-action
 on: [push]
 
 jobs:
+  build-and-deploy-react-client:
+    environment: development
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: 14.x
+      - name: Build React app
+        run: npm run build
+      - name: SCP bundle to VM
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_SSH_KEY }}
+          source: "./build"
+          target: /var/www/larder_client
+
   run-tests:
     environment: development
     runs-on: ubuntu-latest
