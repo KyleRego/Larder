@@ -10,7 +10,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Setup Node
-        uses: 14.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 14.x
       - name: Build React app
         run: npm run build
       - name: SCP bundle to VM
