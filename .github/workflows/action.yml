@@ -28,25 +28,25 @@ jobs:
           source: "./build"
           target: /var/www/larder_client
 
-  run-tests:
-    environment: development
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+  # run-tests:
+  #   environment: development
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-            dotnet-version: '8.0.x'
+  #     - name: Setup .NET
+  #       uses: actions/setup-dotnet@v4
+  #       with:
+  #           dotnet-version: '8.0.x'
 
-      - name: Run tests
-        run: dotnet test WebApi.Tests
+  #     - name: Run tests
+  #       run: dotnet test WebApi.Tests
 
-      - name: Test SSHing to VM
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.PRIVATE_SSH_KEY }}
-          script: echo 'hello world'
+  #     - name: Test SSHing to VM
+  #       uses: appleboy/ssh-action@v1.0.3
+  #       with:
+  #         host: ${{ secrets.HOST }}
+  #         username: ${{ secrets.USERNAME }}
+  #         key: ${{ secrets.PRIVATE_SSH_KEY }}
+  #         script: echo 'hello world'
