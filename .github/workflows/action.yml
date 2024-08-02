@@ -23,11 +23,10 @@ jobs:
       - name: SCP bundle to VM
         uses: appleboy/scp-action@v0.1.7
         with:
-          working-directory: ./client
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_SSH_KEY }}
-          source: "./build"
+          source: "./client/build"
           target: /var/www/larder_client
 
   # run-tests:
