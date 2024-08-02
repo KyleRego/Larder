@@ -29,25 +29,25 @@ jobs:
           source: "./client/build"
           target: /var/www/larder_client
 
-  # run-tests:
-  #   environment: development
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
-
-  #     - name: Setup .NET
-  #       uses: actions/setup-dotnet@v4
-  #       with:
-  #           dotnet-version: '8.0.x'
-
-  #     - name: Run tests
-  #       run: dotnet test WebApi.Tests
-
-  #     - name: Test SSHing to VM
-  #       uses: appleboy/ssh-action@v1.0.3
-  #       with:
-  #         host: ${{ secrets.HOST }}
-  #         username: ${{ secrets.USERNAME }}
-  #         key: ${{ secrets.PRIVATE_SSH_KEY }}
-  #         script: echo 'hello world'
+  build-test-and-deploy-webapi:
+    environment: development
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+            dotnet-version: '8.0.x'
+      - name: Run tests
+        run: dotnet test WebApi.Tests
+      - name: Publish self-contained executable
+        run: dotnet publish WebApi -r linux-x64 --self-contained true
+      - name: SCP dotnet executable to VM
+        uses: appleboy/scp-action@0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_SSH_KEY }}
+          source: "./WebApi/bin/Release/net8.0/linux-x64/publish"
+          target: ${{ secrets.WEBAPI_DEPLOY_DIRECTORY }}
