@@ -3,31 +3,31 @@ name: my-github-action
 on: [push]
 
 jobs:
-  # build-and-deploy-react-client:
-  #   environment: development
-  #   runs-on: ubuntu-latest
-  #   defaults:
-  #     run:
-  #       working-directory: ./client
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
-  #     - name: Setup Node
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: 14.x
-  #     - name: Install dependencies
-  #       run: npm install
-  #     - name: Build React app
-  #       run: npm run build
-  #     - name: SCP bundle to VM
-  #       uses: appleboy/scp-action@v0.1.7
-  #       with:
-  #         host: ${{ secrets.HOST }}
-  #         username: ${{ secrets.USERNAME }}
-  #         key: ${{ secrets.PRIVATE_SSH_KEY }}
-  #         source: "./client/build"
-  #         target: /var/www/larder_client
+  build-and-deploy-react-client:
+    environment: development
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 14.x
+      - name: Install dependencies
+        run: npm install
+      - name: Build React app
+        run: npm run build
+      - name: SCP bundle to VM
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_SSH_KEY }}
+          source: "./client/build"
+          target: /var/www/larder_client
 
   build-test-and-deploy-webapi:
     environment: development

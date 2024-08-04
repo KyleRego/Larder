@@ -29,10 +29,12 @@ if (builder.Environment.IsDevelopment())
 }
 else if (builder.Environment.IsProduction())
 {
+    // from an environment variable
+    string databasePath = builder.Configuration["LARDER_DATABASE_PATH"] ?? throw new ApplicationException();
+
     builder.Services.AddDbContext<AppDbContext>(options =>
     {
-        // supplied on command line
-        options.UseSqlite(builder.Configuration["DatabasePath"]);
+        options.UseSqlite(databasePath);
     });
 }
 
