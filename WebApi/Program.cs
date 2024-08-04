@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+
 using Larder.Data;
 using Larder.Repository;
 using Larder.Services;
@@ -26,16 +27,25 @@ if (builder.Environment.IsDevelopment())
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 }
+else if (builder.Environment.IsProduction())
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+    {
+        // supplied on command line
+        options.UseSqlite(builder.Configuration["DatabasePath"]);
+    });
+}
 
 string corsPolicyName = "corsPolicy";
+string clientReactAppOrigin = builder.Configuration["ClientReactAppOrigin"] ?? throw new ApplicationException();
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: corsPolicyName, policy  =>
-        { // TODO: move the client origin into config
+        {
             policy.AllowAnyHeader()
                 .AllowAnyMethod()
-                .WithOrigins("http://localhost:3000");
+                .WithOrigins(clientReactAppOrigin);
         });
 });
 
