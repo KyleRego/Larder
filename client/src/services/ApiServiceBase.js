@@ -3,6 +3,12 @@ export default class ApiServiceBase
     constructor()
     {
         this.backendOrigin = process.env.REACT_APP_WEBAPI_ORIGIN;
+
+        // TODO: Figure out why npm build does not read .env.production
+        if (this.backendOrigin === undefined)
+        {
+            this.backendOrigin = "http://kylerego.net:5000";
+        }
     }
 
     // TODO: Can this be a protected method
