@@ -15,6 +15,7 @@ public class AppDbContext : DbContext
     public DbSet<Ingredient> Ingredients { get; set; } = default!;
     public DbSet<Recipe> Recipes { get; set; } = default!;
     public DbSet<RecipeIngredient> RecipeIngredients { get; set; } = default!;
+    public DbSet<RecipeStep> RecipeSteps { get; set; } = default!;
     public DbSet<Unit> Units { get; set; } = default!;
     public DbSet<Utensil> Utensils { get; set; } = default!;
 

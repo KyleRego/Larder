@@ -22,4 +22,6 @@ public class Recipe : EntityBase
     public List<RecipeIngredient> RecipeIngredients { get; set; } = [];
 
     public List<Ingredient> Ingredients { get; set; } = [];
+
+    public List<RecipeStep> Steps { get; set; } = [];
 }
