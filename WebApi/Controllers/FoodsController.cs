@@ -17,12 +17,7 @@ public class FoodsController(IFoodService foodService) : ControllerBase
     {
         FoodDto? food = await _foodService.GetFood(id);
 
-        if (food == null)
-        {
-            return NotFound();
-        }
-
-        return food;
+        return (food == null) ? NotFound() : food;
     }
 
     [HttpGet]

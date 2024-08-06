@@ -26,7 +26,7 @@ public class RecipeRepository(AppDbContext dbContext) : RepositoryBase<Recipe, R
                                 .Include(r => r.RecipeIngredients)
                                 .ThenInclude(ri => ri.Ingredient)
                                 .Include(r => r.RecipeIngredients)
-                                .ThenInclude(ri => ri.Unit)
+                                .ThenInclude(ri => ri.Quantity)
                                 .FirstOrDefaultAsync(r => r.Id == id);
     }
 

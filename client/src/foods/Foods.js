@@ -16,11 +16,15 @@ export default function Foods()
 
         service.getFoods(sortOrder).then(result => {
             setFoods(result);
-        })
+        }).catch(error =>
+        {
+            console.log(error);
+        });
+
     }, [sortOrder]);
 
     return <>
-        <h1>Foods</h1>
+        <h1>Foods (ready to eat servings of food)</h1>
 
         <FoodsTable foods={foods} sortOrder={sortOrder} setSortOrder={setSortOrder} />
 

@@ -11,26 +11,18 @@ export default class ApiServiceBase
         }
     }
 
-    // TODO: Can this be a protected method
     async tryGetJson(url)
     {
-        try
+        const response = await fetch(url);
+
+        if (!response.ok)
         {
-            const response = await fetch(url);
-
-            if (!response.ok)
-            {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            const json = await response.json();
-
-            return json;
+            throw new Error(`Response status: ${response.status}`);
         }
-        catch (error)
-        {
-            console.error(error.message);
-        }
+
+        const json = await response.json();
+
+        return json;
     }
 
     async tryPostJson(url, dto)
@@ -43,21 +35,14 @@ export default class ApiServiceBase
             body: JSON.stringify(dto)
         });
 
-        try
-        {
-            const response = await fetch(request);
+        const response = await fetch(request);
 
-            if (!response.ok)
-            {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            return response.json();
-        }
-        catch (error)
+        if (!response.ok)
         {
-            console.error(error);
+            throw new Error(`Response status: ${response.status}`);
         }
+
+        return response.json();
     }
 
     async tryPutJson(url, dto)
@@ -70,21 +55,14 @@ export default class ApiServiceBase
             body: JSON.stringify(dto)
         });
 
-        try
-        {
-            const response = await fetch(request);
+        const response = await fetch(request);
 
-            if (!response.ok)
-            {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            return response.json();
-        }
-        catch (error)
+        if (!response.ok)
         {
-            console.error(error);
+            throw new Error(`Response status: ${response.status}`);
         }
+
+        return response.json();
     }
 
     async tryPatchJson(url, dto)
@@ -97,20 +75,13 @@ export default class ApiServiceBase
             body: JSON.stringify(dto)
         });
 
-        try
-        {
-            const response = await fetch(request);
+        const response = await fetch(request);
 
-            if (!response.ok)
-            {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            return response.json();
-        }
-        catch (error)
+        if (!response.ok)
         {
-            console.error(error);
+            throw new Error(`Response status: ${response.status}`);
         }
+
+        return response.json();
     }
 }

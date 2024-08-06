@@ -14,9 +14,7 @@ export default function FoodsTable({foods, sortOrder, setSortOrder})
             <thead>
                 <tr>
                     <SortingTableHeader columnName="Name" sortOrder={sortOrder} setSortOrder={setSortOrder} />
-                    <th>
-                        Quantity
-                    </th>
+                    <SortingTableHeader columnName="Quantity" sortOrder={sortOrder} setSortOrder={setSortOrder} />
                 </tr>
             </thead>
 
@@ -29,13 +27,9 @@ export default function FoodsTable({foods, sortOrder, setSortOrder})
 
 function FoodRow(food)
 {
-    let links = <Link className="ml-2" to={`/foods/${food.id}`}>Details</Link>;
-
     if (food.recipeId !== null)
     {
         const recipeLink = <Link className="ml-2" to={`/recipes/${food.recipeId}`}>Recipe</Link>
-
-        links = <>{links} {recipeLink}</>
     }
 
     async function handleSubmitQuantity(e)
@@ -44,25 +38,25 @@ function FoodRow(food)
 
         const newQuantity = (new FormData(e.target)).get("quantity");
 
-        const patchFood = {
+        const quantityDto = {
             id: food.id,
-            quantity: newQuantity
+            amount: newQuantity
         };
 
         const service = new FoodsService();
 
-        await service.patchFood(patchFood);
+        await service.patchFood(quantityDto);
     }
 
     return (
         <tr key={food.id}>
-            <th scope="col">
-                {food.name}
-
-                {links}
+            <th scope="row">
+                <Link to={`/foods/${food.id}`}>
+                    {food.name}
+                </Link>
             </th>
 
-            <EditableQuantityTableCell quantity={food.quantity} handleSubmit={handleSubmitQuantity} />
+            <EditableQuantityTableCell quantity={food.quantity?.amount} handleSubmit={handleSubmitQuantity} />
         </tr>
     );
 }

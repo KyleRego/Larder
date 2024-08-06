@@ -1,17 +1,14 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import EditableQuantityTableCell from "../components/EditableQuantityTableCell";
 import SortingTableHeader from "../components/SortingTableHeader";
-
-import { CiEdit } from "react-icons/ci";
-import { MdDone } from "react-icons/md";
 
 import "./IngredientsTable.css";
 import IngredientsService from "../services/IngredientsService";
 
 export default function IngredientsTable({ingredients, sortOrder, setSortOrder})
 {
-    const ingredientRows = ingredients.map(ingredient => <IngredientRow key={ingredient.id} ingredientProp={ingredient} />);
+    const ingredientRows = ingredients.map(ingredient => <IngredientRow key={ingredient.id} ingredient={ingredient} />);
 
     return (
         <>
@@ -33,73 +30,32 @@ export default function IngredientsTable({ingredients, sortOrder, setSortOrder})
     )
 }
 
-function IngredientRow({ingredientProp})
+function IngredientRow({ingredient})
 {
-    const [editing, setEditing] = useState(false);
-    const [ingredient, setIngredient] = useState(ingredientProp);
-
-    function editQuantity()
-    {
-        setEditing(true);
-    }
-
-    async function updateQuantity(e)
+    async function handleSubmitQuantity(e)
     {
         e.preventDefault();
 
         const formData = new FormData(e.target);
+        const newAmount = formData.get("quantity");
 
-        const ingredientData = {
+        const dto = {
             id: ingredient.id,
-            quantity: formData.get("quantity")
+            amount: newAmount
         };
 
         const ingredientsService = new IngredientsService();
 
-        const updatedIngredient = await ingredientsService.patchQuantity(ingredientData);
-        setIngredient(updatedIngredient);
-        setEditing(false);
+        await ingredientsService.patchQuantity(dto);
     }
-
-    let amountCell = <IngredientAmountCell editing={editing}
-                                            ingredient={ingredient}
-                                            editQuantity={editQuantity}
-                                            updateQuantity={updateQuantity} />
 
     return <tr>
         <th scope="row">
-            <span className="mr-2">{ingredient.name}</span>
-            <Link to={`/ingredients/${ingredient.id}`}>Details</Link>
+            <Link to={`/ingredients/${ingredient.id}`}>
+                {ingredient.name}
+            </Link>
         </th>
 
-        {amountCell}
+        <EditableQuantityTableCell quantity={ingredient.quantity?.amount} handleSubmit={handleSubmitQuantity} />
     </tr>
-}
-
-function IngredientAmountCell({editing, ingredient, editQuantity, updateQuantity})
-{
-    if (editing === false)
-    {
-        return <td>
-            <div className="flex align-items-center">
-                <span className="mr-2">{ingredient.quantity}</span>
-                <CiEdit className="mr-2" onClick={editQuantity} />
-                <span>{ingredient.unitName}</span>
-            </div>
-        </td>
-    }
-    else
-    {
-        return <td>
-            <form className="" onSubmit={updateQuantity}>
-                <div className="flex align-items-center">
-                    <input className="mr-2" name="quantity" type="number" defaultValue={ingredient.quantity}></input>
-                    <span className="mr-2">{ingredient.unitName}</span>
-                    <button type="submit">
-                        <MdDone />
-                    </button>
-                </div>
-            </form>
-        </td>
-    }
 }

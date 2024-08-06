@@ -25,7 +25,7 @@ public class IngredientRepository(AppDbContext dbContext) : RepositoryBase<Ingre
     {
         if (string.IsNullOrWhiteSpace(name))
         {
-            throw new ApplicationException("Ingredient name cannot be null or whitespace");
+            throw new ApplicationException("ingredient name cannot be null or whitespace");
         }
 
         Ingredient? ingredient = _dbContext.Ingredients.FirstOrDefault(ing => ing.Name == name);
@@ -41,7 +41,7 @@ public class IngredientRepository(AppDbContext dbContext) : RepositoryBase<Ingre
     public override async Task<Ingredient?> Get(string id)
     {
         return await _dbContext.Ingredients
-                            .Include(ing => ing.Unit)
+                            .Include(ing => ing.Quantity)
                             .Include(ing => ing.RecipeIngredients)
                             .ThenInclude(ri => ri.Recipe)
                             .FirstOrDefaultAsync(ing => ing.Id == id);
@@ -49,7 +49,7 @@ public class IngredientRepository(AppDbContext dbContext) : RepositoryBase<Ingre
 
     public override async Task<List<Ingredient>> GetAll(IngredientSortOptions sortBy, string? search)
     {
-        var baseQuery = _dbContext.Ingredients.Include(ingredient => ingredient.Unit);
+        var baseQuery = _dbContext.Ingredients.Include(ingredient => ingredient.Quantity);
 
         var baseSearchQuery = (search == null) ? baseQuery : baseQuery.Where(ingredient => ingredient.Name.Contains(search));
 

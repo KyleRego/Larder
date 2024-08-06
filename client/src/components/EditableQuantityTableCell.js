@@ -30,16 +30,16 @@ function EditingTableCell({quantity, setEditing, handleSubmit})
         setEditing(false);
     }
 
-    return <td>
+    return <td className="py-0">
         <form onSubmit={innerHandleSubmit}>
-            <div className="flex column-gap-5 align-items-center m-0">
+            <div className="flex column-gap-3 align-items-center m-0">
                 <label hidden htmlFor="number">Quantity</label>
                 <input type="number" id="quantity" name="quantity" defaultValue={quantity} />
-                <button type="submit">
+                <button type="submit" title="Done">
                     <MdDone />
                 </button>
 
-                <button type="button" onClick={cancelEditing}>
+                <button type="button" onClick={cancelEditing} title="Cancel">
                     Cancel
                 </button>
             </div>
@@ -54,10 +54,10 @@ function NoneditingTableCell({quantity, setEditing})
         setEditing(true);
     }
 
-    return <td>
-        <div className="m-0 flex column-gap-5 align-items-center">
+    return <td className="py-0">
+        <div className="m-0 flex column-gap-3 align-items-center">
             {quantity}
-            <CiEdit className="w-5 h-5" onClick={startEditing} />
+            <CiEdit className="w-5 h-5 cursor-pointer" onClick={startEditing} title="Edit quantity" />
         </div>
     </td>
 }

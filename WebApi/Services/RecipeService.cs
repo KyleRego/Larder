@@ -45,13 +45,17 @@ public class RecipeService( IRecipeRepository recipeRepository,
 
             RecipeIngredient recipeIngredient = new()
             {
-                IngredientId = ingredient.Id,
-                Amount = ingredientDto.Amount
+                RecipeId = recipe.Id,
+                IngredientId = ingredient.Id
             };
 
-            if (!string.IsNullOrWhiteSpace(ingredientDto.UnitId))
+            if (ingredientDto.Quantity != null)
             {
-                recipeIngredient.UnitId = ingredientDto.UnitId;
+                recipeIngredient.Quantity = new()
+                {
+                    Amount = ingredientDto.Quantity.Amount,
+                    UnitId = ingredientDto.Quantity.UnitId
+                };
             }
 
             recipeIngredients.Add(recipeIngredient);
@@ -88,27 +92,19 @@ public class RecipeService( IRecipeRepository recipeRepository,
 
     public async Task<RecipeDto> UpdateRecipe(RecipeDto recipeDto)
     {
-        if (recipeDto.Id == null)
-        {
-            throw new ApplicationException("Id was missing");
-        }
-
-        Recipe? recipe = await _recipeRepository.Get(recipeDto.Id);
-        if (recipe == null)
-        {
-            throw new ApplicationException("Recipe was not found");
-        }
+        if (recipeDto.Id == null) throw new ApplicationException("recipe Id was missing");
+    
+        Recipe? recipe = await _recipeRepository.Get(recipeDto.Id) ?? throw new ApplicationException("recipe not found");
 
         string name = recipeDto.Name;
 
         recipe.Name = name;
-        recipe.Food.Name = name;
 
         RecipeIngredient? FindRecipeIngredient(string? recipeIngredientId, List<RecipeIngredient> recipeIngredients)
         {
             if (recipeIngredientId == null) return null;
 
-            return recipeIngredients.FirstOrDefault(recIng => recIng.Id == recipeIngredientId);
+            return recipeIngredients.FirstOrDefault(ri => ri.Id == recipeIngredientId);
         }
 
         List<string> currentRecipeIngredientIds = [];
@@ -120,27 +116,28 @@ public class RecipeService( IRecipeRepository recipeRepository,
 
             string ingredientName = recipeIngredientDto.IngredientName;
             Ingredient ingredient = await _ingredientRepository.FindOrCreateBy(ingredientName);
-            double amount = recipeIngredientDto.Amount;
 
             if (recipeIngredient == null)
             {
                 recipeIngredient = new()
                 {
-                    Id = recipe.Id,
+                    RecipeId = recipe.Id,
                     IngredientId = ingredient.Id,
-                    Amount = amount
                 };
                 recipe.RecipeIngredients.Add(recipeIngredient);
             }
             else
             {
                 recipeIngredient.IngredientId = ingredient.Id;
-                recipeIngredient.Amount = amount;
             }
 
-            if (!string.IsNullOrWhiteSpace(recipeIngredientDto.UnitId))
+            if (recipeIngredientDto.Quantity != null)
             {
-                recipeIngredient.UnitId = recipeIngredientDto.UnitId;
+                recipeIngredient.Quantity = new()
+                {
+                    Amount = recipeIngredientDto.Quantity.Amount,
+                    UnitId = recipeIngredientDto.Quantity.UnitId
+                };
             }
 
             currentRecipeIngredientIds.Add(recipeIngredient.Id);

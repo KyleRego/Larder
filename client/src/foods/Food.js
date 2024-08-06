@@ -14,6 +14,8 @@ export default function Food()
 
         service.getFood(id).then(result => {
             setFood(result);
+        }).catch(error => {
+            console.log(error);
         });
     }, [id]);
 
@@ -27,7 +29,7 @@ export default function Food()
         </p>
 
         <p>
-            Quantity: {food.quantity}
+            Quantity: {food.quantity?.amount} {food.quantity?.unitName}
         </p>
 
         <div>

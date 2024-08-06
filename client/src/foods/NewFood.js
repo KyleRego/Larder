@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import FoodForm from "./FoodForm";
 
 import FoodsService from "../services/FoodsService";
@@ -23,5 +25,7 @@ export default function NewFood()
         <h1>New food:</h1>
 
         <FoodForm initialFood={{}} handleSubmit={handleSubmit} />
+
+        <Link to={"/foods"}>Back to foods</Link>
     </>
 }

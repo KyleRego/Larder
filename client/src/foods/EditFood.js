@@ -18,7 +18,7 @@ export default function EditFood()
         food.id = id;
 
         const service = new FoodsService();
-
+        debugger;
         await service.putFood(food);
     }
 

@@ -6,6 +6,10 @@ table {
     letter-spacing: 0.5px;
 }
 
+table th a:hover {
+    background-color: aliceblue;
+}
+
 th {
     text-align: left;
 }
@@ -29,7 +33,20 @@ th, td {
     border: 1px solid black;
 }
 
+table th:has(> a) {
+    padding: 0;
+}
+
+table th a {
+    padding: 0.75rem;
+}
+
 table,
 tbody tr:nth-child(even) {
     background-color: #f5f5f5;
+}
+
+table a {
+    display: block;
+    text-decoration: none;
 }

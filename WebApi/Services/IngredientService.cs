@@ -45,53 +45,68 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
         return ingredientDtos;
     }
 
-    public async Task<IngredientDto> CreateIngredient(IngredientDto ingredientDto)
+    public async Task<IngredientDto> CreateIngredient(IngredientDto dto)
     {
         Ingredient ingredient = new()
         {
-            Name = ingredientDto.Name,
-            Quantity = ingredientDto.Quantity,
-            UnitId = ingredientDto.UnitId
+            Name = dto.Name
         };
+
+        if (dto.Quantity != null)
+        {
+            ingredient.Quantity = new()
+            {
+                Amount = dto.Quantity.Amount,
+                UnitId = dto.Quantity.UnitId
+            };
+        }
 
         await _ingredientRepository.Insert(ingredient);
 
-        return ingredientDto;
+        return dto;
     }
 
-    public async Task<IngredientDto> UpdateIngredient(IngredientDto ingredientDto)
+    public async Task<IngredientDto> UpdateIngredient(IngredientDto dto)
     {
-        if (ingredientDto.Id == null)
-        {
-            throw new ApplicationException("Id was missing");
-        }
+        if (dto.Id == null) throw new ApplicationException("ingredient Id was missing");
 
-        Ingredient? ingredient = await _ingredientRepository.Get(ingredientDto.Id);
-        if (ingredient == null)
-        {
-            throw new ApplicationException("Ingredient was not found");
-        }
+        Ingredient ingredient = await _ingredientRepository.Get(dto.Id)
+                                        ?? throw new ApplicationException("ingredient not found");
 
-        ingredient.Name = ingredientDto.Name;
-        ingredient.Quantity = ingredientDto.Quantity;
-
-        if (!string.IsNullOrWhiteSpace(ingredientDto.UnitId))
+        ingredient.Name = dto.Name;
+        
+        if (dto.Quantity != null)
         {
-            ingredient.UnitId = ingredientDto.UnitId;
+            ingredient.Quantity = new()
+            {
+                Amount = dto.Quantity.Amount,
+                UnitId = dto.Quantity.UnitId
+            };
         }
 
         await _ingredientRepository.Update(ingredient);
 
-        return ingredientDto;
+        return dto;
     }
 
-    public async Task<IngredientDto?> UpdateQuantity(QuantityDto quantity)
+    public async Task<IngredientDto?> UpdateQuantity(QuantityDto dto)
     {
-        Ingredient? ingredient = await _ingredientRepository.Get(quantity.Id);
+        if (dto.Id == null) throw new ApplicationException("ingredient Id was missing");
 
-        if (ingredient == null) return null;
+        Ingredient ingredient = await _ingredientRepository.Get(dto.Id)
+                                    ?? throw new ApplicationException("ingredient not found");
 
-        ingredient.Quantity = quantity.Quantity;
+        if (ingredient.Quantity != null)
+        {
+            ingredient.Quantity.Amount = dto.Amount;
+        }
+        else
+        {
+            ingredient.Quantity = new()
+            {
+                Amount = dto.Amount
+            };
+        }
 
         ingredient = await _ingredientRepository.Update(ingredient);
 

@@ -19,11 +19,7 @@ public class RecipeIngredientDto
 
     public string? IngredientId { get; set; }
 
-    public double Amount { get; set; }
-
-    public string? UnitName { get; set; }
-
-    public string? UnitId { get; set; }
+    public ItemQuantityDto? Quantity { get; set; }
 }
 
 public static class RecipeDtoAssembler
@@ -47,12 +43,12 @@ public static class RecipeDtoAssembler
 
                 IngredientName = recipeIngredient.Ingredient.Name,
                 IngredientId = recipeIngredient.Ingredient.Id,
-
-                Amount = recipeIngredient.Amount,
-
-                UnitName = recipeIngredient.Unit?.Name,
-                UnitId = recipeIngredient.UnitId
             };
+
+            if (recipeIngredient.Quantity != null)
+            {
+                recipeDtoIngredient.Quantity = ItemQuantityDtoAssembler.Assemble(recipeIngredient.Quantity);
+            }
 
             recipeDto.Ingredients.Add(recipeDtoIngredient);
         }

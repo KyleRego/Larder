@@ -6,11 +6,7 @@ public class IngredientDto : ItemDto
 {
     public string? Id { get; set; }
 
-    public required double Quantity { get; set; }
-
-    public string? UnitName { get; set; }
-
-    public string? UnitId { get; set; }
+    public ItemQuantityDto? Quantity { get; set; }
 
     public List<IngredientRecipeDto> Recipes { get; set; } = [];
 }
@@ -26,17 +22,15 @@ public static class IngredientDtoAssembler
 {
     public static IngredientDto Assemble(Ingredient ingredient)
     {
-        IngredientDto ingredientDto = new()
+        IngredientDto dto = new()
         {
             Id = ingredient.Id,
-            Name = ingredient.Name,
-            Quantity = ingredient.Quantity
+            Name = ingredient.Name
         };
 
-        if (ingredient.Unit != null)
+        if (ingredient.Quantity != null)
         {
-            ingredientDto.UnitName = ingredient.Unit.Name;
-            ingredientDto.UnitId = ingredient.Unit.Id;
+            dto.Quantity = ItemQuantityDtoAssembler.Assemble(ingredient.Quantity);
         }
 
         foreach (RecipeIngredient recipeIngredient in ingredient.RecipeIngredients)
@@ -50,9 +44,9 @@ public static class IngredientDtoAssembler
                 Name = recipe.Name
             };
 
-            ingredientDto.Recipes.Add(recipeDto);
+            dto.Recipes.Add(recipeDto);
         }
 
-        return ingredientDto;
+        return dto;
     }
 }

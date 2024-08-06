@@ -2,7 +2,9 @@ namespace Larder.Dtos;
 
 public class QuantityDto
 {
-    public required string Id { get; set; }
+    public string? Id { get; set; }
 
-    public required double Quantity { get; set; }
+    public double Amount { get; set; }
+
+    public string? UnitId { get; set; }
 }

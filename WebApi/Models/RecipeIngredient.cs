@@ -12,7 +12,7 @@ namespace Larder.Models;
 public class RecipeIngredient : EntityBase
 {
     [Required]
-    public string? RecipeId { get; set; }
+    public required string RecipeId { get; set; }
 
     [ForeignKey(nameof(RecipeId))]
     public Recipe? Recipe { get; set; }
@@ -23,12 +23,5 @@ public class RecipeIngredient : EntityBase
     [ForeignKey(nameof(IngredientId))]
     public Ingredient? Ingredient { get; set; }
 
-
-    [Required]
-    public double Amount { get; set; }
-
-    public string? UnitId { get; set; }
-
-    [ForeignKey(nameof(UnitId))]
-    public Unit? Unit { get; set; }
+    public Quantity? Quantity { get; set; }
 }

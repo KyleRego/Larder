@@ -10,4 +10,6 @@ public abstract class Item : EntityBase
     public string? Description { get; set; }
 
     // TODO: Allow uploading an image for the item
+
+    public Quantity? Quantity { get; set; }
 }

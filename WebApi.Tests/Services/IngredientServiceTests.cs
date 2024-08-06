@@ -1,3 +1,4 @@
+using System.Runtime;
 using Larder.Dtos;
 using Larder.Models;
 using Larder.Repository;
@@ -17,7 +18,7 @@ public class IngredientServiceTests
         IngredientDto ingredient = new()
         {
             Name = "Eggs",
-            Quantity = 5
+            Quantity = new() { Amount = 5 }
         };
 
         await Assert.ThrowsAsync<ApplicationException>(async () => await service.UpdateIngredient(ingredient));
@@ -37,7 +38,7 @@ public class IngredientServiceTests
         {
             Id = id,
             Name = "Eggs",
-            Quantity = 5
+            Quantity = new() { Amount = 5 }
         };
 
         await Assert.ThrowsAsync<ApplicationException>(async () => await service.UpdateIngredient(ingredient)); 

@@ -2,6 +2,7 @@
 using Larder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Larder.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240806182446_RefactorDbWithQuantityTable")]
+    partial class RefactorDbWithQuantityTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
@@ -85,28 +88,6 @@ namespace Larder.Migrations
                     b.HasIndex("UnitId");
 
                     b.ToTable("Quantities");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "c0c130cf-46b8-4d29-b752-6f14abcc6f6e",
-                            Amount = 1.0,
-                            RecipeIngredientId = "f192906a-d0ee-4070-8637-8dbfc625e2c6",
-                            UnitId = "80019b5f-2421-43f4-9dbc-34b9410175ba"
-                        },
-                        new
-                        {
-                            Id = "4f36bb33-5748-4b8c-b4b7-74d31ce1ab3b",
-                            Amount = 2.5,
-                            RecipeIngredientId = "3fafbcb2-36db-4c93-b258-a2076e492a5b",
-                            UnitId = "981342be-e3c6-4d29-ae24-323751268ffa"
-                        },
-                        new
-                        {
-                            Id = "09cdc1e5-1a8d-4807-bb75-47a205358508",
-                            Amount = 1.0,
-                            RecipeIngredientId = "77c040d5-0721-4a70-a744-5930f6ec4e5a"
-                        });
                 });
 
             modelBuilder.Entity("Larder.Models.Recipe", b =>
@@ -135,8 +116,8 @@ namespace Larder.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "39e0ae76-2028-4a64-b916-3c867d33cd6a",
-                            FoodId = "e82cf4ef-de27-4047-93fb-9b646b18e429",
+                            Id = "439f59dd-be1e-4c76-9960-d06f0f257fad",
+                            FoodId = "48588609-31be-4479-965a-38e513cf7bd4",
                             Name = "Rice Roni Low Sodium Chicken Rice",
                             ServingsProduced = 0
                         });
@@ -162,26 +143,6 @@ namespace Larder.Migrations
                     b.HasIndex("RecipeId");
 
                     b.ToTable("RecipeIngredients");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "f192906a-d0ee-4070-8637-8dbfc625e2c6",
-                            IngredientId = "ba79b505-ef1c-4a3c-ac11-f238c96cf55a",
-                            RecipeId = "39e0ae76-2028-4a64-b916-3c867d33cd6a"
-                        },
-                        new
-                        {
-                            Id = "3fafbcb2-36db-4c93-b258-a2076e492a5b",
-                            IngredientId = "8c30b3bf-8d97-4698-a54e-65ba9ffb6874",
-                            RecipeId = "39e0ae76-2028-4a64-b916-3c867d33cd6a"
-                        },
-                        new
-                        {
-                            Id = "77c040d5-0721-4a70-a744-5930f6ec4e5a",
-                            IngredientId = "b8365ef1-1945-4b95-985f-bf7fdc0d8959",
-                            RecipeId = "39e0ae76-2028-4a64-b916-3c867d33cd6a"
-                        });
                 });
 
             modelBuilder.Entity("Larder.Models.RecipeStep", b =>
@@ -223,37 +184,37 @@ namespace Larder.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "39f859ef-a613-4cbf-8150-436180e0ea9b",
+                            Id = "68ae1033-e0b6-4387-839d-0f3e085028ba",
                             Name = "Liters",
                             Type = 1
                         },
                         new
                         {
-                            Id = "38117f39-1bc2-43a3-9433-fc566d1cf405",
+                            Id = "9f545133-0e2a-47d2-9710-6208fe42e099",
                             Name = "Pounds",
                             Type = 2
                         },
                         new
                         {
-                            Id = "548ba096-d9e3-4e00-9c39-e3bfaafc94f1",
+                            Id = "cb5328f2-7d57-4085-a083-2c217d2e6dcd",
                             Name = "Grams",
                             Type = 0
                         },
                         new
                         {
-                            Id = "67afa4e1-6aed-496e-95cf-4f082af69907",
+                            Id = "04d9ddd0-7a12-44f2-a687-1bb81ac02ec3",
                             Name = "Milliliters",
                             Type = 1
                         },
                         new
                         {
-                            Id = "80019b5f-2421-43f4-9dbc-34b9410175ba",
+                            Id = "4a816d7a-da24-4af6-9775-79b857c5d4f5",
                             Name = "Tablespoons",
                             Type = 1
                         },
                         new
                         {
-                            Id = "981342be-e3c6-4d29-ae24-323751268ffa",
+                            Id = "93ce03f5-e2fe-40ad-a850-bf0a369a6edf",
                             Name = "Cups",
                             Type = 1
                         });
@@ -271,7 +232,7 @@ namespace Larder.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e82cf4ef-de27-4047-93fb-9b646b18e429",
+                            Id = "48588609-31be-4479-965a-38e513cf7bd4",
                             Name = "Chicken and rice",
                             Calories = 0.0
                         });
@@ -286,17 +247,17 @@ namespace Larder.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ba79b505-ef1c-4a3c-ac11-f238c96cf55a",
+                            Id = "273866cd-b7ce-4142-a100-f83c52e19219",
                             Name = "Butter"
                         },
                         new
                         {
-                            Id = "8c30b3bf-8d97-4698-a54e-65ba9ffb6874",
+                            Id = "2e514268-89da-4a80-96b6-a7175802e3e5",
                             Name = "Water"
                         },
                         new
                         {
-                            Id = "b8365ef1-1945-4b95-985f-bf7fdc0d8959",
+                            Id = "e793738d-a245-4cc4-8ab4-b009fc9a7229",
                             Name = "Rice Roni Chicken Lower Sodium box"
                         });
                 });

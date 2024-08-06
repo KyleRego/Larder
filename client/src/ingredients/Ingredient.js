@@ -24,7 +24,7 @@ export default function Ingredient()
                 {ingredient.name}
             </h1>
 
-            Stock: {ingredient.quantity} {ingredient.unitName}
+            Stock: {ingredient.quantity?.amount} {ingredient.quantity?.unitName}
 
             <IngredientDetails ingredient={ingredient} />
 

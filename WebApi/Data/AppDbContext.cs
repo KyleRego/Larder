@@ -18,6 +18,7 @@ public class AppDbContext : DbContext
     public DbSet<RecipeStep> RecipeSteps { get; set; } = default!;
     public DbSet<Unit> Units { get; set; } = default!;
     public DbSet<Utensil> Utensils { get; set; } = default!;
+    public DbSet<Quantity> Quantities { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -59,10 +60,19 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Recipe>().HasData([chickenAndRiceRecipe]);
 
         List<RecipeIngredient> chickenAndRiceRecipeIngredients = [
-            new() { RecipeId = chickenAndRiceRecipe.Id, IngredientId = butter.Id, UnitId = tablespoons.Id, Amount = 1 },
-            new() { RecipeId = chickenAndRiceRecipe.Id, IngredientId = water.Id, UnitId = cups.Id, Amount = 2.5 },
-            new() { RecipeId = chickenAndRiceRecipe.Id, IngredientId = boxRice.Id, UnitId = null, Amount = 1 }
+            new() { RecipeId = chickenAndRiceRecipe.Id, IngredientId = butter.Id },
+            new() { RecipeId = chickenAndRiceRecipe.Id, IngredientId = water.Id },
+            new() { RecipeId = chickenAndRiceRecipe.Id, IngredientId = boxRice.Id }
         ];
         modelBuilder.Entity<RecipeIngredient>().HasData(chickenAndRiceRecipeIngredients);
+
+        Quantity quantity1 = new(){ UnitId = tablespoons.Id, Amount = 1,
+                                    RecipeIngredientId = chickenAndRiceRecipeIngredients.First().Id };
+        Quantity quantity2 = new(){ UnitId = cups.Id, Amount = 2.5,
+                                    RecipeIngredientId = chickenAndRiceRecipeIngredients[1].Id };
+        Quantity quantity3 = new(){ UnitId = null, Amount = 1,
+                                    RecipeIngredientId = chickenAndRiceRecipeIngredients[2].Id };
+
+        modelBuilder.Entity<Quantity>().HasData([quantity1, quantity2, quantity3]);
     }
 }
