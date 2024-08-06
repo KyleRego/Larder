@@ -27,10 +27,10 @@ export default function FoodsTable({foods, sortOrder, setSortOrder})
 
 function FoodRow(food)
 {
-    if (food.recipeId !== null)
-    {
-        const recipeLink = <Link className="ml-2" to={`/recipes/${food.recipeId}`}>Recipe</Link>
-    }
+    // if (food.recipeId !== null)
+    // {
+    //     const recipeLink = <Link className="ml-2" to={`/recipes/${food.recipeId}`}>Recipe</Link>
+    // }
 
     async function handleSubmitQuantity(e)
     {
