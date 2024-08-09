@@ -5,7 +5,7 @@ import FoodsService from "../services/FoodsService";
 
 import FoodsTable from "./FoodsTable";
 
-export default function Foods()
+export default function Foods({units})
 {
     const [foods, setFoods] = useState([]);
     const [sortOrder, setSortOrder] = useState("Name");
@@ -24,9 +24,9 @@ export default function Foods()
     }, [sortOrder]);
 
     return <>
-        <h1>Foods (ready to eat servings of food)</h1>
+        <h1>Foods</h1>
 
-        <FoodsTable foods={foods} sortOrder={sortOrder} setSortOrder={setSortOrder} />
+        <FoodsTable foods={foods} sortOrder={sortOrder} setSortOrder={setSortOrder} units={units} />
 
         <div>
             <Link to="/foods/new">New food</Link>

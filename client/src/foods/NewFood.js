@@ -6,7 +6,7 @@ import FoodsService from "../services/FoodsService";
 
 import FoodFormDataMapper from "./FoodFormDataMapper";
 
-export default function NewFood()
+export default function NewFood({units})
 {
     async function handleSubmit(e)
     {
@@ -24,7 +24,7 @@ export default function NewFood()
     return <>
         <h1>New food:</h1>
 
-        <FoodForm initialFood={{}} handleSubmit={handleSubmit} />
+        <FoodForm initialFood={{amount: 0}} units={units} handleSubmit={handleSubmit} />
 
         <Link to={"/foods"}>Back to foods</Link>
     </>

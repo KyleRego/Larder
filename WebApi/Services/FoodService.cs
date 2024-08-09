@@ -27,17 +27,10 @@ public class FoodService(IFoodRepository foodRepo) : IFoodService
         {
             Name = dto.Name,
             Description = dto.Description,
-            Calories = dto.Calories
+            Calories = dto.Calories,
+            Amount = dto.Amount,
+            UnitId = string.IsNullOrWhiteSpace(dto.UnitId) ? null : dto.UnitId
         };
-
-        if (dto.Quantity != null)
-        {
-            entity.Quantity = new()
-            {
-                Amount = dto.Quantity.Amount,
-                UnitId = dto.Quantity.UnitId
-            };
-        }
 
         await _foodRepo.Insert(entity);
 
@@ -48,30 +41,14 @@ public class FoodService(IFoodRepository foodRepo) : IFoodService
     {
         if (dto.Id == null) throw new ApplicationException("food id was missing");
 
-        Food? entity = await _foodRepo.Get(dto.Id);
-
-        if (entity == null) throw new ApplicationException("food was not found");
+        Food entity = await _foodRepo.Get(dto.Id)
+                            ?? throw new ApplicationException("food was not found");
 
         entity.Name = dto.Name;
         entity.Description = dto.Description;
         entity.Calories = dto.Calories;
-
-        if (dto.Quantity != null)
-        {
-            if (entity.Quantity == null)
-            {
-                entity.Quantity = new()
-                {
-                    Amount = dto.Quantity.Amount,
-                    UnitId = dto.Quantity.UnitId
-                };
-            }
-            else
-            {
-                entity.Quantity.Amount = dto.Quantity.Amount;
-                entity.Quantity.UnitId = dto.Quantity.UnitId;
-            }
-        }
+        entity.Amount = dto.Amount;
+        entity.UnitId = string.IsNullOrWhiteSpace(dto.UnitId) ? null : dto.UnitId;
 
         await _foodRepo.Update(entity);
 
@@ -101,25 +78,14 @@ public class FoodService(IFoodRepository foodRepo) : IFoodService
         return foodDtos;
     }
 
-    public async Task<FoodDto> UpdateQuantity(QuantityDto quantity)
+    public async Task<FoodDto> UpdateQuantity(QuantityDto dto)
     {
-        ArgumentNullException.ThrowIfNull(quantity.Id);
+        ArgumentNullException.ThrowIfNull(dto.Id);
 
-        Food entity = await _foodRepo.Get(quantity.Id) ?? throw new ApplicationException("food not found");
+        Food entity = await _foodRepo.Get(dto.Id) ?? throw new ApplicationException("food not found");
 
-        if (entity.Quantity == null)
-        {
-            entity.Quantity = new()
-            {
-                Amount = quantity.Amount,
-                UnitId = quantity.UnitId
-            };
-        }
-        else
-        {
-            entity.Quantity.Amount = quantity.Amount;
-            entity.Quantity.UnitId = quantity.UnitId;
-        }
+        entity.Amount = dto.Amount;
+        entity.UnitId = string.IsNullOrWhiteSpace(dto.UnitId) ? null : dto.UnitId;
 
         await _foodRepo.Update(entity);
 

@@ -6,9 +6,11 @@ import SortingTableHeader from "../components/SortingTableHeader";
 import "./IngredientsTable.css";
 import IngredientsService from "../services/IngredientsService";
 
-export default function IngredientsTable({ingredients, sortOrder, setSortOrder})
+export default function IngredientsTable({ingredients, sortOrder, setSortOrder, units})
 {
-    const ingredientRows = ingredients.map(ingredient => <IngredientRow key={ingredient.id} ingredient={ingredient} />);
+    const ingredientRows = ingredients.map(ingredient => <IngredientRow key={ingredient.id}
+                                                                        ingredient={ingredient}
+                                                                        units={units} />);
 
     return (
         <>
@@ -30,19 +32,19 @@ export default function IngredientsTable({ingredients, sortOrder, setSortOrder})
     )
 }
 
-function IngredientRow({ingredient})
+function IngredientRow({ingredient, units})
 {
     async function handleSubmitQuantity(e)
     {
         e.preventDefault();
 
-        const formData = new FormData(e.target);
-        const newAmount = formData.get("quantity");
-
         const dto = {
             id: ingredient.id,
-            amount: newAmount
         };
+
+        const formData = new FormData(e.target);
+        dto.amount = formData.get("amount");
+        dto.unitId = formData.get("unitId");
 
         const ingredientsService = new IngredientsService();
 
@@ -56,6 +58,9 @@ function IngredientRow({ingredient})
             </Link>
         </th>
 
-        <EditableQuantityTableCell quantity={ingredient.quantity?.amount} handleSubmit={handleSubmitQuantity} />
+        <EditableQuantityTableCell amount={ingredient.amount}
+                                    unitId={ingredient.unitId}
+                                    unitName={ingredient.unitName}
+                                    units={units} handleSubmit={handleSubmitQuantity} />
     </tr>
 }

@@ -1,10 +1,19 @@
 namespace Larder.Dtos;
 
-public class QuantityDto
+public interface IQuantityDto
 {
-    public string? Id { get; set; }
-
     public double Amount { get; set; }
 
     public string? UnitId { get; set; }
+
+    public string? UnitName { get; set; }
+}
+
+public class QuantityDto : DtoBase, IQuantityDto
+{
+    public double Amount { get; set; }
+
+    public string? UnitId { get; set; }
+
+    public string? UnitName { get; set; }
 }

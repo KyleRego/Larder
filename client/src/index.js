@@ -1,3 +1,5 @@
+import "./bootstrap/bootstrap.css";
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
@@ -46,11 +48,11 @@ const router = createBrowserRouter(
     <Route path="/" element={<App />}>
       <Route path="conversions" element={<Conversions />} />
       <Route path="units" element={<Units />} />
-      <Route path="foods" element={<Foods />} />
+      <Route path="foods" element={<Foods units={units} />} />
       <Route path="foods/:id" element={<Food />} />
-      <Route path="foods/new" element={<NewFood />} />
-      <Route path="foods/:id/edit" element={<EditFood />} />
-      <Route path="ingredients" element={<Ingredients />} />
+      <Route path="foods/new" element={<NewFood units={units} />} />
+      <Route path="foods/:id/edit" element={<EditFood units={units} />} />
+      <Route path="ingredients" element={<Ingredients units={units} />} />
       <Route path="ingredients/:id" element={<Ingredient />} />
       <Route path="ingredients/:id/edit" element={<EditIngredient units={units} />} />
       <Route path="ingredients/new" element={<NewIngredient units={units} />} />

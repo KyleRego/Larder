@@ -1,4 +1,6 @@
-export default function FoodForm({initialFood, handleSubmit})
+import QuantityInput from "../components/QuantityInput"
+
+export default function FoodForm({initialFood, handleSubmit, units})
 {
     return <form onSubmit={handleSubmit}>
         <div>
@@ -12,8 +14,7 @@ export default function FoodForm({initialFood, handleSubmit})
         </div>
 
         <div>
-            <label htmlFor="quantity">Quantity (number of servings ready to eat):</label>
-            <input id="quantity" name="quantity" type="number" defaultValue={initialFood.quantity}></input>
+            <QuantityInput initialAmount={initialFood.amount} initialUnitId={initialFood.unitId} units={units} />
         </div>
 
         <div>

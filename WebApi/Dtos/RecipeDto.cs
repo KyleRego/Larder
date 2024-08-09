@@ -2,24 +2,24 @@ using Larder.Models;
 
 namespace Larder.Dtos;
 
-public class RecipeDto
+public class RecipeDto : DtoBase
 {
-    public string? Id { get; set; }
-
     public required string Name { get; set; }
 
     public required List<RecipeIngredientDto> Ingredients { get; set; }
 }
 
-public class RecipeIngredientDto
+public class RecipeIngredientDto : DtoBase, IQuantityDto
 {
-    public string? RecipeIngredientId { get; set; }
-
     public required string IngredientName { get; set; }
 
     public string? IngredientId { get; set; }
 
-    public ItemQuantityDto? Quantity { get; set; }
+    public double Amount { get; set; }
+
+    public string? UnitId { get; set; }
+
+    public string? UnitName { get; set; }
 }
 
 public static class RecipeDtoAssembler
@@ -35,20 +35,15 @@ public static class RecipeDtoAssembler
 
         foreach (RecipeIngredient recipeIngredient in recipe.RecipeIngredients)
         {
-            ArgumentNullException.ThrowIfNull(recipeIngredient.Ingredient);
-
             RecipeIngredientDto recipeDtoIngredient = new()
             {
-                RecipeIngredientId = recipeIngredient.Id,
-
+                Id = recipeIngredient.Id,
                 IngredientName = recipeIngredient.Ingredient.Name,
                 IngredientId = recipeIngredient.Ingredient.Id,
+                Amount = recipeIngredient.Amount,
+                UnitId = recipeIngredient.UnitId,
+                UnitName = recipeIngredient.Unit?.Name
             };
-
-            if (recipeIngredient.Quantity != null)
-            {
-                recipeDtoIngredient.Quantity = ItemQuantityDtoAssembler.Assemble(recipeIngredient.Quantity);
-            }
 
             recipeDto.Ingredients.Add(recipeDtoIngredient);
         }

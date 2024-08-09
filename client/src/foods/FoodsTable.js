@@ -4,13 +4,13 @@ import SortingTableHeader from "../components/SortingTableHeader";
 import EditableQuantityTableCell from "../components/EditableQuantityTableCell";
 import FoodsService from "../services/FoodsService";
 
-export default function FoodsTable({foods, sortOrder, setSortOrder})
+export default function FoodsTable({foods, sortOrder, setSortOrder, units})
 {
-    let rows = foods.map(food => FoodRow(food));
+    let rows = foods.map(food => FoodRow(food, units));
 
     return <>
         <table className="foodsTable">
-            <caption>Foods</caption>
+            <caption>Servings of ready to eat food.</caption>
             <thead>
                 <tr>
                     <SortingTableHeader columnName="Name" sortOrder={sortOrder} setSortOrder={setSortOrder} />
@@ -25,23 +25,21 @@ export default function FoodsTable({foods, sortOrder, setSortOrder})
     </>
 }
 
-function FoodRow(food)
+function FoodRow(food, units)
 {
-    // if (food.recipeId !== null)
-    // {
-    //     const recipeLink = <Link className="ml-2" to={`/recipes/${food.recipeId}`}>Recipe</Link>
-    // }
 
     async function handleSubmitQuantity(e)
     {
         e.preventDefault();
 
-        const newQuantity = (new FormData(e.target)).get("quantity");
-
         const quantityDto = {
-            id: food.id,
-            amount: newQuantity
+            id: food.id
         };
+
+        const formData = new FormData(e.target);
+
+        quantityDto.amount = formData.get("amount");
+        quantityDto.unitId = formData.get("unitId");
 
         const service = new FoodsService();
 
@@ -56,7 +54,11 @@ function FoodRow(food)
                 </Link>
             </th>
 
-            <EditableQuantityTableCell quantity={food.quantity?.amount} handleSubmit={handleSubmitQuantity} />
+            <EditableQuantityTableCell amount={food.amount}
+                                        unitId={food.unitId}
+                                        unitName={food.unitName}
+                                        handleSubmit={handleSubmitQuantity}
+                                        units={units} />
         </tr>
     );
 }

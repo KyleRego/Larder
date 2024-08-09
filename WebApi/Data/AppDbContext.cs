@@ -3,22 +3,16 @@ using Larder.Models;
 
 namespace Larder.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public AppDbContext (DbContextOptions<AppDbContext> options)
-            : base(options)
-        {
-        }
-
-    public DbSet<Item> Items { get; set; } = default!;
-    public DbSet<Food> Foods { get; set; } = default!;
-    public DbSet<Ingredient> Ingredients { get; set; } = default!;
-    public DbSet<Recipe> Recipes { get; set; } = default!;
-    public DbSet<RecipeIngredient> RecipeIngredients { get; set; } = default!;
-    public DbSet<RecipeStep> RecipeSteps { get; set; } = default!;
-    public DbSet<Unit> Units { get; set; } = default!;
-    public DbSet<Utensil> Utensils { get; set; } = default!;
-    public DbSet<Quantity> Quantities { get; set; } = default!;
+    public DbSet<Item> Items { get; set; }
+    public DbSet<Food> Foods { get; set; }
+    public DbSet<Ingredient> Ingredients { get; set; }
+    public DbSet<Recipe> Recipes { get; set; }
+    public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
+    public DbSet<RecipeStep> RecipeSteps { get; set; }
+    public DbSet<Unit> Units { get; set; }
+    public DbSet<Utensil> Utensils { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -60,19 +54,28 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Recipe>().HasData([chickenAndRiceRecipe]);
 
         List<RecipeIngredient> chickenAndRiceRecipeIngredients = [
-            new() { RecipeId = chickenAndRiceRecipe.Id, IngredientId = butter.Id },
-            new() { RecipeId = chickenAndRiceRecipe.Id, IngredientId = water.Id },
-            new() { RecipeId = chickenAndRiceRecipe.Id, IngredientId = boxRice.Id }
+            new()
+            {
+                RecipeId = chickenAndRiceRecipe.Id,
+                IngredientId = butter.Id,
+                Amount = 1,
+                UnitId = tablespoons.Id
+            },
+            new()
+            {
+                RecipeId = chickenAndRiceRecipe.Id,
+                IngredientId = water.Id,
+                Amount = 2.5,
+                UnitId = cups.Id
+            },
+            new()
+            {
+                RecipeId = chickenAndRiceRecipe.Id,
+                IngredientId = boxRice.Id,
+                Amount = 1,
+                UnitId = null
+            }
         ];
         modelBuilder.Entity<RecipeIngredient>().HasData(chickenAndRiceRecipeIngredients);
-
-        Quantity quantity1 = new(){ UnitId = tablespoons.Id, Amount = 1,
-                                    RecipeIngredientId = chickenAndRiceRecipeIngredients.First().Id };
-        Quantity quantity2 = new(){ UnitId = cups.Id, Amount = 2.5,
-                                    RecipeIngredientId = chickenAndRiceRecipeIngredients[1].Id };
-        Quantity quantity3 = new(){ UnitId = null, Amount = 1,
-                                    RecipeIngredientId = chickenAndRiceRecipeIngredients[2].Id };
-
-        modelBuilder.Entity<Quantity>().HasData([quantity1, quantity2, quantity3]);
     }
 }

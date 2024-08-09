@@ -2,13 +2,9 @@ using Larder.Models;
 
 namespace Larder.Dtos;
 
-public class FoodDto : ItemDto
+public class FoodDto : ItemDto, IQuantityDto
 {
-    public string? Id { get; set; }
-
     public string? RecipeId { get; set; }
-
-    public ItemQuantityDto? Quantity { get; set; }
 
     public double Calories { get; set; }
 
@@ -19,24 +15,16 @@ public static class FoodDtoAssembler
 {
     public static FoodDto Assemble(Food food)
     {
-        FoodDto dto = new()
+        return new()
         {
             Id = food.Id,
+            RecipeId = food.Recipe?.Id ?? null,
             Name = food.Name,
             Description = food.Description,
-            Calories = food.Calories
+            Calories = food.Calories,
+            Amount = food.Amount,
+            UnitId = food.UnitId,
+            UnitName = food.Unit?.Name
         };
-
-        if (food.Quantity != null)
-        {
-            dto.Quantity = ItemQuantityDtoAssembler.Assemble(food.Quantity);
-        }
-
-        if (food.Recipe != null)
-        {
-            dto.RecipeId = food.Recipe.Id;
-        }
-
-        return dto;
     }
 }

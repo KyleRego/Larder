@@ -29,7 +29,7 @@ export default function Food()
         </p>
 
         <p>
-            Quantity: {food.quantity?.amount} {food.quantity?.unitName}
+            Quantity: {food.amount} {food.unitName}
         </p>
 
         <div>

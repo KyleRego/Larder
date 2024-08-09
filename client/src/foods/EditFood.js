@@ -6,7 +6,7 @@ import FoodsService from "../services/FoodsService";
 
 import FoodFormDataMapper from "./FoodFormDataMapper";
 
-export default function EditFood()
+export default function EditFood({units})
 {
     async function handleSubmit(e)
     {
@@ -18,7 +18,7 @@ export default function EditFood()
         food.id = id;
 
         const service = new FoodsService();
-        debugger;
+
         await service.putFood(food);
     }
 
@@ -30,7 +30,9 @@ export default function EditFood()
 
         service.getFood(id).then(result => {
             setFood(result);
-        });
+        }).then(error => {
+            console.log(error);
+        })
 
     }, [id]);
 
@@ -40,7 +42,7 @@ export default function EditFood()
         <h1>Editing food</h1>
 
         <div>
-            <FoodForm initialFood={food} handleSubmit={handleSubmit} />
+            <FoodForm initialFood={food} units={units} handleSubmit={handleSubmit} />
         </div>
 
         <div>

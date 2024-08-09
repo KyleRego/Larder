@@ -49,17 +49,10 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
     {
         Ingredient ingredient = new()
         {
-            Name = dto.Name
+            Name = dto.Name,
+            Amount = dto.Amount,
+            UnitId = string.IsNullOrWhiteSpace(dto.UnitId) ? null : dto.UnitId
         };
-
-        if (dto.Quantity != null)
-        {
-            ingredient.Quantity = new()
-            {
-                Amount = dto.Quantity.Amount,
-                UnitId = dto.Quantity.UnitId
-            };
-        }
 
         await _ingredientRepository.Insert(ingredient);
 
@@ -74,15 +67,8 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
                                         ?? throw new ApplicationException("ingredient not found");
 
         ingredient.Name = dto.Name;
-        
-        if (dto.Quantity != null)
-        {
-            ingredient.Quantity = new()
-            {
-                Amount = dto.Quantity.Amount,
-                UnitId = dto.Quantity.UnitId
-            };
-        }
+        ingredient.Amount = dto.Amount;
+        ingredient.UnitId = string.IsNullOrWhiteSpace(dto.UnitId) ? null : dto.UnitId;
 
         await _ingredientRepository.Update(ingredient);
 
@@ -96,17 +82,8 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
         Ingredient ingredient = await _ingredientRepository.Get(dto.Id)
                                     ?? throw new ApplicationException("ingredient not found");
 
-        if (ingredient.Quantity != null)
-        {
-            ingredient.Quantity.Amount = dto.Amount;
-        }
-        else
-        {
-            ingredient.Quantity = new()
-            {
-                Amount = dto.Amount
-            };
-        }
+        ingredient.Amount = dto.Amount;
+        ingredient.UnitId = string.IsNullOrWhiteSpace(dto.UnitId) ? null : dto.UnitId;
 
         ingredient = await _ingredientRepository.Update(ingredient);
 
@@ -116,6 +93,7 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
     public async Task DeleteIngredient(string id)
     {
         Ingredient? ingredient = await _ingredientRepository.Get(id);
+
         ArgumentNullException.ThrowIfNull(ingredient);
 
         await _ingredientRepository.Delete(ingredient);

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import IngredientsService from "../services/IngredientsService";
 import IngredientsTable from "./IngredientsTable";
 
-export default function Ingredients()
+export default function Ingredients({units})
 {
     const [ingredients, setIngredients] = useState(null);
     const [sortOrder, setSortOrder] = useState("Name");
@@ -24,7 +24,8 @@ export default function Ingredients()
         <>
             <h1>Ingredients</h1>
 
-            <IngredientsTable ingredients={ingredients} sortOrder={sortOrder} setSortOrder={setSortOrder} />
+            <IngredientsTable ingredients={ingredients} sortOrder={sortOrder} setSortOrder={setSortOrder}
+                                units={units} />
 
             <Link to="/ingredients/new">New ingredient</Link>
         </>

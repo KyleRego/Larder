@@ -46,17 +46,10 @@ public class RecipeService( IRecipeRepository recipeRepository,
             RecipeIngredient recipeIngredient = new()
             {
                 RecipeId = recipe.Id,
-                IngredientId = ingredient.Id
+                IngredientId = ingredient.Id,
+                Amount = ingredientDto.Amount,
+                UnitId = ingredientDto.UnitId
             };
-
-            if (ingredientDto.Quantity != null)
-            {
-                recipeIngredient.Quantity = new()
-                {
-                    Amount = ingredientDto.Quantity.Amount,
-                    UnitId = ingredientDto.Quantity.UnitId
-                };
-            }
 
             recipeIngredients.Add(recipeIngredient);
         }
@@ -94,7 +87,8 @@ public class RecipeService( IRecipeRepository recipeRepository,
     {
         if (recipeDto.Id == null) throw new ApplicationException("recipe Id was missing");
     
-        Recipe? recipe = await _recipeRepository.Get(recipeDto.Id) ?? throw new ApplicationException("recipe not found");
+        Recipe recipe = await _recipeRepository.Get(recipeDto.Id)
+                                ?? throw new ApplicationException("recipe not found");
 
         string name = recipeDto.Name;
 
@@ -111,7 +105,7 @@ public class RecipeService( IRecipeRepository recipeRepository,
 
         foreach (RecipeIngredientDto recipeIngredientDto in recipeDto.Ingredients)
         {
-            RecipeIngredient? recipeIngredient = FindRecipeIngredient(recipeIngredientDto.RecipeIngredientId,
+            RecipeIngredient? recipeIngredient = FindRecipeIngredient(recipeIngredientDto.Id,
                                                                         recipe.RecipeIngredients);
 
             string ingredientName = recipeIngredientDto.IngredientName;
@@ -123,21 +117,16 @@ public class RecipeService( IRecipeRepository recipeRepository,
                 {
                     RecipeId = recipe.Id,
                     IngredientId = ingredient.Id,
+                    Amount = recipeIngredientDto.Amount,
+                    UnitId = recipeIngredientDto.UnitId
                 };
                 recipe.RecipeIngredients.Add(recipeIngredient);
             }
             else
             {
                 recipeIngredient.IngredientId = ingredient.Id;
-            }
-
-            if (recipeIngredientDto.Quantity != null)
-            {
-                recipeIngredient.Quantity = new()
-                {
-                    Amount = recipeIngredientDto.Quantity.Amount,
-                    UnitId = recipeIngredientDto.Quantity.UnitId
-                };
+                recipeIngredient.Amount = recipeIngredientDto.Amount;
+                recipeIngredient.UnitId = recipeIngredientDto.UnitId;
             }
 
             currentRecipeIngredientIds.Add(recipeIngredient.Id);
