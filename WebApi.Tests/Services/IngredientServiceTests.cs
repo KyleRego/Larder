@@ -18,7 +18,10 @@ public class IngredientServiceTests
         IngredientDto ingredient = new()
         {
             Name = "Eggs",
-            Amount = 5
+            Quantity = new()
+            {
+                Amount = 5
+            }
         };
 
         await Assert.ThrowsAsync<ApplicationException>(async () => await service.UpdateIngredient(ingredient));
@@ -38,7 +41,10 @@ public class IngredientServiceTests
         {
             Id = id,
             Name = "Eggs",
-            Amount = 5
+            Quantity = new()
+            {
+                Amount = 5
+            }
         };
 
         await Assert.ThrowsAsync<ApplicationException>(async () => await service.UpdateIngredient(ingredient)); 
