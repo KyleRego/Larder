@@ -6,6 +6,9 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import Conversions from './Conversions';
 import Units from "./units/Units";
+import Unit from "./units/Unit";
+import NewUnit from "./units/NewUnit";
+import EditUnit from "./units/EditUnit";
 
 import Foods from "./foods/Foods";
 import Food from "./foods/Food";
@@ -48,6 +51,9 @@ const router = createBrowserRouter(
     <Route path="/" element={<App />}>
       <Route path="conversions" element={<Conversions />} />
       <Route path="units" element={<Units />} />
+      <Route path="units/:id" element={<Unit />} />
+      <Route path="units/new" element={<NewUnit />} />
+      <Route path="units/:id/edit" element={<EditUnit />} />
       <Route path="foods" element={<Foods units={units} />} />
       <Route path="foods/:id" element={<Food />} />
       <Route path="foods/new" element={<NewFood units={units} />} />

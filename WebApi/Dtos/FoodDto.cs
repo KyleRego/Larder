@@ -2,13 +2,29 @@ using Larder.Models;
 
 namespace Larder.Dtos;
 
-public class FoodDto : ItemDto, IQuantityDto
+public class FoodDto : ItemDto
 {
     public string? RecipeId { get; set; }
 
     public double Calories { get; set; }
 
-    public double Protein { get; set; }
+    public QuantityDto? Protein { get; set; }
+
+    public QuantityDto? TotalFat { get; set; }
+
+    public QuantityDto? SaturatedFat { get; set; }
+
+    public QuantityDto? TransFat { get; set; }
+
+    public QuantityDto? Cholesterol { get; set; }
+
+    public QuantityDto? Sodium { get; set; }
+
+    public QuantityDto? TotalCarbs { get; set; }
+
+    public QuantityDto? DietaryFiber { get; set; }
+
+    public QuantityDto? TotalSugars { get; set; }
 }
 
 public static class FoodDtoAssembler
@@ -18,13 +34,25 @@ public static class FoodDtoAssembler
         return new()
         {
             Id = food.Id,
-            RecipeId = food.Recipe?.Id ?? null,
             Name = food.Name,
             Description = food.Description,
+            Quantity = new()
+            {
+                Amount = food.Quantity?.Amount ?? 0,
+                UnitId = food.Quantity?.UnitId,
+                UnitName = food.Quantity?.Unit?.Name
+            },
+            RecipeId = food.Recipe?.Id,
             Calories = food.Calories,
-            Amount = food.Amount,
-            UnitId = food.UnitId,
-            UnitName = food.Unit?.Name
+            Protein = QuantityDtoAssembler.Assemble(food.Protein),
+            TotalFat = QuantityDtoAssembler.Assemble(food.TotalFat),
+            SaturatedFat = QuantityDtoAssembler.Assemble(food.SaturatedFat),
+            TransFat = QuantityDtoAssembler.Assemble(food.TransFat),
+            Cholesterol = QuantityDtoAssembler.Assemble(food.Cholesterol),
+            Sodium = QuantityDtoAssembler.Assemble(food.Sodium),
+            TotalCarbs = QuantityDtoAssembler.Assemble(food.TotalCarbs),
+            DietaryFiber = QuantityDtoAssembler.Assemble(food.DietaryFiber),
+            TotalSugars = QuantityDtoAssembler.Assemble(food.TotalSugars)
         };
     }
 }

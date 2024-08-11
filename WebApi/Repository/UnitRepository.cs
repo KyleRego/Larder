@@ -20,9 +20,9 @@ public interface IUnitRepository : IRepositoryBase<Unit, UnitSortOptions>
 
 public class UnitRepository(AppDbContext dbContext) : RepositoryBase<Unit, UnitSortOptions>(dbContext), IUnitRepository
 {
-    public override Task<Unit?> Get(string id)
+    public override async Task<Unit?> Get(string id)
     {
-        throw new NotImplementedException();
+        return await _dbContext.Units.FirstOrDefaultAsync(unit => unit.Id == id);
     }
 
     public override async Task<List<Unit>> GetAll(UnitSortOptions sortBy, string? search)

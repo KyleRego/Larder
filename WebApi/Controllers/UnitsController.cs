@@ -1,26 +1,66 @@
 using Microsoft.AspNetCore.Mvc;
 
-using Larder.Models;
 using Larder.Repository;
+using Larder.Dtos;
+using Larder.Services;
 
 namespace Larder.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class UnitsController(IUnitRepository repository) : ControllerBase
+[ApiController, Route("api/[controller]")]
+public class UnitsController(IUnitService service) : ControllerBase
 {
-    private readonly IUnitRepository _repository = repository;
+    private readonly IUnitService _service = service;
 
     [HttpGet]
-    public async Task<List<Unit>> Index(string? sortOrder)
+    public async Task<List<UnitDto>> Index(string? sortOrder)
     {
         if (sortOrder != null && Enum.TryParse(sortOrder, out UnitSortOptions sortBy))
         {
-            return await _repository.GetAll(sortBy, null);
+            return await _service.GetUnits(sortBy, null);
         }
         else
         {
-            return await _repository.GetAll(UnitSortOptions.AnyOrder, null);
+            return await _service.GetUnits(UnitSortOptions.AnyOrder, null);
         }
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<UnitDto>> Show(string id)
+    {
+        UnitDto? result = await _service.GetUnit(id);
+
+        return (result == null) ? NotFound() : result;
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Create(UnitDto dto)
+    {
+        try
+        {
+            await _service.CreateUnit(dto);
+        }
+        catch (ApplicationException)
+        {
+            return UnprocessableEntity();
+        }
+
+        return Ok();
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult> Update(string id, UnitDto dto)
+    {
+        if (dto.Id == null || dto.Id != id) return BadRequest();
+
+        try
+        {
+            await _service.UpdateUnit(dto);
+        }
+        catch (ApplicationException)
+        {
+            return UnprocessableEntity();
+        }
+
+        return Ok();
     }
 }

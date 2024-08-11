@@ -2,7 +2,7 @@ using Larder.Models;
 
 namespace Larder.Dtos;
 
-public class IngredientDto : ItemDto, IQuantityDto
+public class IngredientDto : ItemDto
 {
     public List<IngredientRecipeDto> Recipes { get; set; } = [];
 }
@@ -22,9 +22,12 @@ public static class IngredientDtoAssembler
         {
             Id = ingredient.Id,
             Name = ingredient.Name,
-            Amount = ingredient.Amount,
-            UnitId = ingredient.UnitId,
-            UnitName = ingredient.Unit?.Name
+            Quantity = new()
+            {
+                Amount = ingredient.Quantity?.Amount ?? 0,
+                UnitId = ingredient.Quantity?.UnitId,
+                UnitName = ingredient.Quantity?.Unit?.Name
+            }
         };
 
         foreach (RecipeIngredient recipeIngredient in ingredient.RecipeIngredients)

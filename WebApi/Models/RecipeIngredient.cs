@@ -9,7 +9,7 @@ namespace Larder.Models;
 /// also with the amount of the ingredient needed
 /// in the recipe.
 /// </summary>
-public class RecipeIngredient : EntityBase, IQuantity
+public class RecipeIngredient : EntityBase
 {
     [Required]
     public required string RecipeId { get; set; }
@@ -23,11 +23,5 @@ public class RecipeIngredient : EntityBase, IQuantity
     [ForeignKey(nameof(IngredientId))]
     public Ingredient Ingredient { get; set; } = null!;
 
-    public double Amount { get; set; }
-
-    [DisplayFormat(ConvertEmptyStringToNull = true)]
-    public string? UnitId { get; set; }
-
-    [ForeignKey(nameof(UnitId))]
-    public Unit? Unit { get; set; }
+    public Quantity? Quantity { get; set; }
 }

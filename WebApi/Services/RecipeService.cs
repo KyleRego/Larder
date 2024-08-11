@@ -47,8 +47,11 @@ public class RecipeService( IRecipeRepository recipeRepository,
             {
                 RecipeId = recipe.Id,
                 IngredientId = ingredient.Id,
-                Amount = ingredientDto.Amount,
-                UnitId = ingredientDto.UnitId
+                Quantity = new()
+                {
+                    Amount = ingredientDto.Amount,
+                    UnitId = ingredientDto.UnitId
+                }
             };
 
             recipeIngredients.Add(recipeIngredient);
@@ -117,16 +120,22 @@ public class RecipeService( IRecipeRepository recipeRepository,
                 {
                     RecipeId = recipe.Id,
                     IngredientId = ingredient.Id,
-                    Amount = recipeIngredientDto.Amount,
-                    UnitId = recipeIngredientDto.UnitId
+                    Quantity = new()
+                    {
+                        Amount = recipeIngredientDto.Amount,
+                        UnitId = recipeIngredientDto.UnitId
+                    }
                 };
                 recipe.RecipeIngredients.Add(recipeIngredient);
             }
             else
             {
                 recipeIngredient.IngredientId = ingredient.Id;
-                recipeIngredient.Amount = recipeIngredientDto.Amount;
-                recipeIngredient.UnitId = recipeIngredientDto.UnitId;
+                recipeIngredient.Quantity = new()
+                {
+                    Amount = recipeIngredientDto.Amount,
+                    UnitId = recipeIngredientDto.UnitId
+                };
             }
 
             currentRecipeIngredientIds.Add(recipeIngredient.Id);

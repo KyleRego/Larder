@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 
 import FoodsService from "../services/FoodsService";
+import FoodConstants from "./FoodConstants";
 
 export default function Food()
 {
@@ -21,6 +22,13 @@ export default function Food()
 
     if (food === null) return <h1>Loading...</h1>;
 
+    const quantityRows = FoodConstants.quantityProperties.map(propName => {
+        return <tr key={propName}>
+            <th scope="row">{propName}</th>
+            <td>{food[propName].amount} {food[propName].unitName}</td>
+        </tr>
+    });
+
     return <>
         <h1>{food.name}</h1>
 
@@ -28,26 +36,20 @@ export default function Food()
             {food.description}
         </p>
 
+        {(food.quantity) && 
         <p>
-            Quantity: {food.amount} {food.unitName}
+            Quantity: {food.quantity.amount} {food.quantity.unitName}
         </p>
+        }
 
         <div>
             <table>
-                <thead>
-                    <tr>
-                        <th scope="col">
-                            Calories
-                        </th>
-                    </tr>
-                </thead>
-
                 <tbody>
                     <tr>
-                        <td>
-                            {food.calories}
-                        </td>
+                        <th scope="row">Calories</th>
+                        <td>{food.calories}</td>
                     </tr>
+                    {quantityRows}
                 </tbody>
             </table>
         </div>

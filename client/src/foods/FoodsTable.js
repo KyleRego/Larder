@@ -54,9 +54,7 @@ function FoodRow(food, units)
                 </Link>
             </th>
 
-            <EditableQuantityTableCell amount={food.amount}
-                                        unitId={food.unitId}
-                                        unitName={food.unitName}
+            <EditableQuantityTableCell quantity={food.quantity}
                                         handleSubmit={handleSubmitQuantity}
                                         units={units} />
         </tr>

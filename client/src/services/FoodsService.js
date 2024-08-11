@@ -31,7 +31,7 @@ export default class FoodsService extends ApiServiceBase
     {
         const url = `${this.foodsBaseUrl}`;
 
-        return await this.tryPostJson(url, food);
+        return await this.tryPost(url, food);
     }
 
     async putFood(food)
@@ -41,7 +41,7 @@ export default class FoodsService extends ApiServiceBase
 
         const url = `${this.foodsBaseUrl}/${id}`;
 
-        return await this.tryPutJson(url, food);
+        return await this.tryPut(url, food);
     }
 
     async patchFood(food)
@@ -51,6 +51,6 @@ export default class FoodsService extends ApiServiceBase
 
         const url = `${this.foodsBaseUrl}/${id}`;
 
-        return await this.tryPatchJson(url, food);
+        return await this.tryPatch(url, food);
     }
 }

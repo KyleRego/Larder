@@ -13,4 +13,25 @@ export default class UnitsService extends ApiServiceBase
 
         return await this.tryGetJson(url);
     }
+
+    async getUnit(id)
+    {
+        let url = `${this.backendOrigin}/api/Units/${id}`;
+
+        return await this.tryGetJson(url);
+    }
+
+    async postUnit(dto)
+    {
+        let url = `${this.backendOrigin}/api/Units`;
+
+        return await this.tryPost(url, dto); 
+    }
+
+    async putUnit(dto)
+    {
+        let url = `${this.backendOrigin}/api/Units/${dto.id}`;
+
+        return await this.tryPut(url, dto);  
+    }
 }

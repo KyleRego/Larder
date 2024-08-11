@@ -8,4 +8,22 @@ public class Food : Item
     public Recipe? Recipe { get; set; }
 
     public double Calories { get; set; }
+
+    public Quantity? Protein { get; set; }
+
+    public Quantity? TotalFat { get; set; }
+
+    public Quantity? SaturatedFat { get; set; }
+
+    public Quantity? TransFat { get; set; }
+
+    public Quantity? Cholesterol { get; set; }
+
+    public Quantity? Sodium { get; set; }
+
+    public Quantity? TotalCarbs { get; set; }
+
+    public Quantity? DietaryFiber { get; set; }
+
+    public Quantity? TotalSugars { get; set; }
 }

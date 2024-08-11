@@ -23,14 +23,21 @@ public class FoodRepository(AppDbContext dbContext) : RepositoryBase<Food, FoodS
     public override async Task<Food?> Get(string id)
     {
         return await _dbContext.Foods.Include(f => f.Recipe)
-                                        .Include(f => f.Unit)
+                                        .Include(f => f.Protein!.Unit)
+                                        .Include(f => f.TotalFat!.Unit)
+                                        .Include(f => f.SaturatedFat!.Unit)
+                                        .Include(f => f.TransFat!.Unit)
+                                        .Include(f => f.Cholesterol!.Unit)
+                                        .Include(f => f.Sodium!.Unit)
+                                        .Include(f => f.TotalCarbs!.Unit)
+                                        .Include(f => f.DietaryFiber!.Unit)
+                                        .Include(f => f.TotalSugars!.Unit)
                                         .FirstOrDefaultAsync(food => food.Id == id);
     }
 
     public override Task<List<Food>> GetAll(FoodSortOptions sortBy, string? search)
     {
-        var baseQuery = _dbContext.Foods.Include(f => f.Recipe)
-                                        .Include(f => f.Unit);
+        var baseQuery = _dbContext.Foods.Include(f => f.Recipe);
 
         var withSearch = (search == null) ? baseQuery : baseQuery.Where(food => food.Name.Contains(search));
 
@@ -41,9 +48,9 @@ public class FoodRepository(AppDbContext dbContext) : RepositoryBase<Food, FoodS
             case FoodSortOptions.Name_Desc:
                 return withSearch.OrderByDescending(f => f.Name).ToListAsync();
             case FoodSortOptions.Quantity:
-                return withSearch.OrderBy(f => f.Amount).ToListAsync();
+                return withSearch.OrderBy(f => f.Quantity).ToListAsync();
             case FoodSortOptions.Quantity_Desc:
-                return withSearch.OrderByDescending(f => f.Amount).ToListAsync();
+                return withSearch.OrderByDescending(f => f.Quantity).ToListAsync();
             default:
                 return withSearch.ToListAsync();
         }

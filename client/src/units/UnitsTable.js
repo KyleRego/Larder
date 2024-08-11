@@ -1,8 +1,10 @@
+import { Link } from "react-router-dom";
+
 import SortingTableHeader from "../components/SortingTableHeader";
 
-export default function UnitsTable({data, sortOrder, setSortOrder})
+export default function UnitsTable({units, sortOrder, setSortOrder})
 {
-    const tableRows = data.map(unit => TableRow(unit));
+    const tableRows = units.map(unit => TableRow(unit));
 
     return (
         <table className="unitsTable">
@@ -29,8 +31,12 @@ function TableRow(unit)
 {
     return (
         <tr key={unit.id}>
-            <th scope="row">{unit.name}</th>
-            <td>{unit.type}</td>
+            <th scope="row">
+                <Link to={`/units/${unit.id}`}>{unit.name}</Link>
+            </th>
+            <td>
+                {unit.type}
+            </td>
         </tr>
     )
 }

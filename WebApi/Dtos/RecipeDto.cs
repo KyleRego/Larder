@@ -9,7 +9,7 @@ public class RecipeDto : DtoBase
     public required List<RecipeIngredientDto> Ingredients { get; set; }
 }
 
-public class RecipeIngredientDto : DtoBase, IQuantityDto
+public class RecipeIngredientDto : DtoBase
 {
     public required string IngredientName { get; set; }
 
@@ -40,9 +40,9 @@ public static class RecipeDtoAssembler
                 Id = recipeIngredient.Id,
                 IngredientName = recipeIngredient.Ingredient.Name,
                 IngredientId = recipeIngredient.Ingredient.Id,
-                Amount = recipeIngredient.Amount,
-                UnitId = recipeIngredient.UnitId,
-                UnitName = recipeIngredient.Unit?.Name
+                Amount = recipeIngredient.Quantity?.Amount ?? 0,
+                UnitId = recipeIngredient.Quantity?.UnitId,
+                UnitName = recipeIngredient.Quantity?.Unit?.Name
             };
 
             recipeDto.Ingredients.Add(recipeDtoIngredient);

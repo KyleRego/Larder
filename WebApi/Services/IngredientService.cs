@@ -50,8 +50,7 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
         Ingredient ingredient = new()
         {
             Name = dto.Name,
-            Amount = dto.Amount,
-            UnitId = string.IsNullOrWhiteSpace(dto.UnitId) ? null : dto.UnitId
+            Quantity = Quantity.FromDto(dto.Quantity),
         };
 
         await _ingredientRepository.Insert(ingredient);
@@ -67,8 +66,7 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
                                         ?? throw new ApplicationException("ingredient not found");
 
         ingredient.Name = dto.Name;
-        ingredient.Amount = dto.Amount;
-        ingredient.UnitId = string.IsNullOrWhiteSpace(dto.UnitId) ? null : dto.UnitId;
+        ingredient.Quantity = Quantity.FromDto(dto.Quantity);
 
         await _ingredientRepository.Update(ingredient);
 
@@ -82,8 +80,7 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
         Ingredient ingredient = await _ingredientRepository.Get(dto.Id)
                                     ?? throw new ApplicationException("ingredient not found");
 
-        ingredient.Amount = dto.Amount;
-        ingredient.UnitId = string.IsNullOrWhiteSpace(dto.UnitId) ? null : dto.UnitId;
+        ingredient.Quantity = Quantity.FromDto(dto);
 
         ingredient = await _ingredientRepository.Update(ingredient);
 

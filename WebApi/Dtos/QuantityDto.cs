@@ -1,6 +1,8 @@
+using Larder.Models;
+
 namespace Larder.Dtos;
 
-public interface IQuantityDto
+public class QuantityDto : DtoBase
 {
     public double Amount { get; set; }
 
@@ -9,11 +11,17 @@ public interface IQuantityDto
     public string? UnitName { get; set; }
 }
 
-public class QuantityDto : DtoBase, IQuantityDto
+public static class QuantityDtoAssembler
 {
-    public double Amount { get; set; }
+    public static QuantityDto? Assemble(Quantity? quantity)
+    {
+        if (quantity == null) return null;
 
-    public string? UnitId { get; set; }
-
-    public string? UnitName { get; set; }
+        return new()
+        {
+            Amount = quantity.Amount,
+            UnitId = quantity.UnitId,
+            UnitName = quantity.Unit?.Name
+        };
+    }
 }

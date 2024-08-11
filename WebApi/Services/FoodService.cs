@@ -28,8 +28,16 @@ public class FoodService(IFoodRepository foodRepo) : IFoodService
             Name = dto.Name,
             Description = dto.Description,
             Calories = dto.Calories,
-            Amount = dto.Amount,
-            UnitId = string.IsNullOrWhiteSpace(dto.UnitId) ? null : dto.UnitId
+            Quantity = Quantity.FromDto(dto.Quantity),
+            Protein = Quantity.FromDto(dto.Protein),
+            TotalFat = Quantity.FromDto(dto.TotalFat),
+            SaturatedFat = Quantity.FromDto(dto.SaturatedFat),
+            TransFat = Quantity.FromDto(dto.TransFat),
+            Cholesterol = Quantity.FromDto(dto.Cholesterol),
+            Sodium = Quantity.FromDto(dto.Sodium),
+            TotalCarbs = Quantity.FromDto(dto.TotalCarbs),
+            DietaryFiber = Quantity.FromDto(dto.DietaryFiber),
+            TotalSugars = Quantity.FromDto(dto.TotalSugars),
         };
 
         await _foodRepo.Insert(entity);
@@ -47,8 +55,16 @@ public class FoodService(IFoodRepository foodRepo) : IFoodService
         entity.Name = dto.Name;
         entity.Description = dto.Description;
         entity.Calories = dto.Calories;
-        entity.Amount = dto.Amount;
-        entity.UnitId = string.IsNullOrWhiteSpace(dto.UnitId) ? null : dto.UnitId;
+        entity.Quantity = Quantity.FromDto(dto.Quantity);
+        entity.Protein = Quantity.FromDto(dto.Protein);
+        entity.TotalFat = Quantity.FromDto(dto.TotalFat);
+        entity.SaturatedFat = Quantity.FromDto(dto.SaturatedFat);
+        entity.TransFat = Quantity.FromDto(dto.TransFat);
+        entity.Cholesterol = Quantity.FromDto(dto.Cholesterol);
+        entity.Sodium = Quantity.FromDto(dto.Sodium);
+        entity.TotalCarbs = Quantity.FromDto(dto.TotalCarbs);
+        entity.DietaryFiber = Quantity.FromDto(dto.DietaryFiber);
+        entity.TotalSugars = Quantity.FromDto(dto.TotalSugars);
 
         await _foodRepo.Update(entity);
 
@@ -84,8 +100,11 @@ public class FoodService(IFoodRepository foodRepo) : IFoodService
 
         Food entity = await _foodRepo.Get(dto.Id) ?? throw new ApplicationException("food not found");
 
-        entity.Amount = dto.Amount;
-        entity.UnitId = string.IsNullOrWhiteSpace(dto.UnitId) ? null : dto.UnitId;
+        entity.Quantity = new()
+        {
+            Amount = dto.Amount,
+            UnitId = string.IsNullOrWhiteSpace(dto.UnitId) ? null : dto.UnitId
+        };
 
         await _foodRepo.Update(entity);
 

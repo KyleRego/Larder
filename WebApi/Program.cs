@@ -16,6 +16,8 @@ builder.Services.AddScoped<IFoodRepository, FoodRepository>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<IIngredientService, IngredientService>();
 builder.Services.AddScoped<IFoodService, FoodService>();
+builder.Services.AddScoped<IUnitService, UnitService>();
+
 
 if (builder.Environment.IsDevelopment())
 {

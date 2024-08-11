@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import UnitsTable from "./UnitsTable";
 
-import UnitsService from "../services/UnitsService"
+import UnitsService from "../services/UnitsService";
 
-import "./Units.css"
+import "./Units.css";
 
 export default function Units()
 {
@@ -26,7 +27,9 @@ export default function Units()
                 Units
             </h1>
 
-            <UnitsTable data={units} sortOrder={sortOrder} setSortOrder={setSortOrder} />
+            <UnitsTable units={units} sortOrder={sortOrder} setSortOrder={setSortOrder} />
+
+            <Link to="/units/new">New unit</Link>
         </>
     )
 }

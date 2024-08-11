@@ -16,7 +16,6 @@ export default function EditFood({units})
 
         const food = FoodFormDataMapper.map(formData);
         food.id = id;
-
         const service = new FoodsService();
 
         await service.putFood(food);
@@ -30,16 +29,14 @@ export default function EditFood({units})
 
         service.getFood(id).then(result => {
             setFood(result);
-        }).then(error => {
-            console.log(error);
-        })
+        });
 
     }, [id]);
 
     if (food == null) return <h1>Loading...</h1>;
 
     return <>
-        <h1>Editing food</h1>
+        <h1>Editing food: {food.name}</h1>
 
         <div>
             <FoodForm initialFood={food} units={units} handleSubmit={handleSubmit} />

@@ -25,7 +25,7 @@ export default class ApiServiceBase
         return json;
     }
 
-    async tryPostJson(url, dto)
+    async tryPost(url, dto)
     {
         const headers = new Headers({"Content-Type": "application/json"});
 
@@ -41,11 +41,9 @@ export default class ApiServiceBase
         {
             throw new Error(`Response status: ${response.status}`);
         }
-
-        return response.json();
     }
 
-    async tryPutJson(url, dto)
+    async tryPut(url, dto)
     {
         const headers = new Headers({"Content-Type": "application/json"});
 
@@ -61,11 +59,9 @@ export default class ApiServiceBase
         {
             throw new Error(`Response status: ${response.status}`);
         }
-
-        return response.json();
     }
 
-    async tryPatchJson(url, dto)
+    async tryPatch(url, dto)
     {
         const headers = new Headers({"Content-Type": "application/json"});
 
@@ -81,7 +77,5 @@ export default class ApiServiceBase
         {
             throw new Error(`Response status: ${response.status}`);
         }
-
-        return response.json();
     }
 }
