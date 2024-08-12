@@ -69,6 +69,19 @@ public class FoodsController(IFoodService foodService) : ControllerBase
         {
             return NotFound();
         }
+    }
 
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(string id)
+    {
+        try
+        {
+            await _foodService.DeleteFood(id);
+            return Ok();
+        }
+        catch (ApplicationException)
+        {
+            return NotFound();
+        }
     }
 }

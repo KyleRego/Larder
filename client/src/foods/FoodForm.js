@@ -6,7 +6,7 @@ export default function FoodForm({initialFood, handleSubmit, units})
     const quantityProperties = FoodConstants.quantityProperties;
 
     const foodNutritionQuantitiesFormItems = quantityProperties.map(propName => {
-        return <div>
+        return <div key={propName}>
             <QuantityInput initialQuantity={initialFood[propName]} units={units} name={propName} />
         </div>
     })
@@ -14,7 +14,7 @@ export default function FoodForm({initialFood, handleSubmit, units})
     return <form onSubmit={handleSubmit}>
         <div>
             <label htmlFor="name">Name:</label>
-            <input id="name" name="name" type="text" defaultValue={initialFood.name}></input>
+            <input className="ms-1" required id="name" name="name" type="text" defaultValue={initialFood.name}></input>
         </div>
 
         <div>
@@ -23,14 +23,15 @@ export default function FoodForm({initialFood, handleSubmit, units})
         </div>
 
         <div>
-            <QuantityInput initialQuantity={initialFood.quantity} units={units} />
+            <label htmlFor="amount">Amount:</label>
+            <input required className="ms-1" type="number" name="amount" defaultValue={initialFood.amount}></input>
         </div>
 
         <h2>Nutrition:</h2>
 
         <div>
             <label htmlFor="calories">Calories:</label>
-            <input id="calories" name="calories" type="number" defaultValue={initialFood.calories}></input>
+            <input required className="ms-1" id="calories" name="calories" type="number" defaultValue={initialFood.calories}></input>
         </div>
 
         {foodNutritionQuantitiesFormItems}

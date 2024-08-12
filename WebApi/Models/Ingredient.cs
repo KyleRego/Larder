@@ -5,6 +5,8 @@ namespace Larder.Models;
 /// </summary>
 public class Ingredient : Item
 {
+    public Quantity? Quantity { get; set; }
+
     public List<RecipeIngredient> RecipeIngredients { get; set; } = [];
 
     public List<Recipe> Recipes { get; set; } = [];

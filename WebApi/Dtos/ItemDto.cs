@@ -5,6 +5,4 @@ public abstract class ItemDto : DtoBase
     public required string Name { get; set; }
 
     public string? Description { get; set; }
-
-    public QuantityDto? Quantity { get; set; }
 }

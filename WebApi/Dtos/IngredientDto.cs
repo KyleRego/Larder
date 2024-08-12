@@ -4,6 +4,8 @@ namespace Larder.Dtos;
 
 public class IngredientDto : ItemDto
 {
+    public QuantityDto? Quantity { get; set; }
+
     public List<IngredientRecipeDto> Recipes { get; set; } = [];
 }
 

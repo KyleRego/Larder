@@ -78,4 +78,21 @@ export default class ApiServiceBase
             throw new Error(`Response status: ${response.status}`);
         }
     }
+
+    async tryDelete(url)
+    {
+        const headers = new Headers({"Content-Type": "application/json"});
+
+        const request = new Request(url, {
+            method: "DELETE",
+            headers: headers,
+        });
+
+        const response = await fetch(request);
+
+        if (!response.ok)
+        {
+            throw new Error(`Response status: ${response.status}`);
+        }
+    }
 }

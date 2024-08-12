@@ -11,8 +11,13 @@ h2 {
   font-size: 1.5rem;
 }
 
-input[type="text"], input[type="number"], select {
+/* input[type="text"], input[type="number"], select {
   padding: 0.25rem;
+} */
+
+select {
+  height: 1.75rem;
+  line-height: 1.75rem;
 }
 
 .app {

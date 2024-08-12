@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 
 import FoodForm from "./FoodForm";
 
@@ -8,6 +8,8 @@ import FoodFormDataMapper from "./FoodFormDataMapper";
 
 export default function NewFood({units})
 {
+    const [setToastMessage, setShowToast] = useOutletContext();
+
     async function handleSubmit(e)
     {
         e.preventDefault();
@@ -18,7 +20,13 @@ export default function NewFood({units})
 
         const service = new FoodsService();
 
-        await service.postFood(food);
+        service.postFood(food).then(() => {
+            setToastMessage("Food created");
+            setShowToast(true);
+        }).catch((error) => {
+            setToastMessage(`Something went wrong: ${error}`);
+            setShowToast(true);
+        })
     }
 
     return <>

@@ -5,6 +5,8 @@ namespace Larder.Models;
 /// </summary>
 public class Food : Item
 {
+    public double Amount { get; set; }
+
     public Recipe? Recipe { get; set; }
 
     public double Calories { get; set; }

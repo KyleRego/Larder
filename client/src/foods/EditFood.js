@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useOutletContext } from "react-router-dom";
 
 import FoodForm from "./FoodForm";
 import FoodsService from "../services/FoodsService";
@@ -8,6 +8,8 @@ import FoodFormDataMapper from "./FoodFormDataMapper";
 
 export default function EditFood({units})
 {
+    const [setToastMessage, setShowToast] = useOutletContext();
+
     async function handleSubmit(e)
     {
         e.preventDefault();
@@ -18,7 +20,12 @@ export default function EditFood({units})
         food.id = id;
         const service = new FoodsService();
 
-        await service.putFood(food);
+        await service.putFood(food).then(() => {
+            setToastMessage("Food successfully updated");
+            setShowToast(true);
+        }).catch(error => {
+            console.log(error);
+        });
     }
 
     const { id } = useParams();

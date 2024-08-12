@@ -53,4 +53,14 @@ export default class FoodsService extends ApiServiceBase
 
         return await this.tryPatch(url, food);
     }
+
+    async deleteFood(food)
+    {
+        const id = food.id;
+        if (id === undefined) throw new Error("food id missing");
+
+        const url = `${this.foodsBaseUrl}/${id}`;
+
+        return await this.tryDelete(url, food);
+    }
 }

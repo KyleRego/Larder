@@ -15,7 +15,7 @@ export default function QuantityInput({initialQuantity, units, name = null})
 
     return <>
         <label htmlFor={amountInputId}>{labelText}</label>
-        <input id={amountInputId} name={amountInputId} type="number" defaultValue={initialQuantity?.amount}></input>
+        <input className="ms-1" id={amountInputId} name={amountInputId} type="number" defaultValue={initialQuantity?.amount}></input>
         <label hidden htmlFor={unitInputId}></label>
         <select className="ms-1" id={unitInputId} title="unit" name={unitInputId} defaultValue={initialQuantity?.unitId}>
             <UnitSelectOptions units={units} />

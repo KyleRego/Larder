@@ -16,8 +16,7 @@ export default function Foods({units})
 
         service.getFoods(sortOrder).then(result => {
             setFoods(result);
-        }).catch(error =>
-        {
+        }).catch(error => {
             console.log(error);
         });
 
@@ -26,7 +25,7 @@ export default function Foods({units})
     return <>
         <h1>Foods</h1>
 
-        <FoodsTable foods={foods} sortOrder={sortOrder} setSortOrder={setSortOrder} units={units} />
+        <FoodsTable foods={foods} setFoods={setFoods} sortOrder={sortOrder} setSortOrder={setSortOrder} units={units} />
 
         <div>
             <Link to="/foods/new">New food</Link>

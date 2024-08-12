@@ -9,10 +9,7 @@ export default class FoodFormDataMapper
         food.name = formData.get("name");
         food.description = formData.get("description");
 
-        food.quantity = {};
-        food.quantity.amount = formData.get("amount");
-        food.quantity.unitId = formData.get("unitId");
-
+        food.amount = formData.get("amount");
         food.calories = formData.get("calories");
 
         const quantityProperties = FoodConstants.quantityProperties;
@@ -21,9 +18,15 @@ export default class FoodFormDataMapper
         {
             const propertyName = quantityProperties[i];
 
-            food[propertyName] = {};
-            food[propertyName]["amount"] = formData.get(`${propertyName}_amount`);
-            food[propertyName]["unitId"] = formData.get(`${propertyName}_unitId`);
+            const amount = formData.get(`${propertyName}_amount`);
+            const unitId = formData.get(`${propertyName}_unitId`);
+
+            if (amount !== "")
+            {
+                food[propertyName] = {};
+                food[propertyName]["amount"] = amount;
+                food[propertyName]["unitId"] = unitId;
+            }
         }
 
         return food;

@@ -4,6 +4,8 @@ namespace Larder.Dtos;
 
 public class FoodDto : ItemDto
 {
+    public double Amount { get; set; }
+
     public string? RecipeId { get; set; }
 
     public double Calories { get; set; }
@@ -36,12 +38,7 @@ public static class FoodDtoAssembler
             Id = food.Id,
             Name = food.Name,
             Description = food.Description,
-            Quantity = new()
-            {
-                Amount = food.Quantity?.Amount ?? 0,
-                UnitId = food.Quantity?.UnitId,
-                UnitName = food.Quantity?.Unit?.Name
-            },
+            Amount = food.Amount,
             RecipeId = food.Recipe?.Id,
             Calories = food.Calories,
             Protein = QuantityDtoAssembler.Assemble(food.Protein),
