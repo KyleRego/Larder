@@ -74,7 +74,7 @@ function FoodAmountTableCell({food, foods, setFoods})
             
             for (let i = 0; i < newFoods.length; i += 1)
             {
-                if (newFoods[i].id == food.id)
+                if (newFoods[i].id === food.id)
                 {
                     newFoods[i].amount = newAmount
                 }
