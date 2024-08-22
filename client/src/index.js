@@ -4,6 +4,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import App from './App';
+import Home from "./Home";
+
 import Conversions from './Conversions';
 import Units from "./units/Units";
 import Unit from "./units/Unit";
@@ -49,6 +51,7 @@ const units = await unitsService.getUnits();
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+      <Route path="" element={<Home />} />
       <Route path="conversions" element={<Conversions />} />
       <Route path="units" element={<Units />} />
       <Route path="units/:id" element={<Unit />} />

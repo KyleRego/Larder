@@ -61,6 +61,10 @@
     column-gap: 1.25rem;
 }
 
+.row-gap-3 {
+    column-gap: 0.75rem;
+}
+
 .flex-grow-1 {
     flex: 1;
 }

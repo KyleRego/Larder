@@ -1,0 +1,19 @@
+/* Cascades over Bootstrap's .card */
+.card {
+    display: inline-block;
+    border: 1px solid black;
+    padding: 0.5rem;
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 166, 179);
+    text-align: center;
+}
+
+.larder-card:first-child {
+    margin: 0 0;
+}
+
+@media (max-width: 584px) {
+    .larder-card {
+        padding: 2rem 3rem;
+    }    
+}

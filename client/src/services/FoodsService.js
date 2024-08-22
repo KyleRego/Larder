@@ -6,6 +6,7 @@ export default class FoodsService extends ApiServiceBase
     {
         super();
         this.foodsBaseUrl = `${this.backendOrigin}/api/foods`;
+        this.foodEatingBaseUrl = `${this.backendOrigin}/api/foodEating`;
     }
 
     async getFoods(sortOrder = null)
@@ -62,5 +63,14 @@ export default class FoodsService extends ApiServiceBase
         const url = `${this.foodsBaseUrl}/${id}`;
 
         return await this.tryDelete(url, food);
+    }
+
+    async postEatFood(dto)
+    {
+        if (!dto.id) return;
+
+        let url = this.foodEatingBaseUrl;
+
+        return await this.tryPost(url, dto);
     }
 }
