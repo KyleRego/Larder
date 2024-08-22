@@ -17,15 +17,15 @@ export default function FoodEater({food})
         await foodService.postEatFood(dto);
     }
 
-    return <div>
-            <form onSubmit={handleEatFood}>
-                <div>
-                    <label htmlFor="servingsConsumed">Consume servings:</label>
-                    <input type="number" step="any" name="servingsConsumed"></input>
-                </div>
-                <div>
-                    <button type="submit" className="btn btn-primary btn-sm">Submit</button>
+    return <form onSubmit={handleEatFood}>
+                <div className="d-flex justify-content-start align-items-center">
+                    <div className="me-4">
+                        <label htmlFor="servingsConsumed">Consume servings:</label>
+                        <input type="number" step="any" name="servingsConsumed"></input>
+                    </div>
+                    <div>
+                        <button type="submit" className="btn btn-primary btn-sm">Submit</button>
+                    </div>
                 </div>
             </form>
-        </div>
 }

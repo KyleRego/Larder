@@ -14,6 +14,7 @@ export default function App() {
             <Nav />
             <div className="container">
                 <Outlet context={[setToastMessage, setShowToast]} />
+
                 <AppToast message={toastMessage} show={showToast} setShow={setShowToast} />
             </div>
         </div>
