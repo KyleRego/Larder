@@ -49,11 +49,12 @@ export default function Food()
 
     return <>
 
-        <div className="float-end">
-            <button className="btn btn-danger" onClick={handleDeleteFood}>Delete food</button>
+        <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center">
+            <h1>{food.name}</h1>
+            <div>
+                <button className="btn btn-danger" onClick={handleDeleteFood}>Delete food</button>
+            </div>
         </div>
-
-        <h1>{food.name}</h1>
 
         <p>{food.description}</p>
  

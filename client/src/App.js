@@ -1,7 +1,8 @@
+import { Outlet } from "react-router-dom";
+
 import "./App.css";
 import Nav from "./Nav";
-import { Outlet } from "react-router-dom";
-import AppToast from "./components/AppToast";
+import AppToast from "./js/components/AppToast";
 
 import { useState } from "react"
 

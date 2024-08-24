@@ -34,8 +34,12 @@
   font-size: 1.2rem;
 }
 
-.navLink {
+.nav-link {
     color: black;
+}
+
+.nav-link:hover {
+    color: rgb(255, 0, 115);
 }
 
 .activeNavLink {

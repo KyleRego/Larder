@@ -18,8 +18,8 @@ export default function FoodEater({food})
     }
 
     return <form onSubmit={handleEatFood}>
-                <div className="d-flex justify-content-start align-items-center">
-                    <div className="me-4">
+                <div className="d-flex flex-column flex-sm-row justify-content-around align-items-center">
+                    <div className="text-center">
                         <label htmlFor="servingsConsumed">Consume servings:</label>
                         <input type="number" step="any" name="servingsConsumed"></input>
                     </div>

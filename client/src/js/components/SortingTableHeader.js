@@ -29,7 +29,7 @@ export default function SortingTableHeader({columnName, sortOrder, setSortOrder}
 
     return (
         <th title="Change ordering" className="cursor-pointer" onClick={handleOnClick} scope="col">
-            <div className="flex align-items-center">
+            <div className="d-flex align-items-center">
                 <span className="">{columnName}</span>
                 {icon}
             </div>

@@ -37,7 +37,7 @@ function EditingTableCell({quantity, setEditing, handleSubmit, units})
 
     return <td className="py-0">
         <form onSubmit={innerHandleSubmit}>
-            <div className="flex column-gap-3 align-items-center m-0">
+            <div className="d-flex column-gap-3 align-items-center m-0">
                 <QuantityInput initialQuantity={quantity} units={units} />
                 <button type="submit" title="Done">
                     <MdDone />
@@ -59,7 +59,7 @@ function NoneditingTableCell({quantity, setEditing})
     }
 
     return <td className="py-0">
-        <div className="m-0 flex column-gap-3 align-items-center">
+        <div className="m-0 d-flex column-gap-3 align-items-center">
             <span>{quantity?.amount} {quantity?.unitName}</span>
             <CiEdit className="w-5 h-5 cursor-pointer" onClick={startEditing} title="Edit quantity" />
         </div>

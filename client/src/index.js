@@ -4,35 +4,36 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import App from './App';
-import Home from "./Home";
+import Home from "./js/Home";
 
-import Conversions from './Conversions';
-import Units from "./units/Units";
-import Unit from "./units/Unit";
-import NewUnit from "./units/NewUnit";
-import EditUnit from "./units/EditUnit";
+import Units from "./js/units/Units";
+import Unit from "./js/units/Unit";
+import NewUnit from "./js/units/NewUnit";
+import EditUnit from "./js/units/EditUnit";
 
-import Foods from "./foods/Foods";
-import Food from "./foods/Food";
-import NewFood from './foods/NewFood';
-import EditFood from './foods/EditFood';
+import Foods from "./js/foods/Foods";
+import Food from "./js/foods/Food";
+import NewFood from './js/foods/NewFood';
+import EditFood from './js/foods/EditFood';
 
-import Ingredients from "./ingredients/Ingredients";
-import Ingredient from "./ingredients/Ingredient";
-import NewIngredient from "./ingredients/NewIngredient";
+import Ingredients from "./js/ingredients/Ingredients";
+import Ingredient from "./js/ingredients/Ingredient";
+import NewIngredient from "./js/ingredients/NewIngredient";
+import EditIngredient from './js/ingredients/EditIngredient';
 
-import Recipes from "./recipes/Recipes";
-import Recipe from "./recipes/Recipe";
-import NewRecipe from "./recipes/NewRecipe";
-import EditRecipe from "./recipes/EditRecipe";
+import Recipes from "./js/recipes/Recipes";
+import Recipe from "./js/recipes/Recipe";
+import NewRecipe from "./js/recipes/NewRecipe";
+import EditRecipe from "./js/recipes/EditRecipe";
 
 import reportWebVitals from './reportWebVitals';
 
 import "./index.css";
-import "./buttons.css";
-import "./utility.css";
-import "./tables.css";
-import "./forms.css";
+import "./css/buttons.css";
+import "./css/utility.css";
+import "./css/tables.css";
+import "./css/forms.css";
+import "./css/cards.css";
 
 import {
   createBrowserRouter,
@@ -41,8 +42,7 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 
-import UnitsService from "./services/UnitsService";
-import EditIngredient from './ingredients/EditIngredient';
+import UnitsService from "./js/services/UnitsService";
 
 const unitsService = new UnitsService();
 
@@ -52,7 +52,6 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route path="" element={<Home />} />
-      <Route path="conversions" element={<Conversions />} />
       <Route path="units" element={<Units />} />
       <Route path="units/:id" element={<Unit />} />
       <Route path="units/new" element={<NewUnit />} />

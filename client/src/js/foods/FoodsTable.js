@@ -8,8 +8,6 @@ import { useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { MdDone } from "react-icons/md";
 
-import "./FoodsTable.css";
-
 // setFoods is passed in so that when the food amount is edited in cell,
 // the entire foods state can be updated, to change the amount of that one food
 export default function FoodsTable({foods, setFoods, sortOrder, setSortOrder})
@@ -89,7 +87,7 @@ function FoodAmountTableCell({food, foods, setFoods})
     {
         return <td className="py-0">
             <form onSubmit={handleSubmit}>
-                <div className="flex column-gap-3 align-items-center m-0">
+                <div className="d-flex column-gap-3 align-items-center m-0">
                     <label hidden htmlFor="amount"></label>
                     <input name="amount" type="number" defaultValue={amount}></input>
                     <button type="submit" title="Done">
@@ -106,7 +104,7 @@ function FoodAmountTableCell({food, foods, setFoods})
     else
     {
         return <td className="py-0">
-            <div className="m-0 flex column-gap-3 align-items-center">
+            <div className="m-0 d-flex column-gap-1 align-items-center">
                 <span>{amount}</span>
                 <CiEdit className="w-5 h-5 cursor-pointer" onClick={() => setEditing(true)} title="Edit" />
             </div>
