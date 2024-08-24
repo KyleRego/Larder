@@ -5,7 +5,9 @@ namespace Larder.Models;
 /// </summary>
 public class Food : Item
 {
-    public double Amount { get; set; }
+    public double Servings { get; set; }
+
+    public Quantity ServingSize { get; set; } = new() { Amount = 1, UnitId = null};
 
     public Recipe? Recipe { get; set; }
 

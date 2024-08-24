@@ -38,7 +38,7 @@ public static class FoodDtoAssembler
             Id = food.Id,
             Name = food.Name,
             Description = food.Description,
-            Amount = food.Amount,
+            Amount = food.Servings,
             RecipeId = food.Recipe?.Id,
             Calories = food.Calories,
             Protein = QuantityDtoAssembler.Assemble(food.Protein),

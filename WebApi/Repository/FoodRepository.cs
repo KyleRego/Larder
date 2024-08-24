@@ -50,9 +50,9 @@ public class FoodRepository(AppDbContext dbContext) : RepositoryBase<Food, FoodS
             case FoodSortOptions.Name_Desc:
                 return withSearch.OrderByDescending(f => f.Name).ToListAsync();
             case FoodSortOptions.Amount:
-                return withSearch.OrderBy(f => f.Amount).ToListAsync();
+                return withSearch.OrderBy(f => f.Servings).ToListAsync();
             case FoodSortOptions.Amount_Desc:
-                return withSearch.OrderByDescending(f => f.Amount).ToListAsync();
+                return withSearch.OrderByDescending(f => f.Servings).ToListAsync();
             case FoodSortOptions.Calories:
                 return withSearch.OrderBy(f => f.Calories).ToListAsync();
             case FoodSortOptions.Calories_Desc:

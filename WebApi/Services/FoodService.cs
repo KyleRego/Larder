@@ -30,7 +30,7 @@ public class FoodService(IFoodRepository foodRepo) : IFoodService
             Name = dto.Name,
             Description = dto.Description,
             Calories = dto.Calories,
-            Amount = dto.Amount,
+            Servings = dto.Amount,
             Protein = Quantity.FromDto(dto.Protein),
             TotalFat = Quantity.FromDto(dto.TotalFat),
             SaturatedFat = Quantity.FromDto(dto.SaturatedFat),
@@ -57,7 +57,7 @@ public class FoodService(IFoodRepository foodRepo) : IFoodService
         entity.Name = dto.Name;
         entity.Description = dto.Description;
         entity.Calories = dto.Calories;
-        entity.Amount = dto.Amount;
+        entity.Servings = dto.Amount;
         entity.Protein = Quantity.FromDto(dto.Protein);
         entity.TotalFat = Quantity.FromDto(dto.TotalFat);
         entity.SaturatedFat = Quantity.FromDto(dto.SaturatedFat);
@@ -102,7 +102,7 @@ public class FoodService(IFoodRepository foodRepo) : IFoodService
 
         Food entity = await _foodRepo.Get(dto.Id) ?? throw new ApplicationException("food not found");
 
-        entity.Amount = dto.Amount;
+        entity.Servings = dto.Amount;
 
         await _foodRepo.Update(entity);
 
