@@ -17,7 +17,7 @@ export default function FoodsCards({foods, setFoods})
     );
 
     return <>
-        <div className="d-flex justify-content-around align-items-center flex-wrap">
+        <div className="d-flex justify-content-start column-gap-3 align-items-center flex-wrap">
             {cards}
         </div>
     </>

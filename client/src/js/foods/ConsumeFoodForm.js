@@ -33,7 +33,7 @@ export default function ConsumeFoodForm({food, foods, setFoods})
                 <div className="d-flex flex-column flex-sm-row justify-content-around align-items-center">
                     <div className="text-center">
                         <label htmlFor="servingsConsumed">Consume servings:</label>
-                        <input type="number" step="any" name="servingsConsumed"></input>
+                        <input type="number" step="any" name="servingsConsumed" defaultValue={0}></input>
                     </div>
                     <div>
                         <button type="submit" className="btn btn-primary btn-sm">Submit</button>

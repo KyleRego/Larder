@@ -28,7 +28,7 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
         Ingredient? ingredient = await _ingredientRepository.Get(id);
         if (ingredient == null) return null;
 
-        return IngredientDtoAssembler.Assemble(ingredient);
+        return IngredientDto.FromEntity(ingredient);
     }
 
     public async Task<List<IngredientDto>> GetIngredients(IngredientSortOptions sortBy, string? searchName)
@@ -39,7 +39,7 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
 
         foreach (Ingredient ingredient in ingredients)
         {
-            ingredientDtos.Add(IngredientDtoAssembler.Assemble(ingredient));
+            ingredientDtos.Add(IngredientDto.FromEntity(ingredient));
         }
 
         return ingredientDtos;
@@ -84,7 +84,7 @@ public class IngredientService(IIngredientRepository ingredientRepository) : IIn
 
         ingredient = await _ingredientRepository.Update(ingredient);
 
-        return IngredientDtoAssembler.Assemble(ingredient);
+        return IngredientDto.FromEntity(ingredient);
     }
 
     public async Task DeleteIngredient(string id)

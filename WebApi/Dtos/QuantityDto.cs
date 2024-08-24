@@ -2,18 +2,14 @@ using Larder.Models;
 
 namespace Larder.Dtos;
 
-public class QuantityDto : DtoBase
+public class QuantityDto
 {
+    public string? Id { get; set; }
     public double Amount { get; set; }
-
     public string? UnitId { get; set; }
-
     public string? UnitName { get; set; }
-}
 
-public static class QuantityDtoAssembler
-{
-    public static QuantityDto? Assemble(Quantity? quantity)
+    public static QuantityDto? FromEntity(Quantity? quantity)
     {
         if (quantity == null) return null;
 

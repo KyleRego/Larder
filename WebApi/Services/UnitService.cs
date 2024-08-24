@@ -35,7 +35,7 @@ public class UnitService(IUnitRepository rep) : IUnitService
     {
         Unit? entity = await _rep.Get(id);
 
-        return (entity == null) ? null : UnitDtoAssembler.Assemble(entity);
+        return (entity == null) ? null : UnitDto.FromEntity(entity);
     }
 
     public async Task<List<UnitDto>> GetUnits(UnitSortOptions sortOrder, string? search)
@@ -46,7 +46,7 @@ public class UnitService(IUnitRepository rep) : IUnitService
 
         foreach (Unit unit in units)
         {
-            dtos.Add(UnitDtoAssembler.Assemble(unit));
+            dtos.Add(UnitDto.FromEntity(unit));
         }
 
         return dtos;

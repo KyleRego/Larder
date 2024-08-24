@@ -6,8 +6,7 @@ using Larder.Repository;
 
 namespace Larder.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
+[ApiController, Route("api/[controller]")]
 public class IngredientsController(IIngredientService ingredientService) : ControllerBase
 {
     private readonly IIngredientService _ingredientService = ingredientService;
@@ -74,6 +73,7 @@ public class IngredientsController(IIngredientService ingredientService) : Contr
     public async Task<ActionResult> Delete(string id)
     {
         await _ingredientService.DeleteIngredient(id);
+
         return Ok();
     }
 }

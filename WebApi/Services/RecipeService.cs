@@ -70,7 +70,7 @@ public class RecipeService( IRecipeRepository recipeRepository,
 
         if (recipe == null) return null;
 
-        return RecipeDtoAssembler.Assemble(recipe);
+        return RecipeDto.FromEntity(recipe);
     }
 
     public async Task<List<RecipeDto>> GetRecipes(RecipeSortOptions sortBy, string? searchName)
@@ -80,7 +80,7 @@ public class RecipeService( IRecipeRepository recipeRepository,
 
         foreach (Recipe recipe in recipes)
         {
-            recipeDtos.Add(RecipeDtoAssembler.Assemble(recipe));
+            recipeDtos.Add(RecipeDto.FromEntity(recipe));
         }
 
         return recipeDtos;
@@ -153,6 +153,6 @@ public class RecipeService( IRecipeRepository recipeRepository,
 
         recipe.RecipeIngredients = resultingRecipeIngredients;
 
-        return RecipeDtoAssembler.Assemble(await _recipeRepository.Update(recipe));
+        return RecipeDto.FromEntity(await _recipeRepository.Update(recipe));
     }
 }

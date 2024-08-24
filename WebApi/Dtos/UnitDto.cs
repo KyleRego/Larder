@@ -2,16 +2,13 @@ using Larder.Models;
 
 namespace Larder.Dtos;
 
-public class UnitDto : DtoBase
+public class UnitDto
 {
+    public string? Id { get; set; }
     public required string Name { get; set; }
-
     public required UnitType Type { get; set; }
-}
 
-public static class UnitDtoAssembler
-{
-    public static UnitDto Assemble(Unit entity)
+    public static UnitDto FromEntity(Unit entity)
     {
         return new()
         {

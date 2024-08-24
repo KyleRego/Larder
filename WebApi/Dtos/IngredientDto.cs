@@ -2,23 +2,16 @@ using Larder.Models;
 
 namespace Larder.Dtos;
 
-public class IngredientDto : ItemDto
+public class IngredientDto
 {
+    public string? Id { get; set; }
+    public required string Name { get; set; }
+    public string? Description { get; set; }
     public QuantityDto? Quantity { get; set; }
 
     public List<IngredientRecipeDto> Recipes { get; set; } = [];
-}
 
-public class IngredientRecipeDto
-{
-    public required string Id { get; set; }
-
-    public required string Name { get; set; }
-}
-
-public static class IngredientDtoAssembler
-{
-    public static IngredientDto Assemble(Ingredient ingredient)
+    public static IngredientDto FromEntity(Ingredient ingredient)
     {
         IngredientDto dto = new()
         {
@@ -48,4 +41,11 @@ public static class IngredientDtoAssembler
 
         return dto;
     }
+}
+
+public class IngredientRecipeDto
+{
+    public required string Id { get; set; }
+
+    public required string Name { get; set; }
 }

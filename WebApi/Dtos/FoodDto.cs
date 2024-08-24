@@ -2,8 +2,14 @@ using Larder.Models;
 
 namespace Larder.Dtos;
 
-public class FoodDto : ItemDto
+public class FoodDto
 {
+    public string? Id { get; set; }
+
+    public required string Name { get; set; }
+
+    public string? Description { get; set; }
+
     public double Servings { get; set; }
 
     public string? RecipeId { get; set; }
@@ -38,15 +44,15 @@ public class FoodDto : ItemDto
             Servings = food.Servings,
             RecipeId = food.Recipe?.Id,
             Calories = food.Calories,
-            Protein = QuantityDtoAssembler.Assemble(food.Protein),
-            TotalFat = QuantityDtoAssembler.Assemble(food.TotalFat),
-            SaturatedFat = QuantityDtoAssembler.Assemble(food.SaturatedFat),
-            TransFat = QuantityDtoAssembler.Assemble(food.TransFat),
-            Cholesterol = QuantityDtoAssembler.Assemble(food.Cholesterol),
-            Sodium = QuantityDtoAssembler.Assemble(food.Sodium),
-            TotalCarbs = QuantityDtoAssembler.Assemble(food.TotalCarbs),
-            DietaryFiber = QuantityDtoAssembler.Assemble(food.DietaryFiber),
-            TotalSugars = QuantityDtoAssembler.Assemble(food.TotalSugars)
+            Protein = QuantityDto.FromEntity(food.Protein),
+            TotalFat = QuantityDto.FromEntity(food.TotalFat),
+            SaturatedFat = QuantityDto.FromEntity(food.SaturatedFat),
+            TransFat = QuantityDto.FromEntity(food.TransFat),
+            Cholesterol = QuantityDto.FromEntity(food.Cholesterol),
+            Sodium = QuantityDto.FromEntity(food.Sodium),
+            TotalCarbs = QuantityDto.FromEntity(food.TotalCarbs),
+            DietaryFiber = QuantityDto.FromEntity(food.DietaryFiber),
+            TotalSugars = QuantityDto.FromEntity(food.TotalSugars)
         };
     }
 }
