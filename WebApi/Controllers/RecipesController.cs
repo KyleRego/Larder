@@ -6,8 +6,7 @@ using Larder.Services;
 
 namespace Larder.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
+[ApiController, Route("api/[controller]")]
 public class RecipesController(IRecipeService recipeService) : ControllerBase
 {
     private readonly IRecipeService _recipeService = recipeService;

@@ -54,6 +54,9 @@ export default function Nav()
                     <Link className="nav-link" to={"/foods"}>Foods <span className="sr-only"></span></Link>
                 </li>
                 <li className="nav-item">
+                    <Link className="nav-link" to={"/timeline"}>Eating timeline</Link>
+                </li>
+                <li className="nav-item">
                     <Link className="nav-link" to={"/ingredients"}>Ingredients</Link>
                 </li>
                 {/* <li className="nav-item dropdown">

@@ -21,9 +21,11 @@ public interface IFoodService
     public Task DeleteFood(string id);
 }
 
-public class FoodService(IFoodRepository foodRepo) : IFoodService
+public class FoodService(IFoodRepository foodRepo,
+                            IConsumedFoodRepository consumedFoodRepository) : IFoodService
 {
     private readonly IFoodRepository _foodRepo = foodRepo;
+    private readonly IConsumedFoodRepository _consumedFoodRepo = consumedFoodRepository;
 
     public async Task<FoodDto> CreateFood(FoodDto dto)
     {
@@ -121,12 +123,27 @@ public class FoodService(IFoodRepository foodRepo) : IFoodService
     public async Task<FoodDto> ConsumeServings(FoodServingsDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto.FoodId);
+        if (dto.Servings < 1) throw new ApplicationException("servings must be >= 1 when consuming a food");
 
         Food entity = await _foodRepo.Get(dto.FoodId) ?? throw new ApplicationException("food not found");
 
         entity.Servings -= dto.Servings;
 
+        DateTime dt = DateTime.Now;
+
+        ConsumedFood consumedFood = new()
+        {
+            FoodName = entity.Name,
+            DateTimeConsumed = dt,
+            DateConsumed = DateOnly.FromDateTime(dt),
+            ServingsConsumed = dto.Servings,
+            CaloriesConsumed = entity.Calories * dto.Servings,
+            ProteinConsumed = (entity.Protein?.Amount ?? 0) * dto.Servings
+        };
+
         await _foodRepo.Update(entity);
+
+        await _consumedFoodRepo.Insert(consumedFood);
 
         return FoodDto.FromEntity(entity);
     }

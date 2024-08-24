@@ -12,12 +12,13 @@ builder.Services.AddScoped<IUnitRepository, UnitRepository>();
 builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
 builder.Services.AddScoped<IIngredientRepository, IngredientRepository>();
 builder.Services.AddScoped<IFoodRepository, FoodRepository>();
+builder.Services.AddScoped<IConsumedFoodRepository, ConsumedFoodRepository>();
 
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<IIngredientService, IngredientService>();
 builder.Services.AddScoped<IFoodService, FoodService>();
 builder.Services.AddScoped<IUnitService, UnitService>();
-
+builder.Services.AddScoped<IConsumedFoodService, ConsumedFoodService>();
 
 if (builder.Environment.IsDevelopment())
 {

@@ -13,6 +13,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<RecipeStep> RecipeSteps { get; set; }
     public DbSet<Unit> Units { get; set; }
     public DbSet<Utensil> Utensils { get; set; }
+    public DbSet<ConsumedFood> ConsumedFoods { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
