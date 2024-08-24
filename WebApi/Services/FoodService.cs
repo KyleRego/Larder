@@ -14,7 +14,9 @@ public interface IFoodService
 
     public Task<FoodDto> UpdateFood(FoodDto food);
 
-    public Task<FoodDto> UpdateQuantity(QuantityDto quantity);
+    public Task<FoodDto> UpdateServings(FoodServingsDto dto);
+
+    public Task<FoodDto> ConsumeServings(FoodServingsDto dto);
 
     public Task DeleteFood(string id);
 }
@@ -30,7 +32,7 @@ public class FoodService(IFoodRepository foodRepo) : IFoodService
             Name = dto.Name,
             Description = dto.Description,
             Calories = dto.Calories,
-            Servings = dto.Amount,
+            Servings = dto.Servings,
             Protein = Quantity.FromDto(dto.Protein),
             TotalFat = Quantity.FromDto(dto.TotalFat),
             SaturatedFat = Quantity.FromDto(dto.SaturatedFat),
@@ -57,7 +59,7 @@ public class FoodService(IFoodRepository foodRepo) : IFoodService
         entity.Name = dto.Name;
         entity.Description = dto.Description;
         entity.Calories = dto.Calories;
-        entity.Servings = dto.Amount;
+        entity.Servings = dto.Servings;
         entity.Protein = Quantity.FromDto(dto.Protein);
         entity.TotalFat = Quantity.FromDto(dto.TotalFat);
         entity.SaturatedFat = Quantity.FromDto(dto.SaturatedFat);
@@ -79,7 +81,7 @@ public class FoodService(IFoodRepository foodRepo) : IFoodService
 
         if (entity == null) return null;
 
-        return FoodDtoAssembler.Assemble(entity);
+        return FoodDto.FromEntity(entity);
     }
 
     public async Task<List<FoodDto>> GetFoods(FoodSortOptions sortBy, string? search)
@@ -90,23 +92,23 @@ public class FoodService(IFoodRepository foodRepo) : IFoodService
 
         foreach (Food food in foods)
         {
-            foodDtos.Add(FoodDtoAssembler.Assemble(food));
+            foodDtos.Add(FoodDto.FromEntity(food));
         }
 
         return foodDtos;
     }
 
-    public async Task<FoodDto> UpdateQuantity(QuantityDto dto)
+    public async Task<FoodDto> UpdateServings(FoodServingsDto dto)
     {
-        ArgumentNullException.ThrowIfNull(dto.Id);
+        ArgumentNullException.ThrowIfNull(dto.FoodId);
 
-        Food entity = await _foodRepo.Get(dto.Id) ?? throw new ApplicationException("food not found");
+        Food entity = await _foodRepo.Get(dto.FoodId) ?? throw new ApplicationException("food not found");
 
-        entity.Servings = dto.Amount;
+        entity.Servings = dto.Servings;
 
         await _foodRepo.Update(entity);
 
-        return FoodDtoAssembler.Assemble(entity);
+        return FoodDto.FromEntity(entity);
     }
 
     public async Task DeleteFood(string id)
@@ -114,5 +116,18 @@ public class FoodService(IFoodRepository foodRepo) : IFoodService
         Food entity = await _foodRepo.Get(id) ?? throw new ApplicationException("food not found");
 
         await _foodRepo.Delete(entity);
+    }
+
+    public async Task<FoodDto> ConsumeServings(FoodServingsDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(dto.FoodId);
+
+        Food entity = await _foodRepo.Get(dto.FoodId) ?? throw new ApplicationException("food not found");
+
+        entity.Servings -= dto.Servings;
+
+        await _foodRepo.Update(entity);
+
+        return FoodDto.FromEntity(entity);
     }
 }

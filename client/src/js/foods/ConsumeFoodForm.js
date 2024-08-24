@@ -1,6 +1,6 @@
 import FoodsService from "../services/FoodsService";
 
-export default function FoodEater({food})
+export default function ConsumeFoodForm({food, foods, setFoods})
 {
     async function handleEatFood(e)
     {
@@ -11,10 +11,22 @@ export default function FoodEater({food})
 
         const dto = {
             foodId: food.id,
-            servingsConsumed: formData.get("servingsConsumed")
+            servings: formData.get("servingsConsumed")
         };
 
-        await foodService.postEatFood(dto);
+        await foodService.postEatFood(dto).then(result => {
+            const newFoods = structuredClone(foods);
+
+            for (let i = 0; i < foods.length; i += 1)
+            {
+                if (foods[i] === food)
+                {
+                    newFoods[i] = result;
+                }
+            }
+
+            setFoods(newFoods);
+        })
     }
 
     return <form onSubmit={handleEatFood}>

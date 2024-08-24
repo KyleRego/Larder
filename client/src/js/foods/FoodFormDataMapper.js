@@ -9,7 +9,7 @@ export default class FoodFormDataMapper
         food.name = formData.get("name");
         food.description = formData.get("description");
 
-        food.amount = formData.get("amount");
+        food.servings = formData.get("servings");
         food.calories = formData.get("calories");
 
         const quantityProperties = FoodConstants.quantityProperties;

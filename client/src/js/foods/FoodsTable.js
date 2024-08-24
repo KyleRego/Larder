@@ -20,7 +20,7 @@ export default function FoodsTable({foods, setFoods, sortOrder, setSortOrder})
             <thead>
                 <tr>
                     <SortingTableHeader columnName="Name" sortOrder={sortOrder} setSortOrder={setSortOrder} />
-                    <SortingTableHeader columnName="Amount" sortOrder={sortOrder} setSortOrder={setSortOrder} />
+                    <SortingTableHeader columnName="Servings" sortOrder={sortOrder} setSortOrder={setSortOrder} />
                     <SortingTableHeader columnName="Calories" sortOrder={sortOrder} setSortOrder={setSortOrder} />
                 </tr>
             </thead>
@@ -51,7 +51,6 @@ function FoodRow(food, foods, setFoods)
 
 function FoodAmountTableCell({food, foods, setFoods})
 {
-    const amount = food.amount;
     const [editing, setEditing] = useState(false);
 
     async function handleSubmit(e)
@@ -59,22 +58,22 @@ function FoodAmountTableCell({food, foods, setFoods})
         e.preventDefault();
 
         const formData = new FormData(e.target);
-        const newAmount = formData.get("amount");
+        const newServings = formData.get("servings");
 
-        const quantityDto = {
-            id: food.id,
-            amount: newAmount
+        const foodServingsDto = {
+            foodId: food.id,
+            servings: newServings
         };
 
         const service = new FoodsService();
-        await service.patchFood(quantityDto).then(() => {
+        await service.patchFood(foodServingsDto).then(() => {
             const newFoods = structuredClone(foods);
             
             for (let i = 0; i < newFoods.length; i += 1)
             {
                 if (newFoods[i].id === food.id)
                 {
-                    newFoods[i].amount = newAmount
+                    newFoods[i].servings = newServings
                 }
             }
 
@@ -88,8 +87,8 @@ function FoodAmountTableCell({food, foods, setFoods})
         return <td className="py-0">
             <form onSubmit={handleSubmit}>
                 <div className="d-flex column-gap-3 align-items-center m-0">
-                    <label hidden htmlFor="amount"></label>
-                    <input name="amount" type="number" defaultValue={amount}></input>
+                    <label hidden htmlFor="servings"></label>
+                    <input name="servings" type="number" step="any" defaultValue={food.servings}></input>
                     <button type="submit" title="Done">
                         <MdDone />
                     </button>
@@ -105,8 +104,8 @@ function FoodAmountTableCell({food, foods, setFoods})
     {
         return <td className="py-0">
             <div className="m-0 d-flex column-gap-1 align-items-center">
-                <span>{amount}</span>
-                <CiEdit className="w-5 h-5 cursor-pointer" onClick={() => setEditing(true)} title="Edit" />
+                <span>{food.servings}</span>
+                <CiEdit className="w-5 h-5" role="button" onClick={() => setEditing(true)} title="Edit" />
             </div>
         </td>
     }

@@ -23,8 +23,8 @@ export default function FoodForm({initialFood, handleSubmit, units})
         </div>
 
         <div>
-            <label htmlFor="amount">Amount:</label>
-            <input required className="ms-1" type="number" name="amount" defaultValue={initialFood.amount}></input>
+            <label htmlFor="servings">Servings:</label>
+            <input required className="ms-1" type="number" name="servings" defaultValue={initialFood.servings}></input>
         </div>
 
         <h2>Nutrition:</h2>

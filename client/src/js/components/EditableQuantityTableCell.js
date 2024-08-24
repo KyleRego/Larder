@@ -61,7 +61,7 @@ function NoneditingTableCell({quantity, setEditing})
     return <td className="py-0">
         <div className="m-0 d-flex column-gap-3 align-items-center">
             <span>{quantity?.amount} {quantity?.unitName}</span>
-            <CiEdit className="w-5 h-5 cursor-pointer" onClick={startEditing} title="Edit quantity" />
+            <CiEdit className="w-5 h-5" role="button" onClick={startEditing} title="Edit quantity" />
         </div>
     </td>
 }

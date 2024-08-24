@@ -28,7 +28,7 @@ export default function SortingTableHeader({columnName, sortOrder, setSortOrder}
     }
 
     return (
-        <th title="Change ordering" className="cursor-pointer" onClick={handleOnClick} scope="col">
+        <th title="Change ordering" className="" role="button" onClick={handleOnClick} scope="col">
             <div className="d-flex align-items-center">
                 <span className="">{columnName}</span>
                 {icon}

@@ -10,8 +10,8 @@ public enum FoodSortOptions
     AnyOrder,
     Name,
     Name_Desc,
-    Amount,
-    Amount_Desc,
+    Servings,
+    Servings_Desc,
     Calories,
     Calories_Desc
 }
@@ -49,9 +49,9 @@ public class FoodRepository(AppDbContext dbContext) : RepositoryBase<Food, FoodS
                 return withSearch.OrderBy(f => f.Name).ToListAsync();
             case FoodSortOptions.Name_Desc:
                 return withSearch.OrderByDescending(f => f.Name).ToListAsync();
-            case FoodSortOptions.Amount:
+            case FoodSortOptions.Servings:
                 return withSearch.OrderBy(f => f.Servings).ToListAsync();
-            case FoodSortOptions.Amount_Desc:
+            case FoodSortOptions.Servings_Desc:
                 return withSearch.OrderByDescending(f => f.Servings).ToListAsync();
             case FoodSortOptions.Calories:
                 return withSearch.OrderBy(f => f.Calories).ToListAsync();

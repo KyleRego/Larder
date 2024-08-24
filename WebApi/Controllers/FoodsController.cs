@@ -6,8 +6,7 @@ using Larder.Dtos;
 
 namespace Larder.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
+[ApiController, Route("api/[controller]")]
 public class FoodsController(IFoodService foodService) : ControllerBase
 {
     private readonly IFoodService _foodService = foodService;
@@ -57,13 +56,28 @@ public class FoodsController(IFoodService foodService) : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    public async Task<ActionResult<FoodDto>> UpdateQuantity(string id, QuantityDto quantity)
+    public async Task<ActionResult<FoodDto>> UpdateQuantity(string id, FoodServingsDto dto)
     {
-        if (quantity.Id != id) return BadRequest();
+        if (dto.FoodId != id) return BadRequest();
 
         try
         {
-            return await _foodService.UpdateQuantity(quantity);
+            return await _foodService.UpdateServings(dto);
+        }
+        catch(ApplicationException)
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpPost("EatFood/{id}")]
+    public async Task<ActionResult<FoodDto>> ConsumeServings(string id, FoodServingsDto dto)
+    {
+        if (dto.FoodId != id) return BadRequest();
+
+        try
+        {
+            return await _foodService.ConsumeServings(dto);
         }
         catch(ApplicationException)
         {

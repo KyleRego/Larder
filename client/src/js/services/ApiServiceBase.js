@@ -41,6 +41,8 @@ export default class ApiServiceBase
         {
             throw new Error(`Response status: ${response.status}`);
         }
+
+        return await response.json();
     }
 
     async tryPut(url, dto)

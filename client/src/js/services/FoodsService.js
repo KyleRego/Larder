@@ -6,7 +6,6 @@ export default class FoodsService extends ApiServiceBase
     {
         super();
         this.foodsBaseUrl = `${this.backendOrigin}/api/foods`;
-        this.foodEatingBaseUrl = `${this.backendOrigin}/api/foodEating`;
     }
 
     async getFoods(sortOrder = null)
@@ -28,11 +27,21 @@ export default class FoodsService extends ApiServiceBase
         return await this.tryGetJson(url);
     }
 
-    async postFood(food)
+    async postFood(foodDto)
     {
         const url = `${this.foodsBaseUrl}`;
 
-        return await this.tryPost(url, food);
+        return await this.tryPost(url, foodDto);
+    }
+
+    async postEatFood(foodServingsDto)
+    {
+        const id = foodServingsDto.foodId;
+        if (id === undefined) throw new Error("food id missing");
+
+        const url = `${this.foodsBaseUrl}/EatFood/${id}`;
+
+        return await this.tryPost(url, foodServingsDto);
     }
 
     async putFood(food)
@@ -47,7 +56,7 @@ export default class FoodsService extends ApiServiceBase
 
     async patchFood(food)
     {
-        const id = food.id;
+        const id = food.foodId;
         if (id === undefined) throw new Error("food id missing");
 
         const url = `${this.foodsBaseUrl}/${id}`;
@@ -63,14 +72,5 @@ export default class FoodsService extends ApiServiceBase
         const url = `${this.foodsBaseUrl}/${id}`;
 
         return await this.tryDelete(url, food);
-    }
-
-    async postEatFood(dto)
-    {
-        if (!dto.id) return;
-
-        let url = this.foodEatingBaseUrl;
-
-        return await this.tryPost(url, dto);
     }
 }

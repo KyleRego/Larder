@@ -58,7 +58,7 @@ export default function Food()
 
         <p>{food.description}</p>
  
-        <p>Amount: {food.amount}</p>
+        <p>Servings: {food.servings}</p>
 
         <div>
             <table className="table">

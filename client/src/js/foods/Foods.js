@@ -44,7 +44,7 @@ export default function Foods({units})
         }
 
         {viewMode === "cards"
-            && <FoodsCards foods={foods} />
+            && <FoodsCards foods={foods} setFoods={setFoods} />
         }
 
         <div>
