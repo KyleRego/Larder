@@ -1,6 +1,7 @@
 import "./Nav.css";
 
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Nav()
 {
@@ -42,7 +43,7 @@ export default function Nav()
         // </nav>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container">
-            <a className="navbar-brand ms-4" href="/">Larder</a>
+            <Link className="navbar-brand ms-4" to={"/"}>Larder</Link>
             <button className="navbar-toggler me-4" onClick={toggleCollapsibleNavbar} type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
             </button>
@@ -50,10 +51,10 @@ export default function Nav()
             <div className={`collapse navbar-collapse ${showCollapsibleNavbar && "show"}`} id="navbarSupportedContent">
                 <ul className="ms-4 navbar-nav mr-auto">
                 <li className="nav-item active">
-                    <a className="nav-link" href="/foods">Foods <span className="sr-only"></span></a>
+                    <Link className="nav-link" to={"/foods"}>Foods <span className="sr-only"></span></Link>
                 </li>
                 <li className="nav-item">
-                    <a className="nav-link" href="/ingredients">Ingredients</a>
+                    <Link className="nav-link" to={"/ingredients"}>Ingredients</Link>
                 </li>
                 {/* <li className="nav-item dropdown">
                     <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
