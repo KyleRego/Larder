@@ -18,6 +18,7 @@ builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<IIngredientService, IngredientService>();
 builder.Services.AddScoped<IFoodService, FoodService>();
 builder.Services.AddScoped<IUnitService, UnitService>();
+builder.Services.AddScoped<ITimelineService, TimelineService>();
 builder.Services.AddScoped<IConsumedFoodService, ConsumedFoodService>();
 
 if (builder.Environment.IsDevelopment())

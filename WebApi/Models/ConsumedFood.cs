@@ -4,7 +4,7 @@ public class ConsumedFood : EntityBase
 {
     public required string FoodName { get; set; }
 
-    public required DateTime DateTimeConsumed { get; set; }
+    public required DateTime? DateTimeConsumed { get; set; }
 
     public required DateOnly DateConsumed { get; set; }
 

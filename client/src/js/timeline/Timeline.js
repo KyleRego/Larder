@@ -1,48 +1,30 @@
 import { useState, useEffect } from "react";
 
-import ConsumedFoodsService from "../services/ConsumedFoodsService";
+import TimelineService from "../services/TimelineService";
+import DayNutritionCard from "./DayNutritionCard";
 
 export default function Timeline()
 {
-    const [data, setData] = useState([]);
+    const [nutritionDays, setNutritionDays] = useState([]);
 
     useEffect(() => {
-        const service = new ConsumedFoodsService();
+        const service = new TimelineService();
 
-        service.getConsumedFoodsIndex().then(result => {
-            setData(result);
+        service.getTimelineIndex().then(result => {
+            setNutritionDays(result);
         }).catch(error => {
             console.error(error);
         });
     }, []);
 
-    console.log(data);
-
-    const days = data.map(day => {
-
-        const consumedFoodItems = day.consumedFoods.map(f => {
-            return <li key={f.foodName}>
-                {f.servingsConsumed} servings of {f.foodName}: {f.caloriesConsumed} calories and {f.proteinConsumed} grams of protein
-            </li>
-        });
-
-        return <div key={day.date}>
-            <h3>{day.date}</h3>
-
-            <p>
-                Total calories: {day.totalCalories}, total protein: {day.totalProtein}
-            </p>
-
-            <ul>
-                {consumedFoodItems}
-            </ul>
-        </div>;
+    const nutritionDayCards = nutritionDays.map(nd => {
+        return <DayNutritionCard key={nd.date} nutritionDay={nd}
+                            nutritionDays={nutritionDays} setNutritionDays={setNutritionDays} />;
     });
 
-
     return <>
-        <h1>Timeline</h1>
+        <h1>Nutrition timeline</h1>
 
-        {days}
+        {nutritionDayCards}
     </>;
 }

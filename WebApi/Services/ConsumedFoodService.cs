@@ -6,58 +6,52 @@ namespace Larder.Services;
 
 public interface IConsumedFoodService
 {
-    public Task<List<DayOfEatingDto>> FoodsOfPastWeek();
+    public Task CreateConsumedFood(ConsumedFoodDto dto);
+    public Task UpdateConsumedFood(ConsumedFoodDto dto);
+    public Task DeleteConsumedFood(string id);
 }
 
 public class ConsumedFoodService(IConsumedFoodRepository consumedFoodRepository) : IConsumedFoodService
 {
-    private readonly IConsumedFoodRepository _consumedFoodRepo = consumedFoodRepository;
+    private readonly IConsumedFoodRepository _consFoodRepo = consumedFoodRepository;
 
-    public async Task<List<DayOfEatingDto>> FoodsOfPastWeek()
+    public async Task CreateConsumedFood(ConsumedFoodDto dto)
     {
-        List<ConsumedFood> entities = await _consumedFoodRepo.GetConsumedFoodsPastWeek();
+        double servingsConsumed = dto.ServingsConsumed;
 
-        Dictionary<DateOnly, List<ConsumedFood>> map = [];
-
-        foreach (ConsumedFood entity in entities)
+        ConsumedFood entity = new()
         {
-            DateOnly dateEatenAt = entity.DateConsumed;
+            FoodName = dto.FoodName,
+            DateTimeConsumed = null,
+            DateConsumed = (DateOnly)dto.DateConsumed,
+            ServingsConsumed = dto.ServingsConsumed,
+            CaloriesConsumed = servingsConsumed * dto.CaloriesConsumed,
+            ProteinConsumed = 0
+        };
 
-            if (map.TryGetValue(dateEatenAt, out List<ConsumedFood>? foodsThatDay))
-            {
-                foodsThatDay.Add(entity);
-            }
-            else
-            {
-                map[dateEatenAt] = [entity];
-            }
-        }
+        await _consFoodRepo.Insert(entity);
+    }
 
-        List<DayOfEatingDto> result = [];
+    public async Task UpdateConsumedFood(ConsumedFoodDto dto)
+    {
+        string id = dto.Id ?? throw new ApplicationException("id of consumed food to update missing");
 
-        foreach (DateOnly date in map.Keys.Order())
-        {
-            DayOfEatingDto dayOfEating = new()
-            {
-                Date = date,
-                TotalCalories = 0,
-                TotalProtein = 0,
-                ConsumedFoods = []
-            };
+        ConsumedFood entity = await _consFoodRepo.Get(id)
+            ?? throw new ApplicationException("consumed food to delete was not found");
 
-            List<ConsumedFood> foodsThatDay = map[date];
+        entity.FoodName = dto.FoodName;
+        entity.ServingsConsumed = dto.ServingsConsumed;
+        entity.CaloriesConsumed = dto.CaloriesConsumed;
+        entity.ProteinConsumed = 0;
 
-            foreach (ConsumedFood consFood in foodsThatDay)
-            {
-                ConsumedFoodDto consumedFoodDto = ConsumedFoodDto.FromEntity(consFood);
+        await _consFoodRepo.Update(entity);
+    }
 
-                dayOfEating.TotalCalories += consumedFoodDto.CaloriesConsumed;
-                dayOfEating.ConsumedFoods.Add(consumedFoodDto);
-            }
-
-            result.Add(dayOfEating);
-        }
-
-        return result;
+    public async Task DeleteConsumedFood(string id)
+    {
+        ConsumedFood entity = await _consFoodRepo.Get(id)
+            ?? throw new ApplicationException("consumed food to delete was not found");
+    
+        await _consFoodRepo.Delete(entity);
     }
 }

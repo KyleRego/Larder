@@ -33,7 +33,7 @@ export default function Foods({units})
 
     return <>
         <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center">
-            <h1>Foods</h1>
+            <h1>Foods Inventory</h1>
             <div>
                 <button type="button" className="btn btn-primary" onClick={toggleViewMode}>Toggle view mode</button>
             </div>

@@ -20,14 +20,14 @@ public class ConsumedFoodRepository(AppDbContext dbContext) : RepositoryBase<Con
 {
     public async Task<List<ConsumedFood>> GetConsumedFoodsPastWeek()
     {
-        DateTime sevenDaysAgo = DateTime.Today.AddDays(-7);
+        DateOnly sevenDaysAgo = DateOnly.FromDateTime(DateTime.Today.AddDays(-7));
 
-        return await _dbContext.ConsumedFoods.Where(f => f.DateTimeConsumed > sevenDaysAgo).ToListAsync();
+        return await _dbContext.ConsumedFoods.Where(f => f.DateConsumed > sevenDaysAgo).ToListAsync();
     }
 
-    public override Task<ConsumedFood?> Get(string id)
+    public async override Task<ConsumedFood?> Get(string id)
     {
-        throw new NotImplementedException();
+        return await _dbContext.ConsumedFoods.FirstOrDefaultAsync(cf => cf.Id == id);
     }
 
     public override Task<List<ConsumedFood>> GetAll(ConsumedFoodSortOptions sortBy, string? search)

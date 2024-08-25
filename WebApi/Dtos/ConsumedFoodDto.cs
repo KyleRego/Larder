@@ -2,19 +2,12 @@ using Larder.Models;
 
 namespace Larder.Dtos;
 
-public class DayOfEatingDto
-{
-    public required DateOnly Date { get; set; }
-
-    public required double TotalCalories { get; set; }
-
-    public required double TotalProtein { get; set; }
-
-    public List<ConsumedFoodDto> ConsumedFoods { get; set; } = [];
-}
-
 public class ConsumedFoodDto
 {
+    public string? Id { get; set; }
+
+    public DateOnly DateConsumed { get; set; }
+
     public required string FoodName { get; set; }
 
     public required double ServingsConsumed { get; set; }
@@ -25,9 +18,11 @@ public class ConsumedFoodDto
     {
         return new()
         {
+            Id = entity.Id,
             FoodName = entity.FoodName,
             ServingsConsumed = entity.ServingsConsumed,
-            CaloriesConsumed = entity.CaloriesConsumed
+            CaloriesConsumed = entity.CaloriesConsumed,
+            DateConsumed = entity.DateConsumed
         };
     }
 }

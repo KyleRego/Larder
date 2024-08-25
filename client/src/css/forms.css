@@ -2,13 +2,16 @@ form div.minWidthLabels label {
     width: 8rem;
 }
 
+label + input {
+    margin-left: 0.5rem;
+}
+
 input {
     min-width: 0;
 }
 
 input[type="number"] {
     width: 5rem;
-    margin: 0 1rem;
 }
 
 textarea {

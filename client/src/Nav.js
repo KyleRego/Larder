@@ -51,10 +51,10 @@ export default function Nav()
             <div className={`collapse navbar-collapse ${showCollapsibleNavbar && "show"}`} id="navbarSupportedContent">
                 <ul className="ms-4 navbar-nav mr-auto">
                 <li className="nav-item active">
-                    <Link className="nav-link" to={"/foods"}>Foods <span className="sr-only"></span></Link>
+                    <Link className="nav-link" to={"/foods"}>Foods<span className="sr-only"></span></Link>
                 </li>
                 <li className="nav-item">
-                    <Link className="nav-link" to={"/timeline"}>Eating timeline</Link>
+                    <Link className="nav-link" to={"/timeline"}>Nutrition timeline</Link>
                 </li>
                 <li className="nav-item">
                     <Link className="nav-link" to={"/ingredients"}>Ingredients</Link>

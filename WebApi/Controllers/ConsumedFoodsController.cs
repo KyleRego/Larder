@@ -9,9 +9,49 @@ public class ConsumedFoodsController(IConsumedFoodService consumedFoodService) :
 {
     private readonly IConsumedFoodService _consFoodService = consumedFoodService;
 
-    [HttpGet]
-    public async Task<ActionResult<List<DayOfEatingDto>>> Index()
+    [HttpPost]
+    public async Task<ActionResult> Create(ConsumedFoodDto dto)
     {
-        return await _consFoodService.FoodsOfPastWeek();
+        if (dto.Id != null) return BadRequest();
+
+        try
+        {
+            await _consFoodService.CreateConsumedFood(dto);
+            return Ok();
+        }
+        catch (ApplicationException)
+        {
+            return UnprocessableEntity();
+        }
+    }
+
+    [HttpPatch("{id}")]
+    public async Task<ActionResult> Update(ConsumedFoodDto dto, string id)
+    {
+        if (dto.Id == null || dto.Id != id) return BadRequest();
+
+        try
+        {
+            await _consFoodService.UpdateConsumedFood(dto);
+            return Ok();
+        }
+        catch (ApplicationException)
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(string id)
+    {
+        try
+        {
+            await _consFoodService.DeleteConsumedFood(id);
+            return Ok();
+        }
+        catch (ApplicationException)
+        {
+            return NotFound();
+        }
     }
 }

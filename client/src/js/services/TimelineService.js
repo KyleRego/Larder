@@ -1,14 +1,14 @@
 import ApiServiceBase from "./ApiServiceBase";
 
-export default class ConsumedFoodsService extends ApiServiceBase
+export default class TimelineService extends ApiServiceBase
 {
     constructor()
     {
         super();
-        this.timelineBaseUrl = `${this.backendOrigin}/api/ConsumedFoods`;
+        this.timelineBaseUrl = `${this.backendOrigin}/api/Timeline`;
     }
 
-    async getConsumedFoodsIndex()
+    async getTimelineIndex()
     {
         let url = this.timelineBaseUrl;
 
