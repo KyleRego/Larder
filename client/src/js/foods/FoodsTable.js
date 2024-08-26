@@ -86,14 +86,15 @@ function FoodAmountTableCell({food, foods, setFoods})
     {
         return <td className="py-0">
             <form onSubmit={handleSubmit}>
-                <div className="d-flex column-gap-3 align-items-center m-0">
-                    <label hidden htmlFor="servings"></label>
+                <div className="d-flex flex-wrap column-gap-1 row-gap-1 align-items-center m-0">
                     <input name="servings" type="number" step="any" defaultValue={food.servings}></input>
-                    <button type="submit" title="Done">
+                    <label hidden htmlFor="servings"></label>
+
+                    <button className="btn btn-primary btn-sm" type="submit" title="Done">
                         <MdDone />
                     </button>
 
-                    <button type="button" onClick={() => setEditing(false)} title="Cancel">
+                    <button onClick={() => setEditing(false)} className="btn btn-secondary btn-sm" type="button" title="Cancel">
                         Cancel
                     </button>
                 </div>
