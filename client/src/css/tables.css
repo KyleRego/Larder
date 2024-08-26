@@ -4,6 +4,7 @@ table {
     border: 1px solid black;
     letter-spacing: 0.5px;
     background-color: rgba(var(--bs-light-rgb), 1) !important;
+    word-break: break-all;
 }
 
 table th a:hover {

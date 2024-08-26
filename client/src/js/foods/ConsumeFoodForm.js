@@ -1,6 +1,6 @@
 import FoodsService from "../services/FoodsService";
 
-export default function ConsumeFoodForm({food, foods, setFoods})
+export default function ConsumeFoodForm({food, setFood})
 {
     async function handleEatFood(e)
     {
@@ -14,24 +14,16 @@ export default function ConsumeFoodForm({food, foods, setFoods})
             servings: formData.get("servingsConsumed")
         };
 
-        await foodService.postEatFood(dto).then(result => {
-            const newFoods = structuredClone(foods);
-
-            for (let i = 0; i < foods.length; i += 1)
-            {
-                if (foods[i] === food)
-                {
-                    newFoods[i] = result;
-                }
-            }
-
-            setFoods(newFoods);
-        })
+        await foodService.postEatFood(dto).then((returnedDto) => {
+            setFood(returnedDto);
+        }).catch(error => {
+            console.log(error);
+        });
     }
 
     return <form onSubmit={handleEatFood}>
-                <div className="d-flex flex-column flex-sm-row justify-content-around align-items-center">
-                    <div className="text-center">
+                <div className="d-flex column-gap-3 flex-wrap align-items-center">
+                    <div className="">
                         <label htmlFor="servingsConsumed">Consume servings:</label>
                         <input type="number" step="any" name="servingsConsumed" defaultValue={0}></input>
                     </div>
@@ -39,5 +31,5 @@ export default function ConsumeFoodForm({food, foods, setFoods})
                         <button type="submit" className="btn btn-primary btn-sm">Submit</button>
                     </div>
                 </div>
-            </form>
+            </form>;
 }

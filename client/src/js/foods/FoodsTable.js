@@ -86,7 +86,7 @@ function FoodAmountTableCell({food, foods, setFoods})
     {
         return <td className="py-0">
             <form onSubmit={handleSubmit}>
-                <div className="d-flex flex-wrap column-gap-1 row-gap-1 align-items-center m-0">
+                <div className="m-0 d-flex flex-wrap column-gap-1 row-gap-1 align-items-center">
                     <input name="servings" type="number" step="any" defaultValue={food.servings}></input>
                     <label hidden htmlFor="servings"></label>
 
@@ -104,7 +104,7 @@ function FoodAmountTableCell({food, foods, setFoods})
     else
     {
         return <td className="py-0">
-            <div className="m-0 d-flex column-gap-1 align-items-center">
+            <div className="m-0 d-flex flex-wrap column-gap-1 row-gap-1 align-items-center">
                 <span>{food.servings}</span>
                 <CiEdit className="w-5 h-5" role="button" onClick={() => setEditing(true)} title="Edit" />
             </div>

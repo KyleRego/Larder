@@ -20,9 +20,7 @@ export default class ApiServiceBase
             throw new Error(`Response status: ${response.status}`);
         }
 
-        const json = await response.json();
-
-        return json;
+        return await response.json();
     }
 
     async tryPost(url, dto)
@@ -41,6 +39,8 @@ export default class ApiServiceBase
         {
             throw new Error(`Response status: ${response.status}`);
         }
+
+        return await response.json();
     }
 
     async tryPut(url, dto)
@@ -59,6 +59,8 @@ export default class ApiServiceBase
         {
             throw new Error(`Response status: ${response.status}`);
         }
+
+        return await response.json();
     }
 
     async tryPatch(url, dto)

@@ -10,14 +10,13 @@ public class ConsumedFoodsController(IConsumedFoodService consumedFoodService) :
     private readonly IConsumedFoodService _consFoodService = consumedFoodService;
 
     [HttpPost]
-    public async Task<ActionResult> Create(ConsumedFoodDto dto)
+    public async Task<ActionResult<ConsumedFoodDto>> Create(ConsumedFoodDto dto)
     {
         if (dto.Id != null) return BadRequest();
 
         try
         {
-            await _consFoodService.CreateConsumedFood(dto);
-            return Ok();
+            return await _consFoodService.CreateConsumedFood(dto);
         }
         catch (ApplicationException)
         {
@@ -25,15 +24,14 @@ public class ConsumedFoodsController(IConsumedFoodService consumedFoodService) :
         }
     }
 
-    [HttpPatch("{id}")]
-    public async Task<ActionResult> Update(ConsumedFoodDto dto, string id)
+    [HttpPut("{id}")]
+    public async Task<ActionResult<ConsumedFoodDto>> Update(ConsumedFoodDto dto, string id)
     {
         if (dto.Id == null || dto.Id != id) return BadRequest();
 
         try
         {
-            await _consFoodService.UpdateConsumedFood(dto);
-            return Ok();
+            return await _consFoodService.UpdateConsumedFood(dto);
         }
         catch (ApplicationException)
         {

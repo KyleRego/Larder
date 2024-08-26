@@ -15,13 +15,13 @@ export default class ConsumedFoodService extends ApiServiceBase
         return await this.tryPost(url, dto);
     }
 
-    async patchConsumedFood(dto)
+    async putConsumedFood(dto)
     {
-        if (dto.id === undefined) throw new Error("no id");
+        if (!dto.id) throw new Error("no id");
 
         const url = `${this.consumedFoodsBaseUrl}/${dto.id}`;
 
-        return await this.tryPatch(url, dto);
+        return await this.tryPut(url, dto);
     }
 
     async deleteConsumedFood(id)

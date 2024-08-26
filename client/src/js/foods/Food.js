@@ -3,6 +3,7 @@ import { useParams, Link, useOutletContext } from "react-router-dom";
 
 import FoodsService from "../services/FoodsService";
 import FoodConstants from "./FoodConstants";
+import FoodCard from "./FoodCard";
 
 export default function Food()
 {
@@ -48,17 +49,14 @@ export default function Food()
     }
 
     return <>
-
-        <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center">
+        <div className="d-flex column-gap-3 flex-wrap align-items-center">
             <h1>{food.name}</h1>
             <div>
                 <button className="btn btn-danger" onClick={handleDeleteFood}>Delete food</button>
             </div>
         </div>
 
-        <p>{food.description}</p>
- 
-        <p>Servings: {food.servings}</p>
+        <FoodCard food={food} setFood={setFood} />
 
         <div>
             <table className="table">

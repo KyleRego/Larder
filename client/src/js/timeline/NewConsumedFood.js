@@ -18,14 +18,15 @@ export default function NewConsumedFood({setNewingConsumedFood, nutritionDay, nu
 
         const service = new ConsumedFoodService();
 
-        service.postConsumedFood(dto).then(() => {
+        service.postConsumedFood(dto).then((returnedDto) => {
             const newNutritionDays = structuredClone(nutritionDays)
 
             for (let i = 0; i < newNutritionDays.length; i += 1)
             {
                 if (newNutritionDays[i].date === nutritionDay.date)
                 {
-                    newNutritionDays[i].consumedFoods.push(dto);
+                    newNutritionDays.totalCalories += returnedDto.caloriesConsumed;
+                    newNutritionDays[i].consumedFoods.push(returnedDto);
                     break;
                 }
             }

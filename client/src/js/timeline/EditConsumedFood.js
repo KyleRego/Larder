@@ -18,7 +18,7 @@ export default function EditConsumedFood({consumedFood, setEditing, nutritionDay
 
         const service = new ConsumedFoodService();
         
-        service.patchConsumedFood(dto).then(() => {
+        service.putConsumedFood(dto).then((returnedDto) => {
             const newNutritionDays = structuredClone(nutritionDays);
 
             for (let i = 0; i < newNutritionDays.length; i += 1)

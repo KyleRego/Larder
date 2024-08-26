@@ -6,8 +6,8 @@ namespace Larder.Services;
 
 public interface IConsumedFoodService
 {
-    public Task CreateConsumedFood(ConsumedFoodDto dto);
-    public Task UpdateConsumedFood(ConsumedFoodDto dto);
+    public Task<ConsumedFoodDto> CreateConsumedFood(ConsumedFoodDto dto);
+    public Task<ConsumedFoodDto> UpdateConsumedFood(ConsumedFoodDto dto);
     public Task DeleteConsumedFood(string id);
 }
 
@@ -15,7 +15,7 @@ public class ConsumedFoodService(IConsumedFoodRepository consumedFoodRepository)
 {
     private readonly IConsumedFoodRepository _consFoodRepo = consumedFoodRepository;
 
-    public async Task CreateConsumedFood(ConsumedFoodDto dto)
+    public async Task<ConsumedFoodDto> CreateConsumedFood(ConsumedFoodDto dto)
     {
         double servingsConsumed = dto.ServingsConsumed;
 
@@ -30,9 +30,11 @@ public class ConsumedFoodService(IConsumedFoodRepository consumedFoodRepository)
         };
 
         await _consFoodRepo.Insert(entity);
+
+        return ConsumedFoodDto.FromEntity(entity);
     }
 
-    public async Task UpdateConsumedFood(ConsumedFoodDto dto)
+    public async Task<ConsumedFoodDto> UpdateConsumedFood(ConsumedFoodDto dto)
     {
         string id = dto.Id ?? throw new ApplicationException("id of consumed food to update missing");
 
@@ -45,6 +47,8 @@ public class ConsumedFoodService(IConsumedFoodRepository consumedFoodRepository)
         entity.ProteinConsumed = 0;
 
         await _consFoodRepo.Update(entity);
+
+        return ConsumedFoodDto.FromEntity(entity);
     }
 
     public async Task DeleteConsumedFood(string id)
