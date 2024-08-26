@@ -18,6 +18,7 @@ export default function EditFood({units})
 
         const food = FoodFormDataMapper.map(formData);
         food.id = id;
+
         const service = new FoodsService();
 
         await service.putFood(food).then(() => {

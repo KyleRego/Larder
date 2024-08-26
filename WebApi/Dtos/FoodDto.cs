@@ -16,23 +16,23 @@ public class FoodDto
 
     public double Calories { get; set; }
 
-    public QuantityDto? Protein { get; set; }
+    public double GramsProtein { get; set; }
 
-    public QuantityDto? TotalFat { get; set; }
+    public double GramsTotalFat { get; set; }
 
-    public QuantityDto? SaturatedFat { get; set; }
+    public double GramsSaturatedFat { get; set; }
 
-    public QuantityDto? TransFat { get; set; }
+    public double GramsTransFat { get; set; }
 
-    public QuantityDto? Cholesterol { get; set; }
+    public double MilligramsCholesterol { get; set; }
 
-    public QuantityDto? Sodium { get; set; }
+    public double MilligramsSodium { get; set; }
 
-    public QuantityDto? TotalCarbs { get; set; }
+    public double GramsTotalCarbs { get; set; }
 
-    public QuantityDto? DietaryFiber { get; set; }
+    public double GramsDietaryFiber { get; set; }
 
-    public QuantityDto? TotalSugars { get; set; }
+    public double GramsTotalSugars { get; set; }
 
     public static FoodDto FromEntity(Food food)
     {
@@ -44,15 +44,15 @@ public class FoodDto
             Servings = food.Servings,
             RecipeId = food.Recipe?.Id,
             Calories = food.Calories,
-            Protein = QuantityDto.FromEntity(food.Protein),
-            TotalFat = QuantityDto.FromEntity(food.TotalFat),
-            SaturatedFat = QuantityDto.FromEntity(food.SaturatedFat),
-            TransFat = QuantityDto.FromEntity(food.TransFat),
-            Cholesterol = QuantityDto.FromEntity(food.Cholesterol),
-            Sodium = QuantityDto.FromEntity(food.Sodium),
-            TotalCarbs = QuantityDto.FromEntity(food.TotalCarbs),
-            DietaryFiber = QuantityDto.FromEntity(food.DietaryFiber),
-            TotalSugars = QuantityDto.FromEntity(food.TotalSugars)
+            GramsProtein = food.GramsProtein,
+            GramsTotalFat = food.GramsTotalFat,
+            GramsSaturatedFat = food.GramsSaturatedFat,
+            GramsTransFat = food.GramsTransFat,
+            MilligramsCholesterol = food.MilligramsCholesterol,
+            MilligramsSodium = food.MilligramsSodium,
+            GramsTotalCarbs = food.GramsTotalCarbs,
+            GramsDietaryFiber = food.GramsDietaryFiber,
+            GramsTotalSugars = food.GramsTotalSugars
         };
     }
 }

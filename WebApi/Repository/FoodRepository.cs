@@ -25,15 +25,6 @@ public class FoodRepository(AppDbContext dbContext) : RepositoryBase<Food, FoodS
     public override async Task<Food?> Get(string id)
     {
         return await _dbContext.Foods.Include(f => f.Recipe)
-                                        .Include(f => f.Protein!.Unit)
-                                        .Include(f => f.TotalFat!.Unit)
-                                        .Include(f => f.SaturatedFat!.Unit)
-                                        .Include(f => f.TransFat!.Unit)
-                                        .Include(f => f.Cholesterol!.Unit)
-                                        .Include(f => f.Sodium!.Unit)
-                                        .Include(f => f.TotalCarbs!.Unit)
-                                        .Include(f => f.DietaryFiber!.Unit)
-                                        .Include(f => f.TotalSugars!.Unit)
                                         .FirstOrDefaultAsync(food => food.Id == id);
     }
 

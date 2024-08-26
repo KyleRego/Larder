@@ -1,5 +1,3 @@
-import FoodConstants from "./FoodConstants";
-
 export default class FoodFormDataMapper
 {
     static map(formData)
@@ -8,26 +6,16 @@ export default class FoodFormDataMapper
 
         food.name = formData.get("name");
         food.description = formData.get("description");
-
         food.servings = formData.get("servings");
         food.calories = formData.get("calories");
-
-        const quantityProperties = FoodConstants.quantityProperties;
-
-        for (let i = 0; i < quantityProperties.length; i += 1)
-        {
-            const propertyName = quantityProperties[i];
-
-            const amount = formData.get(`${propertyName}_amount`);
-            const unitId = formData.get(`${propertyName}_unitId`);
-
-            if (amount !== "")
-            {
-                food[propertyName] = {};
-                food[propertyName]["amount"] = amount;
-                food[propertyName]["unitId"] = unitId;
-            }
-        }
+        food.gramsProtein = formData.get("gramsProtein");
+        food.gramsSaturatedFat = formData.get("gramsSaturatedFat")
+        food.gramsTransFat = formData.get("gramsTransFat");
+        food.milligramsCholesterol = formData.get("milligramsCholesterol");
+        food.milligramsSodium = formData.get("milligramsSodium");
+        food.gramsTotalCarbs = formData.get("gramsTotalCarbs");
+        food.gramsDietaryFiber = formData.get("gramsDietaryFiber");
+        food.gramsTotalSugars = formData.get("gramsTotalSugars");
 
         return food;
     }

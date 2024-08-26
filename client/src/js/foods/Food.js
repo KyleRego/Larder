@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useParams, Link, useOutletContext } from "react-router-dom";
 
 import FoodsService from "../services/FoodsService";
-import FoodConstants from "./FoodConstants";
 import FoodCard from "./FoodCard";
 
 export default function Food()
@@ -24,16 +23,6 @@ export default function Food()
     }, [id]);
 
     if (food === null) return <h1>Loading...</h1>;
-
-    const quantityRows = FoodConstants.quantityProperties.filter(foodProperty => {
-        // A food does not have every property so filter down to ones it has
-        return food[foodProperty];
-    }).map(foodProperty => {
-        return <tr key={foodProperty}>
-            <th scope="row">{foodProperty}</th>
-            <td>{food[foodProperty].amount} {food[foodProperty].unitName}</td>
-        </tr>
-    });
 
     function handleDeleteFood()
     {
@@ -59,19 +48,53 @@ export default function Food()
         <FoodCard food={food} setFood={setFood} />
 
         <div>
+            <h2>
+                Nutrition per serving:
+            </h2>
             <table className="table">
                 <tbody>
                     <tr>
                         <th scope="row">Calories</th>
-                        <td>{food.calories}</td>
+                        <td><span>{food.calories}</span></td>
                     </tr>
-                    {quantityRows}
+                    <tr>
+                        <th scope="row">Protein</th>
+                        <td><span>{food.gramsProtein} g</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Saturated Fat</th>
+                        <td><span>{food.gramsSaturatedFat} g</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Trans Fat</th>
+                        <td><span>{food.gramsTransFat} g</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Cholesterol</th>
+                        <td><span>{food.milligramsCholesterol} mg</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Sodium</th>
+                        <td><span>{food.milligramsCholesterol} mg</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Total Carbs</th>
+                        <td><span>{food.gramsTotalCarbs} g</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Dietary Fiber</th>
+                        <td><span>{food.gramsDietaryFiber} g</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Total Sugars</th>
+                        <td><span>{food.gramsTotalSugars} g</span></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
 
         <div>
-            <Link to={`/foods/${id}/edit`}>Edit food</Link>
+            <Link to={`/foods/${id}/edit`} className="btn btn-primary">Edit food</Link>
         </div>
 
         <div>

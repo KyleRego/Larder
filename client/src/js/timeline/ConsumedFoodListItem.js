@@ -53,8 +53,8 @@ export default function ConsumedFoodListItem({consumedFood, nutritionDay, nutrit
                         <span>
                             {text}
                         </span>
-                        <CiEdit tabindex="0" className="w-5 h-5" role="button" title="Edit consumed food" onClick={() => setEditing(true)} />
-                        <TiDeleteOutline tabindex="0" className="w-5 h-5" role="button" title="Delete consumed food" onClick={handleDelete} />
+                        <CiEdit tabIndex="0" className="w-5 h-5" role="button" title="Edit consumed food" onClick={() => setEditing(true)} />
+                        <TiDeleteOutline tabIndex="0" className="w-5 h-5" role="button" title="Delete consumed food" onClick={handleDelete} />
                     </div>
                 }
             </li>;

@@ -35,15 +35,15 @@ public class FoodService(IFoodRepository foodRepo,
             Description = dto.Description,
             Calories = dto.Calories,
             Servings = dto.Servings,
-            Protein = Quantity.FromDto(dto.Protein),
-            TotalFat = Quantity.FromDto(dto.TotalFat),
-            SaturatedFat = Quantity.FromDto(dto.SaturatedFat),
-            TransFat = Quantity.FromDto(dto.TransFat),
-            Cholesterol = Quantity.FromDto(dto.Cholesterol),
-            Sodium = Quantity.FromDto(dto.Sodium),
-            TotalCarbs = Quantity.FromDto(dto.TotalCarbs),
-            DietaryFiber = Quantity.FromDto(dto.DietaryFiber),
-            TotalSugars = Quantity.FromDto(dto.TotalSugars),
+            GramsProtein = dto.GramsProtein,
+            GramsTotalFat = dto.GramsTotalFat,
+            GramsSaturatedFat = dto.GramsSaturatedFat,
+            GramsTransFat = dto.GramsTransFat,
+            MilligramsCholesterol = dto.MilligramsCholesterol,
+            MilligramsSodium = dto.MilligramsSodium,
+            GramsTotalCarbs = dto.GramsTotalCarbs,
+            GramsDietaryFiber = dto.GramsDietaryFiber,
+            GramsTotalSugars = dto.GramsTotalSugars,
         };
 
         await _foodRepo.Insert(entity);
@@ -62,15 +62,15 @@ public class FoodService(IFoodRepository foodRepo,
         entity.Description = dto.Description;
         entity.Calories = dto.Calories;
         entity.Servings = dto.Servings;
-        entity.Protein = Quantity.FromDto(dto.Protein);
-        entity.TotalFat = Quantity.FromDto(dto.TotalFat);
-        entity.SaturatedFat = Quantity.FromDto(dto.SaturatedFat);
-        entity.TransFat = Quantity.FromDto(dto.TransFat);
-        entity.Cholesterol = Quantity.FromDto(dto.Cholesterol);
-        entity.Sodium = Quantity.FromDto(dto.Sodium);
-        entity.TotalCarbs = Quantity.FromDto(dto.TotalCarbs);
-        entity.DietaryFiber = Quantity.FromDto(dto.DietaryFiber);
-        entity.TotalSugars = Quantity.FromDto(dto.TotalSugars);
+        entity.GramsProtein = dto.GramsProtein;
+        entity.GramsTotalFat = dto.GramsTotalFat;
+        entity.GramsSaturatedFat = dto.GramsSaturatedFat;
+        entity.GramsTransFat = dto.GramsTransFat;
+        entity.MilligramsCholesterol = dto.MilligramsCholesterol;
+        entity.MilligramsSodium = dto.MilligramsSodium;
+        entity.GramsTotalCarbs = dto.GramsTotalCarbs;
+        entity.GramsDietaryFiber = dto.GramsDietaryFiber;
+        entity.GramsTotalSugars = dto.GramsTotalSugars;
 
         await _foodRepo.Update(entity);
 
@@ -138,7 +138,7 @@ public class FoodService(IFoodRepository foodRepo,
             DateConsumed = DateOnly.FromDateTime(dt),
             ServingsConsumed = dto.Servings,
             CaloriesConsumed = entity.Calories * dto.Servings,
-            ProteinConsumed = (entity.Protein?.Amount ?? 0) * dto.Servings
+            ProteinConsumed = entity.GramsProtein * dto.Servings
         };
 
         await _foodRepo.Update(entity);

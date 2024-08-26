@@ -23,7 +23,7 @@ export default function Foods({units})
 
     return <>
         <div className="d-flex column-gap-3 row-gap-1 flex-wrap align-items-center">
-            <h1>Foods Inventory</h1>
+            <h1>Foods inventory</h1>
 
             <Link to="/foods/new" className="btn btn-primary" title="Add new food">Add food</Link>
         </div>

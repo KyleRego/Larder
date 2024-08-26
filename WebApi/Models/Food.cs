@@ -13,21 +13,21 @@ public class Food : Item
 
     public double Calories { get; set; }
 
-    public Quantity? Protein { get; set; }
+    public double GramsProtein { get; set; }
 
-    public Quantity? TotalFat { get; set; }
+    public double GramsTotalFat { get; set; }
 
-    public Quantity? SaturatedFat { get; set; }
+    public double GramsSaturatedFat { get; set; }
 
-    public Quantity? TransFat { get; set; }
+    public double GramsTransFat { get; set; }
 
-    public Quantity? Cholesterol { get; set; }
+    public double MilligramsCholesterol { get; set; }
 
-    public Quantity? Sodium { get; set; }
+    public double MilligramsSodium { get; set; }
 
-    public Quantity? TotalCarbs { get; set; }
+    public double GramsTotalCarbs { get; set; }
 
-    public Quantity? DietaryFiber { get; set; }
+    public double GramsDietaryFiber { get; set; }
 
-    public Quantity? TotalSugars { get; set; }
+    public double GramsTotalSugars { get; set; }
 }
