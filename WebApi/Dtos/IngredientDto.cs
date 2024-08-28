@@ -7,7 +7,7 @@ public class IngredientDto
     public string? Id { get; set; }
     public required string Name { get; set; }
     public string? Description { get; set; }
-    public QuantityDto? Quantity { get; set; }
+    public required QuantityDto Quantity { get; set; }
 
     public List<IngredientRecipeDto> Recipes { get; set; } = [];
 

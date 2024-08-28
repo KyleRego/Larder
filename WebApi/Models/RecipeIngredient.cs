@@ -23,5 +23,5 @@ public class RecipeIngredient : EntityBase
     [ForeignKey(nameof(IngredientId))]
     public Ingredient Ingredient { get; set; } = null!;
 
-    public Quantity? Quantity { get; set; }
+    public required Quantity Quantity { get; set; } = new() { Amount = 1 };
 }

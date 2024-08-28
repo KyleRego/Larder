@@ -51,7 +51,7 @@ public class TimelineService(IConsumedFoodRepository consumedFoodRepository) : I
             {
                 ConsumedFoodDto consumedFoodDto = ConsumedFoodDto.FromEntity(consFood);
 
-                dayOfEating.TotalCalories += consumedFoodDto.CaloriesConsumed;
+                dayOfEating.TotalCalories += consumedFoodDto.Calories;
                 dayOfEating.ConsumedFoods.Add(consumedFoodDto);
             }
 

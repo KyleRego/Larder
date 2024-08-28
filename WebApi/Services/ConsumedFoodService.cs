@@ -17,16 +17,24 @@ public class ConsumedFoodService(IConsumedFoodRepository consumedFoodRepository)
 
     public async Task<ConsumedFoodDto> CreateConsumedFood(ConsumedFoodDto dto)
     {
-        double servingsConsumed = dto.ServingsConsumed;
-
         ConsumedFood entity = new()
         {
-            FoodName = dto.FoodName,
-            DateTimeConsumed = null,
-            DateConsumed = (DateOnly)dto.DateConsumed,
-            ServingsConsumed = dto.ServingsConsumed,
-            CaloriesConsumed = servingsConsumed * dto.CaloriesConsumed,
-            ProteinConsumed = 0
+            FoodName = dto.Name,
+            DateConsumed = dto.DateConsumed,
+
+            CaloriesConsumed = dto.Calories,
+            GramsProteinConsumed = dto.GramsProtein,
+
+            GramsTotalFatConsumed = dto.GramsTotalFat,
+            GramsSaturatedFatConsumed = dto.GramsSaturatedFat,
+            GramsTransFatConsumed = dto.GramsTransFat,
+
+            MilligramsCholesterolConsumed = dto.MilligramsCholesterol,
+            MilligramsSodiumConsumed = dto.MilligramsSodium,
+
+            GramsTotalCarbsConsumed = dto.GramsTotalCarbs,
+            GramsDietaryFiberConsumed = dto.GramsDietaryFiber,
+            GramsTotalSugarsConsumed = dto.GramsTotalSugars
         };
 
         await _consFoodRepo.Insert(entity);
@@ -41,10 +49,22 @@ public class ConsumedFoodService(IConsumedFoodRepository consumedFoodRepository)
         ConsumedFood entity = await _consFoodRepo.Get(id)
             ?? throw new ApplicationException("consumed food to delete was not found");
 
-        entity.FoodName = dto.FoodName;
-        entity.ServingsConsumed = dto.ServingsConsumed;
-        entity.CaloriesConsumed = dto.CaloriesConsumed;
-        entity.ProteinConsumed = 0;
+        // This does not update the DateConsumed
+
+        entity.FoodName = dto.Name;
+        entity.CaloriesConsumed = dto.Calories;
+        entity.GramsProteinConsumed = dto.GramsProtein;
+
+        entity.GramsTotalFatConsumed = dto.GramsTotalFat;
+        entity.GramsSaturatedFatConsumed = dto.GramsSaturatedFat;
+        entity.GramsTransFatConsumed = dto.GramsTransFat;
+
+        entity.MilligramsCholesterolConsumed = dto.MilligramsCholesterol;
+        entity.MilligramsSodiumConsumed = dto.MilligramsSodium;
+
+        entity.GramsTotalCarbsConsumed = dto.GramsTotalCarbs;
+        entity.GramsDietaryFiberConsumed = dto.GramsDietaryFiber;
+        entity.GramsTotalSugarsConsumed = dto.GramsTotalSugars;
 
         await _consFoodRepo.Update(entity);
 

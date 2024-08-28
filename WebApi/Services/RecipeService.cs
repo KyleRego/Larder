@@ -13,35 +13,53 @@ public interface IRecipeService
     public Task<RecipeDto> CreateRecipe(RecipeDto recipeDto);
 
     public Task<RecipeDto> UpdateRecipe(RecipeDto recipeDto);
+
+    public Task<RecipeDto> CookRecipe(CookedRecipeDto cookedRecipeDto);
 }
 
 public class RecipeService( IRecipeRepository recipeRepository,
-                            IIngredientRepository ingredientRepository) : IRecipeService
+                            IIngredientRepository ingredientRepository,
+                            IFoodRepository foodRepository) : IRecipeService
 {
     private readonly IRecipeRepository _recipeRepository = recipeRepository;
     private readonly IIngredientRepository _ingredientRepository = ingredientRepository;
+    private readonly IFoodRepository _foodRepository = foodRepository;
+
+    public async Task<RecipeDto> CookRecipe(CookedRecipeDto cookedRecipeDto)
+    {
+        Recipe recipe = await _recipeRepository.Get(cookedRecipeDto.RecipeId)
+                ?? throw new ApplicationException("recipe was not found");
+
+        foreach(RecipeIngredient recipeIngredient in recipe.RecipeIngredients)
+        {
+            Ingredient ingredient = recipeIngredient.Ingredient;
+
+            // what if the quantities are in different units????
+            // need to have a think about what the design should be regarding this
+            ingredient.Quantity.Amount -= recipeIngredient.Quantity.Amount;
+        }
+
+        await _recipeRepository.Update(recipe);
+
+        Food food = await _foodRepository.FindOrCreateBy(recipe.Name);
+        food.Servings += recipe.ServingsProduced;
+        await _foodRepository.Update(food);
+
+        return RecipeDto.FromEntity(recipe);
+    }
 
     public async Task<RecipeDto> CreateRecipe(RecipeDto recipeDto)
     {
-        string name = recipeDto.Name;
-
-        Food food = new()
-        {
-            Name = name,
-        };
-
         Recipe recipe = new()
         {
-            Food = food,
-            FoodId = food.Id,
             Name = recipeDto.Name
         };
 
         List<RecipeIngredient> recipeIngredients = [];
 
-        foreach (RecipeIngredientDto ingredientDto in recipeDto.Ingredients)
+        foreach (IngredientDto ingredientDto in recipeDto.Ingredients)
         {
-            Ingredient ingredient = await _ingredientRepository.FindOrCreateBy(ingredientDto.IngredientName);
+            Ingredient ingredient = await _ingredientRepository.FindOrCreateBy(ingredientDto.Name);
 
             RecipeIngredient recipeIngredient = new()
             {
@@ -49,8 +67,8 @@ public class RecipeService( IRecipeRepository recipeRepository,
                 IngredientId = ingredient.Id,
                 Quantity = new()
                 {
-                    Amount = ingredientDto.Amount,
-                    UnitId = ingredientDto.UnitId
+                    Amount = ingredientDto.Quantity.Amount,
+                    UnitId = ingredientDto.Quantity.UnitId
                 }
             };
 
@@ -68,9 +86,7 @@ public class RecipeService( IRecipeRepository recipeRepository,
     {
         Recipe? recipe = await _recipeRepository.Get(id);
 
-        if (recipe == null) return null;
-
-        return RecipeDto.FromEntity(recipe);
+        return (recipe == null) ? null : RecipeDto.FromEntity(recipe);
     }
 
     public async Task<List<RecipeDto>> GetRecipes(RecipeSortOptions sortBy, string? searchName)
@@ -93,65 +109,26 @@ public class RecipeService( IRecipeRepository recipeRepository,
         Recipe recipe = await _recipeRepository.Get(recipeDto.Id)
                                 ?? throw new ApplicationException("recipe not found");
 
-        string name = recipeDto.Name;
+        recipe.Name = recipeDto.Name;
 
-        recipe.Name = name;
+        List<RecipeIngredient> newRecipeIngredients = [];
 
-        RecipeIngredient? FindRecipeIngredient(string? recipeIngredientId, List<RecipeIngredient> recipeIngredients)
+        foreach(IngredientDto ingredientDto in recipeDto.Ingredients)
         {
-            if (recipeIngredientId == null) return null;
+            Ingredient ingredient = recipe.Ingredients
+                                .FirstOrDefault(ingr => ingr.Name == ingredientDto.Name)
+                                ?? await _ingredientRepository.FindOrCreateBy(ingredientDto.Name);
 
-            return recipeIngredients.FirstOrDefault(ri => ri.Id == recipeIngredientId);
+            RecipeIngredient newRecipeIngredient = new()
+            {
+                RecipeId = recipe.Id,
+                IngredientId = ingredient.Id,
+                Quantity = Quantity.FromDto(ingredientDto.Quantity)
+            };
+            newRecipeIngredients.Add(newRecipeIngredient);
         }
 
-        List<string> currentRecipeIngredientIds = [];
-
-        foreach (RecipeIngredientDto recipeIngredientDto in recipeDto.Ingredients)
-        {
-            RecipeIngredient? recipeIngredient = FindRecipeIngredient(recipeIngredientDto.Id,
-                                                                        recipe.RecipeIngredients);
-
-            string ingredientName = recipeIngredientDto.IngredientName;
-            Ingredient ingredient = await _ingredientRepository.FindOrCreateBy(ingredientName);
-
-            if (recipeIngredient == null)
-            {
-                recipeIngredient = new()
-                {
-                    RecipeId = recipe.Id,
-                    IngredientId = ingredient.Id,
-                    Quantity = new()
-                    {
-                        Amount = recipeIngredientDto.Amount,
-                        UnitId = recipeIngredientDto.UnitId
-                    }
-                };
-                recipe.RecipeIngredients.Add(recipeIngredient);
-            }
-            else
-            {
-                recipeIngredient.IngredientId = ingredient.Id;
-                recipeIngredient.Quantity = new()
-                {
-                    Amount = recipeIngredientDto.Amount,
-                    UnitId = recipeIngredientDto.UnitId
-                };
-            }
-
-            currentRecipeIngredientIds.Add(recipeIngredient.Id);
-        }
-
-        List<RecipeIngredient> resultingRecipeIngredients = [];
-
-        foreach(RecipeIngredient recipeIngredient in recipe.RecipeIngredients)
-        {
-            if (currentRecipeIngredientIds.Contains(recipeIngredient.Id))
-            {
-                resultingRecipeIngredients.Add(recipeIngredient);
-            }
-        }
-
-        recipe.RecipeIngredients = resultingRecipeIngredients;
+        recipe.RecipeIngredients = newRecipeIngredients;
 
         return RecipeDto.FromEntity(await _recipeRepository.Update(recipe));
     }

@@ -4,6 +4,11 @@ using Larder.Data;
 
 namespace Larder.Repository;
 
+public enum SortOptionsBase
+{
+    AnyOrder
+}
+
 public interface IRepositoryBase<T, TSortOptions>
 {
     public Task<T?> Get(string id);

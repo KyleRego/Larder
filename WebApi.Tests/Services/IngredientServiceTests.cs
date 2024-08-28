@@ -1,10 +1,9 @@
-using System.Runtime;
 using Larder.Dtos;
 using Larder.Models;
 using Larder.Repository;
-using Moq;
+using Larder.Services;
 
-namespace Larder.Services.Tests;
+namespace Larder.Tests.Services;
 
 public class IngredientServiceTests
 {

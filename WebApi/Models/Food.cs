@@ -9,8 +9,6 @@ public class Food : Item
 
     public Quantity ServingSize { get; set; } = new() { Amount = 1, UnitId = null};
 
-    public Recipe? Recipe { get; set; }
-
     public double Calories { get; set; }
 
     public double GramsProtein { get; set; }

@@ -3,6 +3,7 @@ using System;
 using Larder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Larder.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240828150953_RemoveNavigationsBetweenFoodAndRecipe")]
+    partial class RemoveNavigationsBetweenFoodAndRecipe
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
@@ -293,8 +296,7 @@ namespace Larder.Migrations
 
                     b.Navigation("Ingredient");
 
-                    b.Navigation("Quantity")
-                        .IsRequired();
+                    b.Navigation("Quantity");
 
                     b.Navigation("Recipe");
                 });
@@ -372,8 +374,7 @@ namespace Larder.Migrations
                             b1.Navigation("Unit");
                         });
 
-                    b.Navigation("Quantity")
-                        .IsRequired();
+                    b.Navigation("Quantity");
                 });
 
             modelBuilder.Entity("Larder.Models.Recipe", b =>

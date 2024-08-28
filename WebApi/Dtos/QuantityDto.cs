@@ -9,10 +9,8 @@ public class QuantityDto
     public string? UnitId { get; set; }
     public string? UnitName { get; set; }
 
-    public static QuantityDto? FromEntity(Quantity? quantity)
+    public static QuantityDto FromEntity(Quantity quantity)
     {
-        if (quantity == null) return null;
-
         return new()
         {
             Amount = quantity.Amount,

@@ -6,7 +6,7 @@ public class RecipeDto
 {
     public string? Id { get; set; }
     public required string Name { get; set; }
-    public required List<RecipeIngredientDto> Ingredients { get; set; }
+    public required List<IngredientDto> Ingredients { get; set; }
 
     public static RecipeDto FromEntity(Recipe recipe)
     {
@@ -17,36 +17,18 @@ public class RecipeDto
             Ingredients = []
         };
 
-        foreach (RecipeIngredient recipeIngredient in recipe.RecipeIngredients)
+        foreach (Ingredient ingredient in recipe.Ingredients)
         {
-            RecipeIngredientDto recipeDtoIngredient = new()
+            IngredientDto ingredientDto = new()
             {
-                Id = recipeIngredient.Id,
-                IngredientName = recipeIngredient.Ingredient.Name,
-                IngredientId = recipeIngredient.Ingredient.Id,
-                Amount = recipeIngredient.Quantity?.Amount ?? 0,
-                UnitId = recipeIngredient.Quantity?.UnitId,
-                UnitName = recipeIngredient.Quantity?.Unit?.Name
+                Id = ingredient.Id,
+                Name = ingredient.Name,
+                Quantity = QuantityDto.FromEntity(ingredient.Quantity)
             };
 
-            recipeDto.Ingredients.Add(recipeDtoIngredient);
+            recipeDto.Ingredients.Add(ingredientDto);
         }
 
         return recipeDto;
     }
-}
-
-public class RecipeIngredientDto
-{
-    public string? Id { get; set; }
-
-    public required string IngredientName { get; set; }
-
-    public string? IngredientId { get; set; }
-
-    public double Amount { get; set; }
-
-    public string? UnitId { get; set; }
-
-    public string? UnitName { get; set; }
 }

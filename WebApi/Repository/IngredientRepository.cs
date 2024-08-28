@@ -24,14 +24,15 @@ public class IngredientRepository(AppDbContext dbContext) : RepositoryBase<Ingre
     public async Task<Ingredient> FindOrCreateBy(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
-        {
             throw new ApplicationException("ingredient name cannot be null or whitespace");
-        }
-
+        
         Ingredient? ingredient = _dbContext.Ingredients.FirstOrDefault(ing => ing.Name == name);
         if (ingredient != null) return ingredient;
 
-        ingredient = new() { Name = name };
+        ingredient = new() {
+            Name = name,
+            Quantity = new() { Amount = 1 }
+        };
         _dbContext.Ingredients.Add(ingredient);
         await _dbContext.SaveChangesAsync();
 

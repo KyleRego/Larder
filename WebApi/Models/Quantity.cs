@@ -6,10 +6,8 @@ namespace Larder.Models;
 [Owned]
 public class Quantity
 {
-    public static Quantity? FromDto(QuantityDto? dto)
+    public static Quantity FromDto(QuantityDto dto)
     {
-        if (dto == null) return null;
-
         return new()
         {
             Amount = dto.Amount,

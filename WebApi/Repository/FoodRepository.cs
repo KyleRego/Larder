@@ -18,19 +18,35 @@ public enum FoodSortOptions
 
 public interface IFoodRepository : IRepositoryBase<Food, FoodSortOptions>
 {
+    public Task<Food> FindOrCreateBy(string name);
 }
 
 public class FoodRepository(AppDbContext dbContext) : RepositoryBase<Food, FoodSortOptions>(dbContext), IFoodRepository
 {
+    public async Task<Food> FindOrCreateBy(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ApplicationException("ingredient name cannot be null or whitespace");
+        
+        Food? food = await _dbContext.Foods.FirstOrDefaultAsync(f => f.Name == name);
+        if (food != null) return food;
+
+        food = new() { Name = name, };
+        _dbContext.Foods.Add(food);
+        await _dbContext.SaveChangesAsync();
+
+        return food;
+    }
+
     public override async Task<Food?> Get(string id)
     {
-        return await _dbContext.Foods.Include(f => f.Recipe)
-                                        .FirstOrDefaultAsync(food => food.Id == id);
+        return await _dbContext.Foods
+                                .FirstOrDefaultAsync(food => food.Id == id);
     }
 
     public override Task<List<Food>> GetAll(FoodSortOptions sortBy, string? search)
     {
-        var baseQuery = _dbContext.Foods.Include(f => f.Recipe);
+        var baseQuery = _dbContext.Foods;
 
         var withSearch = (search == null) ? baseQuery : baseQuery.Where(food => food.Name.Contains(search));
 

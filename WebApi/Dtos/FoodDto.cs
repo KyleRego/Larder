@@ -12,8 +12,6 @@ public class FoodDto
 
     public double Servings { get; set; }
 
-    public string? RecipeId { get; set; }
-
     public double Calories { get; set; }
 
     public double GramsProtein { get; set; }
@@ -42,14 +40,17 @@ public class FoodDto
             Name = food.Name,
             Description = food.Description,
             Servings = food.Servings,
-            RecipeId = food.Recipe?.Id,
+
             Calories = food.Calories,
             GramsProtein = food.GramsProtein,
+
             GramsTotalFat = food.GramsTotalFat,
             GramsSaturatedFat = food.GramsSaturatedFat,
             GramsTransFat = food.GramsTransFat,
+
             MilligramsCholesterol = food.MilligramsCholesterol,
             MilligramsSodium = food.MilligramsSodium,
+
             GramsTotalCarbs = food.GramsTotalCarbs,
             GramsDietaryFiber = food.GramsDietaryFiber,
             GramsTotalSugars = food.GramsTotalSugars

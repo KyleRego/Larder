@@ -3,6 +3,7 @@ using System;
 using Larder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Larder.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240828123535_DropSomeColumnsFromConsumedFoods")]
+    partial class DropSomeColumnsFromConsumedFoods
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
@@ -47,31 +50,7 @@ namespace Larder.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("GramsDietaryFiberConsumed")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("GramsProteinConsumed")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("GramsSaturatedFatConsumed")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("GramsTotalCarbsConsumed")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("GramsTotalFatConsumed")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("GramsTotalSugarsConsumed")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("GramsTransFatConsumed")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("MilligramsCholesterolConsumed")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("MilligramsSodiumConsumed")
+                    b.Property<double>("ProteinConsumed")
                         .HasColumnType("REAL");
 
                     b.HasKey("Id");
@@ -110,6 +89,10 @@ namespace Larder.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("FoodId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -118,6 +101,9 @@ namespace Larder.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FoodId")
+                        .IsUnique();
 
                     b.ToTable("Recipes");
                 });
@@ -250,6 +236,17 @@ namespace Larder.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Larder.Models.Recipe", b =>
+                {
+                    b.HasOne("Larder.Models.Food", "Food")
+                        .WithOne("Recipe")
+                        .HasForeignKey("Larder.Models.Recipe", "FoodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Food");
+                });
+
             modelBuilder.Entity("Larder.Models.RecipeIngredient", b =>
                 {
                     b.HasOne("Larder.Models.Ingredient", "Ingredient")
@@ -293,8 +290,7 @@ namespace Larder.Migrations
 
                     b.Navigation("Ingredient");
 
-                    b.Navigation("Quantity")
-                        .IsRequired();
+                    b.Navigation("Quantity");
 
                     b.Navigation("Recipe");
                 });
@@ -372,8 +368,7 @@ namespace Larder.Migrations
                             b1.Navigation("Unit");
                         });
 
-                    b.Navigation("Quantity")
-                        .IsRequired();
+                    b.Navigation("Quantity");
                 });
 
             modelBuilder.Entity("Larder.Models.Recipe", b =>
@@ -381,6 +376,11 @@ namespace Larder.Migrations
                     b.Navigation("RecipeIngredients");
 
                     b.Navigation("Steps");
+                });
+
+            modelBuilder.Entity("Larder.Models.Food", b =>
+                {
+                    b.Navigation("Recipe");
                 });
 
             modelBuilder.Entity("Larder.Models.Ingredient", b =>
