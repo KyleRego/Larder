@@ -77,7 +77,9 @@ public class FoodsController(IFoodService foodService) : ControllerBase
 
         try
         {
-            return await _foodService.EatServings(dto);
+            (FoodDto result, ConsumedFoodDto _) = await _foodService.EatFood(dto);
+
+            return result;
         }
         catch(ApplicationException)
         {

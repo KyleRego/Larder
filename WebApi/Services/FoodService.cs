@@ -16,7 +16,7 @@ public interface IFoodService
 
     public Task<FoodDto> UpdateServings(FoodServingsDto dto);
 
-    public Task<FoodDto> EatServings(FoodServingsDto dto);
+    public Task<(FoodDto, ConsumedFoodDto)> EatFood(FoodServingsDto dto);
 
     public Task DeleteFood(string id);
 }
@@ -120,29 +120,28 @@ public class FoodService(IFoodRepository foodRepo,
         await _foodRepo.Delete(entity);
     }
 
-    public async Task<FoodDto> EatServings(FoodServingsDto dto)
+    public async Task<(FoodDto, ConsumedFoodDto)> EatFood(FoodServingsDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto.FoodId);
         if (dto.Servings < 1) throw new ApplicationException("servings must be >= 1 when consuming a food");
 
         Food entity = await _foodRepo.Get(dto.FoodId) ?? throw new ApplicationException("food not found");
 
-        entity.Servings -= dto.Servings;
-
-        DateTime dt = DateTime.Now;
+        if (dto.Servings > entity.Servings) throw new ApplicationException("there are not that many servings");
 
         ConsumedFood consumedFood = new()
         {
             FoodName = entity.Name,
-            DateConsumed = DateOnly.FromDateTime(dt),
+            DateConsumed = DateOnly.FromDateTime(DateTime.Now),
             CaloriesConsumed = entity.Calories * dto.Servings,
             GramsProteinConsumed = entity.GramsProtein * dto.Servings
         };
 
-        await _foodRepo.Update(entity);
+        entity.Servings -= dto.Servings;
 
+        await _foodRepo.Update(entity);
         await _consumedFoodRepo.Insert(consumedFood);
 
-        return FoodDto.FromEntity(entity);
+        return (FoodDto.FromEntity(entity), ConsumedFoodDto.FromEntity(consumedFood));
     }
 }

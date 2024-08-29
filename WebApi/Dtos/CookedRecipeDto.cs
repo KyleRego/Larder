@@ -1,6 +1,6 @@
 namespace Larder.Dtos;
 
-public class CookedRecipeDto
+public class CookRecipeDto
 {
     public required string RecipeId { get; set; }
 }

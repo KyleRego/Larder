@@ -7,14 +7,10 @@ namespace Larder.Services;
 public interface IRecipeService
 {
     public Task<RecipeDto?> GetRecipe(string id);
-
     public Task<List<RecipeDto>> GetRecipes(RecipeSortOptions sortBy, string? searchName);
-
     public Task<RecipeDto> CreateRecipe(RecipeDto recipeDto);
-
     public Task<RecipeDto> UpdateRecipe(RecipeDto recipeDto);
-
-    public Task<RecipeDto> CookRecipe(CookedRecipeDto cookedRecipeDto);
+    public Task<RecipeDto> CookRecipe(CookRecipeDto cookedRecipeDto);
 }
 
 public class RecipeService( IRecipeRepository recipeRepository,
@@ -25,7 +21,7 @@ public class RecipeService( IRecipeRepository recipeRepository,
     private readonly IIngredientRepository _ingredientRepository = ingredientRepository;
     private readonly IFoodRepository _foodRepository = foodRepository;
 
-    public async Task<RecipeDto> CookRecipe(CookedRecipeDto cookedRecipeDto)
+    public async Task<RecipeDto> CookRecipe(CookRecipeDto cookedRecipeDto)
     {
         Recipe recipe = await _recipeRepository.Get(cookedRecipeDto.RecipeId)
                 ?? throw new ApplicationException("recipe was not found");

@@ -129,7 +129,7 @@ public class RecipeServiceTests
         RecipeService sut = new(recipeRepository.Object,
                                 ingredientRepository.Object, foodRepository.Object);
 
-        CookedRecipeDto dto = new()
+        CookRecipeDto dto = new()
         {
             RecipeId = recipe.Id
         };

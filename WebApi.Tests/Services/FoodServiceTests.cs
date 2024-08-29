@@ -44,10 +44,16 @@ public class FoodServiceTests
         FoodService sut = new(mockFoodRepo.Object, mockConsFoodRepo.Object);
 
         // act
-        FoodDto result = await sut.EatServings(dto);
+        (FoodDto foodDtoResult, ConsumedFoodDto consumedFoodDtoResult) = await sut.EatFood(dto);
 
         // assert
-        Assert.Equal(3, result.Servings);
+        double expectedCalories = dto.Servings * food.Calories;
+        double expectedProtein = dto.Servings * food.GramsProtein;
+
+        Assert.Equal(3, foodDtoResult.Servings);
+        Assert.Equal(food.Name, consumedFoodDtoResult.Name);
+        Assert.Equal(expectedCalories, consumedFoodDtoResult.Calories);
+        Assert.Equal(expectedProtein, consumedFoodDtoResult.GramsProtein);
 
         mockFoodRepo.Verify(_ => _.Update(It.Is<Food>(f =>
             f.Servings == 3
@@ -55,8 +61,8 @@ public class FoodServiceTests
 
         mockConsFoodRepo.Verify(_ => _.Insert(It.Is<ConsumedFood>(cf =>
             cf.FoodName == food.Name &&
-            cf.CaloriesConsumed == food.Calories * dto.Servings &&
-            cf.GramsProteinConsumed == food.GramsProtein * dto.Servings
+            cf.CaloriesConsumed == expectedCalories &&
+            cf.GramsProteinConsumed == expectedProtein
         )), Times.Once);
     }
 }
