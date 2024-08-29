@@ -1,4 +1,5 @@
 using Larder.Dtos;
+using Larder.Helpers;
 using Larder.Models;
 using Larder.Repository;
 
@@ -15,11 +16,13 @@ public interface IRecipeService
 
 public class RecipeService( IRecipeRepository recipeRepository,
                             IIngredientRepository ingredientRepository,
-                            IFoodRepository foodRepository) : IRecipeService
+                            IFoodRepository foodRepository,
+                            IUnitConversionRepository unitConvRep) : IRecipeService
 {
     private readonly IRecipeRepository _recipeRepository = recipeRepository;
     private readonly IIngredientRepository _ingredientRepository = ingredientRepository;
     private readonly IFoodRepository _foodRepository = foodRepository;
+    private readonly IUnitConversionRepository _unitConvRep = unitConvRep;
 
     public async Task<RecipeDto> CookRecipe(CookRecipeDto cookedRecipeDto)
     {
@@ -30,15 +33,43 @@ public class RecipeService( IRecipeRepository recipeRepository,
         {
             Ingredient ingredient = recipeIngredient.Ingredient;
 
-            // what if the quantities are in different units????
-            // need to have a think about what the design should be regarding this
-            ingredient.Quantity.Amount -= recipeIngredient.Quantity.Amount;
-        }
+            string? ingredientUnitId = ingredient.Quantity.UnitId;
+            string? recipeIngredientUnitId = recipeIngredient.Quantity.UnitId;
 
-        await _recipeRepository.Update(recipe);
+            if (ingredientUnitId == recipeIngredientUnitId)
+            {
+                ingredient.Quantity.Amount -= recipeIngredient.Quantity.Amount;
+            }
+            else if (ingredient.Quantity.Unit != null && recipeIngredient.Quantity.Unit != null)
+            {
+                UnitConversion? conversion = 
+                                await _unitConvRep.FindByUnitIdsEitherWay(ingredient.Quantity.Unit.Id,
+                                                                    recipeIngredient.Quantity.Unit.Id);
+                
+                if (conversion != null)
+                {
+                    Quantity quantityUsed = QuantityConverter.Convert
+                        (recipeIngredient.Quantity, conversion, ingredient.Quantity.Unit);
+                
+                    ingredient.Quantity.Amount -= quantityUsed.Amount;
+
+                    // that could result in the ingredient quantity being below 0
+                }
+                else
+                {
+                    throw new ApplicationException("recipe ingredient and ingredient units do not have a conversion");
+                }
+            }
+            else
+            {
+                throw new ApplicationException("recipe ingredient quantity and ingredient do not both have units");
+            }
+        }
 
         Food food = await _foodRepository.FindOrCreateBy(recipe.Name);
         food.Servings += recipe.ServingsProduced;
+
+        await _recipeRepository.Update(recipe);
         await _foodRepository.Update(food);
 
         return RecipeDto.FromEntity(recipe);

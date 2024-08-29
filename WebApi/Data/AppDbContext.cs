@@ -14,6 +14,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Unit> Units { get; set; }
     public DbSet<Utensil> Utensils { get; set; }
     public DbSet<ConsumedFood> ConsumedFoods { get; set; }
+    public DbSet<UnitConversion> UnitConversions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
