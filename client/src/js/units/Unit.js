@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import UnitsService from "../services/UnitsService"
+import UnitHelpers from "./UnitHelpers";
+import UnitConversionForm from "./UnitConversionForm";
 
 export default function Unit()
 {
@@ -22,8 +24,10 @@ export default function Unit()
         <h1>{unit.name}</h1>
 
         <p>
-            Type: {unit.type}
+            Type: {UnitHelpers.UnitTypeEnumValueToText(unit.type)}
         </p>
+
+        <UnitConversionForm unit={unit} />
 
         <div>
             <Link to={`/units/${id}/edit`}>Edit unit</Link>

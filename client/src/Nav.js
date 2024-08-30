@@ -59,6 +59,12 @@ export default function Nav()
                 <li className="nav-item">
                     <Link className="nav-link" to={"/ingredients"}>Ingredients</Link>
                 </li>
+                <li className="nav-item">
+                    <Link className="nav-link" to={"/recipes"}>Recipes</Link>
+                </li>
+                <li className="nav-item">
+                    <Link className="nav-link" to={"/units"}>Units</Link>
+                </li>
                 {/* <li className="nav-item dropdown">
                     <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Dropdown

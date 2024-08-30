@@ -17,7 +17,9 @@ export default function Timeline()
         });
     }, []);
 
-    const nutritionDayCards = nutritionDays.map(nd => {
+    console.log(nutritionDays);
+
+    const dayNutritionCards = nutritionDays.map(nd => {
         return <DayNutritionCard key={nd.date} nutritionDay={nd}
                             nutritionDays={nutritionDays} setNutritionDays={setNutritionDays} />;
     });
@@ -25,6 +27,6 @@ export default function Timeline()
     return <>
         <h1>Nutrition timeline</h1>
 
-        {nutritionDayCards}
+        {dayNutritionCards}
     </>;
 }

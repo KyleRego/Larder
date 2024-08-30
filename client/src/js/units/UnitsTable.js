@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 import SortingTableHeader from "../components/SortingTableHeader";
+import UnitHelpers from "./UnitHelpers";
 
 export default function UnitsTable({units, sortOrder, setSortOrder})
 {
@@ -35,7 +36,7 @@ function TableRow(unit)
                 <Link to={`/units/${unit.id}`}>{unit.name}</Link>
             </th>
             <td>
-                {unit.type}
+                {UnitHelpers.UnitTypeEnumValueToText(unit.type)}
             </td>
         </tr>
     )

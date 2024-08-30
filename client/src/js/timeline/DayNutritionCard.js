@@ -8,7 +8,7 @@ export default function DayNutritionCard({nutritionDay, nutritionDays, setNutrit
 {
     const [newingConsumedFood, setNewingConsumedFood] = useState(false);
 
-    const consumedFoodItems = nutritionDay.consumedFoods.map(f => {
+    const consumedFoodListItems = nutritionDay.consumedFoods.map(f => {
         return <ConsumedFoodListItem key={f.id} consumedFood={f} nutritionDay={nutritionDay}
                                             nutritionDays={nutritionDays} setNutritionDays={setNutritionDays} />;
     });
@@ -21,19 +21,25 @@ export default function DayNutritionCard({nutritionDay, nutritionDays, setNutrit
                         Total calories: {nutritionDay.totalCalories}, total protein: {nutritionDay.totalProtein}
                     </p>
 
-                    <ul className="mb-2 list-group">
-                        {consumedFoodItems}
+                    <ul className="mb-2 list-group list-group-flush">
+                        {consumedFoodListItems}
 
-                        <li className="list-group-item">
-                            {newingConsumedFood === true
-                                    ?
-                                <NewConsumedFood nutritionDay={nutritionDay} setNewingConsumedFood={setNewingConsumedFood}
-                                            nutritionDays={nutritionDays} setNutritionDays={setNutritionDays} />
-                                    :
-                                <MdAddCircleOutline onClick={() => setNewingConsumedFood(true)}
-                                            className="w-5 h-5" role="button" title="Add food consumed on this day" />
-                            }
-                        </li>
+                        {newingConsumedFood === true
+                                ?
+                                <li className="list-group-item">
+                            <NewConsumedFood nutritionDay={nutritionDay} setNewingConsumedFood={setNewingConsumedFood}
+                                        nutritionDays={nutritionDays} setNutritionDays={setNutritionDays} />
+                                </li>
+                                :
+                                <li className="list-group-item hover-highlight d-flex justify-content-center align-items-center"
+                                        onClick={() => setNewingConsumedFood(true)}
+                                        title="Add food consumed on this day"
+                                        role="button">
+                                    <MdAddCircleOutline className="w-5 h-5" />
+                                </li>
+                        }
+
+                        
                     </ul>
 
                     

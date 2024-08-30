@@ -1,4 +1,4 @@
-import ConsumeFoodForm from "./ConsumeFoodForm";
+import EatFoodForm from "./EatFoodForm";
 
 export default function FoodCard({food, setFood})
 {
@@ -8,7 +8,7 @@ export default function FoodCard({food, setFood})
                             <p className="mb-2">{food.description}</p>
                             <p className="mb-2">Servings: {food.servings}</p>
                             <div>
-                                <ConsumeFoodForm food={food} setFood={setFood} />
+                                <EatFoodForm food={food} setFood={setFood} />
                             </div>
                         </div>
                     </div>;

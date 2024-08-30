@@ -1,6 +1,6 @@
 import FoodsService from "../services/FoodsService";
 
-export default function ConsumeFoodForm({food, setFood})
+export default function EatFoodForm({food, setFood})
 {
     async function handleEatFood(e)
     {
@@ -23,7 +23,7 @@ export default function ConsumeFoodForm({food, setFood})
 
     return <form onSubmit={handleEatFood}>
                 <div className="d-flex column-gap-3 flex-wrap align-items-center">
-                    <div className="">
+                    <div className="d-flex flex-wrap column-gap-1 align-items-center">
                         <label htmlFor="servingsConsumed">Consume servings:</label>
                         <input type="number" step="any" name="servingsConsumed" defaultValue={0}></input>
                     </div>
