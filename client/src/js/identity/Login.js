@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 import IdentityService from "../services/IdentityService";
 
-export default function Login({})
+export default function Login()
 {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const handleSubmitLogin = (e) => {
         e.preventDefault();
