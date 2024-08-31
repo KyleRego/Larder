@@ -29,6 +29,8 @@ import EditRecipe from "./js/recipes/EditRecipe";
 import reportWebVitals from './reportWebVitals';
 
 import Timeline from "./js/timeline/Timeline";
+import Register from "./js/identity/Register";
+import Login from "./js/identity/Login";
 
 import "./index.css";
 import "./css/buttons.css";
@@ -54,6 +56,8 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route path="" element={<Home />} />
+      <Route path="register" element={<Register />} />
+      <Route path="login" element={<Login />} />
       <Route path="timeline" element={<Timeline />} />
       <Route path="units" element={<Units />} />
       <Route path="units/:id" element={<Unit />} />

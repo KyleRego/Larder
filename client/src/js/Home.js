@@ -1,9 +1,17 @@
+import { Link } from "react-router-dom"
+
 export default function Home()
 {
     return <>
-    
-        <h1>Welcome to Larder</h1>
-        <p>This is an app where you track what foods you eat and it will show you a timeline of personal nutrition statistics.</p>
-        <p>Larder is free software licensed under the GNU Affero General Public License v3.</p>
+        <h1 className="text-center">Larder</h1>
+        <p>Larder is a free software application (<a href="https://github.com/KyleRego/Larder/blob/main/LICENSE.txt">GNU AGPLv3</a>)
+        for tracking your inventory of foods and ingredients; as you cook and eat them, the app also helps track
+        some useful personal nutritional statistics.</p>
+
+        <div className="d-flex flex-wrap justify-content-center column-gap-3">
+            <Link className="btn btn-outline-primary" to={"register"}>Register</Link>
+
+            <Link className="btn btn-outline-primary" to={"login"}>Login</Link>
+        </div>
     </>;
 }

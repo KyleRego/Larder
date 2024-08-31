@@ -3,8 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Larder.Data;
 using Larder.Repository;
 using Larder.Services;
+using Microsoft.AspNetCore.Identity;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+    .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddControllers();
 
@@ -64,6 +70,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 WebApplication app = builder.Build();
+
+app.MapIdentityApi<IdentityUser>();
 
 app.MapControllers();
 
