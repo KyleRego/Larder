@@ -7,7 +7,7 @@ export default class ApiServiceBase
         // TODO: Figure out why npm build does not read .env.production
         if (this.backendOrigin === undefined)
         {
-            this.backendOrigin = "https://larder.lol:49152";
+            this.backendOrigin = "https://kylerego.net:49152";
         }
     }
 
