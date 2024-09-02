@@ -1,5 +1,6 @@
 import { useState } from "react";
-import IdentityService from "../services/IdentityService";
+import { Link } from "react-router-dom";
+import IdentityService from "./IdentityService";
 
 export default function Register()
 {
@@ -14,7 +15,7 @@ export default function Register()
 
         const service = new IdentityService();
 
-        service.PostRegister(email, password).then((res) => {
+        service.postRegister(email, password).then((res) => {
             if (res.status === 400)
             {
                 const tmpErrors = [];
@@ -46,20 +47,26 @@ export default function Register()
     return <>
         <h1>Register:</h1>
 
-        {errorsInfo}
-    
-        <form onSubmit={handleSubmitRegister}>
-            <div className="mb-3">
-                <label htmlFor="email" className="form-label">Email address:</label>
-                <input type="email" className="form-control" name="email" aria-describedby="emailHelp" />
-            </div>
+        <div>
+            {errorsInfo}
+        
+            <form onSubmit={handleSubmitRegister}>
+                <div className="mb-3">
+                    <label htmlFor="email" className="form-label">Email address:</label>
+                    <input type="email" className="form-control" name="email" aria-describedby="emailHelp" />
+                </div>
 
-            <div className="mb-3">
-                <label htmlFor="password" className="form-label">Password:</label>
-                <input type="password" className="form-control" name="password" />
-            </div>
+                <div className="mb-3">
+                    <label htmlFor="password" className="form-label">Password:</label>
+                    <input type="password" className="form-control" name="password" />
+                </div>
 
-            <button type="submit" className="btn btn-primary">Submit</button>
-        </form>
+                <button type="submit" className="btn btn-primary">Submit</button>
+            </form>
+        </div>
+
+        <p className="text-center pt-4">
+            Would you like to <Link to={"/login"}>login</Link> instead?
+        </p>
     </>;
 }

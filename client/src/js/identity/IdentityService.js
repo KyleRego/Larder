@@ -1,8 +1,8 @@
-import ApiServiceBase from "./ApiServiceBase";
+import ApiServiceBase from "../services/ApiServiceBase";
 
 export default class IdentityService extends ApiServiceBase
 {
-    async PostRegister(email, password)
+    async postRegister(email, password)
     {
         const url = `${this.backendOrigin}/register`;
 
@@ -19,14 +19,12 @@ export default class IdentityService extends ApiServiceBase
             body: JSON.stringify(dto)
         });
 
-        const response = await fetch(request);
-
-        return await response.json();
+        return await fetch(request);
     }
 
-    async PostLogin(email, password)
+    async postLogin(email, password)
     {
-        const url = `${this.backendOrigin}/login`;
+        const url = `${this.backendOrigin}/login?useCookies=true`;
 
         const dto = {
             email: email,
@@ -37,15 +35,13 @@ export default class IdentityService extends ApiServiceBase
 
         const request = new Request(url, {
             method: "POST",
+            // without credentials: "include", the browser
+            // ignores the Set-Cookie response header
+            credentials: "include",
             headers: headers,
             body: JSON.stringify(dto)
         });
 
-        const response = await fetch(request);
-
-        if (!response.ok)
-        {
-            throw new Error("response was not ok");
-        }
+        return await fetch(request);
     }
 }

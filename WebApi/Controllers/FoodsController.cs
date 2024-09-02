@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Larder.Repository;
 using Larder.Services;
 using Larder.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Larder.Controllers;
 
@@ -19,7 +20,7 @@ public class FoodsController(IFoodService foodService) : ControllerBase
         return (food == null) ? NotFound() : food;
     }
 
-    [HttpGet]
+    [HttpGet, Authorize]
     public async Task<ActionResult<List<FoodDto>>> Index(string? sortOrder, string? name)
     {
         if (sortOrder != null && Enum.TryParse(sortOrder, out FoodSortOptions sortBy))

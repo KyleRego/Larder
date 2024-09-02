@@ -1,16 +1,16 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 using Larder.Data;
 using Larder.Repository;
 using Larder.Services;
-using Microsoft.AspNetCore.Identity;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthorization();
 
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
-    .AddEntityFrameworkStores<AppDbContext>();
+                .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddControllers();
 
@@ -56,11 +56,13 @@ string clientReactAppOrigin = builder.Configuration["ClientReactAppOrigin"] ?? t
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: corsPolicyName, policy  =>
+    options.AddPolicy(name: corsPolicyName,
+        policy =>
         {
             policy.AllowAnyHeader()
                 .AllowAnyMethod()
-                .WithOrigins(clientReactAppOrigin);
+                .WithOrigins(clientReactAppOrigin)
+                .AllowCredentials();
         });
 });
 
@@ -87,6 +89,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors(corsPolicyName);
+
+app.UseAuthorization();
 
 using (IServiceScope scope = app.Services.CreateScope())
 {

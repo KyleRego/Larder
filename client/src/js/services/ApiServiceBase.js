@@ -13,7 +13,11 @@ export default class ApiServiceBase
 
     async tryGetJson(url)
     {
-        const response = await fetch(url);
+        const response = await fetch(url,
+            {
+                credentials: "include"
+            }
+        );
 
         if (!response.ok)
         {

@@ -1,10 +1,10 @@
-// import { useNavigate } from "react-router-dom";
-
-import IdentityService from "../services/IdentityService";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import IdentityService from "./IdentityService";
 
 export default function Login()
 {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const handleSubmitLogin = (e) => {
         e.preventDefault();
@@ -13,8 +13,11 @@ export default function Login()
         const password = formData.get("password")
 
         const service = new IdentityService();
-        service.PostLogin(email, password).then(res => {
-
+        service.postLogin(email, password).then(response => {
+            if (response.ok)
+            {
+                navigate("/")
+            }
         }).catch(error => {
             console.error(error);
         });
@@ -23,18 +26,25 @@ export default function Login()
     return <>
         <h1>Login:</h1>
     
-        <form onSubmit={handleSubmitLogin}>
-            <div className="mb-3">
-                <label htmlFor="email" className="form-label">Email address:</label>
-                <input type="email" className="form-control" name="email" aria-describedby="emailHelp" />
-            </div>
+        <div>
+            <form onSubmit={handleSubmitLogin}>
+                <div className="mb-3">
+                    <label htmlFor="email" className="form-label">Email address:</label>
+                    <input type="email" className="form-control" name="email" aria-describedby="emailHelp" />
+                </div>
 
-            <div className="mb-3">
-                <label htmlFor="password" className="form-label">Password:</label>
-                <input type="password" className="form-control" name="password" />
-            </div>
+                <div className="mb-3">
+                    <label htmlFor="password" className="form-label">Password:</label>
+                    <input type="password" className="form-control" name="password" />
+                </div>
 
-            <button type="submit" className="btn btn-primary">Submit</button>
-        </form>
+                <button type="submit" className="btn btn-primary">Submit</button>
+            </form>
+        </div>
+
+        <p className="text-center pt-4">
+            Would you like to <Link to={"/register"}>register</Link> instead?
+        </p>
+            
     </>;
 }
