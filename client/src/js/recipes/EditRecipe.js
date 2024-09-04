@@ -6,7 +6,6 @@ import RecipeFormDataMapper from "./RecipeFormDataMapper";
 
 import RecipeForm from "./RecipeForm";
 
-import "./EditRecipe.css";
 
 export default function EditRecipe({units})
 {
@@ -43,7 +42,7 @@ export default function EditRecipe({units})
         <>
             <h1>Editing recipe: {recipe.name}</h1>
 
-            <RecipeForm initialRecipe={recipe} units={units} handleSubmit={handleSubmit} />
+            <RecipeForm recipe={recipe} units={units} handleSubmit={handleSubmit} />
 
             <div>
                 <Link to={`/recipes/${id}`}>Back to recipe</Link>

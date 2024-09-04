@@ -68,7 +68,7 @@ const router = createBrowserRouter(
       <Route path="foods/new" element={<NewFood units={units} />} />
       <Route path="foods/:id/edit" element={<EditFood units={units} />} />
       <Route path="ingredients" element={<Ingredients units={units} />} />
-      <Route path="ingredients/:id" element={<Ingredient />} />
+      <Route path="ingredients/:id" element={<Ingredient units={units} />} />
       <Route path="ingredients/:id/edit" element={<EditIngredient units={units} />} />
       <Route path="ingredients/new" element={<NewIngredient units={units} />} />
       <Route path="recipes" element={<Recipes />} />

@@ -4,8 +4,12 @@ import { CiEdit } from "react-icons/ci";
 import { MdDone } from "react-icons/md";
 import QuantityInput from "./QuantityInput";
 
+import findUnitName from "../helpers/findUnitName";
+
 export default function EditableQuantityTableCell({quantity, handleSubmit, units})
 {
+    const unitName = findUnitName(quantity.unitId, units);
+
     const [editing, setEditing] = useState(false);
 
     if (editing === true)
@@ -18,7 +22,8 @@ export default function EditableQuantityTableCell({quantity, handleSubmit, units
     else
     {
         return <NoneditingTableCell quantity={quantity}
-                                    setEditing={setEditing} />
+                                    setEditing={setEditing}
+                                    unitName={unitName} />
     }
 }
 
@@ -37,13 +42,13 @@ function EditingTableCell({quantity, setEditing, handleSubmit, units})
 
     return <td className="py-0">
         <form onSubmit={innerHandleSubmit}>
-            <div className="d-flex column-gap-3 align-items-center m-0">
-                <QuantityInput initialQuantity={quantity} units={units} />
-                <button type="submit" title="Done">
+            <div className="d-flex flex-wrap column-gap-1 row-gap-1 py-2 align-items-center m-0">
+                <QuantityInput quantity={quantity} units={units} />
+                <button className="btn btn-primary btn-sm" type="submit" title="Done">
                     <MdDone />
                 </button>
 
-                <button type="button" onClick={cancelEditing} title="Cancel">
+                <button className="btn btn-danger btn-sm" type="button" onClick={cancelEditing} title="Cancel">
                     Cancel
                 </button>
             </div>
@@ -51,7 +56,7 @@ function EditingTableCell({quantity, setEditing, handleSubmit, units})
     </td>
 }
 
-function NoneditingTableCell({quantity, setEditing})
+function NoneditingTableCell({quantity, setEditing, unitName})
 {
     function startEditing()
     {
@@ -59,8 +64,8 @@ function NoneditingTableCell({quantity, setEditing})
     }
 
     return <td className="py-0">
-        <div className="m-0 d-flex column-gap-3 align-items-center">
-            <span>{quantity?.amount} {quantity?.unitName}</span>
+        <div className="m-0 d-flex column-gap-1 align-items-center">
+            <span>{quantity?.amount} {unitName}</span>
             <CiEdit className="w-5 h-5" role="button" onClick={startEditing} title="Edit quantity" />
         </div>
     </td>

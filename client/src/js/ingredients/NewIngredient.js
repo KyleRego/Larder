@@ -10,29 +10,28 @@ export default function NewIngredient({units})
         e.preventDefault();
 
         const formData = new FormData(e.target);
+        const name = formData.get("name");
+        const amount = formData.get("amount");
+        const unitId = formData.get("unitId");
 
-        const ingredientData = {
-            name: formData.get("name"),
-            quantity: formData.get("quantity")
+        const dto = {
+            name: name,
+            quantity: {
+                amount: amount,
+                unitId: unitId
+            }
         };
-
-        const unitValue = formData.get("unit");
-
-        if (unitValue !== "")
-        {
-            ingredientData.unitId = unitValue;
-        }
 
         const ingredientsService = new IngredientsService();
 
-        await ingredientsService.postIngredient(ingredientData);
+        await ingredientsService.postIngredient(dto);
     }
 
     return (
         <>
             <h1>New ingredient</h1>
 
-            <IngredientForm initialIngredient={{}} units={units} handleFormSubmit={handleFormSubmit} />
+            <IngredientForm ingredient={{}} units={units} handleFormSubmit={handleFormSubmit} />
 
             <Link to="/ingredients">Back to ingredients</Link>
         </>

@@ -5,8 +5,6 @@ import RecipeForm from "./RecipeForm";
 import RecipesService from "../services/RecipesService";
 import RecipeFormDataMapper from "./RecipeFormDataMapper";
 
-import "./NewRecipe.css";
-
 export default function NewRecipe({units})
 {
     async function handleSubmit(e)
@@ -22,10 +20,19 @@ export default function NewRecipe({units})
         await recipesService.postRecipe(recipeData);
     }
 
+    let initialRecipe = {
+        name: "New recipe",
+        ingredients: []
+    };
+
     return (<>
         <h1>New recipe:</h1>
 
-        <RecipeForm initialRecipe={{ingredients: []}} units={units} handleSubmit={handleSubmit} />
+        <div className="card shadow-sm">
+            <div className="card-body">
+                <RecipeForm recipe={initialRecipe} units={units} handleSubmit={handleSubmit} />
+            </div>
+        </div>
 
         <Link to={"/recipes"}>Back to recipes</Link>
     </>);

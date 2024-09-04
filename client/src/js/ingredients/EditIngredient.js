@@ -12,22 +12,18 @@ export default function EditIngredient({units})
 
         const formData = new FormData(e.target);
 
-        const ingredientData = {
+        const dto = {
             id: id,
             name: formData.get("name"),
-            quantity: formData.get("quantity")
+            quantity: {
+                amount: formData.get("amount"),
+                unitId: formData.get("unitId")
+            }
         };
-
-        const unitValue = formData.get("unit");
-
-        if (unitValue !== "")
-        {
-            ingredientData.unitId = unitValue;
-        }
 
         const ingredientsService = new IngredientsService();
 
-        await ingredientsService.putIngredient(ingredientData);
+        await ingredientsService.putIngredient(dto);
     }
 
     let { id } = useParams();
@@ -47,9 +43,13 @@ export default function EditIngredient({units})
 
     return (
         <>
-            <h1>hello world from edit ingredients</h1>
+            <h1>Editing ingredient {ingredient.name}</h1>
 
-            <IngredientForm initialIngredient={ingredient} units={units} handleFormSubmit={handleFormSubmit} />
+            <div className="card">
+                <div className="card-body">
+                    <IngredientForm ingredient={ingredient} units={units} handleFormSubmit={handleFormSubmit} />
+                </div>
+            </div>
 
             <Link to={`/ingredients/${id}`}>Back to ingredient</Link>
         </>

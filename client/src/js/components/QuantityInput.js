@@ -1,6 +1,6 @@
 import UnitSelectOptions from "../units/UnitSelectOptions";
 
-export default function QuantityInput({initialQuantity, units, name = null})
+export default function QuantityInput({quantity, units, name = null})
 {
     function formatString(str)
     {
@@ -15,9 +15,9 @@ export default function QuantityInput({initialQuantity, units, name = null})
 
     return <>
         <label htmlFor={amountInputId}>{labelText}</label>
-        <input className="ms-1" id={amountInputId} name={amountInputId} type="number" defaultValue={initialQuantity?.amount}></input>
+        <input className="ms-1" id={amountInputId} name={amountInputId} type="number" defaultValue={quantity?.amount}></input>
         <label hidden htmlFor={unitInputId}></label>
-        <select className="ms-1" id={unitInputId} title="unit" name={unitInputId} defaultValue={initialQuantity?.unitId}>
+        <select className="ms-1" id={unitInputId} title="unit" name={unitInputId} defaultValue={quantity?.unitId}>
             <UnitSelectOptions units={units} />
         </select>
     </>

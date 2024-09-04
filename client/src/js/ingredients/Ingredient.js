@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import IngredientsService from "../services/IngredientsService";
 
-export default function Ingredient()
+import findUnitName from "../helpers/findUnitName";
+
+export default function Ingredient({units})
 {
     let { id } = useParams();
     const [ingredient, setIngredient] = useState(null);
@@ -18,18 +20,36 @@ export default function Ingredient()
 
     if (ingredient === null) return <h1>Loading...</h1>;
 
+    const unitName = findUnitName(ingredient.quantity.unitId, units);
+
+    function handleDelete()
+    {
+        if (window.confirm(`Are you sure you want to delete this ingredient - ${ingredient.name}?`))
+        {
+            const service = new IngredientsService();
+            service.deleteIngredient(ingredient.id);
+        }
+        
+    }
+
     return (
         <>
             <h1>
                 {ingredient.name}
             </h1>
 
-            Stock: {ingredient.quantity?.amount} {ingredient.quantity?.unitName}
+            Stock: {ingredient.quantity?.amount} {unitName}
 
             <IngredientDetails ingredient={ingredient} />
 
-            <div>
-                <Link to={`/ingredients/${ingredient.id}/edit`}>Edit ingredient</Link>
+            <div className="d-flex column-gap-3">
+                <Link className="btn btn-primary" to={`/ingredients/${ingredient.id}/edit`}>
+                    Edit
+                </Link>
+            
+                <button className="btn btn-danger" onClick={handleDelete} type="button">
+                    Delete
+                </button>
             </div>
 
             <Link to="/ingredients">Back to ingredients</Link>
@@ -77,14 +97,7 @@ function IngredientDetails({ingredient})
 
 function DeleteButton({ingredient})
 {
-    function handleOnClick(e)
-    {
-        const service = new IngredientsService();
+    
 
-        service.deleteIngredient(ingredient.id);
-    }
-
-    return <button onClick={handleOnClick} type="button">
-        Delete ingredient
-    </button>
+    return 
 }

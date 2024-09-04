@@ -16,7 +16,7 @@ export default function IngredientsTable({ingredients, sortOrder, setSortOrder, 
         <>
             <table className="ingredientsTable">
                 <caption>
-                    Ingredients on hand
+                    Ingredients reading to be used for cooking
                 </caption>
                 <thead>
                     <tr>
@@ -48,7 +48,9 @@ function IngredientRow({ingredient, units})
 
         const ingredientsService = new IngredientsService();
 
-        await ingredientsService.patchQuantity(dto);
+        ingredientsService.patchQuantity(dto).then((result) => {
+            console.log(result);
+        });
     }
 
     return <tr>
@@ -58,9 +60,8 @@ function IngredientRow({ingredient, units})
             </Link>
         </th>
 
-        <EditableQuantityTableCell amount={ingredient.amount}
-                                    unitId={ingredient.unitId}
-                                    unitName={ingredient.unitName}
-                                    units={units} handleSubmit={handleSubmitQuantity} />
+        <EditableQuantityTableCell quantity={ingredient.quantity}
+                                    units={units}
+                                    handleSubmit={handleSubmitQuantity} />
     </tr>
 }

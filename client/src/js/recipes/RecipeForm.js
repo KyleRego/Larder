@@ -1,158 +1,58 @@
-import { useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useState } from "react";
 
-import UnitSelectOptions from "../units/UnitSelectOptions";
+import { v4 as uuidv4 } from 'uuid';
 
-import IngredientsService from "../services/IngredientsService";
+import { GoPlus } from "react-icons/go";
 
-import "./RecipeForm.css";
+import RecipeFormIngredient from "./RecipeFormIngredient";
 
-export default function RecipeForm({initialRecipe, units, handleSubmit})
+export default function RecipeForm({recipe, units, handleSubmit})
 {
-    const [recipe, setRecipe] = useState(initialRecipe);
-    const [addingIngredient, setAddingIngredient] = useState(false);
+    const [formRecipe, setFormRecipe] = useState(structuredClone(recipe));
 
-    function removeIngredient(index)
+    function addIngredient()
     {
-        const newIngredients = [];
-
-        recipe.ingredients.forEach((ri, i) => {
-            if (index !== i) { newIngredients.push(ri); }
-        });
-
-        const newRecipe = structuredClone(recipe);
-        newRecipe.ingredients = newIngredients;
-
-        setRecipe(newRecipe);
+        const newRecipe = structuredClone(formRecipe);
+        const newIngredient = {
+            id: uuidv4(),
+            name: "New ingredient"
+        };
+        newRecipe.ingredients.push(newIngredient);
+        setFormRecipe(newRecipe);
     }
 
-    function addIngredient(ingredient)
-    {
-        const newRecipe = structuredClone(recipe);
-        newRecipe.ingredients.push(ingredient);
-        setRecipe(newRecipe);
-    }
-
-    function showNewRecipeFormIngredient()
-    {
-        setAddingIngredient(true);
-    }
-
-    let recipeIngredients = recipe.ingredients.map((recipeIngredient, i) => {
-        return <RecipeFormIngredient    key={recipeIngredient.recipeIngredientId}
-                                            initialIngredient={recipeIngredient}
-                                            i={i}
+    let recipeFormIngredients = formRecipe.ingredients.map((ing, i) => {
+        return <RecipeFormIngredient    key={ing.id}
+                                            ingredient={ing}
                                             units={units}
-                                            removeIngredient={removeIngredient} />
+                                            formRecipe={formRecipe}
+                                            setFormRecipe={setFormRecipe}/>
     });
 
     return (
         <form className="recipeForm" onSubmit={handleSubmit}>
-            <div className="flex align-items-center">
-                <label htmlFor="recipeName"><strong>Recipe name:</strong></label>
+            <div className="d-flex flex-wrap column-gap-1 row-gap-1 align-items-center">
+                <label htmlFor="recipeName">Name:</label>
                 <input className="flex-grow-1" id="recipeName" name="recipeName" type="text" defaultValue={recipe.name} />
             </div>
 
+            <h2 className="m-0">Ingredients:</h2>
+
             <div className="flex column-gap-5">
-                {recipeIngredients}
+                {recipeFormIngredients}
+            </div>
+           
+            <div className="d-flex justify-content-center">
+                <button type="button"
+                            className="btn btn-secondary btn-sm"
+                            onClick={addIngredient}>
+                                <GoPlus className="w-5 h-5" />
+                            </button>
             </div>
 
-            {addingIngredient === false && 
             <div>
-                <button type="button" onClick={showNewRecipeFormIngredient}>New ingredient</button>
-            </div>
-            }
-
-            {addingIngredient === true &&
-            <div>
-                <NewRecipeFormIngredient setAddingIngredient={setAddingIngredient} addIngredient={addIngredient} />
-            </div>
-            }
-
-            <div>
-                <button type="submit">Submit</button>
+                <button className="btn btn-primary" type="submit">Submit</button>
             </div>
         </form>
     );
-}
-
-function NewRecipeFormIngredient({setAddingIngredient, addIngredient})
-{
-    const [fetchedIngredients, setFetchedIngredients] = useState([]);
-    const [fetchIngredientName, setFetchIngredientName] = useState(null);
-
-    const startFetchingExistingIngredientOptions = (e) => setFetchIngredientName(e.target.value);
-
-    function handleAddNewIngredient(inputId)
-    {
-        const value = document.getElementById(inputId).value;
-        if (value === "") return;
-
-        addIngredient({id: uuidv4(), ingredientName: value});
-        setAddingIngredient(false);
-    }
-
-    function handleChooseIngredient(id, name)
-    {
-        addIngredient({id: id, ingredientName: name});
-        setAddingIngredient(false);
-    }
-
-    useEffect(() =>
-    {
-        if (fetchIngredientName === null) return;
-
-        const ingredientsService = new IngredientsService();
-
-        ingredientsService.getIngredients(null, fetchIngredientName).then(result => {
-            setFetchedIngredients(result);
-        })
-    }, [fetchIngredientName]);
-
-    const fetchedIngredientItems = (fetchedIngredients.length !== 0) ? <ul className="ingredientOptionsList">
-        {fetchedIngredients.map(ing => {
-            return <li key={ing.id} onClick={() => handleChooseIngredient(ing.id, ing.name)}>
-                {ing.name}
-            </li>;
-        })}
-    </ul> : "";
-
-    const inputId = "newIngredient";
-
-    return <div>
-                <label htmlFor={inputId}>Name:</label>
-                <input id={inputId} type="text" className="mr-2" onInput={startFetchingExistingIngredientOptions} />
-                <button type="button" onClick={() => handleAddNewIngredient(inputId)}>Add ingredient</button>
-                {fetchedIngredientItems}
-            </div>
-} 
-
-function RecipeFormIngredient({initialIngredient, i, units, removeIngredient})
-{
-    const nameId = `ingredientName${i}`;
-    const amountId = `ingredientAmount${i}`;
-    const unitId = `ingredientUnit${i}`;
-
-    return (<>
-        <div className="recipeFormIngredient">
-            <div>
-                <input hidden id={nameId} name={nameId} type="text" defaultValue={initialIngredient.ingredientName} />
-                {initialIngredient.ingredientName}
-            </div>
-
-            <div>
-                <label htmlFor={amountId}>Amount:</label>
-                <input id={amountId} name={amountId} type="number" defaultValue={initialIngredient.amount} />
-                <label hidden htmlFor={unitId}>Unit:</label>
-                <select defaultValue={initialIngredient.unitId} id={unitId} name={unitId}>
-                    <UnitSelectOptions units={units} />
-                </select>
-            </div>
-
-            <div>
-                <button type="button" onClick={() => removeIngredient(i)}>Remove</button>
-            </div>
-
-        </div>
-    </>);
 }

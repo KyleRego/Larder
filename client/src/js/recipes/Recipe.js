@@ -22,7 +22,7 @@ export default function Recipe()
 
     let ingredientListItems = recipe.ingredients.map(ri => IngredientListItem(ri));
 
-    return (<>
+    return <>
         <h1>{recipe.name}</h1>
 
         <h2>Ingredients</h2>
@@ -36,7 +36,7 @@ export default function Recipe()
         </div>
         
         <Link to="/recipes">Back to recipes</Link>
-    </>)
+    </>;
 }
 
 function IngredientListItem(recipeIngredient)
