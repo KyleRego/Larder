@@ -24,7 +24,8 @@ export default function Ingredients({units})
         <>
             <h1>Ingredients</h1>
 
-            <IngredientsTable ingredients={ingredients} sortOrder={sortOrder} setSortOrder={setSortOrder}
+            <IngredientsTable ingredients={ingredients} setIngredients={setIngredients}
+                                sortOrder={sortOrder} setSortOrder={setSortOrder}
                                 units={units} />
 
             <Link to="/ingredients/new">New ingredient</Link>

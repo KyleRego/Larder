@@ -3,8 +3,9 @@ import { useParams, Link } from "react-router-dom";
 
 import RecipesService from "../services/RecipesService";
 import "./Recipe.css"
+import findUnitName from "../helpers/findUnitName";
 
-export default function Recipe()
+export default function Recipe({units})
 {
     let { id } = useParams();
     const [recipe, setRecipe] = useState(null);
@@ -18,43 +19,48 @@ export default function Recipe()
         });
     }, [id]);
 
-    function handleDelete()
-    {
-        // if (window.confirm(`Are you sure you want to delete this recipe - ${recipe.name}?`))
-        // {
+    function handleDelete() {
+        if (window.confirm(`Are you sure you want to delete this recipe - ${recipe.name}?`)) {
             const service = new RecipesService();
             service.deleteRecipe(recipe.id);
-        // }
+        }
     }
 
-    if (recipe === null) return <h1>Loading...</h1>
+    if (recipe === null) return <h1>Loading...</h1>;
 
-    console.log(recipe);
-
-    let ingredientListItems = recipe.ingredients.map(ri => IngredientListItem(ri));
+    let ingredientListItems = recipe.ingredients.map(ri =>
+        <IngredientListItem key={ri.id} ingredient={ri} units={units} />);
 
     return <>
-        <h1>{recipe.name}</h1>
+        <div className="card my-4">
+            <div className="card-body">
+                <div className="d-flex align-items-center justify-content-between">
+                    <div className="d-flex align-items-center column-gap-3">
+                        <h1 className="m-0">{recipe.name}</h1>
 
-        <button className="btn btn-danger" onClick={handleDelete}>Delete recipe</button>
+                        <Link className="btn btn-primary" to={`/recipes/${id}/edit`}>Edit</Link>
+                    </div>
 
-        <h2>Ingredients</h2>
+                    <button className="btn btn-danger" onClick={handleDelete}>Delete</button>
+                </div>
 
-        <ul>
-            {ingredientListItems}
-        </ul>
+                <h2>Ingredients:</h2>
 
-        <div>
-            <Link to={`/recipes/${id}/edit`}>Edit recipe</Link>
+                <ul className="list-group">
+                    {ingredientListItems}
+                </ul>
+            </div>
         </div>
-        
+
         <Link to="/recipes">Back to recipes</Link>
     </>;
 }
 
-function IngredientListItem(recipeIngredient)
+function IngredientListItem({ingredient, units})
 {
-    return <li key={recipeIngredient.Id}>
-        {recipeIngredient.quantity.amount} {recipeIngredient.name} 
-    </li>
+    const unitName = findUnitName(ingredient.quantity.unitId, units);
+
+    return <li className="list-group-item">
+        {ingredient.quantity.amount} {unitName} {ingredient.name} 
+    </li>;
 }

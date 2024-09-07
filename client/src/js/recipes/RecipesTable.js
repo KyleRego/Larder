@@ -7,7 +7,7 @@ export default function RecipesTable({recipes, sortOrder, setSortOrder})
     let rows = recipes.map(recipe => RecipeRow(recipe));
 
     return <>
-        <table className="recipesTable">
+        <table>
             <caption>Recipes</caption>
             <thead>
                 <tr>
@@ -26,14 +26,11 @@ function RecipeRow(recipe)
 {
     return (
         <tr key={recipe.id}>
-            <th scope="col">
-                {recipe.name}
-            </th>
-            <td className="text-center">
+            <th scope="row">
                 <Link to={`/recipes/${recipe.id}`}>
-                    Details
+                    {recipe.name}
                 </Link>
-            </td>
+            </th>
         </tr>
     );
 }

@@ -6,10 +6,12 @@ import SortingTableHeader from "../components/SortingTableHeader";
 import "./IngredientsTable.css";
 import IngredientsService from "../services/IngredientsService";
 
-export default function IngredientsTable({ingredients, sortOrder, setSortOrder, units})
+export default function IngredientsTable({ingredients, setIngredients, sortOrder, setSortOrder, units})
 {
     const ingredientRows = ingredients.map(ingredient => <IngredientRow key={ingredient.id}
                                                                         ingredient={ingredient}
+                                                                        ingredients={ingredients}
+                                                                        setIngredients={setIngredients}
                                                                         units={units} />);
 
     return (
@@ -32,7 +34,7 @@ export default function IngredientsTable({ingredients, sortOrder, setSortOrder, 
     )
 }
 
-function IngredientRow({ingredient, units})
+function IngredientRow({ingredient, ingredients, setIngredients, units})
 {
     async function handleSubmitQuantity(e)
     {
@@ -49,7 +51,13 @@ function IngredientRow({ingredient, units})
         const ingredientsService = new IngredientsService();
 
         ingredientsService.patchQuantity(dto).then((result) => {
-            console.log(result);
+            let newIngredients = structuredClone(ingredients);
+            for (let i = 0; i < newIngredients.length; i += 1) {
+                if (newIngredients[i].id === ingredient.id) {
+                    newIngredients[i] = result;
+                }
+            }
+            setIngredients(newIngredients);
         });
     }
 
