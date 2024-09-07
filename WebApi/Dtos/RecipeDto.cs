@@ -2,11 +2,19 @@ using Larder.Models;
 
 namespace Larder.Dtos;
 
+public class RecipeIngredientDto
+{
+    public string? Id { get; set; }
+    public required string Name { get; set; }
+
+    public required QuantityDto Quantity { get; set; }
+}
+
 public class RecipeDto
 {
     public string? Id { get; set; }
     public required string Name { get; set; }
-    public required List<IngredientDto> Ingredients { get; set; }
+    public required List<RecipeIngredientDto> Ingredients { get; set; }
 
     public static RecipeDto FromEntity(Recipe recipe)
     {
@@ -19,14 +27,14 @@ public class RecipeDto
 
         foreach (RecipeIngredient recipeIngredient in recipe.RecipeIngredients)
         {
-            IngredientDto ingredientDto = new()
+            RecipeIngredientDto riDto = new()
             {
                 Id = recipeIngredient.Id,
                 Name = recipeIngredient.Ingredient.Name,
                 Quantity = QuantityDto.FromEntity(recipeIngredient.Quantity)
             };
 
-            recipeDto.Ingredients.Add(ingredientDto);
+            recipeDto.Ingredients.Add(riDto);
         }
 
         return recipeDto;

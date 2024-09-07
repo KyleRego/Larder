@@ -207,9 +207,8 @@ public class RecipeServiceTests
 
         CookRecipeDto dto = new() { RecipeId = recipeId };
 
-        RecipeDto result = await sut.CookRecipe(dto);
+        CookRecipeResultDto result = await sut.CookRecipe(dto);
         IngredientDto ingrResult = result.Ingredients.First();
         Assert.Equal(4 , ingrResult.Quantity.Amount);
-        
     }
 }

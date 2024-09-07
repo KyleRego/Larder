@@ -11,7 +11,7 @@ public interface IRecipeService
     public Task<List<RecipeDto>> GetRecipes(RecipeSortOptions sortBy, string? searchName);
     public Task<RecipeDto> CreateRecipe(RecipeDto recipeDto);
     public Task<RecipeDto> UpdateRecipe(RecipeDto recipeDto);
-    public Task<RecipeDto> CookRecipe(CookRecipeDto cookedRecipeDto);
+    public Task<CookRecipeResultDto> CookRecipe(CookRecipeDto cookedRecipeDto);
     public Task DeleteRecipe(string id);
 }
 
@@ -25,8 +25,10 @@ public class RecipeService( IRecipeRepository recipeRepository,
     private readonly IFoodRepository _foodRepository = foodRepository;
     private readonly IUnitConversionRepository _unitConvRep = unitConvRep;
 
-    public async Task<RecipeDto> CookRecipe(CookRecipeDto cookedRecipeDto)
+    public async Task<CookRecipeResultDto> CookRecipe(CookRecipeDto cookedRecipeDto)
     {
+        CookRecipeResultDto result = new();
+
         Recipe recipe = await _recipeRepository.Get(cookedRecipeDto.RecipeId)
                 ?? throw new ApplicationException("recipe was not found");
 
@@ -40,6 +42,7 @@ public class RecipeService( IRecipeRepository recipeRepository,
             if (ingredientUnitId == recipeIngredientUnitId)
             {
                 ingredient.Quantity.Amount -= recipeIngredient.Quantity.Amount;
+                
             }
             else if (ingredient.Quantity.Unit != null && recipeIngredient.Quantity.Unit != null)
             {
@@ -65,6 +68,8 @@ public class RecipeService( IRecipeRepository recipeRepository,
             {
                 throw new ApplicationException("recipe ingredient quantity and ingredient do not both have units");
             }
+
+            result.Ingredients.Add(IngredientDto.FromEntity(ingredient));
         }
 
         Food food = await _foodRepository.FindOrCreateBy(recipe.Name);
@@ -73,7 +78,7 @@ public class RecipeService( IRecipeRepository recipeRepository,
         await _recipeRepository.Update(recipe);
         await _foodRepository.Update(food);
 
-        return RecipeDto.FromEntity(recipe);
+        return result;
     }
 
     public async Task<RecipeDto> CreateRecipe(RecipeDto recipeDto)
@@ -85,7 +90,7 @@ public class RecipeService( IRecipeRepository recipeRepository,
 
         List<RecipeIngredient> recipeIngredients = [];
 
-        foreach (IngredientDto ingredientDto in recipeDto.Ingredients)
+        foreach (RecipeIngredientDto ingredientDto in recipeDto.Ingredients)
         {
             if (ingredientDto.Quantity.UnitId == "")
             {
@@ -154,7 +159,7 @@ public class RecipeService( IRecipeRepository recipeRepository,
 
         List<RecipeIngredient> newRecipeIngredients = [];
 
-        foreach(IngredientDto ingredientDto in recipeDto.Ingredients)
+        foreach(RecipeIngredientDto ingredientDto in recipeDto.Ingredients)
         {
             Ingredient ingredient = recipe.Ingredients
                                 .FirstOrDefault(ingr => ingr.Name == ingredientDto.Name)
