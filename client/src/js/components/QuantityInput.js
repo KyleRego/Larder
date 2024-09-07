@@ -9,6 +9,7 @@ export default function QuantityInput({quantity, units, name = null})
         return capitalized;
     }
 
+    // TODO: is this needed
     const amountInputId = (name) ? `${name}_amount` : "amount";
     const unitInputId = (name) ? `${name}_unitId` : "unitId";
     const labelText = (name) ? `${formatString(name)}:` : "Quantity:";

@@ -18,12 +18,25 @@ export default function Recipe()
         });
     }, [id]);
 
+    function handleDelete()
+    {
+        // if (window.confirm(`Are you sure you want to delete this recipe - ${recipe.name}?`))
+        // {
+            const service = new RecipesService();
+            service.deleteRecipe(recipe.id);
+        // }
+    }
+
     if (recipe === null) return <h1>Loading...</h1>
+
+    console.log(recipe);
 
     let ingredientListItems = recipe.ingredients.map(ri => IngredientListItem(ri));
 
     return <>
         <h1>{recipe.name}</h1>
+
+        <button className="btn btn-danger" onClick={handleDelete}>Delete recipe</button>
 
         <h2>Ingredients</h2>
 
@@ -41,7 +54,7 @@ export default function Recipe()
 
 function IngredientListItem(recipeIngredient)
 {
-    return <li key={recipeIngredient.recipeIngredientId}>
-        {recipeIngredient.amount} {recipeIngredient.unitName} {recipeIngredient.ingredientName} 
+    return <li key={recipeIngredient.Id}>
+        {recipeIngredient.quantity.amount} {recipeIngredient.name} 
     </li>
 }

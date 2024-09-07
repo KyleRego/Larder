@@ -2,25 +2,20 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 
 import RecipesService from "../services/RecipesService";
-import RecipeFormDataMapper from "./RecipeFormDataMapper";
 
 import RecipeForm from "./RecipeForm";
 
-
 export default function EditRecipe({units})
 {
-    async function handleSubmit(e)
+    async function handleSubmit(e, formRecipe)
     {
         e.preventDefault();
-
-        const formData = new FormData(e.target);
-
-        const recipeData = RecipeFormDataMapper.map(formData);
-        recipeData.id = recipe.id;
+        const recipeName = new FormData(e.target).get("recipeName");
+        formRecipe.name = recipeName;
 
         const recipesService = new RecipesService();
 
-        await recipesService.putRecipe(recipeData);
+        await recipesService.putRecipe(formRecipe);
     }
 
     let { id } = useParams();
@@ -42,7 +37,11 @@ export default function EditRecipe({units})
         <>
             <h1>Editing recipe: {recipe.name}</h1>
 
-            <RecipeForm recipe={recipe} units={units} handleSubmit={handleSubmit} />
+            <div className="card shadow-sm">
+                <div className="card-body">
+                    <RecipeForm recipe={recipe} units={units} handleSubmit={handleSubmit} />
+                </div>
+            </div>
 
             <div>
                 <Link to={`/recipes/${id}`}>Back to recipe</Link>

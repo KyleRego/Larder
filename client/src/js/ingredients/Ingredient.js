@@ -29,7 +29,6 @@ export default function Ingredient({units})
             const service = new IngredientsService();
             service.deleteIngredient(ingredient.id);
         }
-        
     }
 
     return (

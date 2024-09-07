@@ -15,42 +15,45 @@ export default function RecipeForm({recipe, units, handleSubmit})
         const newRecipe = structuredClone(formRecipe);
         const newIngredient = {
             id: uuidv4(),
-            name: "New ingredient"
+            name: "New ingredient",
+            quantity: {
+                amount: 0
+            }
         };
         newRecipe.ingredients.push(newIngredient);
         setFormRecipe(newRecipe);
     }
 
-    let recipeFormIngredients = formRecipe.ingredients.map((ing, i) => {
-        return <RecipeFormIngredient    key={ing.id}
-                                            ingredient={ing}
-                                            units={units}
-                                            formRecipe={formRecipe}
-                                            setFormRecipe={setFormRecipe}/>
+    let recipeFormIngredients = formRecipe.ingredients.map(ing => {
+        return  <RecipeFormIngredient   key={ing.id}
+                                        ingredient={ing}
+                                        units={units}
+                                        formRecipe={formRecipe}
+                                        setFormRecipe={setFormRecipe}/>
     });
 
     return (
-        <form className="recipeForm" onSubmit={handleSubmit}>
+        <form className="recipeForm" onSubmit={(e) => handleSubmit(e, formRecipe)}>
             <div className="d-flex flex-wrap column-gap-1 row-gap-1 align-items-center">
                 <label htmlFor="recipeName">Name:</label>
                 <input className="flex-grow-1" id="recipeName" name="recipeName" type="text" defaultValue={recipe.name} />
             </div>
 
-            <h2 className="m-0">Ingredients:</h2>
+            <h2 className="">Ingredients:</h2>
 
-            <div className="flex column-gap-5">
+            <ul className="list-group">
                 {recipeFormIngredients}
-            </div>
-           
-            <div className="d-flex justify-content-center">
-                <button type="button"
-                            className="btn btn-secondary btn-sm"
-                            onClick={addIngredient}>
-                                <GoPlus className="w-5 h-5" />
-                            </button>
-            </div>
 
-            <div>
+                <li className="list-group-item d-flex justify-content-center">
+                    <button type="button"
+                                className="btn btn-secondary btn-sm"
+                                onClick={addIngredient}>
+                                    <GoPlus className="w-5 h-5" />
+                                </button>
+                </li>
+            </ul>
+
+            <div className="mt-4">
                 <button className="btn btn-primary" type="submit">Submit</button>
             </div>
         </form>

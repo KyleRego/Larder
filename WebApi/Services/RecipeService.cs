@@ -12,6 +12,7 @@ public interface IRecipeService
     public Task<RecipeDto> CreateRecipe(RecipeDto recipeDto);
     public Task<RecipeDto> UpdateRecipe(RecipeDto recipeDto);
     public Task<RecipeDto> CookRecipe(CookRecipeDto cookedRecipeDto);
+    public Task DeleteRecipe(string id);
 }
 
 public class RecipeService( IRecipeRepository recipeRepository,
@@ -86,6 +87,11 @@ public class RecipeService( IRecipeRepository recipeRepository,
 
         foreach (IngredientDto ingredientDto in recipeDto.Ingredients)
         {
+            if (ingredientDto.Quantity.UnitId == "")
+            {
+                ingredientDto.Quantity.UnitId = null;
+            }
+
             Ingredient ingredient = await _ingredientRepository.FindOrCreateBy(ingredientDto.Name);
 
             RecipeIngredient recipeIngredient = new()
@@ -107,6 +113,14 @@ public class RecipeService( IRecipeRepository recipeRepository,
         await _recipeRepository.Insert(recipe);
 
         return recipeDto;
+    }
+
+    public async Task DeleteRecipe(string id)
+    {
+        Recipe recipe = await _recipeRepository.Get(id)
+            ?? throw new ApplicationException("recipe to delete not found");
+    
+        await _recipeRepository.Delete(recipe);
     }
 
     public async Task<RecipeDto?> GetRecipe(string id)

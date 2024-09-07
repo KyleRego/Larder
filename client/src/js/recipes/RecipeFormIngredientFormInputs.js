@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import { v4 as uuidv4 } from 'uuid';
 import { MdDone } from "react-icons/md";
 import { MdCancel } from "react-icons/md";
 
@@ -8,9 +8,10 @@ import IngredientsService from "../services/IngredientsService";
 
 export default function RecipeFormIngredientFormInputs({ingredient, units, setEditing, formRecipe, setFormRecipe})
 {
-    const [formIngredient, setFormIngredient] = useState(ingredient);
     const [fetchedIngredients, setFetchedIngredients] = useState([]);
     const [fetchIngredientName, setFetchIngredientName] = useState(null);
+
+    const thisComponentDomId = uuidv4().trim();
 
     useEffect(() =>
     {
@@ -22,8 +23,6 @@ export default function RecipeFormIngredientFormInputs({ingredient, units, setEd
             setFetchedIngredients(result);
         })
     }, [fetchIngredientName]);
-
-    const quantity = ingredient?.quantity;
 
     const fetchedIngredientItems = (fetchedIngredients.length !== 0) ? <ul className="ingredientOptionsList">
         {fetchedIngredients.map(ing => {
@@ -37,18 +36,25 @@ export default function RecipeFormIngredientFormInputs({ingredient, units, setEd
     {
         let newName = e.target.value;
         setFetchIngredientName(newName);
-
-        const newFormIngredient = structuredClone(formIngredient);
-        newFormIngredient.name = newName;
-        setFormIngredient(newFormIngredient);
+        console.log("handleNameInput fired");
     }
 
     function handleDoneEditing()
     {
         let newFormRecipe = structuredClone(formRecipe);
         for (let i = 0; i < newFormRecipe.ingredients.length; i += 1) {
-            if (newFormRecipe.ingredients[i].id === formIngredient.id) {
-                newFormRecipe.ingredients[i] = formIngredient;
+            if (newFormRecipe.ingredients[i].id === ingredient.id) {
+                const parent = document.getElementById(thisComponentDomId);
+                const newIngredient = {
+                    id: ingredient.id,
+                    quantity: {}
+                };
+
+                newIngredient.name = parent.querySelector("input[name=\"name\"]").value
+                newIngredient.quantity.amount = parent.querySelector("input[name=\"amount\"]")?.value;
+                newIngredient.quantity.unitId = parent.querySelector("select[name=\"unitId\"]")?.value;
+
+                newFormRecipe.ingredients[i] = newIngredient;
             }
         }
         setFormRecipe(newFormRecipe);
@@ -57,33 +63,24 @@ export default function RecipeFormIngredientFormInputs({ingredient, units, setEd
 
     function handleCancelEditing()
     {
-        let newFormRecipe = structuredClone(formRecipe);
-        for (let i = 0; i < newFormRecipe.ingredients.length; i += 1) {
-            if (newFormRecipe.ingredients[i].id === formIngredient.id) {
-                newFormRecipe.ingredients[i] = ingredient;
-            }
-        }
-        setFormRecipe(newFormRecipe);
         setEditing(false);
     }
 
-    return <div className="d-flex flex-wrap align-items-center column-gap-3">
+    return <div id={thisComponentDomId} className="d-flex flex-wrap align-items-center column-gap-3">
         <div className="d-flex align-items-center column-gap-1">
             <label htmlFor="name">Name:</label>
-            <input type="text" onInput={handleNameInput} defaultValue={ingredient.name} />
+            <input type="text" name="name" onInput={handleNameInput} defaultValue={ingredient.name} />
             {fetchedIngredientItems}
         </div>
 
         <div className="d-flex align-items-center column-gap-1">
-            <QuantityInput quantity={{quantity}} units={units} />
+            <QuantityInput quantity={ingredient.quantity} units={units} />
         </div>
-
-        <div>
-            <MdDone onClick={handleDoneEditing} role="button" title="Done editing recipe ingredient" className="w-5 h-5" />
-        </div>
-
-        <div>
-            <MdCancel onClick={handleCancelEditing} role="button" title="Cancel changing recipe ingredient" className="w-5 h-5" />
-        </div>
+        
+        <MdDone onClick={handleDoneEditing} role="button"
+                                    title="Done editing recipe ingredient"
+                                    className="w-5 h-5" />
+        
+        <MdCancel onClick={handleCancelEditing} role="button" title="Cancel changing recipe ingredient" className="w-5 h-5" />
     </div>;
 }

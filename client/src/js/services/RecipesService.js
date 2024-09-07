@@ -61,6 +61,8 @@ export default class RecipesService extends ApiServiceBase
 
     async postRecipe(recipe)
     {
+        console.log("recipe being posted:");
+        console.log(recipe);
         const headers = new Headers({"Content-Type": "application/json"});
         const request = new Request(this.recipesBaseUrl, {
             method: "POST",
@@ -111,5 +113,12 @@ export default class RecipesService extends ApiServiceBase
         {
             console.error(error.message);
         }
+    }
+
+    async deleteRecipe(id)
+    {
+        let url = `${this.recipesBaseUrl}/${id}`;
+
+        this.tryDelete(url);
     }
 }

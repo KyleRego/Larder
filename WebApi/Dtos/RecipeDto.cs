@@ -17,13 +17,13 @@ public class RecipeDto
             Ingredients = []
         };
 
-        foreach (Ingredient ingredient in recipe.Ingredients)
+        foreach (RecipeIngredient recipeIngredient in recipe.RecipeIngredients)
         {
             IngredientDto ingredientDto = new()
             {
-                Id = ingredient.Id,
-                Name = ingredient.Name,
-                Quantity = QuantityDto.FromEntity(ingredient.Quantity)
+                Id = recipeIngredient.Id,
+                Name = recipeIngredient.Ingredient.Name,
+                Quantity = QuantityDto.FromEntity(recipeIngredient.Quantity)
             };
 
             recipeDto.Ingredients.Add(ingredientDto);

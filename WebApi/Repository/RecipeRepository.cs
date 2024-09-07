@@ -24,7 +24,6 @@ public class RecipeRepository(AppDbContext dbContext) : RepositoryBase<Recipe, R
         return await _dbContext.Recipes
                                 .Include(r => r.RecipeIngredients)
                                 .ThenInclude(ri => ri.Ingredient)
-                                .Include(r => r.RecipeIngredients)
                                 .FirstOrDefaultAsync(r => r.Id == id);
     }
 

@@ -40,6 +40,14 @@ public class RecipesController(IRecipeService recipeService) : ControllerBase
         return await _recipeService.CreateRecipe(recipe);
     }
 
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(string id)
+    {
+        await _recipeService.DeleteRecipe(id);
+
+        return Ok();
+    }
+
     [HttpPut("{id}")]
     public async Task<ActionResult<RecipeDto>> Update([FromBody]RecipeDto recipe, string id)
     {
