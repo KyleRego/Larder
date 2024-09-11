@@ -50,7 +50,12 @@ import UnitsService from "./js/services/UnitsService";
 
 const unitsService = new UnitsService();
 
-const units = await unitsService.getUnits();
+let units = [];
+try {
+    units = await unitsService.getUnits();
+} catch(error) {
+    console.log("could not get units in index.js");
+}
 
 const router = createBrowserRouter(
     createRoutesFromElements(

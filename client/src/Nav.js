@@ -24,7 +24,7 @@ export default function Nav({setAuthed})
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <div className="container">
+            <div className="container-fluid">
                 <Link className="navbar-brand ms-4" to={"/"}>Larder</Link>
                 <button className="navbar-toggler" onClick={toggleCollapsibleNavbar} type="button"
                                 data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -35,24 +35,24 @@ export default function Nav({setAuthed})
                 <div className={`collapse navbar-collapse ${showCollapsibleNavbar && "show"}`} id="navbarSupportedContent">
                     <div className="w-100 d-flex justify-content-between align-items-center">
                         <ul className="ms-4 navbar-nav mr-auto">
-                        <li className="nav-item active">
-                            <Link className="nav-link" to={"/foods"}>Foods<span className="sr-only"></span></Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to={"/timeline"}>Nutrition timeline</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to={"/ingredients"}>Ingredients</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to={"/recipes"}>Recipes</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to={"/units"}>Units</Link>
-                        </li>
-
+                            <li className="nav-item active">
+                                <Link className="nav-link" to={"/foods"}>Foods<span className="sr-only"></span></Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to={"/timeline"}>Nutrition timeline</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to={"/ingredients"}>Ingredients</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to={"/recipes"}>Recipes</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to={"/units"}>Units</Link>
+                            </li>
                         </ul>
-                        <div>
+
+                        <div className="m-0">
                             {
                                 authed
                                 ?
@@ -60,7 +60,7 @@ export default function Nav({setAuthed})
                                     Logout
                                 </button>
                                 :
-                                <div className="d-flex flex-wrap justify-content-center column-gap-3 row-gap-3">
+                                <div className="m-0 d-flex flex-wrap justify-content-center column-gap-3 row-gap-3">
                                     <Link className="btn btn-outline-primary" to={"register"}>Register</Link>
 
                                     <Link className="btn btn-outline-primary" to={"login"}>Login</Link>

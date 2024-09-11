@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Larder.Repository;
 using Larder.Dtos;
 using Larder.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Larder.Controllers;
 
@@ -11,7 +12,7 @@ public class UnitsController(IUnitService service) : ControllerBase
 {
     private readonly IUnitService _service = service;
 
-    [HttpGet]
+    [HttpGet, Authorize]
     public async Task<List<UnitDto>> Index(string? sortOrder)
     {
         if (sortOrder != null && Enum.TryParse(sortOrder, out UnitSortOptions sortBy))

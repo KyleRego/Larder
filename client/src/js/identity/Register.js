@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Link, useOutletContext } from "react-router-dom";
+import { Link, useOutletContext, useNavigate } from "react-router-dom";
+
 import IdentityService from "./IdentityService";
 
 export default function Register()
 {
-    const setAuthed = useOutletContext();
+    const [setAuthed] = useOutletContext();
+    const navigate = useNavigate();
     const [errors, setErrors] = useState([]);
 
     function handleSubmitRegister(e)
@@ -16,26 +18,25 @@ export default function Register()
 
         const service = new IdentityService();
 
-        service.postRegister(email, password).then((res) => {
-            if (res.status === 400)
-            {
+        service.postRegister(email, password).then(async result => {
+            if (result.status === 400) {
+                const json = await result.json();
                 const tmpErrors = [];
-                const keys = Object.keys(res.errors);
+                const keys = Object.keys(json.errors);
                 for (let i = 0; i < keys.length; i += 1)
                 {
-                    const errorMessage = res.errors[keys[i]][0];
+                    const errorMessage = json.errors[keys[i]][0];
                     tmpErrors.push(errorMessage);
                 }
                 setErrors(tmpErrors);
             }
-            else if (res.status === 200)
-            {
+            else if (result.status === 200) {
                 setAuthed(true);
                 setErrors([]);
+                navigate("/");
             }
-            else
-            {
-                throw new Error(`Response status: ${res.status}`);
+            else {
+                throw new Error(`Response status: ${result.status}`);
             }
         }).catch((error) => {
             console.error(error);
@@ -43,7 +44,7 @@ export default function Register()
     }
 
     const errorsInfo = <ol>
-        {errors.map(er => <li>{er}</li>)}
+        {errors.map(er => <li key={er}>{er}</li>)}
     </ol>
 
     return <>

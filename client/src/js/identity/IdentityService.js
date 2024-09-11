@@ -51,6 +51,7 @@ export default class IdentityService extends ApiServiceBase
 
         const request = new Request(url, {
             method: "POST",
+            credentials: "include",
             headers: headers,
         });
 

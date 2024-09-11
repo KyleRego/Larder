@@ -23,8 +23,7 @@ export default function App() {
         unitsService.getUnits().then((res) => {
             setUnits(res);
             setAuthed(true);
-            console.log("authed set to true");
-        }).catch((error) => {
+        }).catch(error => {
             setUnits([]);
             setAuthed(false);
         })

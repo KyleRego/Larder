@@ -1,10 +1,9 @@
-import { useNavigate, useOutletContext } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, useOutletContext, Link } from "react-router-dom";
 import IdentityService from "./IdentityService";
 
 export default function Login()
 {
-    const setAuthed = useOutletContext();
+    const [setAuthed] = useOutletContext();
     const navigate = useNavigate();
 
     const handleSubmitLogin = (e) => {
@@ -15,10 +14,9 @@ export default function Login()
 
         const service = new IdentityService();
         service.postLogin(email, password).then(response => {
-            if (response.ok)
-            {
+            if (response.ok) {
                 setAuthed(true);
-                navigate("/")
+                navigate("/");
             }
         }).catch(error => {
             console.error(error);
