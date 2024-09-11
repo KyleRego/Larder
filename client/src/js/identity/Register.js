@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import IdentityService from "./IdentityService";
 
 export default function Register()
 {
+    const setAuthed = useOutletContext();
     const [errors, setErrors] = useState([]);
 
     function handleSubmitRegister(e)
@@ -29,6 +30,7 @@ export default function Register()
             }
             else if (res.status === 200)
             {
+                setAuthed(true);
                 setErrors([]);
             }
             else

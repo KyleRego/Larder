@@ -44,4 +44,16 @@ export default class IdentityService extends ApiServiceBase
 
         return await fetch(request);
     }
+
+    async postLogout() {
+        const url = `${this.backendOrigin}/logout`;
+        const headers = new Headers({"Content-Type": "application/json"});
+
+        const request = new Request(url, {
+            method: "POST",
+            headers: headers,
+        });
+
+        return await fetch(request);
+    }
 }

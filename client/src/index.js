@@ -40,10 +40,10 @@ import "./css/forms.css";
 import "./css/cards.css";
 
 import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-  createRoutesFromElements,
+    createBrowserRouter,
+    RouterProvider,
+    Route,
+    createRoutesFromElements,
 } from "react-router-dom";
 
 import UnitsService from "./js/services/UnitsService";
@@ -53,38 +53,38 @@ const unitsService = new UnitsService();
 const units = await unitsService.getUnits();
 
 const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" element={<App />}>
-      <Route path="" element={<Home />} />
-      <Route path="register" element={<Register />} />
-      <Route path="login" element={<Login />} />
-      <Route path="timeline" element={<Timeline />} />
-      <Route path="units" element={<Units />} />
-      <Route path="units/:id" element={<Unit />} />
-      <Route path="units/new" element={<NewUnit />} />
-      <Route path="units/:id/edit" element={<EditUnit />} />
-      <Route path="foods" element={<Foods units={units} />} />
-      <Route path="foods/:id" element={<Food />} />
-      <Route path="foods/new" element={<NewFood units={units} />} />
-      <Route path="foods/:id/edit" element={<EditFood units={units} />} />
-      <Route path="ingredients" element={<Ingredients units={units} />} />
-      <Route path="ingredients/:id" element={<Ingredient units={units} />} />
-      <Route path="ingredients/:id/edit" element={<EditIngredient units={units} />} />
-      <Route path="ingredients/new" element={<NewIngredient units={units} />} />
-      <Route path="recipes" element={<Recipes />} />
-      <Route path="recipes/new" element = {<NewRecipe units={units} />} />
-      <Route path="recipes/:id" element = {<Recipe units={units} />} />
-      <Route path="recipes/:id/edit" element = {<EditRecipe units={units} />} />
-      
-    </Route>
-  )
+    createRoutesFromElements(
+        <Route path="/" element={<App />}>
+            <Route path="" element={<Home />} />
+            <Route path="register" element={<Register />} />
+            <Route path="login" element={<Login />} />
+            <Route path="timeline" element={<Timeline />} />
+            <Route path="units" element={<Units />} />
+            <Route path="units/:id" element={<Unit />} />
+            <Route path="units/new" element={<NewUnit />} />
+            <Route path="units/:id/edit" element={<EditUnit />} />
+            <Route path="foods" element={<Foods units={units} />} />
+            <Route path="foods/:id" element={<Food />} />
+            <Route path="foods/new" element={<NewFood units={units} />} />
+            <Route path="foods/:id/edit" element={<EditFood units={units} />} />
+            <Route path="ingredients" element={<Ingredients units={units} />} />
+            <Route path="ingredients/:id" element={<Ingredient units={units} />} />
+            <Route path="ingredients/:id/edit" element={<EditIngredient units={units} />} />
+            <Route path="ingredients/new" element={<NewIngredient units={units} />} />
+            <Route path="recipes" element={<Recipes />} />
+            <Route path="recipes/new" element={<NewRecipe units={units} />} />
+            <Route path="recipes/:id" element={<Recipe units={units} />} />
+            <Route path="recipes/:id/edit" element={<EditRecipe units={units} />} />
+
+        </Route>
+    )
 )
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+    <React.StrictMode>
+        <RouterProvider router={router} />
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
