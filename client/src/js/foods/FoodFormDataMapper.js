@@ -17,6 +17,8 @@ export default class FoodFormDataMapper
         food.gramsDietaryFiber = formData.get("gramsDietaryFiber");
         food.gramsTotalSugars = formData.get("gramsTotalSugars");
 
+        Object.keys(food).forEach((key) => food[key] === "" && delete food[key]);
+
         return food;
     }
 }

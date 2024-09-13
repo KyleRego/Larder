@@ -1,31 +1,26 @@
-import { Link, useOutletContext } from "react-router-dom";
-
+import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import FoodForm from "./FoodForm";
-
 import FoodsService from "../services/FoodsService";
-
 import FoodFormDataMapper from "./FoodFormDataMapper";
+import { AlertContext } from "../../AlertContext";
 
-export default function NewFood({units})
-{
-    const [setToastMessage, setShowToast] = useOutletContext();
+export default function NewFood({units}) {
+    const { setAlertMessage } = useContext(AlertContext)
+    const navigate = useNavigate();
 
-    async function handleSubmit(e)
-    {
+    async function handleSubmit(e) {
         e.preventDefault();
 
         const formData = new FormData(e.target);
-
         const food = FoodFormDataMapper.map(formData);
-
         const service = new FoodsService();
 
         service.postFood(food).then(() => {
-            setToastMessage("Food created");
-            setShowToast(true);
+            setAlertMessage("Food created successfully.");
+            navigate("/foods");
         }).catch((error) => {
-            setToastMessage(`Something went wrong: ${error}`);
-            setShowToast(true);
+            setAlertMessage(`Something went wrong creating the food: ${error.message}`);
         })
     }
 
