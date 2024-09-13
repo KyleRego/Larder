@@ -3,12 +3,12 @@ import "./Nav.css";
 import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 
-import { AuthedContext } from "./App";
+import { AuthedContext } from "./AuthedContext";
 import IdentityService from "./js/identity/IdentityService";
 
-export default function Nav({setAuthed})
+export default function Nav()
 {
-    const authed = useContext(AuthedContext);
+    const { authed, setAuthed } = useContext(AuthedContext);
     const [showCollapsibleNavbar, setShowCollapsibleNavbar] = useState(false);
     const toggleCollapsibleNavbar = () => setShowCollapsibleNavbar(!showCollapsibleNavbar);
 

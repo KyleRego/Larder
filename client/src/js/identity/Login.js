@@ -1,9 +1,11 @@
-import { useNavigate, useOutletContext, Link } from "react-router-dom";
+import { useContext } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import IdentityService from "./IdentityService";
+import { AuthedContext } from "../../AuthedContext";
 
 export default function Login()
 {
-    const [setAuthed] = useOutletContext();
+    const { setAuthed } = useContext(AuthedContext);
     const navigate = useNavigate();
 
     const handleSubmitLogin = (e) => {

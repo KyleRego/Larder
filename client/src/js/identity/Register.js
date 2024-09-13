@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { Link, useOutletContext, useNavigate } from "react-router-dom";
-
+import { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthedContext } from "../../AuthedContext";
 import IdentityService from "./IdentityService";
 
 export default function Register()
 {
-    const [setAuthed] = useOutletContext();
+    const { setAuthed } = useContext(AuthedContext);
     const navigate = useNavigate();
     const [errors, setErrors] = useState([]);
 
@@ -56,12 +56,12 @@ export default function Register()
             <form onSubmit={handleSubmitRegister}>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email address:</label>
-                    <input type="email" className="form-control" name="email" aria-describedby="emailHelp" />
+                    <input autoComplete="username" id="email" type="email" className="form-control" name="email" aria-describedby="emailHelp" />
                 </div>
 
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password:</label>
-                    <input type="password" className="form-control" name="password" />
+                    <input autoComplete="new-password" id="password" type="password" className="form-control" name="password" />
                 </div>
 
                 <button type="submit" className="btn btn-primary">Submit</button>
