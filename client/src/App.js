@@ -1,16 +1,13 @@
-import { useState, useEffect, createContext } from "react"
+import { useState, useEffect } from "react"
 import { Outlet } from "react-router-dom";
 import { AuthedContext } from "./AuthedContext";
 import { AlertContext } from "./AlertContext";
-
+import { UnitsContext } from "./UnitsContext";
 import "./App.css";
 import Nav from "./Nav";
 import AppToast from "./js/components/AppToast";
 import Alert from "./Alert";
-
 import UnitsService from "./js/services/UnitsService";
-
-export const UnitsContext = createContext([]);
 
 export default function App() {
     const [authed, setAuthed] = useState(false);
@@ -35,7 +32,7 @@ export default function App() {
     return (
         <AuthedContext.Provider value={{authed, setAuthed}}>
             <AlertContext.Provider value={{alertMessage, setAlertMessage}}>
-                <UnitsContext.Provider value={units}>
+                <UnitsContext.Provider value={{units}}>
                     <div className="app">
                         <Nav />
                         <div className="container">

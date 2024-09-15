@@ -4,8 +4,10 @@ import FoodForm from "./FoodForm";
 import FoodsService from "../services/FoodsService";
 import FoodFormDataMapper from "./FoodFormDataMapper";
 import { AlertContext } from "../../AlertContext";
+import { UnitsContext } from "../../UnitsContext";
 
-export default function NewFood({units}) {
+export default function NewFood() {
+    const { units } = useContext(UnitsContext)
     const { setAlertMessage } = useContext(AlertContext)
     const navigate = useNavigate();
 

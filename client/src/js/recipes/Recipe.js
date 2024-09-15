@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
-
+import { UnitsContext } from "../../UnitsContext";
 import RecipesService from "../services/RecipesService";
 import "./Recipe.css"
 import findUnitName from "../helpers/findUnitName";
 
-export default function Recipe({units})
-{
+export default function Recipe() {
+    const { units } = useContext(UnitsContext)
     let { id } = useParams();
     const [recipe, setRecipe] = useState(null);
 

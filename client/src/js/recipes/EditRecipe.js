@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 
 import RecipesService from "../services/RecipesService";
 
 import RecipeForm from "./RecipeForm";
+import { UnitsContext } from "../../UnitsContext";
 
-export default function EditRecipe({units})
-{
+export default function EditRecipe() {
+    const { units } = useContext(UnitsContext);
+
     async function handleSubmit(e, formRecipe)
     {
         e.preventDefault();

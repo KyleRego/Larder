@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 
 import IngredientForm from "./IngredientForm";
 import IngredientsService from "../services/IngredientsService";
+import { useContext } from "react";
+import { UnitsContext } from "../../UnitsContext";
 
-export default function NewIngredient({units})
-{
+export default function NewIngredient() {
+    const { units } = useContext(UnitsContext);
     async function handleFormSubmit(e)
     {
         e.preventDefault();

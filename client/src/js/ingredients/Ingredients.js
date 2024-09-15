@@ -1,11 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 
 import IngredientsService from "../services/IngredientsService";
 import IngredientsTable from "./IngredientsTable";
+import { UnitsContext } from "../../UnitsContext";
 
-export default function Ingredients({units})
+export default function Ingredients()
 {
+    const { units } = useContext(UnitsContext);
     const [ingredients, setIngredients] = useState(null);
     const [sortOrder, setSortOrder] = useState("Name");
 

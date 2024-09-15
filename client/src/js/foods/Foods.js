@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-
+import { UnitsContext } from "../../UnitsContext";
 import FoodsService from "../services/FoodsService";
 import FoodsTable from "./FoodsTable";
 
-export default function Foods({units})
+export default function Foods()
 {
+    const { units } = useContext(UnitsContext)
     const [foods, setFoods] = useState([]);
     const [sortOrder, setSortOrder] = useState("Name");
 

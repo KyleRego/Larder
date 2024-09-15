@@ -1,13 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useParams, useOutletContext } from "react-router-dom";
-
+import { UnitsContext } from "../../UnitsContext";
 import FoodForm from "./FoodForm";
 import FoodsService from "../services/FoodsService";
 
 import FoodFormDataMapper from "./FoodFormDataMapper";
 
-export default function EditFood({units})
+export default function EditFood()
 {
+    const { units } = useContext(UnitsContext)
     const [setToastMessage, setShowToast] = useOutletContext();
 
     async function handleSubmit(e)

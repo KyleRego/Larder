@@ -3,9 +3,12 @@ import { Link } from "react-router-dom";
 import RecipeForm from "./RecipeForm";
 
 import RecipesService from "../services/RecipesService";
+import { useContext } from "react";
+import { UnitsContext } from "../../UnitsContext";
 
-export default function NewRecipe({units})
-{
+export default function NewRecipe() {
+    const { units } = useContext(UnitsContext);
+
     async function handleSubmit(e, formRecipe)
     {
         e.preventDefault();

@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import IngredientsService from "../services/IngredientsService";
-
 import findUnitName from "../helpers/findUnitName";
+import { UnitsContext } from "../../UnitsContext";
 
-export default function Ingredient({units})
-{
+export default function Ingredient() {
+    const { units } = useContext(UnitsContext);
     let { id } = useParams();
     const [ingredient, setIngredient] = useState(null);
 

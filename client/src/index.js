@@ -46,17 +46,6 @@ import {
     createRoutesFromElements,
 } from "react-router-dom";
 
-import UnitsService from "./js/services/UnitsService";
-
-const unitsService = new UnitsService();
-
-let units = [];
-try {
-    units = await unitsService.getUnits();
-} catch(error) {
-    console.log("could not get units in index.js");
-}
-
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/" element={<App />}>
@@ -68,19 +57,18 @@ const router = createBrowserRouter(
             <Route path="units/:id" element={<Unit />} />
             <Route path="units/new" element={<NewUnit />} />
             <Route path="units/:id/edit" element={<EditUnit />} />
-            <Route path="foods" element={<Foods units={units} />} />
+            <Route path="foods" element={<Foods />} />
             <Route path="foods/:id" element={<Food />} />
-            <Route path="foods/new" element={<NewFood units={units} />} />
-            <Route path="foods/:id/edit" element={<EditFood units={units} />} />
-            <Route path="ingredients" element={<Ingredients units={units} />} />
-            <Route path="ingredients/:id" element={<Ingredient units={units} />} />
-            <Route path="ingredients/:id/edit" element={<EditIngredient units={units} />} />
-            <Route path="ingredients/new" element={<NewIngredient units={units} />} />
+            <Route path="foods/new" element={<NewFood />} />
+            <Route path="foods/:id/edit" element={<EditFood />} />
+            <Route path="ingredients" element={<Ingredients />} />
+            <Route path="ingredients/:id" element={<Ingredient />} />
+            <Route path="ingredients/:id/edit" element={<EditIngredient />} />
+            <Route path="ingredients/new" element={<NewIngredient />} />
             <Route path="recipes" element={<Recipes />} />
-            <Route path="recipes/new" element={<NewRecipe units={units} />} />
-            <Route path="recipes/:id" element={<Recipe units={units} />} />
-            <Route path="recipes/:id/edit" element={<EditRecipe units={units} />} />
-
+            <Route path="recipes/new" element={<NewRecipe />} />
+            <Route path="recipes/:id" element={<Recipe />} />
+            <Route path="recipes/:id/edit" element={<EditRecipe />} />
         </Route>
     )
 )

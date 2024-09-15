@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
-
+import { UnitsContext } from "../../UnitsContext";
 import IngredientsService from "../services/IngredientsService";
 import IngredientForm from "./IngredientForm";
 
-export default function EditIngredient({units})
-{
+export default function EditIngredient() {
+    const { units } = useContext(UnitsContext);
     async function handleFormSubmit(e)
     {
         e.preventDefault();
