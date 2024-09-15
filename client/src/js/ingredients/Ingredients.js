@@ -4,11 +4,13 @@ import { Link } from "react-router-dom";
 import IngredientsService from "../services/IngredientsService";
 import IngredientsTable from "./IngredientsTable";
 import { UnitsContext } from "../../UnitsContext";
+import { AlertContext } from "../../AlertContext";
 
 export default function Ingredients()
 {
+    const { setAlertMessage } = useContext(AlertContext);
     const { units } = useContext(UnitsContext);
-    const [ingredients, setIngredients] = useState(null);
+    const [ingredients, setIngredients] = useState([]);
     const [sortOrder, setSortOrder] = useState("Name");
 
     useEffect(() =>
@@ -17,10 +19,10 @@ export default function Ingredients()
 
         ingredientsService.getIngredients(sortOrder).then(result => {
             setIngredients(result);
+        }).catch(error => {
+            setAlertMessage(`Something went wrong: ${error.message}`);
         });
-    }, [sortOrder]);
-
-    if (ingredients === null) return <h1>Loading...</h1>;
+    }, [sortOrder, setAlertMessage]);
 
     return (
         <>

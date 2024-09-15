@@ -1,11 +1,13 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { UnitsContext } from "../../UnitsContext";
 import RecipesService from "../services/RecipesService";
-import "./Recipe.css"
 import findUnitName from "../helpers/findUnitName";
+import { AlertContext } from "../../AlertContext";
 
 export default function Recipe() {
+    const navigate = useNavigate();
+    const { setAlertMessage } = useContext(AlertContext);
     const { units } = useContext(UnitsContext)
     let { id } = useParams();
     const [recipe, setRecipe] = useState(null);
@@ -20,9 +22,12 @@ export default function Recipe() {
     }, [id]);
 
     function handleDelete() {
-        if (window.confirm(`Are you sure you want to delete this recipe - ${recipe.name}?`)) {
+        if (window.confirm(`Are you sure you want to delete recipe "${recipe.name}"?`)) {
             const service = new RecipesService();
-            service.deleteRecipe(recipe.id);
+            service.deleteRecipe(recipe.id).then(() => {
+                setAlertMessage(`Recipe "${recipe.name}" was deleted.`);
+                navigate("/recipes");
+            });
         }
     }
 

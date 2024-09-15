@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import { UnitsContext } from "../../UnitsContext";
 import FoodsService from "../services/FoodsService";
 import FoodsTable from "./FoodsTable";
+import { AlertContext } from "../../AlertContext";
 
 export default function Foods()
 {
+    const { setAlertMessage } = useContext(AlertContext);
     const { units } = useContext(UnitsContext)
     const [foods, setFoods] = useState([]);
     const [sortOrder, setSortOrder] = useState("Name");
@@ -17,10 +19,10 @@ export default function Foods()
         service.getFoods(sortOrder).then(result => {
             setFoods(result);
         }).catch(error => {
-            console.log(error);
+            setAlertMessage(`Something went wrong: ${error.message}`);
         });
 
-    }, [sortOrder]);
+    }, [sortOrder, setAlertMessage]);
 
     return <>
         <div className="d-flex column-gap-3 row-gap-1 flex-wrap align-items-center">

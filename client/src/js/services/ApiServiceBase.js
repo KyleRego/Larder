@@ -11,7 +11,6 @@ export default class ApiServiceBase
         }
     }
 
-    // TODO: Remove this API and use the one above
     async tryGetJson(url)
     {
         const response = await fetch(url, { credentials: "include" });

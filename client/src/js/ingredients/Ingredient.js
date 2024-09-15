@@ -1,10 +1,13 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import IngredientsService from "../services/IngredientsService";
 import findUnitName from "../helpers/findUnitName";
 import { UnitsContext } from "../../UnitsContext";
+import { AlertContext } from "../../AlertContext";
 
 export default function Ingredient() {
+    const navigate = useNavigate();
+    const { setAlertMessage } = useContext(AlertContext);
     const { units } = useContext(UnitsContext);
     let { id } = useParams();
     const [ingredient, setIngredient] = useState(null);
@@ -27,7 +30,10 @@ export default function Ingredient() {
         if (window.confirm(`Are you sure you want to delete this ingredient - ${ingredient.name}?`))
         {
             const service = new IngredientsService();
-            service.deleteIngredient(ingredient.id);
+            service.deleteIngredient(ingredient.id).then(() => {
+                setAlertMessage(`Ingredient "${ingredient.name}" was deleted.`);
+                navigate("/ingredients");
+            });
         }
     }
 

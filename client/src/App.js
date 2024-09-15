@@ -5,7 +5,6 @@ import { AlertContext } from "./AlertContext";
 import { UnitsContext } from "./UnitsContext";
 import "./App.css";
 import Nav from "./Nav";
-import AppToast from "./js/components/AppToast";
 import Alert from "./Alert";
 import UnitsService from "./js/services/UnitsService";
 
@@ -14,8 +13,6 @@ export default function App() {
     const [alertMessage, setAlertMessage] = useState("");
 
     const [units, setUnits] = useState([]);
-    const [toastMessage, setToastMessage] = useState("");
-    const [showToast, setShowToast] = useState(false);
 
     useEffect(() => {
         const unitsService = new UnitsService();
@@ -36,10 +33,9 @@ export default function App() {
                     <div className="app">
                         <Nav />
                         <div className="container">
-                            <Outlet context={[setToastMessage, setShowToast]} />
+                            <Outlet />
 
                             <Alert />
-                            <AppToast message={toastMessage} show={showToast} setShow={setShowToast} />
                         </div>
                     </div>
                 </UnitsContext.Provider>

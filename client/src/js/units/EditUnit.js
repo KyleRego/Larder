@@ -1,12 +1,15 @@
-import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
 import UnitsService from "../services/UnitsService";
 import UnitFormDataMapper from "./UnitFormDataMapper";
 import UnitForm from "./UnitForm";
+import { AlertContext } from "../../AlertContext";
 
 export default function EditUnit()
 {
+    const navigate = useNavigate();
+    const { setAlertMessage } = useContext(AlertContext);
     const { id } = useParams();
     const [unit, setUnit] = useState(null);
 
@@ -18,8 +21,6 @@ export default function EditUnit()
         })
     }, [id]);
 
-    if (unit === null) return <h1>Loading...</h1>;
-
     async function handleSubmit(e)
     {
         e.preventDefault();
@@ -27,8 +28,13 @@ export default function EditUnit()
         const dto = UnitFormDataMapper.map(formData);
         dto.id = id;
         const service = new UnitsService();
-        await service.putUnit(dto);
+        await service.putUnit(dto).then(() => {
+            setAlertMessage(`Unit "${dto.name}" was created.`);
+            navigate("/units");
+        });
     }
+
+    if (unit === null) return <h1>Loading...</h1>;
 
     return <>
         <h1>Editing unit</h1>

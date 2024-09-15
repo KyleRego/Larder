@@ -1,12 +1,15 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
 import RecipesService from "../services/RecipesService";
 
 import RecipeForm from "./RecipeForm";
 import { UnitsContext } from "../../UnitsContext";
+import { AlertContext } from "../../AlertContext";
 
 export default function EditRecipe() {
+    const navigate = useNavigate();
+    const { setAlertMessage } = useContext(AlertContext);
     const { units } = useContext(UnitsContext);
 
     async function handleSubmit(e, formRecipe)
@@ -17,7 +20,10 @@ export default function EditRecipe() {
 
         const recipesService = new RecipesService();
 
-        await recipesService.putRecipe(formRecipe);
+        await recipesService.putRecipe(formRecipe).then(() => {
+            setAlertMessage(`Recipe "${formRecipe.name}" was updated.`);
+            navigate(`/recipes/${formRecipe.id}`);
+        });
     }
 
     let { id } = useParams();

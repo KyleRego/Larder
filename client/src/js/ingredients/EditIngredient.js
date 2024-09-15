@@ -1,11 +1,15 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { UnitsContext } from "../../UnitsContext";
 import IngredientsService from "../services/IngredientsService";
 import IngredientForm from "./IngredientForm";
+import { AlertContext } from "../../AlertContext";
 
 export default function EditIngredient() {
+    const navigate = useNavigate();
+    const { setAlertMessage } = useContext(AlertContext);
     const { units } = useContext(UnitsContext);
+
     async function handleFormSubmit(e)
     {
         e.preventDefault();
@@ -23,7 +27,10 @@ export default function EditIngredient() {
 
         const ingredientsService = new IngredientsService();
 
-        await ingredientsService.putIngredient(dto);
+        await ingredientsService.putIngredient(dto).then(() => {
+            setAlertMessage(`Ingredient "${dto.name}" was updated.`);
+            navigate(`/ingredients/${dto.id}`);
+        });
     }
 
     let { id } = useParams();

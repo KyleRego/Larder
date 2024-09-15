@@ -1,15 +1,17 @@
 import { useState, useEffect, useContext } from "react";
-import { Link, useParams, useOutletContext } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { UnitsContext } from "../../UnitsContext";
 import FoodForm from "./FoodForm";
 import FoodsService from "../services/FoodsService";
 
 import FoodFormDataMapper from "./FoodFormDataMapper";
+import { AlertContext } from "../../AlertContext";
 
 export default function EditFood()
 {
+    const navigate = useNavigate();
+    const { setAlertMessage } = useContext(AlertContext);
     const { units } = useContext(UnitsContext)
-    const [setToastMessage, setShowToast] = useOutletContext();
 
     async function handleSubmit(e)
     {
@@ -23,8 +25,8 @@ export default function EditFood()
         const service = new FoodsService();
 
         await service.putFood(food).then(() => {
-            setToastMessage("Food successfully updated");
-            setShowToast(true);
+            setAlertMessage(`Food "${food.name}" was updated.`);
+            navigate(`/foods/${food.id}`);
         }).catch(error => {
             console.log(error);
         });

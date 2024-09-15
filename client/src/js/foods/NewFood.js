@@ -19,7 +19,7 @@ export default function NewFood() {
         const service = new FoodsService();
 
         service.postFood(food).then(() => {
-            setAlertMessage("Food created successfully.");
+            setAlertMessage(`Food "${food.name}" was created.`);
             navigate("/foods");
         }).catch((error) => {
             setAlertMessage(`Something went wrong creating the food: ${error.message}`);

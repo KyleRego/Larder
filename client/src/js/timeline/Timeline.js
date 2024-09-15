@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import TimelineService from "../services/TimelineService";
 import DayNutritionCard from "./DayNutritionCard";
+import { AlertContext } from "../../AlertContext";
 
-export default function Timeline()
-{
+export default function Timeline() {
+    const { setAlertMessage } = useContext(AlertContext);
     const [nutritionDays, setNutritionDays] = useState([]);
 
     useEffect(() => {
@@ -13,9 +14,9 @@ export default function Timeline()
         service.getTimelineIndex().then(result => {
             setNutritionDays(result);
         }).catch(error => {
-            console.error(error);
+            setAlertMessage(`Something went wrong: ${error.message}`);
         });
-    }, []);
+    }, [setAlertMessage]);
 
     console.log(nutritionDays);
 

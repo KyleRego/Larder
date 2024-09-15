@@ -2,9 +2,8 @@ import { Link } from "react-router-dom";
 
 import SortingTableHeader from "../components/SortingTableHeader";
 
-export default function RecipesTable({recipes, sortOrder, setSortOrder})
-{
-    let rows = recipes.map(recipe => RecipeRow(recipe));
+export default function RecipesTable({recipes, sortOrder, setSortOrder}) {
+    const rows = recipes.map(recipe => RecipeRow(recipe));
 
     return <>
         <table>

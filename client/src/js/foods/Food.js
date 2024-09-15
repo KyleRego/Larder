@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
-import { useParams, Link, useOutletContext } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
 import EatFoodForm from "./EatFoodForm";
 
 import FoodsService from "../services/FoodsService";
+import { AlertContext } from "../../AlertContext";
 
-export default function Food()
-{
-    const [setToastMessage, setShowToast] = useOutletContext();
-
+export default function Food() {
+    const navigate = useNavigate();
+    const { setAlertMessage } = useContext(AlertContext);
     let { id } = useParams();
     const [food, setFood] = useState(null);
 
@@ -32,8 +32,8 @@ export default function Food()
             const service = new FoodsService();
 
             service.deleteFood(food).then(() => {
-                setToastMessage("Food was successfully deleted");
-                setShowToast(true);
+                setAlertMessage(`Food "${food.name}" was deleted.`);
+                navigate("/foods");
             });
         }
     }

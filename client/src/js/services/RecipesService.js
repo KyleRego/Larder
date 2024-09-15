@@ -8,55 +8,36 @@ export default class RecipesService extends ApiServiceBase
         this.recipesBaseUrl = `${this.backendOrigin}/api/Recipes`;
     }
 
-    async getRecipes(sortOrder)
-    {
+    async getRecipes(sortOrder) {
         let url = this.recipesBaseUrl;
 
         if (sortOrder !== null)
         {
-            url += `?sortOrder=${sortOrder}`
+            url += `?sortOrder=${sortOrder}`;
         }
 
-        try
+        const response = await fetch(url);
+
+        if (!response.ok)
         {
-            const response = await fetch(url);
-
-            if (!response.ok)
-            {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            const json = await response.json();
-
-            return json;
+            throw new Error(`Response status: ${response.status}`);
         }
-        catch (error)
-        {
-            console.error(error.message);
-        }
+
+        return await response.json();
     }
 
     async getRecipe(id)
     {
         let url = `${this.recipesBaseUrl}/${id}`;
 
-        try
+        const response = await fetch(url);
+
+        if (!response.ok)
         {
-            const response = await fetch(url);
-
-            if (!response.ok)
-            {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            const json = await response.json();
-
-            return json;
+            throw new Error(`Response status: ${response.status}`);
         }
-        catch (error)
-        {
-            console.error(error.message);
-        }
+
+        return await response.json();
     }
 
     async postRecipe(recipe)

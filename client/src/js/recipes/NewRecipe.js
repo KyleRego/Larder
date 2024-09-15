@@ -1,13 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import RecipeForm from "./RecipeForm";
 
 import RecipesService from "../services/RecipesService";
 import { useContext } from "react";
 import { UnitsContext } from "../../UnitsContext";
+import { AlertContext } from "../../AlertContext";
 
 export default function NewRecipe() {
     const { units } = useContext(UnitsContext);
+    const navigate = useNavigate();
+    const { setAlertMessage } = useContext(AlertContext);
 
     async function handleSubmit(e, formRecipe)
     {
@@ -17,7 +20,10 @@ export default function NewRecipe() {
 
         const recipesService = new RecipesService();
 
-        await recipesService.postRecipe(formRecipe);
+        await recipesService.postRecipe(formRecipe).then(() => {
+            setAlertMessage(`Recipe "${formRecipe.name}" was created.`);
+            navigate("/recipes");
+        });
     }
 
     let initialRecipe = {

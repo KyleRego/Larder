@@ -12,22 +12,13 @@ export default class TimelineService extends ApiServiceBase
     {
         let url = this.timelineBaseUrl;
 
-        try
+        const response = await fetch(url);
+
+        if (!response.ok)
         {
-            const response = await fetch(url);
-
-            if (!response.ok)
-            {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            const json = await response.json();
-
-            return json;
+            throw new Error(`Response status: ${response.status}`);
         }
-        catch (error)
-        {
-            console.error(error.message);
-        }
+
+        return await response.json();
     }
 }

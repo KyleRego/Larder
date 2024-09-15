@@ -1,12 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import IngredientForm from "./IngredientForm";
 import IngredientsService from "../services/IngredientsService";
 import { useContext } from "react";
 import { UnitsContext } from "../../UnitsContext";
+import { AlertContext } from "../../AlertContext";
 
 export default function NewIngredient() {
+    const navigate = useNavigate();
+    const { setAlertMessage } = useContext(AlertContext);
     const { units } = useContext(UnitsContext);
+
     async function handleFormSubmit(e)
     {
         e.preventDefault();
@@ -26,7 +30,10 @@ export default function NewIngredient() {
 
         const ingredientsService = new IngredientsService();
 
-        await ingredientsService.postIngredient(dto);
+        await ingredientsService.postIngredient(dto).then(() => {
+            setAlertMessage(`Ingredient "${dto.name}" was created.`);
+            navigate("/ingredients");
+        });
     }
 
     return (
