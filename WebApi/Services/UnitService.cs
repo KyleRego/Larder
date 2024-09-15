@@ -1,7 +1,6 @@
 using Larder.Dtos;
 using Larder.Models;
 using Larder.Repository;
-using Microsoft.OpenApi.Extensions;
 
 namespace Larder.Services;
 
@@ -11,16 +10,16 @@ public interface IUnitService
 
     public Task<List<UnitDto>> GetUnits(UnitSortOptions sortOrder, string? search);
 
-    public Task CreateUnit(UnitDto dto);
+    public Task<UnitDto> CreateUnit(UnitDto dto);
 
-    public Task UpdateUnit(UnitDto dto);
+    public Task<UnitDto> UpdateUnit(UnitDto dto);
 }
 
 public class UnitService(IUnitRepository rep) : IUnitService
 {
     private readonly IUnitRepository _rep = rep;
 
-    public async Task CreateUnit(UnitDto dto)
+    public async Task<UnitDto> CreateUnit(UnitDto dto)
     {
         Unit entity = new()
         {
@@ -28,7 +27,9 @@ public class UnitService(IUnitRepository rep) : IUnitService
             Type = dto.Type
         };
 
-        await _rep.Insert(entity);
+        Unit insertedUnit = await _rep.Insert(entity);
+
+        return UnitDto.FromEntity(insertedUnit);
     }
 
     public async Task<UnitDto?> GetUnit(string id)
@@ -52,17 +53,17 @@ public class UnitService(IUnitRepository rep) : IUnitService
         return dtos;
     }
 
-    public async Task UpdateUnit(UnitDto dto)
+    public async Task<UnitDto> UpdateUnit(UnitDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto.Id);
 
-        Unit? entity = await _rep.Get(dto.Id);
-
-        if (entity == null) throw new ApplicationException("unit not found");
+        Unit entity = await _rep.Get(dto.Id) ?? throw new ApplicationException("unit not found");
 
         entity.Name = dto.Name;
         entity.Type = dto.Type;
 
-        await _rep.Update(entity);
+        Unit updatedUnit = await _rep.Update(entity);
+
+        return UnitDto.FromEntity(updatedUnit);
     }
 }

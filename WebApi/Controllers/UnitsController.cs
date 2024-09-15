@@ -34,34 +34,30 @@ public class UnitsController(IUnitService service) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> Create(UnitDto dto)
+    public async Task<ActionResult<UnitDto>> Create(UnitDto dto)
     {
         try
         {
-            await _service.CreateUnit(dto);
+            return await _service.CreateUnit(dto);
         }
         catch (ApplicationException)
         {
             return UnprocessableEntity();
         }
-
-        return Ok();
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> Update(string id, UnitDto dto)
+    public async Task<ActionResult<UnitDto>> Update(string id, UnitDto dto)
     {
         if (dto.Id == null || dto.Id != id) return BadRequest();
 
         try
         {
-            await _service.UpdateUnit(dto);
+            return await _service.UpdateUnit(dto);
         }
         catch (ApplicationException)
         {
             return UnprocessableEntity();
         }
-
-        return Ok();
     }
 }

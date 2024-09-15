@@ -22,5 +22,17 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<UnitConversion>()
+            .HasOne(uc => uc.Unit)
+            .WithMany(u => u.Conversions)
+            .HasForeignKey(uc => uc.UnitId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<UnitConversion>()
+            .HasOne(uc => uc.TargetUnit)
+            .WithMany(u => u.TargetConversions)
+            .HasForeignKey(uc => uc.TargetUnitId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

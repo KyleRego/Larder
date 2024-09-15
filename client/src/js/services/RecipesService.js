@@ -42,9 +42,8 @@ export default class RecipesService extends ApiServiceBase
 
     async postRecipe(recipe)
     {
-        console.log("recipe being posted:");
-        console.log(recipe);
         const headers = new Headers({"Content-Type": "application/json"});
+    
         const request = new Request(this.recipesBaseUrl, {
             method: "POST",
             headers: headers,

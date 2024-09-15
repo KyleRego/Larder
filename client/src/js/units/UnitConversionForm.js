@@ -1,27 +1,18 @@
-import { useState, useEffect } from "react";
-
+import { useContext } from "react";
+import { UnitsContext } from "../../UnitsContext";
 import LabeledInput from "../components/LabeledInput";
-import UnitsService from "../services/UnitsService";
 
-export default function UnitConversionForm({unit})
+export default function UnitConversionForm({unit, unitConversion, handleSubmit})
 {
-    const [targetUnits, setTargetUnits] = useState([]);
+    const { units } = useContext(UnitsContext)
 
-    useEffect(() => {
-        const service = new UnitsService();
-    
-        service.getUnits().then(result => {
-            setTargetUnits(result);
-        });
-    }, []);
-
-    const targetUnitOptions = targetUnits.map(tu => {
+    const targetUnitOptions = units.map(tu => {
         return <option key={tu.id} value={tu.id}>
             {tu.name}
         </option>
     });
 
-    return <form>
+    return <form onSubmit={(e) => handleSubmit(e)}>
         <div className="d-flex column-gap-1 flex-wrap align-items-center">
 
             <span>1 {unit.name} =</span>
@@ -29,7 +20,7 @@ export default function UnitConversionForm({unit})
             <div>
                 <LabeledInput inputName="targetUnitsPerUnit"
                                 labelText=""
-                                initialValue={1}
+                                initialValue={unitConversion.targetUnitsPerUnit}
                                 afterInputText=""
                                 inputType="number"
                                 required={true} />
@@ -41,6 +32,10 @@ export default function UnitConversionForm({unit})
                     {targetUnitOptions}
                 </select>
             </div>
+
+            <button type="submit" className="btn btn-primary btn-sm">
+                Submit
+            </button>
         </div>
     </form>
 }

@@ -22,7 +22,10 @@ public class UnitRepository(AppDbContext dbContext) : RepositoryBase<Unit, UnitS
 {
     public override async Task<Unit?> Get(string id)
     {
-        return await _dbContext.Units.FirstOrDefaultAsync(unit => unit.Id == id);
+        return await _dbContext.Units
+                        .Include(u => u.Conversions)
+                        .Include(u => u.TargetConversions)
+                        .FirstOrDefaultAsync(unit => unit.Id == id);
     }
 
     public override async Task<List<Unit>> GetAll(UnitSortOptions sortBy, string? search)

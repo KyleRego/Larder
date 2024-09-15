@@ -6,12 +6,10 @@ public class UnitConversion : EntityBase
 {
     public required string UnitId { get; set; }
 
-    [ForeignKey(nameof(UnitId))]
     public Unit? Unit { get; set; }
 
     public required string TargetUnitId { get; set; }
 
-    [ForeignKey(nameof(TargetUnitId))]
     public Unit? TargetUnit { get; set; }
 
     public double TargetUnitsPerUnit { get; set; }

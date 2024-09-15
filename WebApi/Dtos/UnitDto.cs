@@ -7,14 +7,28 @@ public class UnitDto
     public string? Id { get; set; }
     public required string Name { get; set; }
     public required UnitType Type { get; set; }
+    public List<UnitConversionDto> Conversions { get; set; } = [];
+    public List<UnitConversionDto> TargetConversions { get; set; } = [];
 
     public static UnitDto FromEntity(Unit entity)
     {
-        return new()
+        UnitDto result =  new()
         {
             Id = entity.Id,
             Name = entity.Name,
             Type = entity.Type
         };
+
+        foreach (UnitConversion uc in entity.Conversions)
+        {
+            result.Conversions.Add(UnitConversionDto.FromEntity(uc));
+        }
+
+        foreach (UnitConversion uc in entity.TargetConversions)
+        {
+            result.TargetConversions.Add(UnitConversionDto.FromEntity(uc));
+        }
+
+        return result;
     }
 }

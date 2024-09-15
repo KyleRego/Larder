@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Larder.Models;
 
@@ -16,4 +17,8 @@ public class Unit : EntityBase
 
     [Required]
     public required UnitType Type { get; set; }
+
+    public List<UnitConversion> Conversions { get; set; } = [];
+
+    public List<UnitConversion> TargetConversions { get; set; } = [];
 }
