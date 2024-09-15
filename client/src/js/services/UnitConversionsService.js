@@ -39,4 +39,17 @@ export default class UnitConversionsService extends ApiServiceBase {
 
         return await response.json();
     }
+
+    async deleteUnitConversion(id) {
+        let url = `${this.unitConversionsBaseUrl}/${id}`;
+
+        const headers = new Headers({ "Content-Type": "application/json"});
+
+        const request = new Request(url, {
+            method: "Delete",
+            headers: headers
+        });
+
+        await fetch(request);
+    }
 }

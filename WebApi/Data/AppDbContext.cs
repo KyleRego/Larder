@@ -26,13 +26,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
         modelBuilder.Entity<UnitConversion>()
             .HasOne(uc => uc.Unit)
             .WithMany(u => u.Conversions)
-            .HasForeignKey(uc => uc.UnitId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .HasForeignKey(uc => uc.UnitId);
 
         modelBuilder.Entity<UnitConversion>()
             .HasOne(uc => uc.TargetUnit)
             .WithMany(u => u.TargetConversions)
-            .HasForeignKey(uc => uc.TargetUnitId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .HasForeignKey(uc => uc.TargetUnitId);
     }
 }

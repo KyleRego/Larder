@@ -60,4 +60,19 @@ public class UnitsController(IUnitService service) : ControllerBase
             return UnprocessableEntity();
         }
     }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(string id)
+    {
+        try
+        {
+            await _service.DeleteUnit(id);
+        }
+        catch (ApplicationException)
+        {
+            return UnprocessableEntity();
+        }
+
+        return Ok();
+    }
 }

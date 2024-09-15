@@ -2,9 +2,13 @@ import ApiServiceBase from "./ApiServiceBase";
 
 export default class UnitsService extends ApiServiceBase
 {
-    async getUnits(sortOrder)
-    {
-        let url = `${this.backendOrigin}/api/Units`;
+    constructor() {
+        super();
+        this.unitsBasePath = `${this.backendOrigin}/api/Units`;
+    }
+
+    async getUnits(sortOrder) {
+        let url = this.unitsBasePath;
 
         if (sortOrder !== null)
         {
@@ -14,24 +18,31 @@ export default class UnitsService extends ApiServiceBase
         return await this.tryGetJson(url);
     }
 
-    async getUnit(id)
-    {
-        let url = `${this.backendOrigin}/api/Units/${id}`;
+    async getUnit(id) {
+        let url = `${this.unitsBasePath}/${id}`;
 
         return await this.tryGetJson(url);
     }
 
-    async postUnit(dto)
-    {
-        let url = `${this.backendOrigin}/api/Units`;
+    async postUnit(dto) {
+        let url = this.unitsBasePath;
 
         return await this.tryPost(url, dto); 
     }
 
-    async putUnit(dto)
-    {
-        let url = `${this.backendOrigin}/api/Units/${dto.id}`;
+    async putUnit(dto) {
+        if (dto.id === undefined) {
+            throw new Error("id missing");
+        }
+
+        let url = `${this.unitsBasePath}/${dto.id}`;
 
         return await this.tryPut(url, dto);  
+    }
+
+    async deleteUnit(id) {
+        let url = `${this.unitsBasePath}/${id}`;
+
+        return await this.tryDelete(url);
     }
 }

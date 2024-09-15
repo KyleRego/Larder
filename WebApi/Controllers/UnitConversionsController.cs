@@ -36,4 +36,19 @@ public class UnitConversionsController(IUnitConversionService unitConvService) :
             return UnprocessableEntity();
         }
     }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(string id)
+    {
+        try
+        {
+            await _unitConvService.DeleteUnitConversion(id);
+        }
+        catch (ApplicationException)
+        {
+            return UnprocessableEntity();
+        }
+
+        return Ok();
+    }
 }

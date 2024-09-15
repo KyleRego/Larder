@@ -8,6 +8,7 @@ public interface IUnitConversionService
 {
     public Task<UnitConversionDto> CreateUnitConversion(UnitConversionDto dto);
     public Task<UnitConversionDto> UpdateUnitConversion(UnitConversionDto dto);
+    public Task DeleteUnitConversion(string id);
 }
 
 public class UnitConversionService(IUnitRepository unitRep,
@@ -38,6 +39,14 @@ public class UnitConversionService(IUnitRepository unitRep,
         await _unitConvRep.Insert(unitConversion);
 
         return UnitConversionDto.FromEntity(unitConversion);
+    }
+
+    public async Task DeleteUnitConversion(string id)
+    {
+        UnitConversion unitConversion = await _unitConvRep.Get(id)
+                ?? throw new ApplicationException("unit conversion to update not found");
+
+        await _unitConvRep.Delete(unitConversion);
     }
 
     public async Task<UnitConversionDto> UpdateUnitConversion(UnitConversionDto dto)

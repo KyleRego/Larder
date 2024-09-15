@@ -7,12 +7,10 @@ namespace Larder.Services;
 public interface IUnitService
 {
     public Task<UnitDto?> GetUnit(string id);
-
     public Task<List<UnitDto>> GetUnits(UnitSortOptions sortOrder, string? search);
-
     public Task<UnitDto> CreateUnit(UnitDto dto);
-
     public Task<UnitDto> UpdateUnit(UnitDto dto);
+    public Task DeleteUnit(string id);
 }
 
 public class UnitService(IUnitRepository rep) : IUnitService
@@ -30,6 +28,13 @@ public class UnitService(IUnitRepository rep) : IUnitService
         Unit insertedUnit = await _rep.Insert(entity);
 
         return UnitDto.FromEntity(insertedUnit);
+    }
+
+    public async Task DeleteUnit(string id)
+    {
+        Unit unit = await _rep.Get(id) ?? throw new ApplicationException("unit not found");
+    
+        await _rep.Delete(unit);
     }
 
     public async Task<UnitDto?> GetUnit(string id)
