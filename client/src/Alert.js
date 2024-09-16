@@ -18,10 +18,10 @@ export default function Alert() {
                         {alertMessage}
                     </div>
                     <div className="">
-                        <button type="button" className="btn btn-primary" onClick={handleCloseAlert}>OK</button>
+                        <button type="button" className="btn btn-outline-primary" onClick={handleCloseAlert}>OK</button>
                     </div>
                 </div>
             </div>
         </div> 
-    </div>
+    </div>;
 }

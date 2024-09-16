@@ -7,10 +7,12 @@ import UnitConversion from "./UnitConversion";
 import TargetUnitConversion from "./TargetUnitConversion";
 import NewUnitConversion from "./NewUnitConversion";
 import { AlertContext } from "../../AlertContext";
+import { UnitsContext } from "../../UnitsContext";
 
 export default function Unit()
 {
     const navigate = useNavigate();
+    const { units, setUnits } = useContext(UnitsContext);
     const { setAlertMessage } = useContext(AlertContext);
     const [newingConversion, setNewingConversion] = useState(false);
     let { id } = useParams();
@@ -29,6 +31,14 @@ export default function Unit()
             const service = new UnitsService();
 
             service.deleteUnit(unit.id).then(() => {
+                const newUnits = structuredClone(units);
+                for (let i = 0; i < newUnits.length; i += 1) {
+                    if (newUnits[i].id === unit.id) {
+                        newUnits.splice(i, 1);
+                        break;
+                    }
+                }
+                setUnits(newUnits);
                 setAlertMessage(`Unit "${unit.name}" was deleted.`);
                 navigate("/units");
             })

@@ -63,10 +63,10 @@ public class IngredientRepository(AppDbContext dbContext) : RepositoryBase<Ingre
                 return await baseSearchQuery.OrderByDescending(ing => ing.Name).ToListAsync();
 
             case IngredientSortOptions.Quantity:
-                return await baseSearchQuery.OrderBy(ing => ing.Quantity).ToListAsync();
+                return await baseSearchQuery.OrderBy(ing => ing.Quantity.Amount).ToListAsync();
 
             case IngredientSortOptions.Quantity_Desc:
-                return await baseSearchQuery.OrderByDescending(ing => ing.Quantity).ToListAsync();
+                return await baseSearchQuery.OrderByDescending(ing => ing.Quantity.Amount).ToListAsync();
 
             default:
                 return await baseSearchQuery.ToListAsync();
