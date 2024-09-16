@@ -21,10 +21,12 @@ export default function Recipes() {
     }, [sortOrder, setAlertMessage]);
 
     return <>
-        <h1>Recipes</h1>
+        <div className="mt-2 mb-4 d-flex justify-content-around align-items-center">
+            <h1>Your recipes:</h1>
 
+            <Link className="btn btn-primary" title="New recipe" to="/recipes/new">New recipe</Link>
+        </div>
+        
         <RecipesTable recipes={recipes} sortOrder={sortOrder} setSortOrder={setSortOrder} />
-
-        <Link to="/recipes/new">New recipe</Link>
     </>;
 }

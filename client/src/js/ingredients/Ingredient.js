@@ -25,8 +25,7 @@ export default function Ingredient() {
 
     const unitName = findUnitName(ingredient.quantity.unitId, units);
 
-    function handleDelete()
-    {
+    function handleDelete() {
         if (window.confirm(`Are you sure you want to delete this ingredient - ${ingredient.name}?`))
         {
             const service = new IngredientsService();
@@ -37,29 +36,23 @@ export default function Ingredient() {
         }
     }
 
-    return (
-        <>
-            <h1>
-                {ingredient.name}
-            </h1>
+    return <>
+            <div className="mt-2 mb-4 d-flex justify-content-between align-items-center">
+                <h1 className="m-0">{ingredient.name}</h1>
 
-            Stock: {ingredient.quantity?.amount} {unitName}
+                <div className="d-flex align-items-center column-gap-3">
+                    <Link className="btn btn-primary" title="Edit ingredient" to={`/ingredients/${ingredient.id}/edit`}>Edit</Link>
+
+                    <button type="button" title="Delete ingredient" className="btn btn-danger" onClick={handleDelete}>Delete</button>
+                </div>
+            </div>
+
+            Quantity: {ingredient.quantity?.amount} {unitName}
 
             <IngredientDetails ingredient={ingredient} />
 
-            <div className="d-flex column-gap-3">
-                <Link className="btn btn-primary" to={`/ingredients/${ingredient.id}/edit`}>
-                    Edit
-                </Link>
-            
-                <button className="btn btn-danger" onClick={handleDelete} type="button">
-                    Delete
-                </button>
-            </div>
-
             <Link to="/ingredients">Back to ingredients</Link>
-        </>
-    )
+        </>;
 }
 
 function IngredientDetails({ingredient})

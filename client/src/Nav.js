@@ -1,13 +1,14 @@
 import "./Nav.css";
 
 import { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { AuthedContext } from "./AuthedContext";
 import IdentityService from "./js/identity/IdentityService";
 
 export default function Nav()
 {
+    const navigate = useNavigate();
     const { authed, setAuthed } = useContext(AuthedContext);
     const [showCollapsibleNavbar, setShowCollapsibleNavbar] = useState(false);
     const toggleCollapsibleNavbar = () => setShowCollapsibleNavbar(!showCollapsibleNavbar);
@@ -17,6 +18,7 @@ export default function Nav()
 
         identityService.postLogout().then(() => {
             setAuthed(false);
+            navigate("/")
         }).catch((error) => {
             console.log(error);
         });
@@ -25,7 +27,9 @@ export default function Nav()
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
-                <Link className="navbar-brand ms-4" to={"/"}>Larder</Link>
+                <Link className="navbar-brand py-3 ms-4" to={"/"}>Larder</Link>
+                {authed === true &&
+                <>
                 <button className="navbar-toggler" onClick={toggleCollapsibleNavbar} type="button"
                                 data-toggle="collapse" data-target="#navbarSupportedContent"
                                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,23 +56,15 @@ export default function Nav()
                             </li>
                         </ul>
 
-                        <div className="m-0">
-                            {
-                                authed
-                                ?
-                                <button onClick={handleLogout} className="btn btn-outline-primary" type="button">
-                                    Logout
-                                </button>
-                                :
-                                <div className="m-0 d-flex flex-wrap justify-content-center column-gap-3 row-gap-3">
-                                    <Link className="btn btn-outline-primary" to={"register"}>Register</Link>
-
-                                    <Link className="btn btn-outline-primary" to={"login"}>Login</Link>
-                                </div>
-                            }
+                        <div>
+                            <button onClick={handleLogout} className="btn btn-outline-primary" type="button">
+                                Logout
+                            </button>
                         </div>
                     </div>
                 </div>
+                </>
+                }
             </div>
         </nav>
     )

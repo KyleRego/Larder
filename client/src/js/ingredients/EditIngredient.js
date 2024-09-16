@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { UnitsContext } from "../../UnitsContext";
 import IngredientsService from "../services/IngredientsService";
 import IngredientForm from "./IngredientForm";
 import { AlertContext } from "../../AlertContext";
@@ -8,7 +7,6 @@ import { AlertContext } from "../../AlertContext";
 export default function EditIngredient() {
     const navigate = useNavigate();
     const { setAlertMessage } = useContext(AlertContext);
-    const { units } = useContext(UnitsContext);
 
     async function handleFormSubmit(e)
     {
@@ -54,7 +52,7 @@ export default function EditIngredient() {
 
             <div className="card">
                 <div className="card-body">
-                    <IngredientForm ingredient={ingredient} units={units} handleFormSubmit={handleFormSubmit} />
+                    <IngredientForm ingredient={ingredient} handleFormSubmit={handleFormSubmit} />
                 </div>
             </div>
 

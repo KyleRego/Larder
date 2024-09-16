@@ -1,26 +1,16 @@
 import UnitSelectOptions from "../units/UnitSelectOptions";
 
-export default function QuantityInput({quantity, units, name = null})
-{
-    function formatString(str)
-    {
-        let capitalized = str[0].toUpperCase() + str.slice(1);
+export default function QuantityInput({quantity, units}) {
+    const amountInputId = "amount";
+    const unitInputId = "unitId";
+    const labelText = "Quantity:";
 
-        return capitalized;
-    }
-
-    // TODO: is this needed
-    const amountInputId = (name) ? `${name}_amount` : "amount";
-    const unitInputId = (name) ? `${name}_unitId` : "unitId";
-    const labelText = (name) ? `${formatString(name)}:` : "Quantity:";
-
-    return <>
+    return <div className="d-flex flex-wrap align-items-center column-gap-1 row-gap-1">
         <label htmlFor={amountInputId}>{labelText}</label>
-        <input className="ms-1" id={amountInputId} name={amountInputId} type="number" defaultValue={quantity?.amount}></input>
+        <input id={amountInputId} name={amountInputId} type="number" defaultValue={quantity?.amount}></input>
         <label hidden htmlFor={unitInputId}></label>
-        <select className="ms-1" id={unitInputId} title="unit" name={unitInputId} defaultValue={quantity?.unitId}>
+        <select id={unitInputId} title="unit" name={unitInputId} defaultValue={quantity?.unitId}>
             <UnitSelectOptions units={units} />
         </select>
-    </>
-
+    </div>;
 }

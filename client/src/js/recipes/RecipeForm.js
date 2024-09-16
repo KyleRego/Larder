@@ -33,13 +33,13 @@ export default function RecipeForm({recipe, units, handleSubmit})
     });
 
     return (
-        <form className="recipeForm" onSubmit={(e) => handleSubmit(e, formRecipe)}>
-            <div className="d-flex flex-wrap column-gap-1 row-gap-1 align-items-center">
+        <form onSubmit={(e) => handleSubmit(e, formRecipe)}>
+            <div className="mb-4 d-flex flex-wrap column-gap-3 row-gap-1 align-items-center">
                 <label htmlFor="recipeName">Name:</label>
-                <input className="flex-grow-1" id="recipeName" name="recipeName" type="text" defaultValue={recipe.name} />
+                <input required className="flex-grow-1" id="recipeName" name="recipeName" type="text" defaultValue={recipe.name} />
             </div>
 
-            <h2 className="">Ingredients:</h2>
+            <h2 className="mb-4">Ingredients:</h2>
 
             <ul className="list-group">
                 {recipeFormIngredients}

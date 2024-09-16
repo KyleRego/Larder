@@ -48,7 +48,7 @@ export default function Register()
     </ol>
 
     return <>
-        <h1>Register:</h1>
+        <h1 className="mt-2 mb-4 text-center">Register:</h1>
 
         <div>
             {errorsInfo}
@@ -56,12 +56,12 @@ export default function Register()
             <form onSubmit={handleSubmitRegister}>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email address:</label>
-                    <input autoComplete="username" id="email" type="email" className="form-control" name="email" aria-describedby="emailHelp" />
+                    <input required autoComplete="username" id="email" type="email" className="form-control" name="email" aria-describedby="emailHelp" />
                 </div>
 
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password:</label>
-                    <input autoComplete="new-password" id="password" type="password" className="form-control" name="password" />
+                    <input required autoComplete="new-password" id="password" type="password" className="form-control" name="password" />
                 </div>
 
                 <button type="submit" className="btn btn-primary">Submit</button>

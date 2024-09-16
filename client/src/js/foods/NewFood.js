@@ -27,10 +27,12 @@ export default function NewFood() {
     }
 
     return <>
-        <h1>New food:</h1>
+        <h1 className="mt-2 mb-4 text-center">New food:</h1>
 
         <FoodForm initialFood={{amount: 0}} units={units} handleSubmit={handleSubmit} />
 
-        <Link to={"/foods"}>Back to foods</Link>
-    </>
+        <div className="mt-4">
+            <Link to={"/foods"}>Back to foods</Link>
+        </div>
+    </>;
 }

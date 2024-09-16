@@ -12,10 +12,6 @@ code {
     monospace;
 }
 
-div {
-  margin: 0.25rem 0;
-}
-
 div#root, div.app {
   margin: 0;
 }

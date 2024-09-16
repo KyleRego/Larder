@@ -31,15 +31,13 @@ export default function NewRecipe() {
         ingredients: []
     };
 
-    return (<>
-        <h1>New recipe:</h1>
+    return <>
+        <h1 className="mb-4 mt-2 text-center">New recipe:</h1>
 
-        <div className="card shadow-sm">
-            <div className="card-body">
-                <RecipeForm recipe={initialRecipe} units={units} handleSubmit={handleSubmit} />
-            </div>
+        <RecipeForm recipe={initialRecipe} units={units} handleSubmit={handleSubmit} />
+
+        <div className="mt-4">
+            <Link to={"/recipes"}>Back to recipes</Link>
         </div>
-
-        <Link to={"/recipes"}>Back to recipes</Link>
-    </>);
+    </>;
 }

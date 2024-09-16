@@ -28,7 +28,7 @@ export default function EatFoodForm({food, setFood})
                         <input type="number" step="any" name="servingsConsumed" defaultValue={0}></input>
                     </div>
                     <div>
-                        <button type="submit" className="btn btn-primary btn-sm">Submit</button>
+                        <button type="submit" className="btn btn-secondary btn-sm">Submit</button>
                     </div>
                 </div>
             </form>;

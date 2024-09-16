@@ -25,7 +25,7 @@ export default function Unit()
     }, [id]);
 
     function handleDelete() {
-        if (window.confirm(`Are you sure you want to delete unit "${unit.name}"`)) {
+        if (window.confirm(`Are you sure you want to delete unit "${unit.name}"?`)) {
             const service = new UnitsService();
 
             service.deleteUnit(unit.id).then(() => {
@@ -45,43 +45,39 @@ export default function Unit()
     });
 
     return <>
-        <div className="card mt-4">
-            <div className="card-body">
-                <div className="mt-0 mb-4 d-flex flex-wrap justify-content-between align-items-center">
-                    <div className="d-flex align-items-center column-gap-3">
-                        <h1 className="m-0">{unit.name}</h1>
+        <div className="mb-4 d-flex column-gap-5 flex-wrap row-gap-1 align-items-center">
+            <h1 className="m-0">Unit: {unit.name}</h1>
 
-                        <Link className="btn btn-primary btn-sm" to={`/units/${id}/edit`}>Edit</Link>
-                    </div>
+            <div className="d-flex align-items-center column-gap-3">
+                <Link className="btn btn-primary" title="Edit unit" to={`/units/${id}/edit`}>Edit</Link>
 
-                    <button onClick={handleDelete} type="button" className="btn btn-danger btn-sm">Delete</button>
-                </div>
-
-                <p>
-                    Type: {UnitHelpers.UnitTypeEnumValueToText(unit.type)}
-                </p>
-
-                <h2>Conversions:</h2>
-
-                <div className="mt-0 mb-4">
-                {unitConversions}
-
-                {unitTargetConversions}
-
-                    <div className="mt-4">
-                    { newingConversion === false 
-                    ?
-                        <button onClick={() => setNewingConversion(true)} type="button" className="btn btn-primary btn-sm">
-                            New conversion
-                        </button>
-                    :
-                        <NewUnitConversion unit={unit}
-                                            setUnit={setUnit}
-                                            setNewingConversion={setNewingConversion} />
-                    }
-                    </div>  
-                </div>
+                <button onClick={handleDelete} title="Delete unit" type="button" className="btn btn-danger">Delete</button>
             </div>
+        </div>
+
+        <p>
+            Type: {UnitHelpers.UnitTypeEnumValueToText(unit.type)}
+        </p>
+
+        <h2>Conversions:</h2>
+
+        <div className="mt-0 mb-4">
+        {unitConversions}
+
+        {unitTargetConversions}
+
+            <div className="mt-4">
+            { newingConversion === false 
+            ?
+                <button onClick={() => setNewingConversion(true)} type="button" className="btn btn-primary btn-sm">
+                    New conversion
+                </button>
+            :
+                <NewUnitConversion unit={unit}
+                                    setUnit={setUnit}
+                                    setNewingConversion={setNewingConversion} />
+            }
+            </div>  
         </div>
 
         <div>

@@ -10,7 +10,7 @@ export default function UnitsTable({units, sortOrder, setSortOrder})
     return (
         <table className="unitsTable">
             <caption>
-                Units
+                Compatible units must be the same type for successful conversions.
             </caption>
 
             <thead>

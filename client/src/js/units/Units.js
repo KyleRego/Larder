@@ -21,12 +21,12 @@ export default function Units() {
     }, [sortOrder, setAlertMessage]);
 
     return <>
-            <h1>
-                Units
-            </h1>
+            <div className="mt-2 mb-4 d-flex justify-content-around align-items-center">
+                <h1>Your units:</h1>
+
+                <Link className="btn btn-primary" title="New unit" to="/units/new">New unit</Link>
+            </div>
 
             <UnitsTable units={units} sortOrder={sortOrder} setSortOrder={setSortOrder} />
-
-            <Link to="/units/new">New unit</Link>
         </>;
 }

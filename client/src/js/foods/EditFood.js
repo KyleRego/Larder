@@ -47,13 +47,13 @@ export default function EditFood()
     if (food == null) return <h1>Loading...</h1>;
 
     return <>
-        <h1>Editing food: {food.name}</h1>
+        <h1 className="mb-4 mt-2 text-center">Editing food: {food.name}</h1>
 
-        <div>
+        <div className="my-4">
             <FoodForm initialFood={food} units={units} handleSubmit={handleSubmit} />
         </div>
 
-        <div>
+        <div className="mt-4">
             <Link to={`/foods/${id}`}>Back to food</Link>
         </div>
     </>

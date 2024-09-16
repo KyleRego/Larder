@@ -14,11 +14,9 @@ export default function IngredientsTable({ingredients, setIngredients, sortOrder
                                                                         setIngredients={setIngredients}
                                                                         units={units} />);
 
-    return (
-        <>
-            <table className="ingredientsTable">
+    return <table className="ingredientsTable">
                 <caption>
-                    Ingredients reading to be used for cooking
+                    Ingredients for cooking
                 </caption>
                 <thead>
                     <tr>
@@ -29,9 +27,7 @@ export default function IngredientsTable({ingredients, setIngredients, sortOrder
                 <tbody>
                     {ingredientRows}
                 </tbody>
-            </table>
-        </>
-    )
+            </table>;
 }
 
 function IngredientRow({ingredient, ingredients, setIngredients, units})
@@ -40,17 +36,18 @@ function IngredientRow({ingredient, ingredients, setIngredients, units})
     {
         e.preventDefault();
 
+        const formData = new FormData(e.target);
+
         const dto = {
             id: ingredient.id,
+            unitId: formData.get("unitId"),
+            amount: formData.get("amount")
         };
-
-        const formData = new FormData(e.target);
-        dto.amount = formData.get("amount");
-        dto.unitId = formData.get("unitId");
 
         const ingredientsService = new IngredientsService();
 
         ingredientsService.patchQuantity(dto).then((result) => {
+            // TODO: There must be a better idiom in JavaScript for this
             let newIngredients = structuredClone(ingredients);
             for (let i = 0; i < newIngredients.length; i += 1) {
                 if (newIngredients[i].id === ingredient.id) {
@@ -69,7 +66,6 @@ function IngredientRow({ingredient, ingredients, setIngredients, units})
         </th>
 
         <EditableQuantityTableCell quantity={ingredient.quantity}
-                                    units={units}
                                     handleSubmit={handleSubmitQuantity} />
-    </tr>
+    </tr>;
 }

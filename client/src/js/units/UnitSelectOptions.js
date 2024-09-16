@@ -1,9 +1,7 @@
-export default function UnitSelectOptions({units})
-{
-    const noUnitOption = <option value="">Unitless</option>
+export default function UnitSelectOptions({units}) {
+    const noUnitOption = <option value=""></option>
 
-    return (
-        <>
+    return <>
             {noUnitOption}
 
             {units.map(u => {
@@ -11,7 +9,5 @@ export default function UnitSelectOptions({units})
                     {u.name}
                 </option>
             })}
-        </>    
-    )
-    
+        </>;
 }

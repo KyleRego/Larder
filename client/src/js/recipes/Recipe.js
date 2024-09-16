@@ -37,27 +37,25 @@ export default function Recipe() {
         <IngredientListItem key={ri.id} ingredient={ri} units={units} />);
 
     return <>
-        <div className="card my-4">
-            <div className="card-body">
-                <div className="d-flex align-items-center justify-content-between">
-                    <div className="d-flex align-items-center column-gap-3">
-                        <h1 className="m-0">{recipe.name}</h1>
+        <div className="mb-4 mt-2 d-flex justify-content-around align-items-center">
+            <h1 className="m-0">{recipe.name}</h1>
 
-                        <Link className="btn btn-primary" to={`/recipes/${id}/edit`}>Edit</Link>
-                    </div>
+            <div className="d-flex align-items-center column-gap-3">
+                <Link className="btn btn-primary" title="Edit recipe" to={`/recipes/${id}/edit`}>Edit</Link>
 
-                    <button className="btn btn-danger" onClick={handleDelete}>Delete</button>
-                </div>
-
-                <h2>Ingredients:</h2>
-
-                <ul className="list-group">
-                    {ingredientListItems}
-                </ul>
+                <button className="btn btn-danger" title="Delete recipe" onClick={handleDelete}>Delete</button>
             </div>
         </div>
 
-        <Link to="/recipes">Back to recipes</Link>
+        <h2 className="mb-4">Ingredients:</h2>
+
+        <ul className="list-group">
+            {ingredientListItems}
+        </ul>
+
+        <div className="mt-4">
+            <Link to="/recipes">Back to recipes</Link>
+        </div>
     </>;
 }
 

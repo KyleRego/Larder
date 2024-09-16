@@ -3,13 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import IngredientForm from "./IngredientForm";
 import IngredientsService from "../services/IngredientsService";
 import { useContext } from "react";
-import { UnitsContext } from "../../UnitsContext";
 import { AlertContext } from "../../AlertContext";
 
 export default function NewIngredient() {
     const navigate = useNavigate();
     const { setAlertMessage } = useContext(AlertContext);
-    const { units } = useContext(UnitsContext);
 
     async function handleFormSubmit(e)
     {
@@ -36,13 +34,13 @@ export default function NewIngredient() {
         });
     }
 
-    return (
-        <>
-            <h1>New ingredient</h1>
+    return <>
+            <h1 className="mt-2 mb-4">New ingredient:</h1>
 
-            <IngredientForm ingredient={{}} units={units} handleFormSubmit={handleFormSubmit} />
+            <IngredientForm ingredient={{}} handleFormSubmit={handleFormSubmit} />
 
-            <Link to="/ingredients">Back to ingredients</Link>
-        </>
-    )
+            <div className="mt-4">
+                <Link to="/ingredients">Back to ingredients</Link>
+            </div>
+        </>;
 }

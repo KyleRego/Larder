@@ -43,13 +43,9 @@ export default function EditRecipe() {
 
     return (
         <>
-            <h1>Editing recipe: {recipe.name}</h1>
+            <h1 className="mt-0 mb-4">Editing recipe: {recipe.name}</h1>
 
-            <div className="card shadow-sm">
-                <div className="card-body">
-                    <RecipeForm recipe={recipe} units={units} handleSubmit={handleSubmit} />
-                </div>
-            </div>
+            <RecipeForm recipe={recipe} units={units} handleSubmit={handleSubmit} />
 
             <div>
                 <Link to={`/recipes/${id}`}>Back to recipe</Link>
