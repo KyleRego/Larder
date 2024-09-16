@@ -32,22 +32,25 @@ public class UnitRepository(AppDbContext dbContext) : RepositoryBase<Unit, UnitS
     {
         var baseQuery = _dbContext.Units;
 
+        var baseSearchQuery = (search == null) ? baseQuery
+                    : baseQuery.Where(unit => unit.Name.Contains(search));
+
         switch (sortBy)
         {
             case UnitSortOptions.Name:
-                return await baseQuery.OrderBy(u => u.Name).ToListAsync();
+                return await baseSearchQuery.OrderBy(u => u.Name).ToListAsync();
 
             case UnitSortOptions.Name_Desc:
-                return await baseQuery.OrderByDescending(u => u.Name).ToListAsync();
+                return await baseSearchQuery.OrderByDescending(u => u.Name).ToListAsync();
 
             case UnitSortOptions.Type:
-                return await baseQuery.OrderBy(u => u.Type).ToListAsync();
+                return await baseSearchQuery.OrderBy(u => u.Type).ToListAsync();
 
             case UnitSortOptions.Type_Desc:
-                return await baseQuery.OrderByDescending(u => u.Type).ToListAsync();
+                return await baseSearchQuery.OrderByDescending(u => u.Type).ToListAsync();
 
             default:
-                return await baseQuery.ToListAsync();
+                return await baseSearchQuery.ToListAsync();
         }
     }
 }

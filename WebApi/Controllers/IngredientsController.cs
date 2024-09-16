@@ -20,15 +20,15 @@ public class IngredientsController(IIngredientService ingredientService) : Contr
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<IngredientDto>>> Index(string? sortOrder, string? name)
+    public async Task<ActionResult<List<IngredientDto>>> Index(string? sortOrder, string? search)
     {
         if (sortOrder != null && Enum.TryParse(sortOrder, out IngredientSortOptions sortBy))
         {
-            return await _ingredientService.GetIngredients(sortBy, name);
+            return await _ingredientService.GetIngredients(sortBy, search);
         }
         else
         {
-            return await _ingredientService.GetIngredients(IngredientSortOptions.AnyOrder, name);
+            return await _ingredientService.GetIngredients(IngredientSortOptions.AnyOrder, search);
         }
     }
 

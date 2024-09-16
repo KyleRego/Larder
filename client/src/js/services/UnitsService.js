@@ -1,47 +1,41 @@
 import ApiServiceBase from "./ApiServiceBase";
 
-export default class UnitsService extends ApiServiceBase
-{
+export default class UnitsService extends ApiServiceBase {
     constructor() {
         super();
-        this.unitsBasePath = `${this.backendOrigin}/api/Units`;
+        this.unitsBaseUrl = `${this.backendOrigin}/api/Units`;
     }
 
-    async getUnits(sortOrder) {
-        let url = this.unitsBasePath;
+    async getUnits(sortOrder="", search="") {
+        let url = this.unitsBaseUrl;
 
-        if (sortOrder !== null)
-        {
-            url += `?sortOrder=${sortOrder}`
-        }
+        if (sortOrder !== "" && search !== "") url += `?sortOrder=${sortOrder}&search=${search}`;
+        else if (sortOrder !== "") url += `?sortOrder=${sortOrder}`;
+        else if (search !== "") url += `?search=${search}`;
 
         return await this.tryGetJson(url);
     }
 
     async getUnit(id) {
-        let url = `${this.unitsBasePath}/${id}`;
+        let url = `${this.unitsBaseUrl}/${id}`;
 
         return await this.tryGetJson(url);
     }
 
-    async postUnit(dto) {
-        let url = this.unitsBasePath;
-
-        return await this.tryPost(url, dto); 
+    async postUnit(unitDto) {
+        return await this.tryPost(this.unitsBaseUrl, unitDto); 
     }
 
-    async putUnit(dto) {
-        if (dto.id === undefined) {
-            throw new Error("id missing");
-        }
+    async putUnit(unitDto) {
+        if (unitDto.id === undefined) throw new Error("id missing");
 
-        let url = `${this.unitsBasePath}/${dto.id}`;
+        let url = `${this.unitsBaseUrl}/${unitDto.id}`;
 
-        return await this.tryPut(url, dto);  
+        return await this.tryPut(url, unitDto);  
     }
 
     async deleteUnit(id) {
-        let url = `${this.unitsBasePath}/${id}`;
+        let url = `${this.unitsBaseUrl}/${id}`;
 
         return await this.tryDelete(url);
     }

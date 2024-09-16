@@ -1,97 +1,41 @@
 import ApiServiceBase from "./ApiServiceBase";
 
-export default class IngredientsService extends ApiServiceBase
-{
-    constructor()
-    {
+export default class IngredientsService extends ApiServiceBase {
+    constructor() {
         super();
         this.ingredientsBaseUrl = `${this.backendOrigin}/api/Ingredients`;
     }
 
-    async getIngredients(sortOrder = null, name = null)
-    {
+    async getIngredients(sortOrder = "", search = "") {
         let url = this.ingredientsBaseUrl;
 
-        if (sortOrder !== null && name !== null)
-        {
-            url += `?sortOrder=${sortOrder}&name=${name}`;
-        }
-        else if (sortOrder !== null)
-        {
-            url += `?sortOrder=${sortOrder}`;
-        }
-        else if (name !== null)
-        {
-            url += `?name=${name}`;
-        }
+        if (sortOrder !== "" && search !== "") url += `?sortOrder=${sortOrder}&search=${search}`;
+        else if (sortOrder !== "") url += `?sortOrder=${sortOrder}`;
+        else if (search !== "") url += `?search=${search}`;
 
         return await this.tryGetJson(url);
     }
 
-    async getIngredient(id)
-    {
-        let url = `${this.ingredientsBaseUrl}/${id}`;
+    async getIngredient(id) {
+        const url = `${this.ingredientsBaseUrl}/${id}`;
 
         return await this.tryGetJson(url);
     }
 
-    async postIngredient(ingredient)
-    {
-        const headers = new Headers();
-        headers.append("Content-Type", "application/json");
-
-        const request = new Request(this.ingredientsBaseUrl, {
-            method: "POST",
-            body: JSON.stringify(ingredient) ,
-            headers: headers
-        });
-
-        try
-        {
-            const response = await fetch(request);
-
-            if (!response.ok)
-            {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            return response.json();
-        }
-        catch (error)
-        {
-            console.error(error);
-        }
+    async postIngredient(ingDto) {
+        return await this.tryPost(this.ingredientsBaseUrl, ingDto);
     }
 
-    async putIngredient(ingredient)
-    {
-        const headers = new Headers({"Content-Type": "application/json"});
-    
-        const request = new Request(`${this.ingredientsBaseUrl}/${ingredient.id}`, {
-            method: "PUT",
-            headers: headers,
-            body: JSON.stringify(ingredient)
-        });
+    async putIngredient(ingDto) {
+        if (ingDto.id === undefined) throw new Error("id missing");
 
-        try
-        {
-            const response = await fetch(request);
+        let url = `${this.ingredientsBaseUrl}/${ingDto.id}`;
 
-            if (!response.ok)
-            {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            return response.json();
-        }
-        catch (error)
-        {
-            console.error(error);
-        }
+        return await this.tryPut(url, ingDto);  
     }
 
-    async patchQuantity(ingredient)
-    {
+    // TODO: Refactor this to use the super class patch method
+    async patchQuantity(ingredient) {
         let url = `${this.ingredientsBaseUrl}/${ingredient.id}`;
 
         const headers = new Headers();
@@ -103,48 +47,19 @@ export default class IngredientsService extends ApiServiceBase
             headers: headers
         });
 
-        try
-        {
-            const response = await fetch(request);
+        const response = await fetch(request);
 
-            if (!response.ok)
-            {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            return response.json();
-        }
-        catch (error)
+        if (!response.ok)
         {
-            console.error(error);
+            throw new Error(`Response status: ${response.status}`);
         }
+
+        return response.json();
     }
 
-    async deleteIngredient(id)
-    {
+    async deleteIngredient(id) {
         const url = `${this.ingredientsBaseUrl}/${id}`;
 
-        const headers = new Headers({"Content-Type": "application/json"});
-
-        const request = new Request(url, {
-            method: "DELETE",
-            headers: headers
-        });
-
-        try
-        {
-            const response = await fetch(request);
-
-            if (!response.ok)
-            {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            return;
-        }
-        catch (error)
-        {
-            console.error(error);
-        }
+        this.tryDelete(url);
     }
 }

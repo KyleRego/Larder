@@ -10,26 +10,36 @@ export default function Foods() {
     const { units } = useContext(UnitsContext)
     const [foods, setFoods] = useState([]);
     const [sortOrder, setSortOrder] = useState("Name");
+    const [searchParam, setSearchParam] = useState("");
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         const service = new FoodsService();
 
-        service.getFoods(sortOrder).then(result => {
+        service.getFoods(sortOrder, searchParam).then(result => {
             setFoods(result);
         }).catch(error => {
             setAlertMessage(`Something went wrong: ${error.message}`);
         });
 
-    }, [sortOrder, setAlertMessage]);
+    }, [sortOrder, searchParam, setAlertMessage]);
 
     return <>
         <div className="mb-4 mt-2 d-flex flex-wrap row-gap-1 align-items-center justify-content-around">
             <h1 className="m-0">Your foods:</h1>
 
+            <div className="d-flex flex-column align-items-start">
+                <label htmlFor="search">Search:</label>
+                <input id="search" className="form-control-sm"
+                    type="search" onChange={(e) => setSearchParam(e.target.value)} />
+            </div>
+
             <Link to="/foods/new" className="btn btn-primary" title="Add new food">New food</Link>
         </div>
 
-        <FoodsTable foods={foods} setFoods={setFoods} sortOrder={sortOrder} setSortOrder={setSortOrder} units={units} />
+        
+
+        <FoodsTable foods={foods} setFoods={setFoods}
+                    sortOrder={sortOrder} setSortOrder={setSortOrder} 
+                    units={units} />
     </>;
 }

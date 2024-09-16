@@ -10,12 +10,10 @@ import { MdDone } from "react-icons/md";
 
 // setFoods is passed in so that when the food amount is edited in cell,
 // the entire foods state can be updated, to change the amount of that one food
-export default function FoodsTable({foods, setFoods, sortOrder, setSortOrder})
-{
+export default function FoodsTable({foods, setFoods, sortOrder, setSortOrder}) {
     let rows = foods.map(food => FoodRow(food, foods, setFoods));
 
-    return <>
-        <table className="foodsTable">
+    return <table className="foodsTable">
             <caption>Servings of ready to eat food.</caption>
             <thead>
                 <tr>
@@ -28,14 +26,11 @@ export default function FoodsTable({foods, setFoods, sortOrder, setSortOrder})
             <tbody>
                 {rows}
             </tbody>
-        </table>
-    </>
+        </table>;
 }
 
-function FoodRow(food, foods, setFoods)
-{
-    return (
-        <tr key={food.id}>
+function FoodRow(food, foods, setFoods) {
+    return <tr key={food.id}>
             <th scope="row">
                 <Link to={`/foods/${food.id}`}>
                     {food.name}
@@ -45,12 +40,10 @@ function FoodRow(food, foods, setFoods)
             <FoodAmountTableCell food={food} foods={foods} setFoods={setFoods} />
 
             <td>{food.calories}</td>
-        </tr>
-    );
+        </tr>;
 }
 
-function FoodAmountTableCell({food, foods, setFoods})
-{
+function FoodAmountTableCell({food, foods, setFoods}) {
     const [editing, setEditing] = useState(false);
 
     async function handleSubmit(e)
@@ -99,7 +92,7 @@ function FoodAmountTableCell({food, foods, setFoods})
                     </button>
                 </div>
             </form>
-        </td>
+        </td>;
     }
     else
     {
@@ -108,6 +101,6 @@ function FoodAmountTableCell({food, foods, setFoods})
                 <span>{food.servings}</span>
                 <CiEdit className="w-5 h-5" role="button" onClick={() => setEditing(true)} title="Edit" />
             </div>
-        </td>
+        </td>;
     }
 }

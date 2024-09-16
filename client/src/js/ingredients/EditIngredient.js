@@ -46,8 +46,7 @@ export default function EditIngredient() {
 
     if (ingredient === null) return <h1>Loading...</h1>;
 
-    return (
-        <>
+    return <>
             <h1>Editing ingredient {ingredient.name}</h1>
 
             <div className="card">
@@ -57,6 +56,5 @@ export default function EditIngredient() {
             </div>
 
             <Link to={`/ingredients/${id}`}>Back to ingredient</Link>
-        </>
-    )
+        </>;
 }

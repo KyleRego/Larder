@@ -31,16 +31,19 @@ public class RecipeRepository(AppDbContext dbContext) : RepositoryBase<Recipe, R
     {
         var baseQuery = _dbContext.Recipes;
 
+        var baseSearchQuery = (search == null) ? baseQuery
+                    : baseQuery.Where(recipe => recipe.Name.Contains(search));
+
         switch (sortBy)
         {
             case RecipeSortOptions.Name:
-                return await baseQuery.OrderBy(rec => rec.Name).ToListAsync();
+                return await baseSearchQuery.OrderBy(rec => rec.Name).ToListAsync();
 
             case RecipeSortOptions.Name_Desc:
-                return await baseQuery.OrderByDescending(rec => rec.Name).ToListAsync();
+                return await baseSearchQuery.OrderByDescending(rec => rec.Name).ToListAsync();
 
             default:
-                return await baseQuery.ToListAsync();
+                return await baseSearchQuery.ToListAsync();
         }
     }
 }

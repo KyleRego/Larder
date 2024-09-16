@@ -22,15 +22,15 @@ public class RecipesController(IRecipeService recipeService) : ControllerBase
     }
 
     [HttpGet]
-    public async Task<List<RecipeDto>> Index(string? sortOrder)
+    public async Task<List<RecipeDto>> Index(string? sortOrder, string? search)
     {
         if (sortOrder != null && Enum.TryParse(sortOrder, out RecipeSortOptions sortBy))
         {
-            return await _recipeService.GetRecipes(sortBy, null);
+            return await _recipeService.GetRecipes(sortBy, search);
         }
         else
         {
-            return await _recipeService.GetRecipes(RecipeSortOptions.AnyOrder, null);
+            return await _recipeService.GetRecipes(RecipeSortOptions.AnyOrder, search);
         }
     }
 

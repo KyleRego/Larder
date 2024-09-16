@@ -21,15 +21,15 @@ public class FoodsController(IFoodService foodService) : ControllerBase
     }
 
     [HttpGet, Authorize]
-    public async Task<ActionResult<List<FoodDto>>> Index(string? sortOrder, string? name)
+    public async Task<ActionResult<List<FoodDto>>> Index(string? sortOrder, string? search)
     {
         if (sortOrder != null && Enum.TryParse(sortOrder, out FoodSortOptions sortBy))
         {
-            return await _foodService.GetFoods(sortBy, name);
+            return await _foodService.GetFoods(sortBy, search);
         }
         else
         {
-            return await _foodService.GetFoods(FoodSortOptions.AnyOrder, name);
+            return await _foodService.GetFoods(FoodSortOptions.AnyOrder, search);
         }
     }
 

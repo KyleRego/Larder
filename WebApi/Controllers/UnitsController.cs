@@ -13,15 +13,15 @@ public class UnitsController(IUnitService service) : ControllerBase
     private readonly IUnitService _service = service;
 
     [HttpGet, Authorize]
-    public async Task<List<UnitDto>> Index(string? sortOrder)
+    public async Task<List<UnitDto>> Index(string? sortOrder, string? search)
     {
         if (sortOrder != null && Enum.TryParse(sortOrder, out UnitSortOptions sortBy))
         {
-            return await _service.GetUnits(sortBy, null);
+            return await _service.GetUnits(sortBy, search);
         }
         else
         {
-            return await _service.GetUnits(UnitSortOptions.AnyOrder, null);
+            return await _service.GetUnits(UnitSortOptions.AnyOrder, search);
         }
     }
 

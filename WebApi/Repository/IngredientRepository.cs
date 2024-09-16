@@ -52,7 +52,8 @@ public class IngredientRepository(AppDbContext dbContext) : RepositoryBase<Ingre
     {
         var baseQuery = _dbContext.Ingredients.Include(ing => ing.Quantity);
 
-        var baseSearchQuery = (search == null) ? baseQuery : baseQuery.Where(ingredient => ingredient.Name.Contains(search));
+        var baseSearchQuery = (search == null) ? baseQuery
+                    : baseQuery.Where(ingredient => ingredient.Name.Contains(search));
 
         switch (sortBy)
         {

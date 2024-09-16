@@ -1,103 +1,41 @@
 import ApiServiceBase from "./ApiServiceBase";
 
-export default class RecipesService extends ApiServiceBase
-{
-    constructor()
-    {
+export default class RecipesService extends ApiServiceBase {
+    constructor() {
         super();
         this.recipesBaseUrl = `${this.backendOrigin}/api/Recipes`;
     }
 
-    async getRecipes(sortOrder) {
+    async getRecipes(sortOrder="", search="") {
         let url = this.recipesBaseUrl;
 
-        if (sortOrder !== null)
-        {
-            url += `?sortOrder=${sortOrder}`;
-        }
+        if (sortOrder !== "" && search !== "") url += `?sortOrder=${sortOrder}&search=${search}`;
+        else if (sortOrder !== "") url += `?sortOrder=${sortOrder}`;
+        else if (search !== "") url += `?search=${search}`;
 
-        const response = await fetch(url);
-
-        if (!response.ok)
-        {
-            throw new Error(`Response status: ${response.status}`);
-        }
-
-        return await response.json();
+        return await this.tryGetJson(url);
     }
 
-    async getRecipe(id)
-    {
-        let url = `${this.recipesBaseUrl}/${id}`;
+    async getRecipe(id) {
+        const url = `${this.recipesBaseUrl}/${id}`;
 
-        const response = await fetch(url);
-
-        if (!response.ok)
-        {
-            throw new Error(`Response status: ${response.status}`);
-        }
-
-        return await response.json();
+        return await this.tryGetJson(url);
     }
 
-    async postRecipe(recipe)
-    {
-        const headers = new Headers({"Content-Type": "application/json"});
-    
-        const request = new Request(this.recipesBaseUrl, {
-            method: "POST",
-            headers: headers,
-            body: JSON.stringify(recipe)
-        });
-
-        try
-        {
-            const response = await fetch(request);
-
-            if (!response.ok)
-            {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            return response.json();
-        }
-        catch(error)
-        {
-            console.error(error);
-        }
+    async postRecipe(recipeDto) {
+        return await this.tryPost(this.recipesBaseUrl, recipeDto);
     }
 
-    async putRecipe(recipe)
-    {
-        let url = `${this.recipesBaseUrl}/${recipe.id}`;
+    async putRecipe(recipeDto) {
+        if (recipeDto.id === undefined) throw new Error("id missing");
 
-        const headers = new Headers();
-        headers.append("Content-Type", "application/json");
+        const url = `${this.recipesBaseUrl}/${recipeDto.id}`;
 
-        const request = new Request(url, {
-            method: "PUT",
-            body: JSON.stringify(recipe) ,
-            headers: headers
-        });
-
-        try
-        {
-            const response = await fetch(request);
-
-            if (!response.ok)
-            {
-                throw new Error(`Response status: ${response.status}`);
-            }
-        }
-        catch (error)
-        {
-            console.error(error.message);
-        }
+        return await this.tryPut(url, recipeDto);  
     }
 
-    async deleteRecipe(id)
-    {
-        let url = `${this.recipesBaseUrl}/${id}`;
+    async deleteRecipe(id) {
+        const url = `${this.recipesBaseUrl}/${id}`;
 
         this.tryDelete(url);
     }

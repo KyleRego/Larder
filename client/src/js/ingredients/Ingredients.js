@@ -11,21 +11,27 @@ export default function Ingredients() {
     const { units } = useContext(UnitsContext);
     const [ingredients, setIngredients] = useState([]);
     const [sortOrder, setSortOrder] = useState("Name");
+    const [searchParam, setSearchParam] = useState("");
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         const ingredientsService = new IngredientsService();
 
-        ingredientsService.getIngredients(sortOrder).then(result => {
+        ingredientsService.getIngredients(sortOrder, searchParam).then(result => {
             setIngredients(result);
         }).catch(error => {
             setAlertMessage(`Something went wrong: ${error.message}`);
         });
-    }, [sortOrder, setAlertMessage]);
+    }, [sortOrder, searchParam, setAlertMessage]);
 
     return <>
-        <div className="mt-2 mb-4 d-flex justify-content-around">
+        <div className="mt-2 mb-4 d-flex flex-wrap row-gap-3 justify-content-around align-items-center">
             <h1>Your ingredients:</h1>
+
+            <div className="d-flex flex-column align-items-start">
+                <label htmlFor="search">Search:</label>
+                <input id="search" className="form-control-sm"
+                    type="search" onChange={(e) => setSearchParam(e.target.value)} />
+            </div>
 
             <Link className="btn btn-primary" title="New ingredient" to="/ingredients/new">New ingredient</Link>
         </div>
