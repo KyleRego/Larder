@@ -14,22 +14,28 @@ public enum IngredientSortOptions
     Quantity_Desc
 }
 
-public interface IIngredientRepository : IRepositoryBase<Ingredient, IngredientSortOptions>
+public interface IIngredientRepository
+                : IRepositoryBase<Ingredient, IngredientSortOptions>
 {
-    public Task<Ingredient> FindOrCreateBy(string name);
+    public Task<Ingredient> FindOrCreateBy(string userId, string name);
 }
 
-public class IngredientRepository(AppDbContext dbContext) : RepositoryBase<Ingredient, IngredientSortOptions>(dbContext), IIngredientRepository
+public class IngredientRepository(AppDbContext dbContext)
+    : RepositoryBase<Ingredient, IngredientSortOptions>(dbContext),
+                                                IIngredientRepository
 {
-    public async Task<Ingredient> FindOrCreateBy(string name)
+    public async Task<Ingredient> FindOrCreateBy(string userId, string name)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ApplicationException("ingredient name cannot be null or whitespace");
         
-        Ingredient? ingredient = _dbContext.Ingredients.FirstOrDefault(ing => ing.Name == name);
+        Ingredient? ingredient = _dbContext.Ingredients.FirstOrDefault(
+            ing => ing.UserId == userId && ing.Name == name);
+
         if (ingredient != null) return ingredient;
 
         ingredient = new() {
+            UserId = userId,
             Name = name,
             Quantity = new() { Amount = 1 }
         };
@@ -48,12 +54,15 @@ public class IngredientRepository(AppDbContext dbContext) : RepositoryBase<Ingre
                             .FirstOrDefaultAsync(ing => ing.Id == id);
     }
 
-    public override async Task<List<Ingredient>> GetAll(IngredientSortOptions sortBy, string? search)
+    public override async Task<List<Ingredient>> GetAllForUser(string userId,
+                                                IngredientSortOptions sortBy,
+                                                                string? search)
     {
-        var baseQuery = _dbContext.Ingredients.Include(ing => ing.Quantity);
+        var baseQuery = _dbContext.Ingredients.Where(
+            ing => ing.UserId == userId).Include(ing => ing.Quantity);
 
         var baseSearchQuery = (search == null) ? baseQuery
-                    : baseQuery.Where(ingredient => ingredient.Name.Contains(search));
+            : baseQuery.Where(ingredient => ingredient.Name.Contains(search));
 
         switch (sortBy)
         {
@@ -72,6 +81,5 @@ public class IngredientRepository(AppDbContext dbContext) : RepositoryBase<Ingre
             default:
                 return await baseSearchQuery.ToListAsync();
         }
-        
     }
 }

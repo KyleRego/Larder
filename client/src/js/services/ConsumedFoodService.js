@@ -1,23 +1,19 @@
 import ApiServiceBase from "./ApiServiceBase";
 
-export default class ConsumedFoodService extends ApiServiceBase
-{
-    constructor()
-    {
+export default class ConsumedFoodService extends ApiServiceBase {
+    constructor() {
         super();
         this.consumedFoodsBaseUrl = `${this.backendOrigin}/api/ConsumedFoods`;
     }
 
-    async postConsumedFood(dto)
-    {
+    async postConsumedFood(dto) {
         const url = `${this.consumedFoodsBaseUrl}`;
 
         return await this.tryPost(url, dto);
     }
 
-    async putConsumedFood(dto)
-    {
-        if (!dto.id) throw new Error("no id");
+    async putConsumedFood(dto) {
+        this.throwNoId();
 
         const url = `${this.consumedFoodsBaseUrl}/${dto.id}`;
 
@@ -26,7 +22,7 @@ export default class ConsumedFoodService extends ApiServiceBase
 
     async deleteConsumedFood(id)
     {
-        if (!id) throw new Error("no id");
+        this.throwNoId();
 
         const url = `${this.consumedFoodsBaseUrl}/${id}`;
 

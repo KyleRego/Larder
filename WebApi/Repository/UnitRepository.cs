@@ -18,19 +18,23 @@ public interface IUnitRepository : IRepositoryBase<Unit, UnitSortOptions>
     
 }
 
-public class UnitRepository(AppDbContext dbContext) : RepositoryBase<Unit, UnitSortOptions>(dbContext), IUnitRepository
+public class UnitRepository(AppDbContext dbContext)
+                            : RepositoryBase<Unit, UnitSortOptions>(dbContext),
+                                                                IUnitRepository
 {
     public override async Task<Unit?> Get(string id)
     {
         return await _dbContext.Units
                         .Include(u => u.Conversions)
                         .Include(u => u.TargetConversions)
-                        .FirstOrDefaultAsync(unit => unit.Id == id);
+                        .FirstOrDefaultAsync(
+                            unit => unit.Id == id);
     }
 
-    public override async Task<List<Unit>> GetAll(UnitSortOptions sortBy, string? search)
+    public override async Task<List<Unit>> GetAllForUser(string userId,
+                                    UnitSortOptions sortBy, string? search)
     {
-        var baseQuery = _dbContext.Units;
+        var baseQuery = _dbContext.Units.Where(unit => unit.UserId == userId);
 
         var baseSearchQuery = (search == null) ? baseQuery
                     : baseQuery.Where(unit => unit.Name.Contains(search));

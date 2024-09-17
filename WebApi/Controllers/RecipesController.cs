@@ -6,8 +6,8 @@ using Larder.Services;
 
 namespace Larder.Controllers;
 
-[ApiController, Route("api/[controller]")]
-public class RecipesController(IRecipeService recipeService) : ControllerBase
+public class RecipesController(IRecipeService recipeService)
+                                        : ApplicationControllerBase
 {
     private readonly IRecipeService _recipeService = recipeService;
 
@@ -49,7 +49,8 @@ public class RecipesController(IRecipeService recipeService) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<RecipeDto>> Update([FromBody]RecipeDto recipe, string id)
+    public async Task<ActionResult<RecipeDto>>
+                            Update([FromBody]RecipeDto recipe, string id)
     {
         if (recipe.Id != id) return BadRequest();
 

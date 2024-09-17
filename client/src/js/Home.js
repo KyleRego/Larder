@@ -2,8 +2,7 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthedContext } from "../AuthedContext";
 
-export default function Home()
-{
+export default function Home() {
     const { authed } = useContext(AuthedContext);
 
     return <>
@@ -22,6 +21,10 @@ export default function Home()
             <Link className="btn btn-outline-primary" to={"register"}>Register</Link>
 
             <Link className="btn btn-outline-primary" to={"login"}>Login</Link>
+
+            <button disabled type="button" className="btn btn-outline-primary">
+                Try it out!
+            </button>
         </div>
         :
         ""

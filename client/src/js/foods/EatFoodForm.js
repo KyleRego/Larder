@@ -1,7 +1,10 @@
+import { useContext } from "react";
 import FoodsService from "../services/FoodsService";
+import { UnitsContext } from "../../UnitsContext";
 
-export default function EatFoodForm({food, setFood})
-{
+export default function EatFoodForm({food, setFood}) {
+    const { setAlertMessage } = useContext(UnitsContext);
+    
     async function handleEatFood(e)
     {
         e.preventDefault();
@@ -16,6 +19,7 @@ export default function EatFoodForm({food, setFood})
 
         await foodService.postEatFood(dto).then((returnedDto) => {
             setFood(returnedDto);
+            setAlertMessage("Food eaten");
         }).catch(error => {
             console.log(error);
         });

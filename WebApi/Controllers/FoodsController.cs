@@ -3,12 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Larder.Repository;
 using Larder.Services;
 using Larder.Dtos;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Larder.Controllers;
 
-[ApiController, Route("api/[controller]")]
-public class FoodsController(IFoodService foodService) : ControllerBase
+public class FoodsController(IFoodService foodService)
+                                        : ApplicationControllerBase
 {
     private readonly IFoodService _foodService = foodService;
 
@@ -20,7 +19,7 @@ public class FoodsController(IFoodService foodService) : ControllerBase
         return (food == null) ? NotFound() : food;
     }
 
-    [HttpGet, Authorize]
+    [HttpGet]
     public async Task<ActionResult<List<FoodDto>>> Index(string? sortOrder, string? search)
     {
         if (sortOrder != null && Enum.TryParse(sortOrder, out FoodSortOptions sortBy))

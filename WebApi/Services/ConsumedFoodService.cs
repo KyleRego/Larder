@@ -1,6 +1,7 @@
 using Larder.Dtos;
 using Larder.Models;
 using Larder.Repository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Larder.Services;
 
@@ -11,14 +12,18 @@ public interface IConsumedFoodService
     public Task DeleteConsumedFood(string id);
 }
 
-public class ConsumedFoodService(IConsumedFoodRepository consumedFoodRepository) : IConsumedFoodService
+public class ConsumedFoodService(IConsumedFoodRepository repository,
+                                    IHttpContextAccessor httpConAcsr,
+                                    IAuthorizationService authService)
+                : ApplicationServiceBase(httpConAcsr, authService), IConsumedFoodService
 {
-    private readonly IConsumedFoodRepository _consFoodRepo = consumedFoodRepository;
+    private readonly IConsumedFoodRepository _repository = repository;
 
     public async Task<ConsumedFoodDto> CreateConsumedFood(ConsumedFoodDto dto)
     {
         ConsumedFood entity = new()
         {
+            UserId = CurrentUserId(),
             FoodName = dto.Name,
             DateConsumed = dto.DateConsumed,
 
@@ -37,17 +42,20 @@ public class ConsumedFoodService(IConsumedFoodRepository consumedFoodRepository)
             GramsTotalSugarsConsumed = dto.GramsTotalSugars
         };
 
-        await _consFoodRepo.Insert(entity);
+        await _repository.Insert(entity);
 
         return ConsumedFoodDto.FromEntity(entity);
     }
 
     public async Task<ConsumedFoodDto> UpdateConsumedFood(ConsumedFoodDto dto)
     {
-        string id = dto.Id ?? throw new ApplicationException("id of consumed food to update missing");
+        string id = dto.Id
+            ?? throw new ApplicationException("id of consumed food missing");
 
-        ConsumedFood entity = await _consFoodRepo.Get(id)
-            ?? throw new ApplicationException("consumed food to delete was not found");
+        ConsumedFood entity = await _repository.Get(id)
+            ?? throw new ApplicationException("consumed food not found");
+
+        await ThrowIfUserCannotAccess(entity);
 
         // This does not update the DateConsumed
 
@@ -66,16 +74,18 @@ public class ConsumedFoodService(IConsumedFoodRepository consumedFoodRepository)
         entity.GramsDietaryFiberConsumed = dto.GramsDietaryFiber;
         entity.GramsTotalSugarsConsumed = dto.GramsTotalSugars;
 
-        await _consFoodRepo.Update(entity);
+        await _repository.Update(entity);
 
         return ConsumedFoodDto.FromEntity(entity);
     }
 
     public async Task DeleteConsumedFood(string id)
     {
-        ConsumedFood entity = await _consFoodRepo.Get(id)
-            ?? throw new ApplicationException("consumed food to delete was not found");
-    
-        await _consFoodRepo.Delete(entity);
+        ConsumedFood entity = await _repository.Get(id)
+            ?? throw new ApplicationException("consumed food not found");
+
+        await ThrowIfUserCannotAccess(entity);
+
+        await _repository.Delete(entity);
     }
 }

@@ -3,25 +3,32 @@ using Microsoft.AspNetCore.Mvc;
 using Larder.Repository;
 using Larder.Dtos;
 using Larder.Services;
-using Microsoft.AspNetCore.Authorization;
+
 
 namespace Larder.Controllers;
 
-[ApiController, Route("api/[controller]")]
-public class UnitsController(IUnitService service) : ControllerBase
+public class UnitsController(IUnitService service)
+                                        : ApplicationControllerBase
 {
     private readonly IUnitService _service = service;
 
-    [HttpGet, Authorize]
-    public async Task<List<UnitDto>> Index(string? sortOrder, string? search)
+    [HttpGet]
+    public async Task<ActionResult<List<UnitDto>>> Index(string? sortOrder, string? search)
     {
-        if (sortOrder != null && Enum.TryParse(sortOrder, out UnitSortOptions sortBy))
+        try
         {
-            return await _service.GetUnits(sortBy, search);
+            if (sortOrder != null && Enum.TryParse(sortOrder, out UnitSortOptions sortBy))
+            {
+                return await _service.GetUnits(sortBy, search);
+            }
+            else
+            {
+                return await _service.GetUnits(UnitSortOptions.AnyOrder, search);
+            }
         }
-        else
+        catch (ApplicationException)
         {
-            return await _service.GetUnits(UnitSortOptions.AnyOrder, search);
+            return UnprocessableEntity();
         }
     }
 

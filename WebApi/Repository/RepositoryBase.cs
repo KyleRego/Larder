@@ -13,7 +13,7 @@ public interface IRepositoryBase<T, TSortOptions>
 {
     public Task<T?> Get(string id);
 
-    public Task<List<T>> GetAll(TSortOptions sortBy, string? search);
+    public Task<List<T>> GetAllForUser(string userId, TSortOptions sortBy, string? search);
 
     public Task<T> Insert(T newEntity);
 
@@ -28,7 +28,7 @@ public abstract class RepositoryBase<T, TSortOptions>(AppDbContext dbContext) : 
 
     public abstract Task<T?> Get(string id);
 
-    public abstract Task<List<T>> GetAll(TSortOptions sortBy, string? search);
+    public abstract Task<List<T>> GetAllForUser(string userId, TSortOptions sortBy, string? search);
 
     public async Task<T> Insert(T newEntity)
     {

@@ -5,15 +5,15 @@ using Larder.Services;
 
 namespace Larder.Tests.Services;
 
-public class UnitConversionServiceTests
+public class UnitConversionServiceTests : ServiceTestsBase
 {
     private readonly Dictionary<string, Unit> _unitMap;
 
     public UnitConversionServiceTests()
     {
         _unitMap = [];
-        _unitMap["1"] = new() { Id = "1", Type = UnitType.Mass, Name = "Grams" };
-        _unitMap["2"] = new() { Id = "2", Type = UnitType.Volume, Name = "Cups" };
+        _unitMap["1"] = new() { UserId = mockUserId, Id = "1", Type = UnitType.Mass, Name = "Grams" };
+        _unitMap["2"] = new() { UserId = mockUserId, Id = "2", Type = UnitType.Volume, Name = "Cups" };
     }
 
     [Fact]
@@ -30,7 +30,9 @@ public class UnitConversionServiceTests
 
         var mockUnitConvRepo = new Mock<IUnitConversionRepository>();
 
-        UnitConversionService sut = new(mockUnitRepo.Object, mockUnitConvRepo.Object);
+        UnitConversionService sut = new(mockUnitRepo.Object, mockUnitConvRepo.Object,
+                        mockHttpContextAccessor.Object, mockAuthorizationService.Object);
+
         UnitConversionDto dto = new()
         {
             UnitId = unitId,

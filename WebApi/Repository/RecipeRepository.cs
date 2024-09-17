@@ -17,7 +17,9 @@ public interface IRecipeRepository : IRepositoryBase<Recipe, RecipeSortOptions>
 
 }
 
-public class RecipeRepository(AppDbContext dbContext) : RepositoryBase<Recipe, RecipeSortOptions>(dbContext), IRecipeRepository
+public class RecipeRepository(AppDbContext dbContext)
+                : RepositoryBase<Recipe, RecipeSortOptions>(dbContext),
+                                                        IRecipeRepository
 {
     public override async Task<Recipe?> Get(string id)
     {
@@ -27,12 +29,13 @@ public class RecipeRepository(AppDbContext dbContext) : RepositoryBase<Recipe, R
                                 .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public override async Task<List<Recipe>> GetAll(RecipeSortOptions sortBy, string? search)
+    public override async Task<List<Recipe>> GetAllForUser(string userId,
+                                RecipeSortOptions sortBy, string? search)
     {
-        var baseQuery = _dbContext.Recipes;
+        var baseQuery = _dbContext.Recipes.Where(recipe => recipe.UserId == userId);
 
-        var baseSearchQuery = (search == null) ? baseQuery
-                    : baseQuery.Where(recipe => recipe.Name.Contains(search));
+        var baseSearchQuery = (search == null) ? baseQuery : baseQuery.Where(
+                                            recipe => recipe.Name.Contains(search));
 
         switch (sortBy)
         {

@@ -5,7 +5,7 @@ using Larder.Services;
 
 namespace Larder.Tests.Services;
 
-public class FoodServiceTests
+public class FoodServiceTests : ServiceTestsBase
 {
     private readonly Dictionary<string, Food> _foodMap;
 
@@ -15,6 +15,7 @@ public class FoodServiceTests
 
         _foodMap["1"] = new()
         {
+            UserId = mockUserId,
             Id = "1",
             Servings = 4,
             Name = "Apple",
@@ -26,7 +27,6 @@ public class FoodServiceTests
     [Fact]
     public async void EatServingsCreatesAConsumedFoodAndDecreasesServingsOfFood()
     {
-        // arrange
         string foodId = "1";
         Food food = _foodMap[foodId];
 
@@ -41,12 +41,11 @@ public class FoodServiceTests
             FoodId = "1",
             Servings = 1
         };
-        FoodService sut = new(mockFoodRepo.Object, mockConsFoodRepo.Object);
+        FoodService sut = new(mockFoodRepo.Object, mockConsFoodRepo.Object,
+                        mockHttpContextAccessor.Object, mockAuthorizationService.Object);
 
-        // act
         (FoodDto foodDtoResult, ConsumedFoodDto consumedFoodDtoResult) = await sut.EatFood(dto);
 
-        // assert
         double expectedCalories = dto.Servings * food.Calories;
         double expectedProtein = dto.Servings * food.GramsProtein;
 

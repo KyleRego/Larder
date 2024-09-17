@@ -27,10 +27,9 @@ export default class FoodsService extends ApiServiceBase {
     }
 
     async postEatFood(foodServingsDto) {
-        const id = foodServingsDto.foodId;
-        if (id === undefined) throw new Error("food id missing");
+        if (foodServingsDto.foodId === undefined) this.throwNoId();
 
-        const url = `${this.foodsBaseUrl}/EatFood/${id}`;
+        const url = `${this.foodsBaseUrl}/EatFood/${foodServingsDto.id}`;
 
         return await this.tryPost(url, foodServingsDto);
     }
@@ -45,10 +44,9 @@ export default class FoodsService extends ApiServiceBase {
     }
 
     async patchFood(food) {
-        const id = food.foodId;
-        if (id === undefined) throw new Error("food id missing");
+        if (food.id === null) this.throwNoId();
 
-        const url = `${this.foodsBaseUrl}/${id}`;
+        const url = `${this.foodsBaseUrl}/${food.id}`;
 
         return await this.tryPatch(url, food);
     }

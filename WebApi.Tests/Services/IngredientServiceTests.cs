@@ -5,14 +5,16 @@ using Larder.Services;
 
 namespace Larder.Tests.Services;
 
-public class IngredientServiceTests
+public class IngredientServiceTests : ServiceTestsBase
 {
     [Fact]
     public async void UpdateIngredientThrowsIfMissingId()
     {
         var ingredientRepository = new Mock<IIngredientRepository>();
 
-        IngredientService service = new(ingredientRepository.Object);
+        IngredientService service = new(ingredientRepository.Object,
+                                        mockHttpContextAccessor.Object,
+                                        mockAuthorizationService.Object);
 
         IngredientDto ingredient = new()
         {
@@ -23,7 +25,8 @@ public class IngredientServiceTests
             }
         };
 
-        await Assert.ThrowsAsync<ApplicationException>(async () => await service.UpdateIngredient(ingredient));
+        await Assert.ThrowsAsync<ApplicationException>(
+            async () => await service.UpdateIngredient(ingredient));
     }
 
     [Fact]
@@ -34,7 +37,8 @@ public class IngredientServiceTests
         string id = "made_up_id";
         ingredientRepository.Setup(ir => ir.Get(id)).ReturnsAsync((Ingredient?)null);
 
-        IngredientService service = new(ingredientRepository.Object);
+        IngredientService service = new(ingredientRepository.Object,
+            mockHttpContextAccessor.Object, mockAuthorizationService.Object);
 
         IngredientDto ingredient = new()
         {

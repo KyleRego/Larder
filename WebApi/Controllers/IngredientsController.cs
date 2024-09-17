@@ -6,8 +6,8 @@ using Larder.Repository;
 
 namespace Larder.Controllers;
 
-[ApiController, Route("api/[controller]")]
-public class IngredientsController(IIngredientService ingredientService) : ControllerBase
+public class IngredientsController(IIngredientService ingredientService)
+                                        : ApplicationControllerBase
 {
     private readonly IIngredientService _ingredientService = ingredientService;
 

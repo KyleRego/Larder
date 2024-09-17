@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 using Larder.Models;
 
 namespace Larder.Data;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<IdentityUser>(options)
+public class AppDbContext(DbContextOptions<AppDbContext> options)
+                                : IdentityDbContext<ApplicationUser>(options)
 {
     public DbSet<Item> Items { get; set; }
     public DbSet<Food> Foods { get; set; }

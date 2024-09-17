@@ -1,6 +1,7 @@
 using Larder.Dtos;
 using Larder.Models;
 using Larder.Repository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Larder.Services;
 
@@ -12,24 +13,33 @@ public interface IUnitConversionService
 }
 
 public class UnitConversionService(IUnitRepository unitRep,
-                                    IUnitConversionRepository unitConvRep) : IUnitConversionService
+                                    IUnitConversionRepository unitConvRep,
+                                    IHttpContextAccessor httpConAcsr,
+                                    IAuthorizationService authService)
+    : ApplicationServiceBase(httpConAcsr, authService), IUnitConversionService
 {
     private readonly IUnitRepository _unitRep = unitRep;
     private readonly IUnitConversionRepository _unitConvRep = unitConvRep;
 
-    public async Task<UnitConversionDto> CreateUnitConversion(UnitConversionDto dto)
+    public async Task<UnitConversionDto>
+                                    CreateUnitConversion(UnitConversionDto dto)
     {
         Unit unit = await _unitRep.Get(dto.UnitId)
                 ?? throw new ApplicationException("unit not found");
 
+        await ThrowIfUserCannotAccess(unit);
+
         Unit targetUnit = await _unitRep.Get(dto.TargetUnitId)
                 ?? throw new ApplicationException("target unit not found");
 
+        await ThrowIfUserCannotAccess(targetUnit);
+
         if (unit.Type != targetUnit.Type)
-                throw new ApplicationException("unit and target unit must be same type (e.g. mass units)");
+            throw new ApplicationException("unit and target unit must be same type (e.g. mass units)");
     
         UnitConversion unitConversion = new()
         {
+            UserId = CurrentUserId(),
             UnitId = unit.Id,
             TargetUnitId = targetUnit.Id,
             UnitType = unit.Type,
@@ -44,7 +54,9 @@ public class UnitConversionService(IUnitRepository unitRep,
     public async Task DeleteUnitConversion(string id)
     {
         UnitConversion unitConversion = await _unitConvRep.Get(id)
-                ?? throw new ApplicationException("unit conversion to update not found");
+            ?? throw new ApplicationException("unit conversion to update not found");
+
+        await ThrowIfUserCannotAccess(unitConversion);
 
         await _unitConvRep.Delete(unitConversion);
     }

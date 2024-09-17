@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Larder.Controllers;
 
-[ApiController, Route("api/[controller]")]
-public class TimelineController(ITimelineService timelineService) : Controller
+public class TimelineController(ITimelineService timelineService)
+                                        : ApplicationControllerBase
 {
     private readonly ITimelineService _timelineService = timelineService;
 

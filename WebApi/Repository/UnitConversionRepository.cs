@@ -13,19 +13,25 @@ public enum UnitConversionSortOptions
 public interface IUnitConversionRepository
                 : IRepositoryBase<UnitConversion, UnitConversionSortOptions>
 {
-    public Task<UnitConversion?> FindByUnitIdsEitherWay(string unitId1, string unitId2);
+    public Task<UnitConversion?> FindByUnitIdsEitherWay(string userId,
+                                                        string unitId1,
+                                                        string unitId2);
 }
 
 public class UnitConversionRepository(AppDbContext dbContext)
-            : RepositoryBase<UnitConversion, UnitConversionSortOptions>(dbContext), IUnitConversionRepository
+        : RepositoryBase<UnitConversion, UnitConversionSortOptions>(dbContext),
+                                            IUnitConversionRepository
 {
-    public async Task<UnitConversion?> FindByUnitIdsEitherWay(string unitId1, string unitId2)
+    public async Task<UnitConversion?> FindByUnitIdsEitherWay(string userId,
+                                                                string unitId1,
+                                                                string unitId2)
     {
         return await _dbContext.UnitConversions
                     .Include(uc => uc.Unit)
                     .Include(uc => uc.TargetUnit)
-                    .FirstOrDefaultAsync(uc =>
-            (uc.UnitId == unitId1 && uc.TargetUnitId == unitId2) || (uc.UnitId == unitId2 && uc.TargetUnitId == unitId1)
+                    .FirstOrDefaultAsync(uc => uc.UserId == userId &&
+            ((uc.UnitId == unitId1 && uc.TargetUnitId == unitId2) ||
+                (uc.UnitId == unitId2 && uc.TargetUnitId == unitId1))
         );
     }
 
@@ -33,10 +39,12 @@ public class UnitConversionRepository(AppDbContext dbContext)
     {
         return await _dbContext.UnitConversions
                     .Include(uc => uc.Unit)
-                    .Include(uc => uc.TargetUnit).FirstOrDefaultAsync(uc => uc.Id == id); 
+                    .Include(uc => uc.TargetUnit).FirstOrDefaultAsync(
+                                uc => uc.Id == id); 
     }
 
-    public override Task<List<UnitConversion>> GetAll(UnitConversionSortOptions sortBy, string? search)
+    public override Task<List<UnitConversion>> GetAllForUser(string userId,
+                            UnitConversionSortOptions sortBy, string? search)
     {
         throw new NotImplementedException();
     }

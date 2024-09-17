@@ -5,7 +5,7 @@ using Larder.Dtos;
 
 namespace Larder.Tests.Services;
 
-public class RecipeServiceTests
+public class RecipeServiceTests : ServiceTestsBase
 {
     [Fact]
     public async void UpdateRecipeThrowsIfIdIsNull()
@@ -15,9 +15,11 @@ public class RecipeServiceTests
         var foodRepository = new Mock<IFoodRepository>();
         var unitConvRep = new Mock<IUnitConversionRepository>();
 
-        RecipeService service = new(recipeRepository.Object,
+        RecipeService sut = new(recipeRepository.Object,
                                     ingredientRepository.Object,
-                                    foodRepository.Object, unitConvRep.Object);
+                                    foodRepository.Object, unitConvRep.Object,
+                                    mockHttpContextAccessor.Object,
+                                    mockAuthorizationService.Object);
 
         RecipeDto recipe = new()
         {
@@ -30,7 +32,8 @@ public class RecipeServiceTests
             ]
         };
 
-        await Assert.ThrowsAsync<ApplicationException>(async () => await service.UpdateRecipe(recipe));
+        await Assert.ThrowsAsync<ApplicationException>(
+                async () => await sut.UpdateRecipe(recipe));
     }
 
     [Fact]
@@ -44,10 +47,12 @@ public class RecipeServiceTests
         string id = "made_up_id";
         recipeRepository.Setup(r => r.Get(id)).ReturnsAsync((Recipe?)null);
 
-        RecipeService service = new(recipeRepository.Object,
+        RecipeService sut = new(recipeRepository.Object,
                                     ingredientRepository.Object,
                                     foodRepository.Object,
-                                    unitConvRepository.Object);
+                                    unitConvRepository.Object,
+                                    mockHttpContextAccessor.Object,
+                                    mockAuthorizationService.Object);
 
         RecipeDto recipe = new()
         {
@@ -61,22 +66,24 @@ public class RecipeServiceTests
             ]
         };
 
-        await Assert.ThrowsAsync<ApplicationException>(async () => await service.UpdateRecipe(recipe));
+        await Assert.ThrowsAsync<ApplicationException>(
+            async () => await sut.UpdateRecipe(recipe));
     }
 
     [Fact]
     public async void CookRecipeDecreasesIngredientAmountsAndCreatesFood()
     {
-        // arrange
         string recipeId = "1";
         Recipe recipe = new()
         {
+            UserId = mockUserId,
             Id = recipeId,
             Name = "Rice with butter"
         };
 
         Unit ingredient1Unit = new()
         {
+            UserId = mockUserId,
             Id = "unit1",
             Name = "Cups",
             Type = UnitType.Volume
@@ -84,12 +91,14 @@ public class RecipeServiceTests
 
         Ingredient ingredient1 = new()
         {
+            UserId = mockUserId,
             Name = "White rice",
             Quantity = new() { Amount = 5, Unit = ingredient1Unit, UnitId = ingredient1Unit.Id }
         };
 
         Unit ingredient2Unit = new()
         {
+            UserId = mockUserId,
             Id = "unit2",
             Name = "Tablespoons",
             Type = UnitType.Volume
@@ -97,6 +106,7 @@ public class RecipeServiceTests
 
         Ingredient ingredient2 = new()
         {
+            UserId = mockUserId,
             Name = "Butter",
             Quantity = new() { Amount = 12, Unit = ingredient2Unit, UnitId = ingredient2Unit.Id }
         };
@@ -104,6 +114,7 @@ public class RecipeServiceTests
         recipe.RecipeIngredients = [
             new()
             {
+                UserId = mockUserId,
                 Ingredient = ingredient1,
                 RecipeId = recipe.Id,
                 IngredientId = ingredient1.Id,
@@ -111,6 +122,7 @@ public class RecipeServiceTests
             },
             new()
             {
+                UserId = mockUserId,
                 Ingredient = ingredient2,
                 RecipeId = recipe.Id,
                 IngredientId = ingredient2.Id,
@@ -126,24 +138,25 @@ public class RecipeServiceTests
         var ingredientRepository = new Mock<IIngredientRepository>();
 
         var foodRepository = new Mock<IFoodRepository>();
-        foodRepository.Setup(_ => _.FindOrCreateBy(recipe.Name))
-                                    .ReturnsAsync((Food)new() { Name = recipe.Name, Servings = 1 });
+        foodRepository.Setup(_ => _.FindOrCreateBy(mockUserId, recipe.Name))
+                        .ReturnsAsync(
+            (Food)new() { UserId = mockUserId, Name = recipe.Name, Servings = 1 });
 
         var unitConvRep = new Mock<IUnitConversionRepository>();
     
         RecipeService sut = new(recipeRepository.Object,
                                 ingredientRepository.Object,
-                                foodRepository.Object, unitConvRep.Object);
+                                foodRepository.Object, unitConvRep.Object,
+                                mockHttpContextAccessor.Object,
+                                mockAuthorizationService.Object);
 
         CookRecipeDto dto = new()
         {
             RecipeId = recipe.Id
         };
 
-        // act  
         await sut.CookRecipe(dto);
 
-        // assert
         // Verify that the food servings was increased
         foodRepository.Verify(_ => _.Update(It.Is<Food>(f =>
             f.Name == recipe.Name && f.Servings == 1 + recipe.ServingsProduced
@@ -159,12 +172,13 @@ public class RecipeServiceTests
     [Fact]
     public async void CookRecipeConvertsRecipeIngredientQuantityToIngredientUnitToDecreaseIngredientQuantity()
     {
-        Unit cupsUnit = new() { Name="Cups", Type=UnitType.Volume };
-        Unit mlUnit = new() { Name="ml", Type=UnitType.Volume };
-        Ingredient ingredient = new() { Id = "ingredient1", Name = "Water",
+        Unit cupsUnit = new() { UserId = mockUserId, Name="Cups", Type=UnitType.Volume };
+        Unit mlUnit = new() { UserId = mockUserId, Name="ml", Type=UnitType.Volume };
+        Ingredient ingredient = new() { UserId = mockUserId, Id = "ingredient1", Name = "Water",
                                         Quantity = new() { Amount = 6, Unit = cupsUnit, UnitId = cupsUnit.Id } };
         UnitConversion conversion = new()
         {
+            UserId = mockUserId,
             UnitId = cupsUnit.Id,
             Unit = cupsUnit,
             TargetUnitId = mlUnit.Id,
@@ -176,12 +190,14 @@ public class RecipeServiceTests
         string recipeId = "1";
         Recipe recipe = new()
         {
+            UserId = mockUserId,
             Id = recipeId, 
             Name = "Test Recipe"
         };
 
         RecipeIngredient recipeIngredient = new()
         {
+            UserId = mockUserId,
             RecipeId = recipeId,
             IngredientId = ingredient.Id,
             Ingredient = ingredient,
@@ -196,14 +212,16 @@ public class RecipeServiceTests
         var ingredientRepo = new Mock<IIngredientRepository>();
 
         var foodRepo = new Mock<IFoodRepository>();
-        Food food = new() { Name = recipe.Name };
-        foodRepo.Setup(_ => _.FindOrCreateBy(recipe.Name)).ReturnsAsync(food);
+        Food food = new() { UserId = mockUserId, Name = recipe.Name };
+        foodRepo.Setup(_ => _.FindOrCreateBy(mockUserId, recipe.Name)).ReturnsAsync(food);
 
         var unitConvRepo = new Mock<IUnitConversionRepository>();
-        unitConvRepo.Setup(_ => _.FindByUnitIdsEitherWay(cupsUnit.Id, mlUnit.Id)).ReturnsAsync(conversion);
+        unitConvRepo.Setup(_ => _.FindByUnitIdsEitherWay(mockUserId, cupsUnit.Id, mlUnit.Id)).ReturnsAsync(conversion);
 
         RecipeService sut = new(recipeRepo.Object, ingredientRepo.Object,
-                                foodRepo.Object, unitConvRepo.Object);
+                                foodRepo.Object, unitConvRepo.Object,
+                                mockHttpContextAccessor.Object,
+                                mockAuthorizationService.Object);
 
         CookRecipeDto dto = new() { RecipeId = recipeId };
 

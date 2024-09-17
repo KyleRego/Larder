@@ -4,13 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Larder.Controllers;
 
-[ApiController, Route("api/[controller]")]
-public class ConsumedFoodsController(IConsumedFoodService consumedFoodService) : Controller
+public class ConsumedFoodsController(IConsumedFoodService consumedFoodService)
+                                        : ApplicationControllerBase
 {
-    private readonly IConsumedFoodService _consFoodService = consumedFoodService;
+    private readonly IConsumedFoodService _consFoodService =
+                                                         consumedFoodService;
 
     [HttpPost]
-    public async Task<ActionResult<ConsumedFoodDto>> Create(ConsumedFoodDto dto)
+    public async Task<ActionResult<ConsumedFoodDto>>
+                                                    Create(ConsumedFoodDto dto)
     {
         if (dto.Id != null) return BadRequest();
 
@@ -25,7 +27,8 @@ public class ConsumedFoodsController(IConsumedFoodService consumedFoodService) :
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<ConsumedFoodDto>> Update(ConsumedFoodDto dto, string id)
+    public async Task<ActionResult<ConsumedFoodDto>>
+                                        Update(ConsumedFoodDto dto, string id)
     {
         if (dto.Id == null || dto.Id != id) return BadRequest();
 

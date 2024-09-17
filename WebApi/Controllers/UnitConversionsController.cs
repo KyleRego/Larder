@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Larder.Controllers;
 
-[ApiController, Route("api/[controller]")]
-public class UnitConversionsController(IUnitConversionService unitConvService) : ControllerBase
+public class UnitConversionsController(IUnitConversionService unitConvService)
+                                                : ApplicationControllerBase
 {
     private readonly IUnitConversionService _unitConvService = unitConvService;
 

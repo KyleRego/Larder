@@ -11,20 +11,25 @@ public class QuantityConverterTests
 
     public QuantityConverterTests()
     {
+        string mockUserId = Guid.NewGuid().ToString();
+
         _gramsUnit = new()
         {
+            UserId = mockUserId,
             Type = UnitType.Mass,
             Name = "Grams"
         };
 
         _milligramsUnit = new()
         {
+            UserId = mockUserId,
             Type = UnitType.Mass,
             Name = "Milligrams"
         };
 
         _gramsToMilligramsConversion = new()
         {
+            UserId = mockUserId,
             UnitId = _gramsUnit.Id,
             Unit = _gramsUnit,
             TargetUnitId = _milligramsUnit.Id,
