@@ -11,8 +11,7 @@ export default function NewUnit() {
     const navigate = useNavigate();
     const { setAlertMessage } = useContext(AlertContext);
 
-    async function handleSubmit(e)
-    {
+    async function handleSubmit(e) {
         e.preventDefault();
         const formData = new FormData(e.target);
         const dto = UnitFormDataMapper.map(formData);

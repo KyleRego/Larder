@@ -24,6 +24,8 @@ public class UnitService(IUnitRepository repository,
 
     public async Task<UnitDto> CreateUnit(UnitDto dto)
     {
+        Console.WriteLine("hello world 1");
+        Console.WriteLine(CurrentUserId());
         Unit entity = new()
         {
             UserId = CurrentUserId(),

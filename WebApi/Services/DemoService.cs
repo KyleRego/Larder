@@ -22,12 +22,19 @@ public class DemoService(UserManager<ApplicationUser> userManager,
 
     public async Task CreateDemo()
     {
+        string userName = $"demo-user-{Guid.NewGuid()}@larder.lol";
+
         ApplicationUser demoUser = new()
         {
-            UserName = "DemoUser@larder.lol"
+            UserName = userName
         };
 
-        await _userManager.CreateAsync(demoUser);
+        IdentityResult result = await _userManager.CreateAsync(demoUser);
+
+        if (!result.Succeeded)
+        {
+            throw new ApplicationException("Unable to create the demo user");
+        }
 
         await _signInManager.SignInAsync(demoUser, false);
     }

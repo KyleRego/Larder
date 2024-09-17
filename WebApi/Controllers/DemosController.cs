@@ -12,7 +12,14 @@ public class DemosController(IDemoService demoService) : ApplicationControllerBa
     [AllowAnonymous, HttpPost]
     public async Task<ActionResult> Create()
     {
-        await _demoService.CreateDemo();
+        try
+        {
+            await _demoService.CreateDemo();
+        }
+        catch (ApplicationException)
+        {
+            return UnprocessableEntity();
+        }
 
         return Ok();
     }

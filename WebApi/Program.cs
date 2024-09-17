@@ -5,6 +5,8 @@ using Larder.Data;
 using Larder.Repository;
 using Larder.Services;
 using Larder.Policies.Requirements;
+using Microsoft.AspNetCore.Authorization;
+using Larder.Policies.Handlers;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,8 @@ builder.Services.AddScoped<ITimelineService, TimelineService>();
 builder.Services.AddScoped<IConsumedFoodService, ConsumedFoodService>();
 builder.Services.AddScoped<IUnitConversionService, UnitConversionService>();
 builder.Services.AddScoped<IDemoService, DemoService>();
+
+builder.Services.AddSingleton<IAuthorizationHandler, UserCanAccessEntityHandler>();
 
 if (builder.Environment.IsDevelopment())
 {
