@@ -23,7 +23,7 @@ export default class RecipesService extends ApiServiceBase {
     }
 
     async postRecipe(recipeDto) {
-        return await this.tryPost(this.recipesBaseUrl, recipeDto);
+        return await this.tryPostJson(this.recipesBaseUrl, recipeDto);
     }
 
     async putRecipe(recipeDto) {

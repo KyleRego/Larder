@@ -29,7 +29,19 @@ export default class ApiServiceBase
         return await response.json();
     }
 
-    async tryPost(url, dto) {
+    async tryPost(url) {
+        const request = new Request(url, {
+            method: "POST",
+            headers: this.headers,
+            credentials: "include"
+        });
+
+        const response = await fetch(request);
+
+        if (!response.ok) this.#throwError(response);
+    }
+
+    async tryPostJson(url, dto) {
         const request = new Request(url, {
             method: "POST",
             headers: this.headers,

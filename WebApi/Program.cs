@@ -36,7 +36,7 @@ builder.Services.AddScoped<IUnitService, UnitService>();
 builder.Services.AddScoped<ITimelineService, TimelineService>();
 builder.Services.AddScoped<IConsumedFoodService, ConsumedFoodService>();
 builder.Services.AddScoped<IUnitConversionService, UnitConversionService>();
-
+builder.Services.AddScoped<IDemoService, DemoService>();
 
 if (builder.Environment.IsDevelopment())
 {

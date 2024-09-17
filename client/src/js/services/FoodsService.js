@@ -23,7 +23,7 @@ export default class FoodsService extends ApiServiceBase {
     }
 
     async postFood(foodDto) {
-        return await this.tryPost(this.foodsBaseUrl, foodDto);
+        return await this.tryPostJson(this.foodsBaseUrl, foodDto);
     }
 
     async postEatFood(foodServingsDto) {
@@ -31,7 +31,7 @@ export default class FoodsService extends ApiServiceBase {
 
         const url = `${this.foodsBaseUrl}/EatFood/${foodServingsDto.id}`;
 
-        return await this.tryPost(url, foodServingsDto);
+        return await this.tryPostJson(url, foodServingsDto);
     }
 
     async putFood(food) {

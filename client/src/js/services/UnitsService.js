@@ -23,7 +23,7 @@ export default class UnitsService extends ApiServiceBase {
     }
 
     async postUnit(unitDto) {
-        return await this.tryPost(this.unitsBaseUrl, unitDto); 
+        return await this.tryPostJson(this.unitsBaseUrl, unitDto); 
     }
 
     async putUnit(unitDto) {

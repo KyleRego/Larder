@@ -9,7 +9,7 @@ export default class ConsumedFoodService extends ApiServiceBase {
     async postConsumedFood(dto) {
         const url = `${this.consumedFoodsBaseUrl}`;
 
-        return await this.tryPost(url, dto);
+        return await this.tryPostJson(url, dto);
     }
 
     async putConsumedFood(dto) {

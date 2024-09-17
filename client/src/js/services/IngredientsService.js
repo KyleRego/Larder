@@ -23,7 +23,7 @@ export default class IngredientsService extends ApiServiceBase {
     }
 
     async postIngredient(ingDto) {
-        return await this.tryPost(this.ingredientsBaseUrl, ingDto);
+        return await this.tryPostJson(this.ingredientsBaseUrl, ingDto);
     }
 
     async putIngredient(ingDto) {

@@ -1,9 +1,33 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthedContext } from "../AuthedContext";
+import DemoService from "./services/DemoService";
+import { AlertContext } from "../AlertContext";
+import UnitsService from "./services/UnitsService";
+import { UnitsContext } from "../UnitsContext";
 
 export default function Home() {
-    const { authed } = useContext(AuthedContext);
+    const navigate = useNavigate();
+    const { setAlertMessage } = useContext(AlertContext);
+    const { authed, setAuthed } = useContext(AuthedContext);
+    const { setUnits } = useContext(UnitsContext);
+
+    function handleCreateDemo() {
+        const service = new DemoService();
+
+        service.postCreateDemo().then(res => {
+            setAlertMessage("Success! You are signed in as a demo user to try out Larder 🤍");
+            const unitsService = new UnitsService();
+
+            unitsService.getUnits().then((result) => {
+                setUnits(result);
+                setAuthed(true);
+                navigate("/foods")
+            })
+        }).catch(error => {
+            setAlertMessage("Something went wrong setting up a demo");
+        });
+    }
 
     return <>
         <h1 className="text-center my-4">Larder</h1>
@@ -22,7 +46,7 @@ export default function Home() {
 
             <Link className="btn btn-outline-primary" to={"login"}>Login</Link>
 
-            <button disabled type="button" className="btn btn-outline-primary">
+            <button onClick={handleCreateDemo} type="button" className="btn btn-outline-primary">
                 Try it out!
             </button>
         </div>

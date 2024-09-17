@@ -22,7 +22,7 @@ The frontend is a React app that was created with Create React App. The backend 
 
 #### Authentication
 
-The backend uses cookie-based authentication with ASP.NET Core Identity. Since React is being used without a framework, the client has a React context called `AuthedContext` to track the user authentication state client side. The initial test of whether the client is authenticated is a fetch call to the units index endpoint. Since units are used throughout the app (like for ingredient quantities), there is a React context `UnitsContext`, so this has the dual purpose of checking if there are valid cookies and setting up the client auth context.
+The backend uses cookie-based authentication with ASP.NET Core Identity. Since React is being used without a framework, the client has a React context called `AuthedContext` to track the user authentication state client side. The initial test of whether the client is authenticated is a fetch call to the units index endpoint. Since units are used throughout the app (like for ingredient quantities), there is a React context `UnitsContext`, so this has the dual purpose of checking if there are valid cookies and setting up the user's units context.
 
 #### Controllers, services, repository
 
