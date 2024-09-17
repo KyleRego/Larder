@@ -1,12 +1,11 @@
 import { useContext } from "react";
 import FoodsService from "../services/FoodsService";
-import { UnitsContext } from "../../UnitsContext";
+import { AlertContext } from "../../AlertContext";
 
 export default function EatFoodForm({food, setFood}) {
-    const { setAlertMessage } = useContext(UnitsContext);
+    const { setAlertMessage } = useContext(AlertContext);
     
-    async function handleEatFood(e)
-    {
+    async function handleEatFood(e) {
         e.preventDefault();
         const formData = new FormData(e.target);
 

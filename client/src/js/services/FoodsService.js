@@ -29,7 +29,7 @@ export default class FoodsService extends ApiServiceBase {
     async postEatFood(foodServingsDto) {
         if (foodServingsDto.foodId === undefined) this.throwNoId();
 
-        const url = `${this.foodsBaseUrl}/EatFood/${foodServingsDto.id}`;
+        const url = `${this.foodsBaseUrl}/EatFood/${foodServingsDto.foodId}`;
 
         return await this.tryPostJson(url, foodServingsDto);
     }
