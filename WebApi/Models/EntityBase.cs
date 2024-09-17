@@ -10,5 +10,5 @@ public abstract class EntityBase
 
     [ForeignKey(nameof(UserId))]
     public ApplicationUser? User { get; set; }
-    public required string? UserId { get; set; }
+    public required string UserId { get; set; }
 }
