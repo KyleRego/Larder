@@ -3,15 +3,16 @@ import { Link } from "react-router-dom";
 import SortingTableHeader from "../components/SortingTableHeader";
 
 import FoodsService from "../services/FoodsService";
-import { useState } from "react";
-
+import { useContext, useState } from "react";
+import { AlertContext } from "./../../AlertContext";
 import { CiEdit } from "react-icons/ci";
 import { MdDone } from "react-icons/md";
 
 // setFoods is passed in so that when the food amount is edited in cell,
 // the entire foods state can be updated, to change the amount of that one food
 export default function FoodsTable({foods, setFoods, sortOrder, setSortOrder}) {
-    let rows = foods.map(food => FoodRow(food, foods, setFoods));
+    const { setAlertMessage } = useContext(AlertContext)
+    let rows = foods.map(food => FoodRow(food, foods, setFoods, setAlertMessage));
 
     return <table className="foodsTable">
             <caption>Servings of ready to eat food.</caption>
@@ -29,7 +30,7 @@ export default function FoodsTable({foods, setFoods, sortOrder, setSortOrder}) {
         </table>;
 }
 
-function FoodRow(food, foods, setFoods) {
+function FoodRow(food, foods, setFoods, setAlertMessage) {
     return <tr key={food.id}>
             <th scope="row">
                 <Link to={`/foods/${food.id}`}>
@@ -37,13 +38,14 @@ function FoodRow(food, foods, setFoods) {
                 </Link>
             </th>
 
-            <FoodAmountTableCell food={food} foods={foods} setFoods={setFoods} />
+            <FoodAmountTableCell food={food} foods={foods} setFoods={setFoods}
+                            setAlertMessage={setAlertMessage} />
 
             <td>{food.calories}</td>
         </tr>;
 }
 
-function FoodAmountTableCell({food, foods, setFoods}) {
+function FoodAmountTableCell({food, foods, setFoods, setAlertMessage}) {
     const [editing, setEditing] = useState(false);
 
     async function handleSubmit(e)
@@ -61,7 +63,7 @@ function FoodAmountTableCell({food, foods, setFoods}) {
         const service = new FoodsService();
         await service.patchFood(foodServingsDto).then(() => {
             const newFoods = structuredClone(foods);
-            
+
             for (let i = 0; i < newFoods.length; i += 1)
             {
                 if (newFoods[i].id === food.id)
@@ -72,6 +74,8 @@ function FoodAmountTableCell({food, foods, setFoods}) {
 
             setFoods(newFoods);
             setEditing(false);
+        }).catch(error => {
+            setAlertMessage(error.message);
         });
     }
 

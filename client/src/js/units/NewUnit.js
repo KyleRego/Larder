@@ -22,7 +22,7 @@ export default function NewUnit() {
             setUnits(newUnits);
             setAlertMessage(`Unit "${dto.name}" was created.`);
             navigate("/units");
-        });
+        }).catch(() => setAlertMessage("Something went wrong"));
     }
 
     return <>

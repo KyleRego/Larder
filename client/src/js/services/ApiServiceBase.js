@@ -11,8 +11,8 @@ export default class ApiServiceBase
     }
 
     // TODO: Double check this is the syntax for a private function
-    async #throwError(response) {
-        throw new Error(`Response status: ${response.status}`);
+    async #throwReject(response) {
+        return Promise.reject(new Error(`Response status: ${response.status}`));
     }
 
     // TODO: This should be protected
@@ -23,7 +23,8 @@ export default class ApiServiceBase
     async tryGetJson(url) {
         const response = await fetch(url, { credentials: "include" });
 
-        if (!response.ok) this.#throwError(response);
+        if (!response.ok)
+            return this.#throwReject(response);
 
         return await response.json();
     }
@@ -37,7 +38,10 @@ export default class ApiServiceBase
 
         const response = await fetch(request);
 
-        if (!response.ok) this.#throwError(response);
+        if (!response.ok)
+            return this.#throwReject(response);
+
+        return response;
     }
 
     async tryPostJson(url, dto) {
@@ -50,7 +54,8 @@ export default class ApiServiceBase
 
         const response = await fetch(request);
 
-        if (!response.ok) this.#throwError(response);
+        if (!response.ok)
+            return this.#throwReject(response);
 
         return await response.json();
     }
@@ -65,7 +70,8 @@ export default class ApiServiceBase
 
         const response = await fetch(request);
 
-        if (!response.ok) this.#throwError(response);
+        if (!response.ok)
+            return this.#throwReject(response);
 
         return await response.json();
     }
@@ -81,7 +87,10 @@ export default class ApiServiceBase
 
         const response = await fetch(request);
 
-        if (!response.ok) this.#throwError(response);
+        if (!response.ok)
+            return this.#throwReject(response);
+
+        return response;
     }
 
     async tryDelete(url) {
@@ -93,6 +102,9 @@ export default class ApiServiceBase
 
         const response = await fetch(request);
 
-        if (!response.ok) this.#throwError(response);
+        if (!response.ok)
+            return this.#throwReject(response);
+
+        return response;
     }
 }

@@ -43,12 +43,12 @@ export default class FoodsService extends ApiServiceBase {
         return await this.tryPut(url, food);
     }
 
-    async patchFood(food) {
-        if (food.id === null) this.throwNoId();
+    async patchFood(foodServingsDto) {
+        if (!foodServingsDto.foodId) this.throwNoId();
 
-        const url = `${this.foodsBaseUrl}/${food.id}`;
+        const url = `${this.foodsBaseUrl}/${foodServingsDto.foodId}`;
 
-        return await this.tryPatch(url, food);
+        return await this.tryPatch(url, foodServingsDto);
     }
 
     async deleteFood(food) {
