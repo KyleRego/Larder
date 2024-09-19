@@ -7,16 +7,17 @@ namespace Larder.Tests.Services;
 
 public class FoodServiceTests : ServiceTestsBase
 {
+    private readonly string _foodId = "1";
     private readonly Dictionary<string, Food> _foodMap;
 
     public FoodServiceTests()
     {
         _foodMap = [];
 
-        _foodMap["1"] = new()
+        _foodMap[_foodId] = new()
         {
             UserId = mockUserId,
-            Id = "1",
+            Id = _foodId,
             Servings = 4,
             Name = "Apple",
             Calories = 100,
@@ -25,13 +26,70 @@ public class FoodServiceTests : ServiceTestsBase
     }
 
     [Fact]
-    public async void EatServingsCreatesAConsumedFoodAndDecreasesServingsOfFood()
+    public async void CreateFoodSetsTotalsOfCaloriesAndProteinFromServings()
     {
-        string foodId = "1";
-        Food food = _foodMap[foodId];
+        var mockFoodRepo = new Mock<IFoodRepository>();
+        var mockConsFoodRepo = new Mock<IConsumedFoodRepository>();
+
+        FoodService sut = new(mockFoodRepo.Object, mockConsFoodRepo.Object,
+                        mockHttpContextAccessor.Object, mockAuthorizationService.Object);
+
+        double calories = 100;
+        double proteins = 15;
+        double servings = 4;
+
+        FoodDto food = new()
+        {
+            Name = "Test food",
+            Calories = calories,
+            GramsProtein = proteins,
+            Servings = servings
+        };
+
+        FoodDto result = await sut.CreateFood(food);
+
+        Assert.Equal(calories * servings, result.TotalCalories);
+        Assert.Equal(proteins * servings, result.TotalGramsProtein);
+    }
+
+    [Fact]
+    public async void UpdateFoodUpdatesTotalsOfCaloriesAndProteinFromServings()
+    {
+        Food foodToUpdate = _foodMap[_foodId];
 
         var mockFoodRepo = new Mock<IFoodRepository>();
-        mockFoodRepo.Setup(m => m.Get(foodId)).ReturnsAsync(food);
+        mockFoodRepo.Setup(m => m.Get(_foodId)).ReturnsAsync(foodToUpdate);
+        var mockConsFoodRepo = new Mock<IConsumedFoodRepository>();
+
+        FoodService sut = new(mockFoodRepo.Object, mockConsFoodRepo.Object,
+                        mockHttpContextAccessor.Object, mockAuthorizationService.Object);
+
+        double calories = 150;
+        double proteins = 10;
+        double servings = 3;
+
+        FoodDto foodDto = new()
+        {
+            Id = foodToUpdate.Id,
+            Name = foodToUpdate.Name,
+            Calories = calories,
+            GramsProtein = proteins,
+            Servings = servings
+        };
+
+        FoodDto result = await sut.UpdateFood(foodDto);
+
+        Assert.Equal(calories * servings, result.TotalCalories);
+        Assert.Equal(proteins * servings, result.TotalGramsProtein);
+    }
+
+    [Fact]
+    public async void EatServingsCreatesAConsumedFoodAndDecreasesServingsOfFood()
+    {
+        Food food = _foodMap[_foodId];
+
+        var mockFoodRepo = new Mock<IFoodRepository>();
+        mockFoodRepo.Setup(m => m.Get(_foodId)).ReturnsAsync(food);
 
         var mockConsFoodRepo = new Mock<IConsumedFoodRepository>();
         mockConsFoodRepo.Setup(m => m.Insert(It.IsAny<ConsumedFood>()));

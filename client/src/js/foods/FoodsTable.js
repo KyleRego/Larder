@@ -8,8 +8,6 @@ import { AlertContext } from "./../../AlertContext";
 import { CiEdit } from "react-icons/ci";
 import { MdDone } from "react-icons/md";
 
-// setFoods is passed in so that when the food amount is edited in cell,
-// the entire foods state can be updated, to change the amount of that one food
 export default function FoodsTable({foods, setFoods, sortOrder, setSortOrder}) {
     const { setAlertMessage } = useContext(AlertContext)
     let rows = foods.map(food => FoodRow(food, foods, setFoods, setAlertMessage));
@@ -21,6 +19,8 @@ export default function FoodsTable({foods, setFoods, sortOrder, setSortOrder}) {
                     <SortingTableHeader columnName="Name" sortOrder={sortOrder} setSortOrder={setSortOrder} />
                     <SortingTableHeader columnName="Servings" sortOrder={sortOrder} setSortOrder={setSortOrder} />
                     <SortingTableHeader columnName="Calories" sortOrder={sortOrder} setSortOrder={setSortOrder} />
+                    <SortingTableHeader columnName="TotalCalories" sortOrder={sortOrder} setSortOrder={setSortOrder} />
+                    <SortingTableHeader columnName="TotalGramsProtein" sortOrder={sortOrder} setSortOrder={setSortOrder} />
                 </tr>
             </thead>
 
@@ -42,6 +42,8 @@ function FoodRow(food, foods, setFoods, setAlertMessage) {
                             setAlertMessage={setAlertMessage} />
 
             <td>{food.calories}</td>
+            <td>{food.totalCalories}</td>
+            <td>{food.totalGramsProtein}</td>
         </tr>;
 }
 

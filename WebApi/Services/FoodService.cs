@@ -34,13 +34,17 @@ public class FoodService(IFoodRepository repository,
 
     public async Task<FoodDto> CreateFood(FoodDto dto)
     {
+        double servings = dto.Servings;
+        double calories = dto.Calories;
+        double proteins = dto.GramsProtein;
+
         Food entity = new()
         {
             UserId = CurrentUserId(),
             Name = dto.Name,
             Description = dto.Description,
-            Calories = dto.Calories,
-            Servings = dto.Servings,
+            Calories = calories,
+            Servings = servings,
             GramsProtein = dto.GramsProtein,
             GramsTotalFat = dto.GramsTotalFat,
             GramsSaturatedFat = dto.GramsSaturatedFat,
@@ -50,11 +54,14 @@ public class FoodService(IFoodRepository repository,
             GramsTotalCarbs = dto.GramsTotalCarbs,
             GramsDietaryFiber = dto.GramsDietaryFiber,
             GramsTotalSugars = dto.GramsTotalSugars,
+
+            TotalCalories = calories * servings,
+            TotalGramsProtein = proteins * servings
         };
 
         await _repository.Insert(entity);
 
-        return dto;
+        return FoodDto.FromEntity(entity);
     }
 
     public async Task<FoodDto> UpdateFood(FoodDto dto)
@@ -66,10 +73,14 @@ public class FoodService(IFoodRepository repository,
 
         await ThrowIfUserCannotAccess(entity);
 
+        double servings = dto.Servings;
+        double proteins = dto.GramsProtein;
+        double calories = dto.Calories;
+
         entity.Name = dto.Name;
         entity.Description = dto.Description;
-        entity.Calories = dto.Calories;
-        entity.Servings = dto.Servings;
+        entity.Calories = calories;
+        entity.Servings = servings;
         entity.GramsProtein = dto.GramsProtein;
         entity.GramsTotalFat = dto.GramsTotalFat;
         entity.GramsSaturatedFat = dto.GramsSaturatedFat;
@@ -80,9 +91,12 @@ public class FoodService(IFoodRepository repository,
         entity.GramsDietaryFiber = dto.GramsDietaryFiber;
         entity.GramsTotalSugars = dto.GramsTotalSugars;
 
+        entity.TotalCalories = servings * calories;
+        entity.TotalGramsProtein = servings * proteins;
+
         await _repository.Update(entity);
 
-        return dto;
+        return FoodDto.FromEntity(entity);
     }
 
     public async Task<FoodDto?> GetFood(string id)

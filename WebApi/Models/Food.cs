@@ -13,6 +13,7 @@ public class Food : Item
 
     public double GramsProtein { get; set; }
 
+
     public double GramsTotalFat { get; set; }
 
     public double GramsSaturatedFat { get; set; }
@@ -28,4 +29,8 @@ public class Food : Item
     public double GramsDietaryFiber { get; set; }
 
     public double GramsTotalSugars { get; set; }
+
+    // TotalCalories should be equal to Servings X Calories etc
+    public double TotalCalories { get; set; }
+    public double TotalGramsProtein { get; set; }
 }
