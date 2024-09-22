@@ -1,7 +1,7 @@
 export default class ApiServiceBase
 {
     constructor() {
-        this.backendOrigin = process.env.REACT_APP_WEBAPI_ORIGIN;
+        this.backendOrigin = import.meta.env.VITE_APP_WEBAPI_ORIGIN;
         this.headers = new Headers({"Content-Type": "application/json"});
 
         // TODO: Figure out why npm build does not read .env.production
