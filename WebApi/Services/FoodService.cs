@@ -32,19 +32,21 @@ public class FoodService(IFoodRepository repository,
     private readonly IFoodRepository _repository = repository;
     private readonly IConsumedFoodRepository _conFoodRepo = conFoodRepo;
 
+    private static void UpdateFoodTotals(Food entity)
+    {
+        entity.TotalCalories = entity.Calories * entity.Servings;
+        entity.TotalGramsProtein = entity.GramsProtein * entity.Servings;
+    }
+
     public async Task<FoodDto> CreateFood(FoodDto dto)
     {
-        double servings = dto.Servings;
-        double calories = dto.Calories;
-        double proteins = dto.GramsProtein;
-
-        Food entity = new()
+         Food entity = new()
         {
             UserId = CurrentUserId(),
             Name = dto.Name,
             Description = dto.Description,
-            Calories = calories,
-            Servings = servings,
+            Calories = dto.Calories,
+            Servings = dto.Servings,
             GramsProtein = dto.GramsProtein,
             GramsTotalFat = dto.GramsTotalFat,
             GramsSaturatedFat = dto.GramsSaturatedFat,
@@ -53,11 +55,10 @@ public class FoodService(IFoodRepository repository,
             MilligramsSodium = dto.MilligramsSodium,
             GramsTotalCarbs = dto.GramsTotalCarbs,
             GramsDietaryFiber = dto.GramsDietaryFiber,
-            GramsTotalSugars = dto.GramsTotalSugars,
-
-            TotalCalories = calories * servings,
-            TotalGramsProtein = proteins * servings
+            GramsTotalSugars = dto.GramsTotalSugars
         };
+
+        UpdateFoodTotals(entity);
 
         await _repository.Insert(entity);
 
@@ -73,14 +74,10 @@ public class FoodService(IFoodRepository repository,
 
         await ThrowIfUserCannotAccess(entity);
 
-        double servings = dto.Servings;
-        double proteins = dto.GramsProtein;
-        double calories = dto.Calories;
-
         entity.Name = dto.Name;
         entity.Description = dto.Description;
-        entity.Calories = calories;
-        entity.Servings = servings;
+        entity.Calories = dto.Calories;
+        entity.Servings = dto.Servings;
         entity.GramsProtein = dto.GramsProtein;
         entity.GramsTotalFat = dto.GramsTotalFat;
         entity.GramsSaturatedFat = dto.GramsSaturatedFat;
@@ -91,8 +88,7 @@ public class FoodService(IFoodRepository repository,
         entity.GramsDietaryFiber = dto.GramsDietaryFiber;
         entity.GramsTotalSugars = dto.GramsTotalSugars;
 
-        entity.TotalCalories = servings * calories;
-        entity.TotalGramsProtein = servings * proteins;
+        UpdateFoodTotals(entity);
 
         await _repository.Update(entity);
 
@@ -138,6 +134,8 @@ public class FoodService(IFoodRepository repository,
 
         entity.Servings = dto.Servings;
 
+        UpdateFoodTotals(entity);
+
         await _repository.Update(entity);
 
         return FoodDto.FromEntity(entity);
@@ -178,8 +176,8 @@ public class FoodService(IFoodRepository repository,
         };
 
         entity.Servings -= dto.Servings;
-        entity.TotalCalories = entity.Servings * entity.Calories;
-        entity.TotalGramsProtein = entity.Servings * entity.GramsProtein;
+        
+        UpdateFoodTotals(entity);
 
         await _repository.Update(entity);
         await _conFoodRepo.Insert(consumedFood);
