@@ -24,8 +24,8 @@ export default function Foods() {
     }, [sortOrder, searchParam, setAlertMessage]);
 
     return <>
-        <div className="mb-4 mt-2 d-flex flex-wrap row-gap-1 align-items-center justify-content-around">
-            <h1 className="m-0">Your foods:</h1>
+        <div className="mb-4 mt-2 d-flex flex-wrap column-gap-1 row-gap-3 align-items-center justify-content-around">
+            <h1>Your foods:</h1>
 
             <div className="d-flex flex-column align-items-start">
                 <label htmlFor="search">Search:</label>
@@ -36,10 +36,10 @@ export default function Foods() {
             <Link to="/foods/new" className="btn btn-primary" title="Add new food">New food</Link>
         </div>
 
-        
-
-        <FoodsTable foods={foods} setFoods={setFoods}
+        <div className="overflow-x-scroll">
+            <FoodsTable foods={foods} setFoods={setFoods}
                     sortOrder={sortOrder} setSortOrder={setSortOrder} 
                     units={units} />
+        </div>
     </>;
 }

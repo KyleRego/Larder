@@ -19,8 +19,10 @@ export default function FoodsTable({foods, setFoods, sortOrder, setSortOrder}) {
                     <SortingTableHeader columnName="Name" sortOrder={sortOrder} setSortOrder={setSortOrder} />
                     <SortingTableHeader columnName="Servings" sortOrder={sortOrder} setSortOrder={setSortOrder} />
                     <SortingTableHeader columnName="Calories" sortOrder={sortOrder} setSortOrder={setSortOrder} />
-                    <SortingTableHeader columnName="TotalCalories" sortOrder={sortOrder} setSortOrder={setSortOrder} />
-                    <SortingTableHeader columnName="TotalGramsProtein" sortOrder={sortOrder} setSortOrder={setSortOrder} />
+                    <SortingTableHeader columnName="TotalCalories" sortOrder={sortOrder} setSortOrder={setSortOrder}
+                                                                    columnDisplayText={"Total Calories"} />
+                    <SortingTableHeader columnName="TotalGramsProtein" sortOrder={sortOrder} setSortOrder={setSortOrder}
+                                                                        columnDisplayText={"Total Protein (g)"} />
                 </tr>
             </thead>
 

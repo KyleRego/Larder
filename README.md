@@ -18,7 +18,7 @@ dotnet tool install --global dotnet-ef
 
 ### Architecture and Design
 
-The frontend is a React app that was created with Create React App. The backend is a monolithic ASP.NET Core project with a controller-service-repository architecture.
+The frontend is a React app that was created with Create React App and refactored to use Vite. The backend is a monolithic ASP.NET Core project with a controller-service-repository architecture.
 
 #### Authentication
 

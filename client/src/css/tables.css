@@ -1,6 +1,7 @@
 table {
     table-layout: fixed;
-    width: 100%;
+    min-width: 100%;
+    width: max-content;
     border: 1px solid black;
     letter-spacing: 0.5px;
     background-color: rgba(var(--bs-light-rgb), 1) !important;
@@ -21,7 +22,7 @@ caption {
     font-style: italic;
     caption-side: bottom;
     color: #000000;
-    text-align: center;
+    text-align: start;
     letter-spacing: 1px;
 }
 

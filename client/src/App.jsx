@@ -30,7 +30,7 @@ export default function App() {
         <AuthedContext.Provider value={{authed, setAuthed}}>
             <AlertContext.Provider value={{alertMessage, setAlertMessage}}>
                 <UnitsContext.Provider value={{units, setUnits}}>
-                    <div className="app">
+                    <div className="app" style={{width: "100%", maxWidth: "100vw"}}>
                         <Nav />
                         <div className="container">
                             <div className="card shadow-sm mt-4">

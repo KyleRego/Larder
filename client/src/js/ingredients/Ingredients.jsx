@@ -24,7 +24,7 @@ export default function Ingredients() {
     }, [sortOrder, searchParam, setAlertMessage]);
 
     return <>
-        <div className="mt-2 mb-4 d-flex flex-wrap row-gap-3 justify-content-around align-items-center">
+        <div className="mb-4 mt-2 d-flex flex-wrap column-gap-1 row-gap-3 align-items-center justify-content-around">
             <h1>Your ingredients:</h1>
 
             <div className="d-flex flex-column align-items-start">

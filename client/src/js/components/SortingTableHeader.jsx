@@ -3,7 +3,8 @@ import { TiArrowSortedUp } from "react-icons/ti";
 import { TiArrowSortedDown } from "react-icons/ti";
 
 // Convention: columnName and columnName_Desc are supported sortBy query strings 
-export default function SortingTableHeader({columnName, sortOrder, setSortOrder})
+export default function SortingTableHeader({columnName, sortOrder, setSortOrder,
+                                                columnDisplayText=null})
 {
     const sortDesc = `${columnName}_Desc`;
 
@@ -29,9 +30,9 @@ export default function SortingTableHeader({columnName, sortOrder, setSortOrder}
 
     return (
         <th title="Change ordering" className="" role="button" onClick={handleOnClick} scope="col">
-            <div className="d-flex align-items-center">
-                <span className="">{columnName}</span>
-                {icon}
+            <div className="d-flex justify-content-center column-gap-1 flex-wrap column-gap-1 align-items-center">
+                <span className="">{columnDisplayText ?? columnName}</span>
+                <span className="flex-grow-1">{icon}</span>
             </div>
         </th>
     );
