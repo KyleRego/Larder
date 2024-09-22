@@ -178,8 +178,8 @@ public class FoodService(IFoodRepository repository,
         };
 
         entity.Servings -= dto.Servings;
-        entity.TotalCalories -= entity.Calories * dto.Servings;
-        entity.TotalGramsProtein -= entity.GramsProtein * dto.Servings;
+        entity.TotalCalories = entity.Servings * entity.Calories;
+        entity.TotalGramsProtein = entity.Servings * entity.GramsProtein;
 
         await _repository.Update(entity);
         await _conFoodRepo.Insert(consumedFood);

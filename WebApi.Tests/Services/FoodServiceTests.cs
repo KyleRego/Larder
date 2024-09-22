@@ -123,8 +123,8 @@ public class FoodServiceTests : ServiceTestsBase
     public async void EatFoodUpdatesFoodTotalProperties()
     {
         Food food = _foodMap[_foodId];
-        double initialTotalCalories = food.TotalCalories;
-        double initialGramsProtein = food.TotalGramsProtein;
+        food.TotalCalories = 0;
+        food.TotalGramsProtein = 0;
 
         _mockFoodRepo.Setup(m => m.Get(_foodId)).ReturnsAsync(food);
 
@@ -139,9 +139,7 @@ public class FoodServiceTests : ServiceTestsBase
 
         (FoodDto foodDto, ConsumedFoodDto consFoodDto) = await sut.EatFood(dto);
 
-        double caloriesConsumed = food.Calories * dto.Servings;
-        double gramsProteinConsumed = food.GramsProtein * dto.Servings;
-        Assert.Equal(initialTotalCalories - caloriesConsumed, foodDto.TotalCalories);
-        Assert.Equal(initialGramsProtein - gramsProteinConsumed, foodDto.TotalGramsProtein);
+        Assert.Equal(foodDto.Calories * foodDto.Servings, foodDto.TotalCalories);
+        Assert.Equal(foodDto.GramsProtein * foodDto.Servings, foodDto.TotalGramsProtein);
     }
 }
