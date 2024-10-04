@@ -1,6 +1,8 @@
 name: my-github-action
 
-on: [push]
+on:
+  push:
+    branches: [ deploy ]
 
 jobs:
   build-and-deploy-react-client:
