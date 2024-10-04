@@ -1,8 +1,7 @@
-export default class ApiServiceBase
-{
+export default class ApiServiceBase {
     constructor() {
         this.backendOrigin = import.meta.env.VITE_APP_WEBAPI_ORIGIN;
-        this.headers = new Headers({"Content-Type": "application/json"});
+        this.headers = new Headers({ "Content-Type": "application/json" });
 
         // TODO: Figure out why npm build does not read .env.production
         if (this.backendOrigin === undefined) {
@@ -27,6 +26,29 @@ export default class ApiServiceBase
             return this.#throwReject(response);
 
         return await response.json();
+    }
+
+    async tryGetJsonV2(url) {
+        try {
+            const response = await fetch(url, { credentials: "include" });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "An error occurred");
+            }
+
+            return {
+                success: data.success,
+                message: data.message,
+                data: data.data,
+            };
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message,
+                data: null,
+            };
+        }
     }
 
     async tryPost(url) {
@@ -76,8 +98,7 @@ export default class ApiServiceBase
         return await response.json();
     }
 
-    async tryPatch(url, dto)
-    {
+    async tryPatch(url, dto) {
         const request = new Request(url, {
             method: "PATCH",
             headers: this.headers,

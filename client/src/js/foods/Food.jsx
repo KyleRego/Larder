@@ -17,7 +17,7 @@ export default function Food() {
         const service = new FoodsService();
 
         service.getFood(id).then(result => {
-            setFood(result);
+            setFood(result.data);
         }).catch(error => {
             console.log(error);
         });

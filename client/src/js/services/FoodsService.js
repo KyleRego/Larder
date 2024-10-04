@@ -19,7 +19,7 @@ export default class FoodsService extends ApiServiceBase {
     async getFood(id) {
         const url = `${this.foodsBaseUrl}/${id}`;
 
-        return await this.tryGetJson(url);
+        return await this.tryGetJsonV2(url);
     }
 
     async postFood(foodDto) {

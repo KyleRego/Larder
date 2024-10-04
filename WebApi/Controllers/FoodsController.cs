@@ -12,11 +12,20 @@ public class FoodsController(IFoodService foodService)
     private readonly IFoodService _foodService = foodService;
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<FoodDto>> Show(string id)
+    public async Task<ActionResult<ApiResponse<FoodDto>>> Show(string id)
     {
-        FoodDto? food = await _foodService.GetFood(id);
+        try
+        {
+            FoodDto? food = await _foodService.GetFood(id);
 
-        return (food == null) ? NotFound() : food;
+            if (food == null) return NotFound();
+
+            return new ApiResponse<FoodDto>(food, "", ApiResponseType.Success);
+        }
+        catch (ApplicationException)
+        {
+            return UnprocessableEntity();
+        }
     }
 
     [HttpGet]
@@ -56,7 +65,8 @@ public class FoodsController(IFoodService foodService)
     }
 
     [HttpPatch("{id}")]
-    public async Task<ActionResult<FoodDto>> UpdateQuantity(string id, FoodServingsDto dto)
+    public async Task<ActionResult<FoodDto>>
+                                UpdateQuantity(string id, FoodServingsDto dto)
     {
         if (dto.FoodId != id) return BadRequest();
 
@@ -71,7 +81,8 @@ public class FoodsController(IFoodService foodService)
     }
 
     [HttpPost("EatFood/{id}")]
-    public async Task<ActionResult<FoodDto>> ConsumeServings(string id, FoodServingsDto dto)
+    public async Task<ActionResult<ApiResponse<FoodDto>>>
+                                ConsumeServings(string id, FoodServingsDto dto)
     {
         if (dto.FoodId != id) return BadRequest();
 
@@ -79,11 +90,12 @@ public class FoodsController(IFoodService foodService)
         {
             (FoodDto result, ConsumedFoodDto _) = await _foodService.EatFood(dto);
 
-            return result;
+            return new ApiResponse<FoodDto>(result, "Food eaten!",
+                                                        ApiResponseType.Success);
         }
         catch(ApplicationException)
         {
-            return NotFound();
+            return UnprocessableEntity();
         }
     }
 
