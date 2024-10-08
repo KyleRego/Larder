@@ -39,6 +39,7 @@ builder.Services.AddScoped<ITimelineService, TimelineService>();
 builder.Services.AddScoped<IConsumedFoodService, ConsumedFoodService>();
 builder.Services.AddScoped<IUnitConversionService, UnitConversionService>();
 builder.Services.AddScoped<IDemoService, DemoService>();
+builder.Services.AddScoped<IServiceProviderWrapper, ServiceProviderWrapper>();
 
 builder.Services.AddSingleton<IAuthorizationHandler, UserCanAccessEntityHandler>();
 

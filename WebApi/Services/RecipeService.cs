@@ -2,7 +2,6 @@ using Larder.Dtos;
 using Larder.Helpers;
 using Larder.Models;
 using Larder.Repository;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Larder.Services;
 
@@ -18,13 +17,12 @@ public interface IRecipeService
     public Task DeleteRecipe(string id);
 }
 
-public class RecipeService( IRecipeRepository repository,
-                            IIngredientRepository ingRepo,
-                            IFoodRepository foodRepo,
-                            IUnitConversionRepository unitConvRepo,
-                            IHttpContextAccessor httpConAcsr,
-                            IAuthorizationService authService)
-                     : ApplicationServiceBase(httpConAcsr, authService), IRecipeService
+public class RecipeService(IServiceProviderWrapper serviceProvider,
+                                    IRecipeRepository repository,
+                                    IIngredientRepository ingRepo,
+                                    IFoodRepository foodRepo,
+                                    IUnitConversionRepository unitConvRepo)
+                     : AppServiceBase(serviceProvider), IRecipeService
 {
     private readonly IRecipeRepository _repository = repository;
     private readonly IIngredientRepository _ingRepo = ingRepo;

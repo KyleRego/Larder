@@ -15,10 +15,9 @@ public interface IUnitService
     public Task DeleteUnit(string id);
 }
 
-public class UnitService(IUnitRepository repository,
-                        IHttpContextAccessor httpConAcsr,
-                        IAuthorizationService authService)
-        : ApplicationServiceBase(httpConAcsr, authService), IUnitService
+public class UnitService(IServiceProviderWrapper serviceProvider,
+                                                    IUnitRepository repository)
+                        : AppServiceBase(serviceProvider), IUnitService
 {
     private readonly IUnitRepository _repository = repository;
 

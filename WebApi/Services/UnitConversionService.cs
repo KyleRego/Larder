@@ -1,7 +1,6 @@
 using Larder.Dtos;
 using Larder.Models;
 using Larder.Repository;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Larder.Services;
 
@@ -12,11 +11,10 @@ public interface IUnitConversionService
     public Task DeleteUnitConversion(string id);
 }
 
-public class UnitConversionService(IUnitRepository unitRep,
-                                    IUnitConversionRepository unitConvRep,
-                                    IHttpContextAccessor httpConAcsr,
-                                    IAuthorizationService authService)
-    : ApplicationServiceBase(httpConAcsr, authService), IUnitConversionService
+public class UnitConversionService(IServiceProviderWrapper serviceProvider,
+                                        IUnitRepository unitRep,
+                                        IUnitConversionRepository unitConvRep)
+            : AppServiceBase(serviceProvider), IUnitConversionService
 {
     private readonly IUnitRepository _unitRep = unitRep;
     private readonly IUnitConversionRepository _unitConvRep = unitConvRep;

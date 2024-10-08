@@ -5,26 +5,28 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Larder.Services;
 
-public abstract class ApplicationServiceBase(IHttpContextAccessor httpConAcsr,
-                                            IAuthorizationService authService)
+public abstract class AppServiceBase(IServiceProviderWrapper serviceProvider)
 {
-    private readonly IHttpContextAccessor _httpConAcsr = httpConAcsr;
-    private readonly IAuthorizationService _authService = authService;
+    private readonly IHttpContextAccessor _httpContextAccessor
+                = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+    private readonly IAuthorizationService _authzService
+                = serviceProvider.GetRequiredService<IAuthorizationService>();
 
     protected string CurrentUserId()
     {
-        return _httpConAcsr.HttpContext?.User?
+        return _httpContextAccessor.HttpContext?.User?
                             .FindFirst(ClaimTypes.NameIdentifier)?.Value
-                ?? throw new ApplicationException("No user id in the HTTP context");
+            ?? throw new ApplicationException("Current user id is missing");
     }
 
     protected async Task ThrowIfUserCannotAccess(EntityBase resource)
     {
-        ClaimsPrincipal user = _httpConAcsr.HttpContext?.User
+        ClaimsPrincipal user = _httpContextAccessor.HttpContext?.User
             ?? throw new ApplicationException("No claims principal/ user");
 
         AuthorizationResult authorizationResult =
-            await _authService.AuthorizeAsync(user, resource, UserCanAccessEntityRequirement.Name);
+                            await _authzService.AuthorizeAsync(user, resource,
+                                        UserCanAccessEntityRequirement.Name);
 
         if (!authorizationResult.Succeeded)
             throw new ApplicationException("Authorization did not succeed");

@@ -15,11 +15,9 @@ public class RecipeServiceTests : ServiceTestsBase
         var foodRepository = new Mock<IFoodRepository>();
         var unitConvRep = new Mock<IUnitConversionRepository>();
 
-        RecipeService sut = new(recipeRepository.Object,
+        RecipeService sut = new(mSP.Object, recipeRepository.Object,
                                     ingredientRepository.Object,
-                                    foodRepository.Object, unitConvRep.Object,
-                                    mockHttpContextAccessor.Object,
-                                    mockAuthorizationService.Object);
+                                    foodRepository.Object, unitConvRep.Object);
 
         RecipeDto recipe = new()
         {
@@ -47,12 +45,10 @@ public class RecipeServiceTests : ServiceTestsBase
         string id = "made_up_id";
         recipeRepository.Setup(r => r.Get(id)).ReturnsAsync((Recipe?)null);
 
-        RecipeService sut = new(recipeRepository.Object,
+        RecipeService sut = new(mSP.Object, recipeRepository.Object,
                                     ingredientRepository.Object,
                                     foodRepository.Object,
-                                    unitConvRepository.Object,
-                                    mockHttpContextAccessor.Object,
-                                    mockAuthorizationService.Object);
+                                    unitConvRepository.Object);
 
         RecipeDto recipe = new()
         {
@@ -144,11 +140,9 @@ public class RecipeServiceTests : ServiceTestsBase
 
         var unitConvRep = new Mock<IUnitConversionRepository>();
     
-        RecipeService sut = new(recipeRepository.Object,
+        RecipeService sut = new(mSP.Object, recipeRepository.Object,
                                 ingredientRepository.Object,
-                                foodRepository.Object, unitConvRep.Object,
-                                mockHttpContextAccessor.Object,
-                                mockAuthorizationService.Object);
+                                foodRepository.Object, unitConvRep.Object);
 
         CookRecipeDto dto = new()
         {
@@ -218,10 +212,8 @@ public class RecipeServiceTests : ServiceTestsBase
         var unitConvRepo = new Mock<IUnitConversionRepository>();
         unitConvRepo.Setup(_ => _.FindByUnitIdsEitherWay(mockUserId, cupsUnit.Id, mlUnit.Id)).ReturnsAsync(conversion);
 
-        RecipeService sut = new(recipeRepo.Object, ingredientRepo.Object,
-                                foodRepo.Object, unitConvRepo.Object,
-                                mockHttpContextAccessor.Object,
-                                mockAuthorizationService.Object);
+        RecipeService sut = new(mSP.Object, recipeRepo.Object, ingredientRepo.Object,
+                                 foodRepo.Object, unitConvRepo.Object);
 
         CookRecipeDto dto = new() { RecipeId = recipeId };
 

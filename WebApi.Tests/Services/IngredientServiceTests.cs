@@ -12,9 +12,7 @@ public class IngredientServiceTests : ServiceTestsBase
     {
         var ingredientRepository = new Mock<IIngredientRepository>();
 
-        IngredientService service = new(ingredientRepository.Object,
-                                        mockHttpContextAccessor.Object,
-                                        mockAuthorizationService.Object);
+        IngredientService service = new(mSP.Object, ingredientRepository.Object);
 
         IngredientDto ingredient = new()
         {
@@ -37,8 +35,7 @@ public class IngredientServiceTests : ServiceTestsBase
         string id = "made_up_id";
         ingredientRepository.Setup(ir => ir.Get(id)).ReturnsAsync((Ingredient?)null);
 
-        IngredientService service = new(ingredientRepository.Object,
-            mockHttpContextAccessor.Object, mockAuthorizationService.Object);
+        IngredientService service = new(mSP.Object, ingredientRepository.Object);
 
         IngredientDto ingredient = new()
         {

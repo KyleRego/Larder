@@ -1,7 +1,6 @@
 using Larder.Dtos;
 using Larder.Models;
 using Larder.Repository;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Larder.Services;
 
@@ -12,10 +11,9 @@ public interface IConsumedFoodService
     public Task DeleteConsumedFood(string id);
 }
 
-public class ConsumedFoodService(IConsumedFoodRepository repository,
-                                    IHttpContextAccessor httpConAcsr,
-                                    IAuthorizationService authService)
-                : ApplicationServiceBase(httpConAcsr, authService), IConsumedFoodService
+public class ConsumedFoodService(IServiceProviderWrapper serviceProvider,
+                                            IConsumedFoodRepository repository)
+                : AppServiceBase(serviceProvider), IConsumedFoodService
 {
     private readonly IConsumedFoodRepository _repository = repository;
 

@@ -30,8 +30,8 @@ public class UnitConversionServiceTests : ServiceTestsBase
 
         var mockUnitConvRepo = new Mock<IUnitConversionRepository>();
 
-        UnitConversionService sut = new(mockUnitRepo.Object, mockUnitConvRepo.Object,
-                        mockHttpContextAccessor.Object, mockAuthorizationService.Object);
+        UnitConversionService sut = new(mSP.Object, mockUnitRepo.Object,
+                                                    mockUnitConvRepo.Object);
 
         UnitConversionDto dto = new()
         {

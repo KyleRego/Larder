@@ -1,7 +1,6 @@
 using Larder.Dtos;
 using Larder.Models;
 using Larder.Repository;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Larder.Services;
 
@@ -10,10 +9,9 @@ public interface ITimelineService
     public Task<List<NutritionDayDto>> FoodsOfPastWeek();
 }
 
-public class TimelineService(IConsumedFoodRepository repository,
-                            IHttpContextAccessor httpConAcsr,
-                            IAuthorizationService authService)
-        : ApplicationServiceBase(httpConAcsr, authService), ITimelineService
+public class TimelineService(IServiceProviderWrapper serviceProvider,
+                                            IConsumedFoodRepository repository)
+                    : AppServiceBase(serviceProvider), ITimelineService
 {
     private readonly IConsumedFoodRepository _repository = repository;
 
