@@ -33,7 +33,7 @@ public class IngredientServiceTests : ServiceTestsBase
         var ingredientRepository = new Mock<IIngredientRepository>();
 
         string id = "made_up_id";
-        ingredientRepository.Setup(ir => ir.Get(id)).ReturnsAsync((Ingredient?)null);
+        ingredientRepository.Setup(ir => ir.Get(id)).ReturnsAsync((Item?)null);
 
         IngredientService service = new(mSP.Object, ingredientRepository.Object);
 

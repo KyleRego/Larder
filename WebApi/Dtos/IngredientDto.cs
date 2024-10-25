@@ -11,23 +11,25 @@ public class IngredientDto
 
     public List<IngredientRecipeDto> Recipes { get; set; } = [];
 
-    public static IngredientDto FromEntity(Ingredient ingredient)
+    public static IngredientDto FromEntity(Item item)
     {
+        ArgumentNullException.ThrowIfNull(item.Ingredient);
+
         IngredientDto dto = new()
         {
-            Id = ingredient.Id,
-            Name = ingredient.Name,
+            Id = item.Id,
+            Name = item.Name,
             Quantity = new()
             {
-                Amount = ingredient.Quantity?.Amount ?? 0,
-                UnitId = ingredient.Quantity?.UnitId,
-                UnitName = ingredient.Quantity?.Unit?.Name
+                Amount = item.Ingredient.Quantity.Amount,
+                UnitId = item.Ingredient.Quantity?.UnitId,
+                UnitName = item.Ingredient.Quantity?.Unit?.Name
             }
         };
 
-        foreach (RecipeIngredient recipeIngredient in ingredient.RecipeIngredients)
+        foreach (RecipeIngredient recIng in item.Ingredient.RecipeIngredients)
         {
-            Recipe? recipe = recipeIngredient.Recipe;
+            Recipe? recipe = recIng.Recipe;
             ArgumentNullException.ThrowIfNull(recipe);
 
             IngredientRecipeDto recipeDto = new()

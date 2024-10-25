@@ -7,26 +7,34 @@ namespace Larder.Tests.Services;
 
 public class FoodServiceTests : ServiceTestsBase
 {
-    private readonly string _foodId = "1";
-    private readonly Dictionary<string, Food> _foodMap;
+    private readonly string _foodItemId = "1";
+    private readonly Dictionary<string, Item> _foodMap;
     private readonly Mock<IFoodRepository> _mockFoodRepo = new();
     private readonly Mock<IConsumedFoodRepository> _mockConsFoodRepo = new();
 
     public FoodServiceTests()
     {
-        _foodMap = [];
-
-        _foodMap[_foodId] = new()
+        Item foodItem = new()
         {
-            UserId = mockUserId,
-            Id = _foodId,
+            Id = _foodItemId,
+            Name = "Apples",
+            UserId = mockUserId
+        };
+
+        Food food = new()
+        {
+            Item = foodItem,
             Servings = 4,
-            Name = "Apple",
             Calories = 100,
             GramsProtein = 2,
             TotalCalories = 400,
             TotalGramsProtein = 8
         };
+        foodItem.Food = food;
+
+        _foodMap = [];
+        _foodMap[_foodItemId] = foodItem;
+        _mockFoodRepo.Setup(m => m.Get(_foodItemId)).ReturnsAsync(foodItem);
     }
 
     [Fact]
@@ -56,9 +64,8 @@ public class FoodServiceTests : ServiceTestsBase
     [Fact]
     public async void UpdateFood_UpdatesTotalsOfCaloriesAndProteinFromServings()
     {
-        Food foodToUpdate = _foodMap[_foodId];
+        Item foodItem = _foodMap[_foodItemId];
 
-        _mockFoodRepo.Setup(m => m.Get(_foodId)).ReturnsAsync(foodToUpdate);
 
         FoodService sut = new(mSP.Object, _mockFoodRepo.Object,
                                                     _mockConsFoodRepo.Object);
@@ -69,8 +76,8 @@ public class FoodServiceTests : ServiceTestsBase
 
         FoodDto foodDto = new()
         {
-            Id = foodToUpdate.Id,
-            Name = foodToUpdate.Name,
+            Id = foodItem.Id,
+            Name = foodItem.Name,
             Calories = calories,
             GramsProtein = proteins,
             Servings = servings
@@ -85,9 +92,8 @@ public class FoodServiceTests : ServiceTestsBase
     [Fact]
     public async void EatServings_CreatesAConsumedFoodAndDecreasesServingsOfFood()
     {
-        Food food = _foodMap[_foodId];
+        Item foodItem = _foodMap[_foodItemId];
 
-        _mockFoodRepo.Setup(m => m.Get(_foodId)).ReturnsAsync(food);
         _mockConsFoodRepo.Setup(m => m.Insert(It.IsAny<ConsumedFood>()));
 
         FoodServingsDto dto = new()
@@ -99,20 +105,20 @@ public class FoodServiceTests : ServiceTestsBase
 
         (FoodDto foodDtoResult, ConsumedFoodDto consumedFoodDtoResult) = await sut.EatFood(dto);
 
-        double expectedCalories = dto.Servings * food.Calories;
-        double expectedProtein = dto.Servings * food.GramsProtein;
+        double expectedCalories = dto.Servings * foodItem.Food!.Calories;
+        double expectedProtein = dto.Servings * foodItem.Food.GramsProtein;
 
         Assert.Equal(3, foodDtoResult.Servings);
-        Assert.Equal(food.Name, consumedFoodDtoResult.Name);
+        Assert.Equal(foodItem.Name, consumedFoodDtoResult.Name);
         Assert.Equal(expectedCalories, consumedFoodDtoResult.Calories);
         Assert.Equal(expectedProtein, consumedFoodDtoResult.GramsProtein);
 
-        _mockFoodRepo.Verify(_ => _.Update(It.Is<Food>(f =>
-            f.Servings == 3
+        _mockFoodRepo.Verify(_ => _.Update(It.Is<Item>(item =>
+            item.Food!.Servings == 3
         )), Times.Once);
 
         _mockConsFoodRepo.Verify(_ => _.Insert(It.Is<ConsumedFood>(cf =>
-            cf.FoodName == food.Name &&
+            cf.FoodName == foodItem.Name &&
             cf.CaloriesConsumed == expectedCalories &&
             cf.GramsProteinConsumed == expectedProtein
         )), Times.Once);
@@ -121,18 +127,18 @@ public class FoodServiceTests : ServiceTestsBase
     [Fact]
     public async void EatFood_UpdatesFoodTotalProperties()
     {
-        Food food = _foodMap[_foodId];
-        food.TotalCalories = 0;
-        food.TotalGramsProtein = 0;
+        Item foodItem = _foodMap[_foodItemId];
+        foodItem.Food!.TotalCalories = 0;
+        foodItem.Food.TotalGramsProtein = 0;
 
-        _mockFoodRepo.Setup(m => m.Get(_foodId)).ReturnsAsync(food);
+        _mockFoodRepo.Setup(m => m.Get(_foodItemId)).ReturnsAsync(foodItem);
 
         FoodService sut = new(mSP.Object, _mockFoodRepo.Object,
                                                     _mockConsFoodRepo.Object);
 
         FoodServingsDto dto = new()
         {
-            FoodId = food.Id,
+            FoodId = foodItem.Id,
             Servings = 1
         };
 

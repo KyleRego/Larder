@@ -1,9 +1,6 @@
 namespace Larder.Models;
 
-/// <summary>
-/// A food is a serving of food ready to be eaten
-/// </summary>
-public class Food : Item
+public class Food : ItemComponent
 {
     public double Servings { get; set; }
 
@@ -12,7 +9,6 @@ public class Food : Item
     public double Calories { get; set; }
 
     public double GramsProtein { get; set; }
-
 
     public double GramsTotalFat { get; set; }
 

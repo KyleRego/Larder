@@ -9,7 +9,7 @@ namespace Larder.Models;
 /// also with the amount of the ingredient needed
 /// in the recipe.
 /// </summary>
-public class RecipeIngredient : EntityBase
+public class RecipeIngredient : UserOwnedEntity
 {
     [Required]
     public required string RecipeId { get; set; }

@@ -15,41 +15,47 @@ public enum FoodSortOptions
     TotalGramsProtein, TotalGramsProtein_Desc
 }
 
-public interface IFoodRepository : IRepositoryBase<Food, FoodSortOptions>
+public interface IFoodRepository : IRepositoryBase<Item, FoodSortOptions>
 {
-    public Task<Food> FindOrCreateBy(string userId, string name);
+    public Task<Item> FindOrCreateBy(string userId, string name);
 }
 
 public class FoodRepository(AppDbContext dbContext)
-            : RepositoryBase<Food, FoodSortOptions>(dbContext), IFoodRepository
+            : RepositoryBase<Item, FoodSortOptions>(dbContext), IFoodRepository
 {
-    public async Task<Food> FindOrCreateBy(string userId, string name)
+    public async Task<Item> FindOrCreateBy(string userId, string name)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ApplicationException("ingredient name cannot be null or whitespace");
-        
-        Food? food = await _dbContext.Foods.FirstOrDefaultAsync(
-                f => f.UserId == userId && f.Name == name);
 
-        if (food != null) return food;
+        Item? foodItem = await _dbContext.Items.FirstOrDefaultAsync(item =>
+            item.UserId == userId && item.Name == name && item.Food != null);
 
-        food = new() { Name = name, UserId = userId };
-        _dbContext.Foods.Add(food);
+        if (foodItem != null) return foodItem;
+
+        foodItem = new() { Name = name, UserId = userId };
+        Food food = new() { Item = foodItem };
+        foodItem.Food = food;
+
+        _dbContext.Items.Add(foodItem);
         await _dbContext.SaveChangesAsync();
 
-        return food;
+        return foodItem;
     }
 
-    public override async Task<Food?> Get(string id)
+    public override async Task<Item?> Get(string id)
     {
-        return await _dbContext.Foods.FirstOrDefaultAsync(
-                                                    food => food.Id == id);
+        return await _dbContext.Items.FirstOrDefaultAsync(item =>
+            item.Id == id && item.Food != null);
     }
 
-    public override Task<List<Food>> GetAllForUser(string userId,
+    public override Task<List<Item>> GetAllForUser(string userId,
                             FoodSortOptions sortBy, string? search)
     {
-        var baseQuery = _dbContext.Foods.Where(food => food.UserId == userId);
+        var baseQuery = _dbContext.Items
+                                .Include(item => item.Food)
+                                .Where(item =>
+            item.UserId == userId && item.Food != null);
 
         var withSearch = (search == null) ? baseQuery : baseQuery.Where(
             food => food.Name.Contains(search)
@@ -58,25 +64,25 @@ public class FoodRepository(AppDbContext dbContext)
         switch(sortBy)
         {
             case FoodSortOptions.Name:
-                return withSearch.OrderBy(f => f.Name).ToListAsync();
+                return withSearch.OrderBy(item => item.Name).ToListAsync();
             case FoodSortOptions.Name_Desc:
-                return withSearch.OrderByDescending(f => f.Name).ToListAsync();
+                return withSearch.OrderByDescending(item => item.Name).ToListAsync();
             case FoodSortOptions.Servings:
-                return withSearch.OrderBy(f => f.Servings).ToListAsync();
+                return withSearch.OrderBy(item => item.Food!.Servings).ToListAsync();
             case FoodSortOptions.Servings_Desc:
-                return withSearch.OrderByDescending(f => f.Servings).ToListAsync();
+                return withSearch.OrderByDescending(item => item.Food!.Servings).ToListAsync();
             case FoodSortOptions.Calories:
-                return withSearch.OrderBy(f => f.Calories).ToListAsync();
+                return withSearch.OrderBy(item => item.Food!.Calories).ToListAsync();
             case FoodSortOptions.Calories_Desc:
-                return withSearch.OrderByDescending(f => f.Calories).ToListAsync();
+                return withSearch.OrderByDescending(item => item.Food!.Calories).ToListAsync();
             case FoodSortOptions.TotalCalories:
-                return withSearch.OrderBy(f => f.TotalCalories).ToListAsync();
+                return withSearch.OrderBy(item => item.Food!.TotalCalories).ToListAsync();
             case FoodSortOptions.TotalCalories_Desc:
-                return withSearch.OrderByDescending(f => f.TotalCalories).ToListAsync();
+                return withSearch.OrderByDescending(item => item.Food!.TotalCalories).ToListAsync();
             case FoodSortOptions.TotalGramsProtein:
-                return withSearch.OrderBy(f => f.TotalGramsProtein).ToListAsync();
+                return withSearch.OrderBy(item => item.Food!.TotalGramsProtein).ToListAsync();
             case FoodSortOptions.TotalGramsProtein_Desc:
-                return withSearch.OrderByDescending(f => f.TotalGramsProtein).ToListAsync();
+                return withSearch.OrderByDescending(item => item.Food!.TotalGramsProtein).ToListAsync();
             default:
                 return withSearch.ToListAsync();
         }

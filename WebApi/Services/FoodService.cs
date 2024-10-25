@@ -30,19 +30,24 @@ public class FoodService(IServiceProviderWrapper serviceProvider,
     private readonly IFoodRepository _repository = repo;
     private readonly IConsumedFoodRepository _conFoodRepo = conFoodRepo;
 
-    private static void UpdateFoodTotals(Food entity)
+    private static void UpdateFoodTotals(Food food)
     {
-        entity.TotalCalories = entity.Calories * entity.Servings;
-        entity.TotalGramsProtein = entity.GramsProtein * entity.Servings;
+        food.TotalCalories = food.Calories * food.Servings;
+        food.TotalGramsProtein = food.GramsProtein * food.Servings;
     }
 
     public async Task<FoodDto> CreateFood(FoodDto dto)
     {
-         Food entity = new()
+        Item item = new()
         {
             UserId = CurrentUserId(),
             Name = dto.Name,
-            Description = dto.Description,
+            Description = dto.Description
+        };
+
+        Food food = new()
+        {
+            Item = item,
             Calories = dto.Calories,
             Servings = dto.Servings,
             GramsProtein = dto.GramsProtein,
@@ -55,67 +60,69 @@ public class FoodService(IServiceProviderWrapper serviceProvider,
             GramsDietaryFiber = dto.GramsDietaryFiber,
             GramsTotalSugars = dto.GramsTotalSugars
         };
+        item.Food = food;
 
-        UpdateFoodTotals(entity);
+        UpdateFoodTotals(food);
 
-        await _repository.Insert(entity);
+        await _repository.Insert(item);
 
-        return FoodDto.FromEntity(entity);
+        return FoodDto.FromEntity(item);
     }
 
     public async Task<FoodDto> UpdateFood(FoodDto dto)
     {
         if (dto.Id == null) throw new ApplicationException("food id was missing");
 
-        Food entity = await _repository.Get(dto.Id)
+        Item item = await _repository.Get(dto.Id)
                 ?? throw new ApplicationException("food was not found");
+        ArgumentNullException.ThrowIfNull(item.Food);
 
-        await ThrowIfUserCannotAccess(entity);
+        await ThrowIfUserCannotAccess(item);
 
-        entity.Name = dto.Name;
-        entity.Description = dto.Description;
-        entity.Calories = dto.Calories;
-        entity.Servings = dto.Servings;
-        entity.GramsProtein = dto.GramsProtein;
-        entity.GramsTotalFat = dto.GramsTotalFat;
-        entity.GramsSaturatedFat = dto.GramsSaturatedFat;
-        entity.GramsTransFat = dto.GramsTransFat;
-        entity.MilligramsCholesterol = dto.MilligramsCholesterol;
-        entity.MilligramsSodium = dto.MilligramsSodium;
-        entity.GramsTotalCarbs = dto.GramsTotalCarbs;
-        entity.GramsDietaryFiber = dto.GramsDietaryFiber;
-        entity.GramsTotalSugars = dto.GramsTotalSugars;
+        item.Name = dto.Name;
+        item.Description = dto.Description;
+        item.Food.Calories = dto.Calories;
+        item.Food.Servings = dto.Servings;
+        item.Food.GramsProtein = dto.GramsProtein;
+        item.Food.GramsTotalFat = dto.GramsTotalFat;
+        item.Food.GramsSaturatedFat = dto.GramsSaturatedFat;
+        item.Food.GramsTransFat = dto.GramsTransFat;
+        item.Food.MilligramsCholesterol = dto.MilligramsCholesterol;
+        item.Food.MilligramsSodium = dto.MilligramsSodium;
+        item.Food.GramsTotalCarbs = dto.GramsTotalCarbs;
+        item.Food.GramsDietaryFiber = dto.GramsDietaryFiber;
+        item.Food.GramsTotalSugars = dto.GramsTotalSugars;
 
-        UpdateFoodTotals(entity);
+        UpdateFoodTotals(item.Food);
 
-        await _repository.Update(entity);
+        await _repository.Update(item);
 
-        return FoodDto.FromEntity(entity);
+        return FoodDto.FromEntity(item);
     }
 
     public async Task<FoodDto?> GetFood(string id)
     {
-        Food? entity = await _repository.Get(id);
+        Item? item = await _repository.Get(id);
         
-        if (entity == null) return null;
+        if (item == null) return null;
 
-        await ThrowIfUserCannotAccess(entity);
+        await ThrowIfUserCannotAccess(item);
 
-        return FoodDto.FromEntity(entity);
+        return FoodDto.FromEntity(item);
     }
 
     public async Task<List<FoodDto>> GetFoods(FoodSortOptions sortBy,
                                                         string? search)
     {
-        List<Food> foods = await _repository.GetAllForUser(CurrentUserId(),
+        List<Item> foodItems = await _repository.GetAllForUser(CurrentUserId(),
                                                             sortBy,
                                                             search);
 
         List<FoodDto> result = [];
 
-        foreach (Food food in foods)
+        foreach (Item foodItem in foodItems)
         {
-            result.Add(FoodDto.FromEntity(food));
+            result.Add(FoodDto.FromEntity(foodItem));
         }
 
         return result;
@@ -125,28 +132,29 @@ public class FoodService(IServiceProviderWrapper serviceProvider,
     {
         ArgumentNullException.ThrowIfNull(dto.FoodId);
 
-        Food entity = await _repository.Get(dto.FoodId)
+        Item foodItem = await _repository.Get(dto.FoodId)
                 ?? throw new ApplicationException("food not found");
+        ArgumentNullException.ThrowIfNull(foodItem.Food);
 
-        await ThrowIfUserCannotAccess(entity);
+        await ThrowIfUserCannotAccess(foodItem);
 
-        entity.Servings = dto.Servings;
+        foodItem.Food.Servings = dto.Servings;
 
-        UpdateFoodTotals(entity);
+        UpdateFoodTotals(foodItem.Food);
 
-        await _repository.Update(entity);
+        await _repository.Update(foodItem);
 
-        return FoodDto.FromEntity(entity);
+        return FoodDto.FromEntity(foodItem);
     }
 
     public async Task DeleteFood(string id)
     {
-        Food entity = await _repository.Get(id)
-                ?? throw new ApplicationException("food not found");
+        Item item = await _repository.Get(id)
+            ?? throw new ApplicationException("food not found");
 
-        await ThrowIfUserCannotAccess(entity);
+        await ThrowIfUserCannotAccess(item);
 
-        await _repository.Delete(entity);
+        await _repository.Delete(item);
     }
 
     public async Task<(FoodDto, ConsumedFoodDto)> EatFood(FoodServingsDto dto)
@@ -156,30 +164,31 @@ public class FoodService(IServiceProviderWrapper serviceProvider,
         if (dto.Servings < 1)
             throw new ApplicationException("food servings must be >= 1");
 
-        Food entity = await _repository.Get(dto.FoodId)
+        Item item = await _repository.Get(dto.FoodId)
             ?? throw new ApplicationException("food not found");
+        ArgumentNullException.ThrowIfNull(item.Food);
 
-        await ThrowIfUserCannotAccess(entity);
+        await ThrowIfUserCannotAccess(item);
 
-        if (dto.Servings > entity.Servings)
+        if (dto.Servings > item.Food.Servings)
             throw new ApplicationException("there are not that many servings");
 
         ConsumedFood consumedFood = new()
         {
             UserId = CurrentUserId(),
-            FoodName = entity.Name,
+            FoodName = item.Name,
             DateConsumed = DateOnly.FromDateTime(DateTime.Now),
-            CaloriesConsumed = entity.Calories * dto.Servings,
-            GramsProteinConsumed = entity.GramsProtein * dto.Servings
+            CaloriesConsumed = item.Food.Calories * dto.Servings,
+            GramsProteinConsumed = item.Food.GramsProtein * dto.Servings
         };
 
-        entity.Servings -= dto.Servings;
+        item.Food.Servings -= dto.Servings;
         
-        UpdateFoodTotals(entity);
+        UpdateFoodTotals(item.Food);
 
-        await _repository.Update(entity);
+        await _repository.Update(item);
         await _conFoodRepo.Insert(consumedFood);
 
-        return (FoodDto.FromEntity(entity), ConsumedFoodDto.FromEntity(consumedFood));
+        return (FoodDto.FromEntity(item), ConsumedFoodDto.FromEntity(consumedFood));
     }
 }

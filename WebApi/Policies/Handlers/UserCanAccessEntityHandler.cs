@@ -8,12 +8,12 @@ using Larder.Models;
 namespace Larder.Policies.Handlers;
 
 public class UserCanAccessEntityHandler
-        : AuthorizationHandler<UserCanAccessEntityRequirement, EntityBase>
+        : AuthorizationHandler<UserCanAccessEntityRequirement, UserOwnedEntity>
 {
     protected override Task HandleRequirementAsync(
                             AuthorizationHandlerContext context,
                             UserCanAccessEntityRequirement requirement,
-                                            EntityBase resource)
+                                            UserOwnedEntity resource)
     {
         string? userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 

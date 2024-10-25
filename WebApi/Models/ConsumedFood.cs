@@ -1,6 +1,6 @@
 namespace Larder.Models;
 
-public class ConsumedFood : EntityBase
+public class ConsumedFood : UserOwnedEntity
 {
     public required string FoodName { get; set; }
     public required DateOnly DateConsumed { get; set; }

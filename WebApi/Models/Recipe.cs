@@ -6,7 +6,7 @@ namespace Larder.Models;
 /// A recipe has many ingredients; 
 /// A recipe is the dependent side in one-to-one with food
 /// </summary>
-public class Recipe : EntityBase
+public class Recipe : UserOwnedEntity
 {
     [Required(AllowEmptyStrings = false)]
     public required string Name { get; set; }

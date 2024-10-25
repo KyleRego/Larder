@@ -15,51 +15,63 @@ public enum IngredientSortOptions
 }
 
 public interface IIngredientRepository
-                : IRepositoryBase<Ingredient, IngredientSortOptions>
+                : IRepositoryBase<Item, IngredientSortOptions>
 {
-    public Task<Ingredient> FindOrCreateBy(string userId, string name);
+    public Task<Item> FindOrCreateBy(string userId, string name);
 }
 
 public class IngredientRepository(AppDbContext dbContext)
-    : RepositoryBase<Ingredient, IngredientSortOptions>(dbContext),
+    : RepositoryBase<Item, IngredientSortOptions>(dbContext),
                                                 IIngredientRepository
 {
-    public async Task<Ingredient> FindOrCreateBy(string userId, string name)
+    public async Task<Item> FindOrCreateBy(string userId, string name)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ApplicationException("ingredient name cannot be null or whitespace");
         
-        Ingredient? ingredient = _dbContext.Ingredients.FirstOrDefault(
-            ing => ing.UserId == userId && ing.Name == name);
+        Item? ingItem = _dbContext.Items.FirstOrDefault(item =>
+            item.UserId == userId && item.Name == name && item.Ingredient != null);
 
-        if (ingredient != null) return ingredient;
+        if (ingItem != null) return ingItem;
 
-        ingredient = new() {
+        ingItem = new() {
             UserId = userId,
             Name = name,
+            Amount = 1
+        };
+
+        Ingredient ing = new()
+        {
+            Item = ingItem,
             Quantity = new() { Amount = 1 }
         };
-        _dbContext.Ingredients.Add(ingredient);
+        ingItem.Ingredient = ing;
+
+        _dbContext.Items.Add(ingItem);
         await _dbContext.SaveChangesAsync();
 
-        return ingredient;
+        return ingItem;
     }
 
-    public override async Task<Ingredient?> Get(string id)
+    public override async Task<Item?> Get(string id)
     {
-        return await _dbContext.Ingredients
-                            .Include(ing => ing.Quantity)
-                            .Include(ing => ing.RecipeIngredients)
-                            .ThenInclude(ri => ri.Recipe)
-                            .FirstOrDefaultAsync(ing => ing.Id == id);
+        return await _dbContext.Items
+                            .Include(item => item.Ingredient)
+                            .ThenInclude(ing => ing!.Recipes)
+                            .ThenInclude(ing => ing!.RecipeIngredients)
+                            .ThenInclude(ing => ing!.Quantity)
+                            .FirstOrDefaultAsync(item => item.Id == id && item.Ingredient != null);
     }
 
-    public override async Task<List<Ingredient>> GetAllForUser(string userId,
+    public override async Task<List<Item>> GetAllForUser(string userId,
                                                 IngredientSortOptions sortBy,
                                                                 string? search)
     {
-        var baseQuery = _dbContext.Ingredients.Where(
-            ing => ing.UserId == userId).Include(ing => ing.Quantity);
+        var baseQuery = _dbContext.Items
+                                    .Include(item => item.Ingredient)
+                                    .ThenInclude(ing => ing!.Quantity)
+                                    .Where(item => 
+            item.UserId == userId && item.Ingredient != null);
 
         var baseSearchQuery = (search == null) ? baseQuery
             : baseQuery.Where(ingredient => ingredient.Name.Contains(search));
@@ -67,16 +79,16 @@ public class IngredientRepository(AppDbContext dbContext)
         switch (sortBy)
         {
             case IngredientSortOptions.Name:
-                return await baseSearchQuery.OrderBy(ing => ing.Name).ToListAsync();
+                return await baseSearchQuery.OrderBy(item => item.Name).ToListAsync();
 
             case IngredientSortOptions.Name_Desc:
-                return await baseSearchQuery.OrderByDescending(ing => ing.Name).ToListAsync();
+                return await baseSearchQuery.OrderByDescending(item => item.Name).ToListAsync();
 
             case IngredientSortOptions.Quantity:
-                return await baseSearchQuery.OrderBy(ing => ing.Quantity.Amount).ToListAsync();
+                return await baseSearchQuery.OrderBy(item => item.Ingredient!.Quantity.Amount).ToListAsync();
 
             case IngredientSortOptions.Quantity_Desc:
-                return await baseSearchQuery.OrderByDescending(ing => ing.Quantity.Amount).ToListAsync();
+                return await baseSearchQuery.OrderByDescending(item => item.Ingredient!.Quantity.Amount).ToListAsync();
 
             default:
                 return await baseSearchQuery.ToListAsync();

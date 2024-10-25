@@ -78,14 +78,15 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
                 throw new ApplicationException("recipe ingredient quantity and ingredient do not both have units");
             }
 
-            result.Ingredients.Add(IngredientDto.FromEntity(ingredient));
+            result.Ingredients.Add(IngredientDto.FromEntity(ingredient.Item));
         }
 
-        Food food = await _foodRepo.FindOrCreateBy(CurrentUserId(), recipe.Name);
-        food.Servings += recipe.ServingsProduced;
+        Item foodItem = await _foodRepo.FindOrCreateBy(CurrentUserId(), recipe.Name);
+        ArgumentNullException.ThrowIfNull(foodItem.Food);
+        foodItem.Food.Servings += recipe.ServingsProduced;
 
         await _repository.Update(recipe);
-        await _foodRepo.Update(food);
+        await _foodRepo.Update(foodItem);
 
         return result;
     }
@@ -107,14 +108,15 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
                 ingredientDto.Quantity.UnitId = null;
             }
 
-            Ingredient ingredient = await _ingRepo.FindOrCreateBy(
+            Item ingItem = await _ingRepo.FindOrCreateBy(
                                 CurrentUserId(), ingredientDto.Name);
+            ArgumentNullException.ThrowIfNull(ingItem.Ingredient);
 
             RecipeIngredient recipeIngredient = new()
             {
                 UserId = CurrentUserId(),
                 RecipeId = recipe.Id,
-                IngredientId = ingredient.Id,
+                IngredientId = ingItem.Id,
                 Quantity = new()
                 {
                     Amount = ingredientDto.Quantity.Amount,
@@ -168,10 +170,11 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
 
     public async Task<RecipeDto> UpdateRecipe(RecipeDto recipeDto)
     {
-        if (recipeDto.Id == null) throw new ApplicationException("recipe Id was missing");
+        if (recipeDto.Id == null)
+                    throw new ApplicationException("recipe Id was missing");
     
         Recipe recipe = await _repository.Get(recipeDto.Id)
-                                ?? throw new ApplicationException("recipe not found");
+                    ?? throw new ApplicationException("recipe not found");
 
         await ThrowIfUserCannotAccess(recipe);
 
@@ -179,18 +182,18 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
 
         List<RecipeIngredient> newRecipeIngredients = [];
 
-        foreach(RecipeIngredientDto ingredientDto in recipeDto.Ingredients)
+        foreach(RecipeIngredientDto ingDto in recipeDto.Ingredients)
         {
-            Ingredient ingredient = recipe.Ingredients
-                                .FirstOrDefault(ingr => ingr.Name == ingredientDto.Name)
-                ?? await _ingRepo.FindOrCreateBy(CurrentUserId(), ingredientDto.Name);
+            Item ingItem = recipe.Ingredients.FirstOrDefault(ing =>
+                                            ing.Item.Name == ingDto.Name)?.Item
+                ?? await _ingRepo.FindOrCreateBy(CurrentUserId(), ingDto.Name);
 
             RecipeIngredient newRecipeIngredient = new()
             {
                 UserId = CurrentUserId(),
                 RecipeId = recipe.Id,
-                IngredientId = ingredient.Id,
-                Quantity = Quantity.FromDto(ingredientDto.Quantity)
+                IngredientId = ingItem.Id,
+                Quantity = Quantity.FromDto(ingDto.Quantity)
             };
             newRecipeIngredients.Add(newRecipeIngredient);
         }

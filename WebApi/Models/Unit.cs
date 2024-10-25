@@ -10,7 +10,7 @@ public enum UnitType
     Weight
 }
 
-public class Unit : EntityBase
+public class Unit : UserOwnedEntity
 {
     [Required(AllowEmptyStrings = false)]
     public required string Name { get; set; }

@@ -28,26 +28,27 @@ public class IngredientService(IServiceProviderWrapper serviceProvider,
 
     public async Task<IngredientDto?> GetIngredient(string id)
     {
-        Ingredient? entity = await _repository.Get(id);
+        Item? ingItem = await _repository.Get(id);
 
-        if (entity == null) return null;
+        if (ingItem == null) return null;
 
-        await ThrowIfUserCannotAccess(entity);
+        await ThrowIfUserCannotAccess(ingItem);
 
-        return IngredientDto.FromEntity(entity);
+        return IngredientDto.FromEntity(ingItem);
     }
 
     public async Task<List<IngredientDto>> GetIngredients(
                             IngredientSortOptions sortBy, string? searchName)
     {
-        List<Ingredient> ingredients = await _repository.GetAllForUser(
+        List<Item> ingItems = await _repository.GetAllForUser(
                                         CurrentUserId(), sortBy, searchName);
 
         List<IngredientDto> ingredientDtos = [];
 
-        foreach (Ingredient ingredient in ingredients)
+        foreach (Item ingItem in ingItems)
         {
-            ingredientDtos.Add(IngredientDto.FromEntity(ingredient));
+            ArgumentNullException.ThrowIfNull(ingItem.Ingredient);
+            ingredientDtos.Add(IngredientDto.FromEntity(ingItem));
         }
 
         return ingredientDtos;
@@ -55,14 +56,20 @@ public class IngredientService(IServiceProviderWrapper serviceProvider,
 
     public async Task<IngredientDto> CreateIngredient(IngredientDto dto)
     {
-        Ingredient ingredient = new()
+        Item ingItem = new()
         {
             UserId = CurrentUserId(),
-            Name = dto.Name,
-            Quantity = Quantity.FromDto(dto.Quantity),
+            Name = dto.Name
         };
 
-        await _repository.Insert(ingredient);
+        Ingredient ingredient = new()
+        {
+            Item = ingItem,
+            Quantity = Quantity.FromDto(dto.Quantity),
+        };
+        ingItem.Ingredient = ingredient;
+
+        await _repository.Insert(ingItem);
 
         return dto;
     }
@@ -72,15 +79,16 @@ public class IngredientService(IServiceProviderWrapper serviceProvider,
         if (dto.Id == null) 
             throw new ApplicationException("ingredient Id was missing");
 
-        Ingredient ingredient = await _repository.Get(dto.Id)
+        Item ingItem = await _repository.Get(dto.Id)
                 ?? throw new ApplicationException("ingredient not found");
+        ArgumentNullException.ThrowIfNull(ingItem.Ingredient);
 
-        await ThrowIfUserCannotAccess(ingredient);
+        await ThrowIfUserCannotAccess(ingItem);
 
-        ingredient.Name = dto.Name;
-        ingredient.Quantity = Quantity.FromDto(dto.Quantity);
+        ingItem.Name = dto.Name;
+        ingItem.Ingredient.Quantity = Quantity.FromDto(dto.Quantity);
 
-        await _repository.Update(ingredient);
+        await _repository.Update(ingItem);
 
         return dto;
     }
@@ -90,25 +98,26 @@ public class IngredientService(IServiceProviderWrapper serviceProvider,
         if (dto.Id == null) 
                 throw new ApplicationException("ingredient Id was missing");
 
-        Ingredient ingredient = await _repository.Get(dto.Id)
+        Item ingItem = await _repository.Get(dto.Id)
                     ?? throw new ApplicationException("ingredient not found");
+        ArgumentNullException.ThrowIfNull(ingItem.Ingredient);
 
-        await ThrowIfUserCannotAccess(ingredient);
+        await ThrowIfUserCannotAccess(ingItem);
 
-        ingredient.Quantity = Quantity.FromDto(dto);
+        ingItem.Ingredient.Quantity = Quantity.FromDto(dto);
 
-        ingredient = await _repository.Update(ingredient);
+        ingItem = await _repository.Update(ingItem);
 
-        return IngredientDto.FromEntity(ingredient);
+        return IngredientDto.FromEntity(ingItem);
     }
 
     public async Task DeleteIngredient(string id)
     {
-        Ingredient ingredient = await _repository.Get(id)
+        Item ingItem = await _repository.Get(id)
                     ?? throw new ApplicationException("ingredient not found");
 
-        await ThrowIfUserCannotAccess(ingredient);
+        await ThrowIfUserCannotAccess(ingItem);
 
-        await _repository.Delete(ingredient);
+        await _repository.Delete(ingItem);
     }
 }

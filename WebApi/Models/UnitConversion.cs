@@ -1,8 +1,6 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace Larder.Models;
 
-public class UnitConversion : EntityBase
+public class UnitConversion : UserOwnedEntity
 {
     public required string UnitId { get; set; }
 

@@ -1,9 +1,6 @@
 namespace Larder.Models;
 
-/// <summary>
-/// An ingredient is used in cooking a food
-/// </summary>
-public class Ingredient : Item
+public class Ingredient : ItemComponent
 {
     public required Quantity Quantity { get; set; } = new() { Amount = 0 };
 

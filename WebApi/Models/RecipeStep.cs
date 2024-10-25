@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Larder.Models;
 
-public class RecipeStep : EntityBase
+public class RecipeStep : UserOwnedEntity
 {
     [Required]
     public required string RecipeId { get; set; }

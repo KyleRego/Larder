@@ -77,7 +77,7 @@ public class RecipeServiceTests : ServiceTestsBase
             Name = "Rice with butter"
         };
 
-        Unit ingredient1Unit = new()
+        Unit ing1Unit = new()
         {
             UserId = mockUserId,
             Id = "unit1",
@@ -85,14 +85,20 @@ public class RecipeServiceTests : ServiceTestsBase
             Type = UnitType.Volume
         };
 
-        Ingredient ingredient1 = new()
+        Item ingItem1 = new()
         {
             UserId = mockUserId,
             Name = "White rice",
-            Quantity = new() { Amount = 5, Unit = ingredient1Unit, UnitId = ingredient1Unit.Id }
         };
 
-        Unit ingredient2Unit = new()
+        Ingredient ing1 = new()
+        {
+            Item = ingItem1,
+            Quantity = new() { Amount = 5, Unit = ing1Unit, UnitId = ing1Unit.Id }
+        };
+        ingItem1.Ingredient = ing1;
+
+        Unit ing2Unit = new()
         {
             UserId = mockUserId,
             Id = "unit2",
@@ -100,33 +106,39 @@ public class RecipeServiceTests : ServiceTestsBase
             Type = UnitType.Volume
         };
 
-        Ingredient ingredient2 = new()
+        Item ingItem2 = new()
         {
             UserId = mockUserId,
-            Name = "Butter",
-            Quantity = new() { Amount = 12, Unit = ingredient2Unit, UnitId = ingredient2Unit.Id }
+            Name = "Butter"
         };
+
+        Ingredient ing2 = new()
+        {
+            Item = ingItem2,
+            Quantity = new() { Amount = 12, Unit = ing2Unit, UnitId = ing2Unit.Id }
+        };
+        ingItem2.Ingredient = ing2;
 
         recipe.RecipeIngredients = [
             new()
             {
                 UserId = mockUserId,
-                Ingredient = ingredient1,
+                Ingredient = ingItem1.Ingredient,
                 RecipeId = recipe.Id,
-                IngredientId = ingredient1.Id,
-                Quantity = new() { Amount = 3, Unit = ingredient1Unit, UnitId = ingredient1Unit.Id }
+                IngredientId = ingItem1.Id,
+                Quantity = new() { Amount = 3, Unit = ing1Unit, UnitId = ing1Unit.Id }
             },
             new()
             {
                 UserId = mockUserId,
-                Ingredient = ingredient2,
+                Ingredient = ingItem2.Ingredient,
                 RecipeId = recipe.Id,
-                IngredientId = ingredient2.Id,
-                Quantity = new() { Amount = 2, Unit = ingredient2Unit, UnitId = ingredient2Unit.Id }
+                IngredientId = ingItem2.Id,
+                Quantity = new() { Amount = 2, Unit = ing2Unit, UnitId = ing2Unit.Id }
             }
         ];
 
-        recipe.Ingredients = [ingredient1, ingredient2];
+        recipe.Ingredients = [ingItem1.Ingredient, ingItem2.Ingredient];
 
         var recipeRepository = new Mock<IRecipeRepository>();
         recipeRepository.Setup(_ => _.Get(recipeId)).ReturnsAsync(recipe);
@@ -134,9 +146,21 @@ public class RecipeServiceTests : ServiceTestsBase
         var ingredientRepository = new Mock<IIngredientRepository>();
 
         var foodRepository = new Mock<IFoodRepository>();
+
+        Item foodItem = new()
+        {
+            UserId = mockUserId,
+            Name = recipe.Name
+        };
+        Food food = new()
+        {
+            Item = foodItem,
+            Servings = 1
+        };
+        foodItem.Food = food;
+
         foodRepository.Setup(_ => _.FindOrCreateBy(mockUserId, recipe.Name))
-                        .ReturnsAsync(
-            (Food)new() { UserId = mockUserId, Name = recipe.Name, Servings = 1 });
+                        .ReturnsAsync(foodItem);
 
         var unitConvRep = new Mock<IUnitConversionRepository>();
     
@@ -152,14 +176,14 @@ public class RecipeServiceTests : ServiceTestsBase
         await sut.CookRecipe(dto);
 
         // Verify that the food servings was increased
-        foodRepository.Verify(_ => _.Update(It.Is<Food>(f =>
-            f.Name == recipe.Name && f.Servings == 1 + recipe.ServingsProduced
+        foodRepository.Verify(_ => _.Update(It.Is<Item>(item =>
+            item.Name == recipe.Name && item.Food!.Servings == 1 + recipe.ServingsProduced
         )));
 
         // Verify that the ingredient quantities were decreased
         recipeRepository.Verify(_ => _.Update(It.Is<Recipe>(r => 
-            r.Ingredients.First(ingr => ingr.Name == ingredient1.Name).Quantity.Amount == 2
-            && r.Ingredients.First(ingr => ingr.Name == ingredient2.Name).Quantity.Amount == 10
+            r.Ingredients.First(ing => ing.Item.Name == ingItem1.Name).Quantity.Amount == 2
+            && r.Ingredients.First(ing => ing.Item.Name == ingItem2.Name).Quantity.Amount == 10
         )));
     }
 
@@ -168,8 +192,17 @@ public class RecipeServiceTests : ServiceTestsBase
     {
         Unit cupsUnit = new() { UserId = mockUserId, Name="Cups", Type=UnitType.Volume };
         Unit mlUnit = new() { UserId = mockUserId, Name="ml", Type=UnitType.Volume };
-        Ingredient ingredient = new() { UserId = mockUserId, Id = "ingredient1", Name = "Water",
+
+        Item ingItem = new()
+        {
+            Id = "ingredient1",
+            Name = "Water",
+            UserId = mockUserId
+        };
+        Ingredient ingredient = new() { Item = ingItem,
                                         Quantity = new() { Amount = 6, Unit = cupsUnit, UnitId = cupsUnit.Id } };
+        ingItem.Ingredient = ingredient;
+
         UnitConversion conversion = new()
         {
             UserId = mockUserId,
@@ -206,8 +239,16 @@ public class RecipeServiceTests : ServiceTestsBase
         var ingredientRepo = new Mock<IIngredientRepository>();
 
         var foodRepo = new Mock<IFoodRepository>();
-        Food food = new() { UserId = mockUserId, Name = recipe.Name };
-        foodRepo.Setup(_ => _.FindOrCreateBy(mockUserId, recipe.Name)).ReturnsAsync(food);
+        Item foodItem = new()
+        {
+            Name = recipe.Name,
+            UserId = mockUserId
+        };
+
+        Food food = new(){ Item = foodItem };
+        foodItem.Food = food;
+
+        foodRepo.Setup(_ => _.FindOrCreateBy(mockUserId, recipe.Name)).ReturnsAsync(foodItem);
 
         var unitConvRepo = new Mock<IUnitConversionRepository>();
         unitConvRepo.Setup(_ => _.FindByUnitIdsEitherWay(mockUserId, cupsUnit.Id, mlUnit.Id)).ReturnsAsync(conversion);

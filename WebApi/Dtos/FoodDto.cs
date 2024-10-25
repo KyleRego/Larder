@@ -35,32 +35,33 @@ public class FoodDto
     public double TotalCalories { get; set; }
     public double TotalGramsProtein { get; set; }
 
-    public static FoodDto FromEntity(Food food)
+    public static FoodDto FromEntity(Item foodItem)
     {
+        ArgumentNullException.ThrowIfNull(foodItem.Food);
+
         return new()
         {
-            Id = food.Id,
-            Name = food.Name,
-            Description = food.Description,
-            Servings = food.Servings,
+            Id = foodItem.Id,
+            Name = foodItem.Name,
+            Description = foodItem.Description,
+            Servings = foodItem.Food.Servings,
 
-            Calories = food.Calories,
-            GramsProtein = food.GramsProtein,
+            Calories = foodItem.Food.Calories,
+            GramsProtein = foodItem.Food.GramsProtein,
 
-            GramsTotalFat = food.GramsTotalFat,
-            GramsSaturatedFat = food.GramsSaturatedFat,
-            GramsTransFat = food.GramsTransFat,
+            GramsTotalFat = foodItem.Food.GramsTotalFat,
+            GramsSaturatedFat = foodItem.Food.GramsSaturatedFat,
+            GramsTransFat = foodItem.Food.GramsTransFat,
 
-            MilligramsCholesterol = food.MilligramsCholesterol,
-            MilligramsSodium = food.MilligramsSodium,
+            MilligramsCholesterol = foodItem.Food.MilligramsCholesterol,
+            MilligramsSodium = foodItem.Food.MilligramsSodium,
 
-            GramsTotalCarbs = food.GramsTotalCarbs,
-            GramsDietaryFiber = food.GramsDietaryFiber,
-            GramsTotalSugars = food.GramsTotalSugars,
+            GramsTotalCarbs = foodItem.Food.GramsTotalCarbs,
+            GramsDietaryFiber = foodItem.Food.GramsDietaryFiber,
+            GramsTotalSugars = foodItem.Food.GramsTotalSugars,
 
-            TotalCalories = food.TotalCalories,
-            TotalGramsProtein = food.TotalGramsProtein
-
+            TotalCalories = foodItem.Food.TotalCalories,
+            TotalGramsProtein = foodItem.Food.TotalGramsProtein
         };
     }
 }
