@@ -1,3 +1,5 @@
+using Larder.Dtos;
+
 namespace Larder.Models;
 
 public class Food : ItemComponent
@@ -29,4 +31,11 @@ public class Food : ItemComponent
     // TotalCalories should be equal to Servings X Calories etc
     public double TotalCalories { get; set; }
     public double TotalGramsProtein { get; set; }
+
+    // TODO: Unit tests for this
+    public void UpdateTotals()
+    {
+        TotalCalories = Calories * Servings;
+        TotalGramsProtein = GramsProtein * Servings;
+    }
 }

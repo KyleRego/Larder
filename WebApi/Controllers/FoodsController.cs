@@ -7,7 +7,7 @@ using Larder.Dtos;
 namespace Larder.Controllers;
 
 public class FoodsController(IFoodService foodService)
-                                        : ApplicationControllerBase
+                                        : AppControllerBase
 {
     private readonly IFoodService _foodService = foodService;
 
@@ -38,29 +38,6 @@ public class FoodsController(IFoodService foodService)
         else
         {
             return await _foodService.GetFoods(FoodSortOptions.AnyOrder, search);
-        }
-    }
-
-    [HttpPost]
-    public async Task<ActionResult<FoodDto>> Create(FoodDto food)
-    {
-        if (food.Id != null) return BadRequest();
-
-        return await _foodService.CreateFood(food);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<ActionResult<FoodDto>> Update(string id, FoodDto food)
-    {
-        if (food.Id != id) return BadRequest();
-
-        try
-        {
-            return await _foodService.UpdateFood(food);
-        }
-        catch(ApplicationException)
-        {
-            return NotFound();
         }
     }
 
@@ -96,20 +73,6 @@ public class FoodsController(IFoodService foodService)
         catch(ApplicationException)
         {
             return UnprocessableEntity();
-        }
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(string id)
-    {
-        try
-        {
-            await _foodService.DeleteFood(id);
-            return Ok();
-        }
-        catch (ApplicationException)
-        {
-            return NotFound();
         }
     }
 }

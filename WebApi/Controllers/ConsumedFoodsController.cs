@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Larder.Controllers;
 
 public class ConsumedFoodsController(IConsumedFoodService consumedFoodService)
-                                        : ApplicationControllerBase
+                                        : AppControllerBase
 {
     private readonly IConsumedFoodService _consFoodService =
                                                          consumedFoodService;

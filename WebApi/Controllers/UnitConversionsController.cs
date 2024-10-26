@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Larder.Controllers;
 
 public class UnitConversionsController(IUnitConversionService unitConvService)
-                                                : ApplicationControllerBase
+                                                : AppControllerBase
 {
     private readonly IUnitConversionService _unitConvService = unitConvService;
 

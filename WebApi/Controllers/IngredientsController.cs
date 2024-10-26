@@ -7,7 +7,7 @@ using Larder.Repository;
 namespace Larder.Controllers;
 
 public class IngredientsController(IIngredientService ingredientService)
-                                        : ApplicationControllerBase
+                                        : AppControllerBase
 {
     private readonly IIngredientService _ingredientService = ingredientService;
 

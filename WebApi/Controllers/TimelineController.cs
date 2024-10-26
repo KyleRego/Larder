@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Larder.Controllers;
 
 public class TimelineController(ITimelineService timelineService)
-                                        : ApplicationControllerBase
+                                        : AppControllerBase
 {
     private readonly ITimelineService _timelineService = timelineService;
 

@@ -38,58 +38,6 @@ public class FoodServiceTests : ServiceTestsBase
     }
 
     [Fact]
-    public async void CreateFood_SetsTotalsOfCaloriesAndProteinFromServings()
-    {
-        FoodService sut = new(mSP.Object, _mockFoodRepo.Object,
-                                                    _mockConsFoodRepo.Object);
-
-        double calories = 100;
-        double proteins = 15;
-        double servings = 4;
-
-        FoodDto food = new()
-        {
-            Name = "Test food",
-            Calories = calories,
-            GramsProtein = proteins,
-            Servings = servings
-        };
-
-        FoodDto result = await sut.CreateFood(food);
-
-        Assert.Equal(calories * servings, result.TotalCalories);
-        Assert.Equal(proteins * servings, result.TotalGramsProtein);
-    }
-
-    [Fact]
-    public async void UpdateFood_UpdatesTotalsOfCaloriesAndProteinFromServings()
-    {
-        Item foodItem = _foodMap[_foodItemId];
-
-
-        FoodService sut = new(mSP.Object, _mockFoodRepo.Object,
-                                                    _mockConsFoodRepo.Object);
-
-        double calories = 150;
-        double proteins = 10;
-        double servings = 3;
-
-        FoodDto foodDto = new()
-        {
-            Id = foodItem.Id,
-            Name = foodItem.Name,
-            Calories = calories,
-            GramsProtein = proteins,
-            Servings = servings
-        };
-
-        FoodDto result = await sut.UpdateFood(foodDto);
-
-        Assert.Equal(calories * servings, result.TotalCalories);
-        Assert.Equal(proteins * servings, result.TotalGramsProtein);
-    }
-
-    [Fact]
     public async void EatServings_CreatesAConsumedFoodAndDecreasesServingsOfFood()
     {
         Item foodItem = _foodMap[_foodItemId];

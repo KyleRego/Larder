@@ -9,19 +9,6 @@ public enum SortOptionsBase
     AnyOrder
 }
 
-public interface IRepositoryBase<T, TSortOptions>
-{
-    public Task<T?> Get(string id);
-
-    public Task<List<T>> GetAllForUser(string userId, TSortOptions sortBy, string? search);
-
-    public Task<T> Insert(T newEntity);
-
-    public Task<T> Update(T editedEntity);
-
-    public Task Delete(T entity);
-}
-
 public abstract class RepositoryBase<T, TSortOptions>(AppDbContext dbContext) : IRepositoryBase<T, TSortOptions>
 {
     protected readonly AppDbContext _dbContext = dbContext;

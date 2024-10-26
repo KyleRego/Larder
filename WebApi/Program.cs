@@ -1,27 +1,27 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 using Larder.Data;
 using Larder.Repository;
 using Larder.Services;
 using Larder.Policies.Requirements;
-using Microsoft.AspNetCore.Authorization;
 using Larder.Policies.Handlers;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy(UserCanAccessEntityRequirement.Name,
-            policy => policy.Requirements.Add(new UserCanAccessEntityRequirement()));
-});
+
+builder.Services.AddAuthorizationBuilder()
+                .AddPolicy(UserCanAccessEntityRequirement.Name, policy =>
+    policy.Requirements.Add(new UserCanAccessEntityRequirement()));
 
 builder.Services.AddIdentityApiEndpoints<Larder.Models.ApplicationUser>()
                 .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddControllers();
 
+builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<IUnitRepository, UnitRepository>();
 builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
 builder.Services.AddScoped<IIngredientRepository, IngredientRepository>();
@@ -31,6 +31,7 @@ builder.Services.AddScoped<IConsumedFoodRepository,
 builder.Services.AddScoped<IUnitConversionRepository,
                                                 UnitConversionRepository>();
 
+builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<IIngredientService, IngredientService>();
 builder.Services.AddScoped<IFoodService, FoodService>();
@@ -87,19 +88,6 @@ builder.Services.AddSwaggerGen();
 
 WebApplication app = builder.Build();
 
-app.MapIdentityApi<Larder.Models.ApplicationUser>();
-app.MapPost("/logout", async (SignInManager<Larder.Models.ApplicationUser>
-                                                            signInManager) =>
-                                    {
-                                        await signInManager.SignOutAsync();
-                                        return Results.Ok();
-                                    })
-                                    .WithOpenApi()
-                                    .RequireAuthorization();
-
-app.MapControllers();
-
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -111,8 +99,19 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors(corsPolicyName);
-
 app.UseAuthorization();
+
+app.MapIdentityApi<Larder.Models.ApplicationUser>();
+app.MapPost("/logout", async (SignInManager<Larder.Models.ApplicationUser>
+                                                            signInManager) =>
+                                    {
+                                        await signInManager.SignOutAsync();
+                                        return Results.Ok();
+                                    })
+                                    .WithOpenApi()
+                                    .RequireAuthorization();
+
+app.MapControllers();
 
 using (IServiceScope scope = app.Services.CreateScope())
 {

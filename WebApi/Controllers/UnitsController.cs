@@ -8,7 +8,7 @@ using Larder.Services;
 namespace Larder.Controllers;
 
 public class UnitsController(IUnitService service)
-                                        : ApplicationControllerBase
+                                        : AppControllerBase
 {
     private readonly IUnitService _service = service;
 

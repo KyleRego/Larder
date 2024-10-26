@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Larder.Controllers;
 
-public class DemosController(IDemoService demoService) : ApplicationControllerBase
+public class DemosController(IDemoService demoService) : AppControllerBase
 {
     private readonly IDemoService _demoService = demoService;
 

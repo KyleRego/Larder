@@ -5,13 +5,7 @@ namespace Larder.Dtos;
 public class FoodDto
 {
     public string? Id { get; set; }
-
-    public required string Name { get; set; }
-
-    public string? Description { get; set; }
-
     public double Servings { get; set; }
-
     public double Calories { get; set; }
 
     public double GramsProtein { get; set; }
@@ -35,15 +29,39 @@ public class FoodDto
     public double TotalCalories { get; set; }
     public double TotalGramsProtein { get; set; }
 
+    public static FoodDto FromEntity(Food food)
+    {
+        return new()
+        {
+            Id = food.Id,
+            Servings = food.Servings,
+
+            Calories = food.Calories,
+            GramsProtein = food.GramsProtein,
+
+            GramsTotalFat = food.GramsTotalFat,
+            GramsSaturatedFat = food.GramsSaturatedFat,
+            GramsTransFat = food.GramsTransFat,
+
+            MilligramsCholesterol = food.MilligramsCholesterol,
+            MilligramsSodium = food.MilligramsSodium,
+
+            GramsTotalCarbs = food.GramsTotalCarbs,
+            GramsDietaryFiber = food.GramsDietaryFiber,
+            GramsTotalSugars = food.GramsTotalSugars,
+
+            TotalCalories = food.TotalCalories,
+            TotalGramsProtein = food.TotalGramsProtein
+        };
+    }
+
+    // TODO: Remove this
     public static FoodDto FromEntity(Item foodItem)
     {
         ArgumentNullException.ThrowIfNull(foodItem.Food);
 
         return new()
         {
-            Id = foodItem.Id,
-            Name = foodItem.Name,
-            Description = foodItem.Description,
             Servings = foodItem.Food.Servings,
 
             Calories = foodItem.Food.Calories,
