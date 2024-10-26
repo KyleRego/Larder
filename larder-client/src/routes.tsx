@@ -4,13 +4,17 @@ import NewItem from './pages/NewItem';
 import Items from './pages/Items';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Logout from './pages/Logout';
+import App from './App';
 
 export const router = createBrowserRouter([
-    { path: '/', element: <Index /> },
-    { path: '/items', element: <Items /> },
-    { path: '/items/new', element: <NewItem /> },
-    { path: '/login', element: <Login /> },
-    { path: '/register', element: <Register />},
-    { path: '/logout', element: <Logout /> }
+    {   path: "/",
+        element: <App />,
+        children:
+            [   { path: '/', element: <Index /> },
+                { path: '/items', element: <Items /> },
+                { path: '/items/new', element: <NewItem /> },
+                { path: '/login', element: <Login /> },
+                { path: '/register', element: <Register />}
+            ]
+    }
 ]);
