@@ -44,7 +44,7 @@ export default function NewItem() {
 
     return (
         <>
-            <div className="d-flex flex-wrap justify-content-between align-items-center column-gap-3 row-gap-1">
+            <div className="page-flex-header">
                 <h1>New item:</h1>
                 <Link className="btn btn-danger" to={"/items"}>Cancel</Link>
             </div>

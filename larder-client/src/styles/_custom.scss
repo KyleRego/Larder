@@ -11,3 +11,19 @@ label, input, textarea {
 h1, h2 {
     margin: 0;
 }
+
+.page-flex-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  column-gap: 1rem;
+  row-gap: 0.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid black;
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}

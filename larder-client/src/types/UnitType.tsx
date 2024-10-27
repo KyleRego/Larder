@@ -1,5 +1,4 @@
-export enum UnitType
-{
+export enum UnitType {
     Mass,
     Volume,
     Weight

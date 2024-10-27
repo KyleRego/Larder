@@ -17,7 +17,7 @@ export default function Items() {
 
     return (
         <>
-            <div className="d-flex flex-wrap column-gap-3 row-gap-1 justify-content-around align-items-center">
+            <div className="page-flex-header">
                 <h1>Items</h1>
                 <Link className="btn btn-primary" to={"/items/new"}>New item</Link>
             </div>

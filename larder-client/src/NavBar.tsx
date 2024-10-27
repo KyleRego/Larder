@@ -1,15 +1,19 @@
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthedContext } from "./contexts/AuthedContext";
 import { apiClient } from "./util/axios";
 
 export function NavBar() {
     const [collapsed, setCollapsed] = useState(false);
     const { authed, setAuthed } = useContext(AuthedContext);
+    const navigate = useNavigate();
 
     function handleLogout() {
-        apiClient.post("/logout")
-                .then(() => setAuthed(false));
+        apiClient.post("/logout").then(() => {
+            setAuthed(false);
+            setCollapsed(true);
+            navigate("/");    
+        }).catch(error => console.error(error));
     }
 
     return (
@@ -28,9 +32,8 @@ export function NavBar() {
                 </div>
                 <div className={`collapse navbar-collapse ${collapsed === false && "show"}`} id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li className="nav-item">
-                            <Link to="/items" className="nav-link">Items</Link>
-                        </li> 
+                        <li className="nav-item"><Link className="nav-link" to="/items">Items</Link></li>
+                        <li className="nav-item"><Link className="nav-link" to="/units">Units</Link></li> 
                     </ul>
                     <div className="d-none d-lg-block">
                         <button onClick={handleLogout} type="button" className="btn btn-outline-light text-black border-black">Log out</button>
