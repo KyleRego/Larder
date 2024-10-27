@@ -95,8 +95,8 @@ export default function NewItem() {
                     </div>
                 </>)}
 
-                <div>
-                    <button type="submit">Create item</button>
+                <div className="mt-4">
+                    <button type="submit" className="btn btn-primary">Create item</button>
                 </div>
             </form>
         </div>

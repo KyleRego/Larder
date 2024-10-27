@@ -1,16 +1,14 @@
-import './App.css'
-import { Outlet, RouterProvider } from 'react-router'
-import { router } from './routes'
-import { useContext, useEffect } from 'react'
-import { UnitsContext, UnitsProvider } from './contexts/UnitsContext'
-import { apiClient } from './util/axios'
-import { Unit } from './types/Unit'
-import { AuthedContext, AuthedProvider } from './contexts/AuthedContext'
-import { NavBar } from './NavBar'
+import { Outlet } from 'react-router';
+import { useContext, useEffect } from 'react';
+import { UnitsContext, UnitsProvider } from './contexts/UnitsContext';
+import { apiClient } from './util/axios';
+import { Unit } from './types/Unit';
+import { AuthedContext, AuthedProvider } from './contexts/AuthedContext';
+import { NavBar } from './NavBar';
 
 function App() {
-    const { units, setUnits } = useContext(UnitsContext);
-    const { authed, setAuthed } = useContext(AuthedContext);
+    const { setUnits } = useContext(UnitsContext);
+    const { setAuthed } = useContext(AuthedContext);
 
     useEffect(() => {
         try {
@@ -27,10 +25,14 @@ function App() {
         <>
             <AuthedProvider>
                 <UnitsProvider>
-                    <div className="bg-white min-vh-100">
+                    <div className="bg-secondary min-vh-100">
                         <NavBar />
                         <div className="container">
-                            <Outlet />
+                            <div className="card shadow-sm mt-4">
+                                <div className="card-body">
+                                    <Outlet />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </UnitsProvider>

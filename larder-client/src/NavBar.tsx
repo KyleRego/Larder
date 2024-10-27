@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthedContext } from "./contexts/AuthedContext";
-import './NavBar.css';
 import { apiClient } from "./util/axios";
 
 export function NavBar() {
@@ -14,7 +13,7 @@ export function NavBar() {
     }
 
     return (
-        <nav className="navbar navbar-expand-lg sticky-top p-3 mb-4">
+        <nav className="navbar navbar-expand-lg sticky-top p-3 bg-primary">
             <div className="container">
                 <Link to="/" className="navbar-brand">Larder</Link>
                 {authed === true ?

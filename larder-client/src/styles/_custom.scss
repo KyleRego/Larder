@@ -1,0 +1,9 @@
+$primary: #d988ff;
+$secondary: #ffe4c8;
+
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
+label, input, textarea {
+  display: block;
+  width: 100%;
+}
