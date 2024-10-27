@@ -23,7 +23,7 @@ export function NavBar() {
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="d-lg-none">
-                        <button onClick={handleLogout} type="button" className="btn btn-outline-light text-black">Log out</button>
+                        <button onClick={handleLogout} type="button" className="btn btn-outline-light text-black border-black">Log out</button>
                     </div>
                 </div>
                 <div className={`collapse navbar-collapse ${collapsed === false && "show"}`} id="navbarSupportedContent">
@@ -33,15 +33,15 @@ export function NavBar() {
                         </li> 
                     </ul>
                     <div className="d-none d-lg-block">
-                        <button onClick={handleLogout} type="button" className="btn btn-outline-light text-black">Log out</button>
+                        <button onClick={handleLogout} type="button" className="btn btn-outline-light text-black border-black">Log out</button>
                     </div>
                 </div>
                 </> :
                 <>
                 <div className="d-flex column-gap-3">
-                    <Link to="/login" className="btn btn-outline-light text-black">Login</Link>
+                    <Link to="/login" className="btn btn-outline-light text-black border-black">Login</Link>
               
-                    <Link to="/register" className="btn btn-outline-light text-black">Register</Link>  
+                    <Link to="/register" className="btn btn-outline-light text-black border-black">Register</Link>  
                 </div> 
                 </>
                 }          

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Item } from "../types/Item";
 import { apiClient } from "../util/axios";
+import ItemsTable from "../components/ItemsTable";
+import { Link } from "react-router-dom";
 
 export default function Items() {
     const [items, setItems] = useState<Item[]>([]); 
@@ -13,17 +15,14 @@ export default function Items() {
             .catch(error => console.log(error));
     }, [searchParam, sortByParam])
 
-    const itemsListElements = items.map(item => {
-        return <li key={item.id}>{item.name}</li>;
-    })
-
     return (
         <>
-            <h1>Items</h1>
+            <div className="d-flex flex-wrap column-gap-3 row-gap-1 justify-content-around align-items-center">
+                <h1>Items</h1>
+                <Link className="btn btn-primary" to={"/items/new"}>New item</Link>
+            </div>
 
-            <ol>
-                {itemsListElements}
-            </ol>
+            <ItemsTable items={items} />
         </>
     );
 }

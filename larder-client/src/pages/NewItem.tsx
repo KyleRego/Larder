@@ -42,66 +42,55 @@ export default function NewItem() {
         apiClient.post("/api/Items", newItem);
     }
 
-    return <>
-        <h1>
-            New item:
-        </h1>
-        <div>
-            <h2>Item is a?</h2>
-            <div>
-                <label>
-                    <input type="checkbox" name="isFood"
-                                            checked={checkboxStates.isFood}
-                                            onChange={handleCheckboxChange} />
-                    Food
-                </label>
+    return (
+        <>
+            <div className="d-flex flex-wrap justify-content-between align-items-center column-gap-3 row-gap-1">
+                <h1>New item:</h1>
+                <Link className="btn btn-danger" to={"/items"}>Cancel</Link>
             </div>
-            <div>
-                <label>
-                    <input
-                        type="checkbox" name="isIngredient"
-                                        checked={checkboxStates.isIngredient}
-                                        onChange={handleCheckboxChange} />
-                    Ingredient
-                </label>
-            </div>
-        </div>
-        
-        <div>
-            <form onSubmit={handleSubmit}>
-                <div>
+            
+            <div className="mt-4">
+                <form onSubmit={handleSubmit}>
                     <div>
-                        <label htmlFor="nameInput">Name:</label>
-                        <input id="nameInput" type="text" name="name" title="Item name:" required></input>
-                    </div>
-                    <div>
-                        <label htmlFor="descriptionInput">Description:</label>
-                        <textarea id="descriptionInput" name="description" title="Item description:"></textarea>
-                    </div>
-                </div>
-
-                {checkboxStates.isFood && (
-                <>
-                    <div>
-                        <h3>Food information:</h3>
                         <div>
-                            <label htmlFor="caloriesInput">Calories:</label>
-                            <input id="caloriesInput" type="number" name="calories" title="Food calories:" />
+                            <label htmlFor="nameInput">Name:</label>
+                            <input id="nameInput" type="text" name="name" title="Item name:" required></input>
                         </div>
-                        <div>
-                            <label htmlFor="servings">Servings:</label>
-                            <input id="servings" type="number" name="servings" title="Food servings:" />
+                        <div className="mt-2">
+                            <label htmlFor="descriptionInput">Description:</label>
+                            <textarea id="descriptionInput" name="description" title="Item description:"></textarea>
                         </div>
                     </div>
-                </>)}
 
-                <div className="mt-4">
-                    <button type="submit" className="btn btn-primary">Create item</button>
-                </div>
-            </form>
-        </div>
-        <div>
-            <Link to={"/"}>Home</Link>
-        </div>
-    </>;
+                    <div className="btn-group mt-4" role="group">
+                        <input type="checkbox" className="btn-check" id="isFood" name="isFood" autoComplete="off"
+                            checked={checkboxStates.isFood} onChange={handleCheckboxChange} />
+                        <label className="btn btn-outline-primary" htmlFor="isFood">Food</label>
+
+                        <input type="checkbox" className="btn-check" id="isIngredient" name="isIngredient" autoComplete="off"
+                                checked={checkboxStates.isIngredient} onChange={handleCheckboxChange} />
+                        <label className="btn btn-outline-primary" htmlFor="isIngredient">Ingredient</label>
+                    </div>
+
+                    {checkboxStates.isFood && (
+                    <>
+                        <div className="mt-4">
+                            <div>
+                                <label htmlFor="caloriesInput">Calories:</label>
+                                <input id="caloriesInput" type="number" name="calories" title="Food calories:" />
+                            </div>
+                            <div>
+                                <label htmlFor="servings">Servings:</label>
+                                <input id="servings" type="number" name="servings" title="Food servings:" />
+                            </div>
+                        </div>
+                    </>)}
+
+                    <div className="mt-4 d-flex justify-content-center">
+                        <button type="submit" className="btn btn-primary">Create item</button>
+                    </div>
+                </form>
+            </div>
+        </>
+    );
 }

@@ -1,10 +1,11 @@
 import { useContext } from "react";
 import { AuthedContext } from "../contexts/AuthedContext";
 import { apiClient } from "../util/axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
     const { setAuthed } = useContext(AuthedContext);
+    const navigate = useNavigate()
 
     function handleLogin(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -17,6 +18,7 @@ export default function Login() {
                         { params: {useCookies: true} }).then(response => {
             if (response.status === 200) {
                 setAuthed(true);
+                navigate("/items");
             }})
             .catch(error => console.log(error));
     };
