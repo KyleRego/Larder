@@ -14,12 +14,12 @@ export default function UnitForm({unit, handleSubmit}: {
                 <label htmlFor="name">Unit name:</label>
                 <input required className="form-control" 
                         id="name" name="name" type="text"
-                        value={unit?.name} />
+                        defaultValue={unit?.name} />
             </div>
 
             <div className="mt-4">
                 <label htmlFor="type">Unit type:</label>
-                <select className="form-select" id="type" name="type">
+                <select defaultValue={unit?.type} className="form-select" id="type" name="type">
                     <option value={UnitType.Mass}>
                         Mass
                     </option>

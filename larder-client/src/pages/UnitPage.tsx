@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { Unit } from "../types/Unit";
 import { apiClient } from "../util/axios";
 import { useParams } from "react-router";
-import { MdModeEdit } from "react-icons/md";
 import Loading from "../components/Loading";
-import { Link } from "react-router-dom";
+import EditLink from "../components/EditLink";
 
 export default function UnitPage() {
     const [unit, setUnit] = useState<Unit | null>(null);
@@ -27,10 +26,7 @@ export default function UnitPage() {
             <div className="page-flex-header">
                 <h1>{unit.name}</h1>
 
-                <Link to={`/units/${unit.id}/edit`} title="Edit unit"
-                        type="button" className="btn btn-sm btn-outline-primary">
-                    <MdModeEdit className="icon" />
-                </Link>
+                <EditLink path={`/units/${unit.id}/edit`} title="Edit unit" />
             </div>
 
             <div className="mt-4">

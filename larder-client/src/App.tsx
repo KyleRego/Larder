@@ -5,6 +5,8 @@ import { apiClient } from './util/axios';
 import { Unit } from './types/Unit';
 import { AuthedContext, AuthedProvider } from './contexts/AuthedContext';
 import { NavBar } from './NavBar';
+import { MessageProvider } from './contexts/MessageContext';
+import MessageDisplay from './components/MessageDisplay';
 
 function App() {
     const { setUnits } = useContext(UnitsContext);
@@ -27,16 +29,19 @@ function App() {
         <>
             <AuthedProvider>
                 <UnitsProvider>
-                    <div className="bg-secondary min-vh-100">
-                        <NavBar />
-                        <div className="container d-flex flex-column justify-content-center">
-                            <div className="card shadow-sm mt-4">
-                                <div className="card-body">
-                                    <Outlet />
+                    <MessageProvider>
+                        <div className="bg-secondary min-vh-100">
+                            <NavBar />
+                            <div className="container d-flex flex-column justify-content-center">
+                                <div className="card shadow-sm mt-4">
+                                    <div className="card-body">
+                                        <Outlet />
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <MessageDisplay />
+                    </MessageProvider>
                 </UnitsProvider>
             </AuthedProvider>
         </>

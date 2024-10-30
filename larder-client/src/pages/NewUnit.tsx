@@ -3,9 +3,13 @@ import UnitForm from "../components/UnitForm";
 import { UnitType } from "../types/UnitType";
 import { apiClient } from "../util/axios";
 import { Unit } from "../types/Unit";
+import { ApiResponse } from "../types/ApiResponse";
+import { useContext } from "react";
+import { MessageContext } from "../contexts/MessageContext";
 
 export default function NewUnit() {
     const navigate = useNavigate();
+    const { setMessage } = useContext(MessageContext);
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -15,7 +19,8 @@ export default function NewUnit() {
 
         const newUnit = new Unit(null, name, unitType);
 
-        apiClient.post<Unit>("/api/units", newUnit).then(_ => {
+        apiClient.post<ApiResponse<Unit>>("/api/units", newUnit).then(res => {
+            setMessage({text: res.data.message, type: res.data.type})
             navigate("/units");
         }).catch(error => {
             console.error(error);

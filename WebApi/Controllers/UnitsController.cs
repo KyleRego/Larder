@@ -41,11 +41,12 @@ public class UnitsController(IUnitService service)
     }
 
     [HttpPost]
-    public async Task<ActionResult<UnitDto>> Create(UnitDto dto)
+    public async Task<ActionResult<ApiResponse<UnitDto>>> Create(UnitDto dto)
     {
         try
         {
-            return await _service.CreateUnit(dto);
+            UnitDto unit = await _service.CreateUnit(dto);
+            return new ApiResponse<UnitDto>(unit, "Unit created", ApiResponseType.Success);
         }
         catch (ApplicationException)
         {
@@ -54,13 +55,14 @@ public class UnitsController(IUnitService service)
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<UnitDto>> Update(string id, UnitDto dto)
+    public async Task<ActionResult<ApiResponse<UnitDto>>> Update(string id, UnitDto dto)
     {
         if (dto.Id == null || dto.Id != id) return BadRequest();
 
         try
         {
-            return await _service.UpdateUnit(dto);
+            UnitDto unit = await _service.UpdateUnit(dto);
+            return new ApiResponse<UnitDto>(unit, "Unit updated", ApiResponseType.Success);
         }
         catch (ApplicationException)
         {
