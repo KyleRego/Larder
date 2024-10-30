@@ -32,7 +32,7 @@ export default function UnitForm({unit, handleSubmit}: {
                 </select>
             </div>
 
-            <div className="mt-4">
+            <div className="mt-4 d-flex justify-content-center">
                 <button className="btn btn-primary" type="submit">{submitText}</button>
             </div>
         </form>

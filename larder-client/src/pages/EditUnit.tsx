@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import UnitForm from "../components/UnitForm";
 import { MessageContext } from "../contexts/MessageContext";
 import { ApiResponse } from "../types/ApiResponse";
+import DeleteBtn from "../components/DeleteBtn";
 
 export default function EditUnit() {
     const [unit, setUnit] = useState<Unit | null>(null);
@@ -40,14 +41,26 @@ export default function EditUnit() {
         });
     }
 
+    async function handleDelete() {
+        if (window.confirm(`Are you sure you want to delete unit ${unit?.name}?`)) {
+            const response = await apiClient.delete(`api/units/${unitId}`);
+            setMessage({text: response.data.message, type: response.data.type});
+            navigate("/units");
+        }
+    }
+
     if (unit === null) return <Loading />;
 
     return (
         <>
             <div className="page-flex-header">
-                <h1>Editing unit: {unit.name}</h1>
+                <div className="d-flex column-gap-5 align-items-center">
+                    <h1>Editing unit: {unit.name}</h1>
 
-                <Link className="btn btn-danger" to={`/units/${unit.id}`}>Cancel</Link>
+                    <Link className="btn btn-danger" to={`/units/${unit.id}`}>Cancel</Link>
+                </div>
+
+                <DeleteBtn handleClick={handleDelete} />
             </div>
 
             <div className="mt-4">

@@ -23,8 +23,6 @@ public class UnitService(IServiceProviderWrapper serviceProvider,
 
     public async Task<UnitDto> CreateUnit(UnitDto dto)
     {
-        Console.WriteLine("hello world 1");
-        Console.WriteLine(CurrentUserId());
         Unit entity = new()
         {
             UserId = CurrentUserId(),
@@ -40,7 +38,7 @@ public class UnitService(IServiceProviderWrapper serviceProvider,
     public async Task DeleteUnit(string id)
     {
         Unit unit = await _repository.Get(id)
-            ?? throw new ApplicationException("unit not found");
+            ?? throw new ApplicationException("Unit was not found.");
 
         await ThrowIfUserCannotAccess(unit);
 

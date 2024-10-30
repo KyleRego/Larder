@@ -5,9 +5,23 @@ public enum ApiResponseType
     Success, Danger, Warning, Info
 }
 
-public class ApiResponse<T>(T data, string msg, ApiResponseType type)
+public class ApiResponse<T>
 {
-    public T Data { get; set; } = data;
-    public string Message { get; set; } = msg;
-    public ApiResponseType Type { get; set; } = type;
+    public T? Data { get; set; }
+    public string Message { get; set; }
+    public ApiResponseType Type { get; set; }
+
+    public ApiResponse(T data, string msg, ApiResponseType type)
+    {
+        Data = data;
+        Message = msg;
+        Type = type;
+    }
+
+    public ApiResponse(string msg, ApiResponseType type)
+    {
+        Data = default;
+        Message = msg;
+        Type = type;
+    }
 }
