@@ -1,31 +1,44 @@
 import { Link } from "react-router-dom";
 import UnitsTable from "../components/UnitsTable";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UnitsContext } from "../contexts/UnitsContext";
 import { Unit } from "../types/Unit";
 import { apiClient } from "../util/axios";
+import { UnitSortOptions } from "../types/UnitSortOptions";
+import SearchBox from "../components/SearchBox";
 
 export default function Units() {
     const { units, setUnits } = useContext(UnitsContext);
+    const [sortOrder, setSortOrder] = useState(UnitSortOptions.Name);
+    const [searchParam, setSearchParam] = useState("");
 
     useEffect(() => {
-        apiClient.get<Unit[]>("api/units").then(res => {
-            setUnits(res.data);
-        }).catch(error => {
-            console.error(error);
-        })
-    }, [])
+        async function getUnits() {
+            const response = await apiClient.get<Unit[]>("api/units", 
+                { params: {sortOrder: sortOrder, search: searchParam} })
+
+            setUnits(response.data);
+        }
+
+        getUnits();
+    }, [sortOrder, searchParam])
+
+    function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setSearchParam(e.currentTarget.value);
+    }
 
     return (
         <>
             <div className="page-flex-header">
                 <h1>Units</h1>
 
+                <SearchBox handleOnChange={handleSearchChange} />
+
                 <Link className="btn btn-primary" to={"/units/new"}>New unit</Link>
             </div>
 
             <div className="mt-4">
-                <UnitsTable units={units} />
+                <UnitsTable units={units} sortOrder={sortOrder} setSortOrder={setSortOrder} />
             </div>
         
         </>
