@@ -1,8 +1,4 @@
-import { createContext,
-        Dispatch,
-        ReactNode,
-        SetStateAction,
-        useState } from "react";
+import { createContext, Dispatch, SetStateAction } from "react";
 
 import { Unit } from "../types/Unit";
 
@@ -15,13 +11,3 @@ export const UnitsContext = createContext<UnitsContextType>({
     units: [],
     setUnits: () => {}
 });
-
-export const UnitsProvider = ({ children }: { children: ReactNode }) => {
-    const [units, setUnits] = useState<Unit[]>([]);
-
-    return (
-        <UnitsContext.Provider value={{ units, setUnits }}>
-            {children}
-        </UnitsContext.Provider>
-    );
-};
