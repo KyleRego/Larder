@@ -1,11 +1,15 @@
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthedContext } from "../contexts/AuthedContext";
 import { apiClient } from "../util/axios";
+import { MessageContext } from "../contexts/MessageContext";
+import { ApiResponseType } from "../types/ApiResponse";
 
 export default function Register() {
     const { setAuthed } = useContext(AuthedContext);
     const [errors, setErrors] = useState<string[]>([]);
+    const navigate = useNavigate();
+    const { setMessage } = useContext(MessageContext);
 
     function handleRegister(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -14,8 +18,11 @@ export default function Register() {
         const password: string = formData.get("password") as string;
 
         apiClient.post("/register", { email: email, password: password})
-                                                .then(_ => setAuthed(true))
-                                                        .catch(error => {
+            .then(_ => {
+                setAuthed(true);
+                navigate("/");
+                setMessage({text: "Account registered successfully.", type: ApiResponseType.Success});
+            }).catch(error => {
             if (error.response?.status === 400) {
                 const json = error.response.data;
                 const tmpErrors: string[] = [];
@@ -52,7 +59,9 @@ export default function Register() {
                     <input required autoComplete="new-password" id="password" type="password" className="form-control" name="password" />
                 </div>
 
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <div>
+                    <button id="submit-login" type="submit" className="btn btn-primary">Submit</button>
+                </div>     
             </form>
         </div>
 

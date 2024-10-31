@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
 import { AuthedContext } from "../contexts/AuthedContext";
 
 export default function Index() {
@@ -21,11 +20,7 @@ export default function Index() {
 
             {authed === false
             ?
-            <div className="my-4 d-flex flex-wrap justify-content-center column-gap-3 row-gap-3">
-                <Link className="btn btn-outline-primary" to={"register"}>Register</Link>
-
-                <Link className="btn btn-outline-primary" to={"login"}>Login</Link>
-
+            <div className="my-4 d-flex flex-wrap justify-content-center">
                 <button onClick={handleCreateDemo} type="button" className="btn btn-outline-primary">
                     Try it out!
                 </button>

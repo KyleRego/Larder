@@ -13,7 +13,7 @@ export default function MessageDisplay() {
             <div className="card bg-primary-subtle text-center shadow-sm">
                 <div className="card-body">
                     <div className="d-flex justify-content-center column-gap-3 align-items-center">
-                        <div className="">
+                        <div id="message-text" className="">
                             {message.text}
                         </div>
                         <div className="">

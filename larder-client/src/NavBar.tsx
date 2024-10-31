@@ -16,6 +16,11 @@ export function NavBar() {
         }).catch(error => console.error(error));
     }
 
+    const logoutBtn =   <button id="logout-btn" onClick={handleLogout} type="button"
+                                className="btn btn-outline-light text-black border-black">
+                            Log out
+                        </button>;
+
     return (
         <nav className="navbar navbar-expand-lg sticky-top p-3 bg-primary">
             <div className="container">
@@ -27,7 +32,7 @@ export function NavBar() {
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="d-lg-none">
-                        <button onClick={handleLogout} type="button" className="btn btn-outline-light text-black border-black">Log out</button>
+                        {logoutBtn}
                     </div>
                 </div>
                 <div className={`collapse navbar-collapse ${collapsed === false && "show"}`} id="navbarSupportedContent">
@@ -36,15 +41,15 @@ export function NavBar() {
                         <li className="nav-item"><Link className="nav-link" to="/units">Units</Link></li> 
                     </ul>
                     <div className="d-none d-lg-block">
-                        <button onClick={handleLogout} type="button" className="btn btn-outline-light text-black border-black">Log out</button>
+                        {logoutBtn}
                     </div>
                 </div>
                 </> :
                 <>
                 <div className="d-flex column-gap-3">
-                    <Link to="/login" className="btn btn-outline-light text-black border-black">Login</Link>
+                    <Link id="login-btn" to="/login" className="btn btn-outline-light text-black border-black">Login</Link>
               
-                    <Link to="/register" className="btn btn-outline-light text-black border-black">Register</Link>  
+                    <Link id="register-btn" to="/register" className="btn btn-outline-light text-black border-black">Register</Link>  
                 </div> 
                 </>
                 }          
