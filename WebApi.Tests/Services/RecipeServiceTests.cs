@@ -43,7 +43,7 @@ public class RecipeServiceTests : ServiceTestsBase
         var unitConvRepository = new Mock<IUnitConversionRepository>();
 
         string id = "made_up_id";
-        recipeRepository.Setup(r => r.Get(id)).ReturnsAsync((Recipe?)null);
+        recipeRepository.Setup(r => r.Get(mockUserId, id)).ReturnsAsync((Recipe?)null);
 
         RecipeService sut = new(mSP.Object, recipeRepository.Object,
                                     ingredientRepository.Object,
@@ -141,7 +141,7 @@ public class RecipeServiceTests : ServiceTestsBase
         recipe.Ingredients = [ingItem1.Ingredient, ingItem2.Ingredient];
 
         var recipeRepository = new Mock<IRecipeRepository>();
-        recipeRepository.Setup(_ => _.Get(recipeId)).ReturnsAsync(recipe);
+        recipeRepository.Setup(_ => _.Get(mockUserId, recipeId)).ReturnsAsync(recipe);
 
         var ingredientRepository = new Mock<IIngredientRepository>();
 
@@ -234,7 +234,7 @@ public class RecipeServiceTests : ServiceTestsBase
 
         recipe.RecipeIngredients = [recipeIngredient];
         recipe.Ingredients = [ingredient];
-        recipeRepo.Setup(_ => _.Get(recipeId)).ReturnsAsync(recipe);
+        recipeRepo.Setup(_ => _.Get(mockUserId, recipeId)).ReturnsAsync(recipe);
 
         var ingredientRepo = new Mock<IIngredientRepository>();
 

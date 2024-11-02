@@ -12,24 +12,19 @@ public enum RecipeSortOptions
     Name_Desc
 }
 
-public interface IRecipeRepository : IRepositoryBase<Recipe, RecipeSortOptions>
-{
-
-}
-
 public class RecipeRepository(AppDbContext dbContext)
                 : RepositoryBase<Recipe, RecipeSortOptions>(dbContext),
                                                         IRecipeRepository
 {
-    public override async Task<Recipe?> Get(string id)
+    public override async Task<Recipe?> Get(string userId, string id)
     {
         return await _dbContext.Recipes
                                 .Include(r => r.RecipeIngredients)
                                 .ThenInclude(ri => ri.Ingredient)
-                                .FirstOrDefaultAsync(r => r.Id == id);
+                .FirstOrDefaultAsync(r => r.Id == id && r.UserId == userId);
     }
 
-    public override async Task<List<Recipe>> GetAllForUser(string userId,
+    public override async Task<List<Recipe>> GetAll(string userId,
                                 RecipeSortOptions sortBy, string? search)
     {
         var baseQuery = _dbContext.Recipes.Where(recipe => recipe.UserId == userId);

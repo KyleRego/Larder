@@ -28,11 +28,9 @@ public class IngredientService(IServiceProviderWrapper serviceProvider,
 
     public async Task<IngredientDto?> GetIngredient(string id)
     {
-        Item? ingItem = await _repository.Get(id);
+        Item? ingItem = await _repository.Get(CurrentUserId(), id);
 
         if (ingItem == null) return null;
-
-        await ThrowIfUserCannotAccess(ingItem);
 
         return IngredientDto.FromEntity(ingItem);
     }
@@ -40,7 +38,7 @@ public class IngredientService(IServiceProviderWrapper serviceProvider,
     public async Task<List<IngredientDto>> GetIngredients(
                             IngredientSortOptions sortBy, string? searchName)
     {
-        List<Item> ingItems = await _repository.GetAllForUser(
+        List<Item> ingItems = await _repository.GetAll(
                                         CurrentUserId(), sortBy, searchName);
 
         List<IngredientDto> ingredientDtos = [];
@@ -79,11 +77,9 @@ public class IngredientService(IServiceProviderWrapper serviceProvider,
         if (dto.Id == null) 
             throw new ApplicationException("ingredient Id was missing");
 
-        Item ingItem = await _repository.Get(dto.Id)
+        Item ingItem = await _repository.Get(CurrentUserId(), dto.Id)
                 ?? throw new ApplicationException("ingredient not found");
         ArgumentNullException.ThrowIfNull(ingItem.Ingredient);
-
-        await ThrowIfUserCannotAccess(ingItem);
 
         ingItem.Name = dto.Name;
         ingItem.Ingredient.Quantity = Quantity.FromDto(dto.Quantity);
@@ -98,11 +94,9 @@ public class IngredientService(IServiceProviderWrapper serviceProvider,
         if (dto.Id == null) 
                 throw new ApplicationException("ingredient Id was missing");
 
-        Item ingItem = await _repository.Get(dto.Id)
+        Item ingItem = await _repository.Get(CurrentUserId(), dto.Id)
                     ?? throw new ApplicationException("ingredient not found");
         ArgumentNullException.ThrowIfNull(ingItem.Ingredient);
-
-        await ThrowIfUserCannotAccess(ingItem);
 
         ingItem.Ingredient.Quantity = Quantity.FromDto(dto);
 
@@ -113,10 +107,8 @@ public class IngredientService(IServiceProviderWrapper serviceProvider,
 
     public async Task DeleteIngredient(string id)
     {
-        Item ingItem = await _repository.Get(id)
+        Item ingItem = await _repository.Get(CurrentUserId(), id)
                     ?? throw new ApplicationException("ingredient not found");
-
-        await ThrowIfUserCannotAccess(ingItem);
 
         await _repository.Delete(ingItem);
     }

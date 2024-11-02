@@ -13,25 +13,20 @@ public enum UnitSortOptions
     Type_Desc
 }
 
-public interface IUnitRepository : IRepositoryBase<Unit, UnitSortOptions>
-{
-    
-}
-
 public class UnitRepository(AppDbContext dbContext)
                             : RepositoryBase<Unit, UnitSortOptions>(dbContext),
                                                                 IUnitRepository
 {
-    public override async Task<Unit?> Get(string id)
+    public override async Task<Unit?> Get(string userId, string id)
     {
         return await _dbContext.Units
                         .Include(u => u.Conversions)
                         .Include(u => u.TargetConversions)
                         .FirstOrDefaultAsync(
-                            unit => unit.Id == id);
+                            unit => unit.Id == id && unit.UserId == userId);
     }
 
-    public override async Task<List<Unit>> GetAllForUser(string userId,
+    public override async Task<List<Unit>> GetAll(string userId,
                                     UnitSortOptions sortBy, string? search)
     {
         var baseQuery = _dbContext.Units.Where(unit => unit.UserId == userId);

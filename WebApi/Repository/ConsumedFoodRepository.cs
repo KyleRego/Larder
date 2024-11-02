@@ -31,13 +31,14 @@ public class ConsumedFoodRepository(AppDbContext dbContext) :
         ).ToListAsync();
     }
 
-    public async override Task<ConsumedFood?> Get(string id)
+    public async override Task<ConsumedFood?> Get(string userId, string id)
     {
         return await _dbContext.ConsumedFoods
-                        .FirstOrDefaultAsync(cf => cf.Id == id);
+                        .FirstOrDefaultAsync(
+                            cf => cf.Id == id && cf.UserId == userId);
     }
 
-    public override Task<List<ConsumedFood>> GetAllForUser(string userId,
+    public override Task<List<ConsumedFood>> GetAll(string userId,
                                 ConsumedFoodSortOptions sortBy, string? search)
     {
         throw new NotImplementedException();

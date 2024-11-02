@@ -2,9 +2,10 @@ namespace Larder.Repository;
 
 public interface IRepositoryBase<T, TSortOptions>
 {
-    public Task<T?> Get(string id);
+    public Task<T?> Get(string userId, string id);
 
-    public Task<List<T>> GetAllForUser(string userId, TSortOptions sortBy, string? search);
+    public Task<List<T>> GetAll(string userId, TSortOptions sortBy,
+                                                    string? search);
 
     public Task<T> Insert(T newEntity);
 

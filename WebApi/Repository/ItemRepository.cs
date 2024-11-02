@@ -14,17 +14,18 @@ public enum ItemSortOptions
 }
 
 public class ItemRepository(AppDbContext dbContext)
-                        : RepositoryBase<Item, ItemSortOptions>(dbContext), IItemRepository
+            : RepositoryBase<Item, ItemSortOptions>(dbContext), IItemRepository
 {
-    public override async Task<Item?> Get(string id)
+    public override async Task<Item?> Get(string userId, string id)
     {
         return await _dbContext.Items
                                 .Include(item => item.Food)
                                 .Include(item => item.Ingredient)
-                                .FirstOrDefaultAsync(item => item.Id == id);
+                                .FirstOrDefaultAsync(
+                            item => item.Id == id && item.UserId == userId);
     }
 
-    public override async Task<List<Item>> GetAllForUser(string userId,
+    public override async Task<List<Item>> GetAll(string userId,
                                                     ItemSortOptions sortBy,
                                                     string? search)
     {

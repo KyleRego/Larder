@@ -4,51 +4,58 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Larder.Controllers;
 
-public class UnitConversionsController(IUnitConversionService unitConvService)
-                                                : AppControllerBase
+using UnitConversionActionResult
+                        = Task<ActionResult<ApiResponse<UnitConversionDto>>>;
+
+public class UnitConversionsController(IUnitConversionService service)
+                                                            : AppControllerBase
 {
-    private readonly IUnitConversionService _unitConvService = unitConvService;
+    private readonly IUnitConversionService _service = service;
 
     [HttpPost]
-    public async Task<ActionResult<UnitConversionDto>> Create(UnitConversionDto dto)
+    public async UnitConversionActionResult Create(UnitConversionDto dto)
     {
         try
         {
-            return await _unitConvService.CreateUnitConversion(dto);
+            UnitConversionDto unitConv = await _service.CreateUnitConversion(dto);
+
+            return new ApiResponse<UnitConversionDto>(
+                unitConv, "Unit conversion created", ApiResponseType.Success);
         }
-        catch (ApplicationException)
+        catch (ApplicationException e)
         {
-            return UnprocessableEntity();
+            return UnprocessableEntity(FromError(e));
         }
     }
-    
+
     [HttpPut("{id}")]
-    public async Task<ActionResult<UnitConversionDto>> Update(UnitConversionDto dto, string id)
+    public async UnitConversionActionResult Update(UnitConversionDto dto, string id)
     {
         if (dto.Id == null || dto.Id != id) return BadRequest();
 
         try
         {
-            return await _unitConvService.UpdateUnitConversion(dto);
+            UnitConversionDto resultDto = await _service.UpdateUnitConversion(dto);
+            return new ApiResponse<UnitConversionDto>(
+                resultDto, "Unit conversion created", ApiResponseType.Success);
         }
-        catch (ApplicationException)
+        catch (ApplicationException e)
         {
-            return UnprocessableEntity();
+            return UnprocessableEntity(FromError(e));
         }
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(string id)
+    public async Task<ActionResult<ApiResponse<object>>> Delete(string id)
     {
         try
         {
-            await _unitConvService.DeleteUnitConversion(id);
+            await _service.DeleteUnitConversion(id);
+            return Ok();
         }
-        catch (ApplicationException)
+        catch (ApplicationException e)
         {
-            return UnprocessableEntity();
-        }
-
-        return Ok();
+            return UnprocessableEntity(FromError(e));
+        }   
     }
 }

@@ -14,12 +14,6 @@ public enum IngredientSortOptions
     Quantity_Desc
 }
 
-public interface IIngredientRepository
-                : IRepositoryBase<Item, IngredientSortOptions>
-{
-    public Task<Item> FindOrCreateBy(string userId, string name);
-}
-
 public class IngredientRepository(AppDbContext dbContext)
     : RepositoryBase<Item, IngredientSortOptions>(dbContext),
                                                 IIngredientRepository
@@ -53,17 +47,19 @@ public class IngredientRepository(AppDbContext dbContext)
         return ingItem;
     }
 
-    public override async Task<Item?> Get(string id)
+    public override async Task<Item?> Get(string userId, string id)
     {
         return await _dbContext.Items
                             .Include(item => item.Ingredient)
                             .ThenInclude(ing => ing!.Recipes)
                             .ThenInclude(ing => ing!.RecipeIngredients)
                             .ThenInclude(ing => ing!.Quantity)
-                            .FirstOrDefaultAsync(item => item.Id == id && item.Ingredient != null);
+                            .FirstOrDefaultAsync(
+            item => item.Id == id && item.UserId == userId
+                                    && item.Ingredient != null);
     }
 
-    public override async Task<List<Item>> GetAllForUser(string userId,
+    public override async Task<List<Item>> GetAll(string userId,
                                                 IngredientSortOptions sortBy,
                                                                 string? search)
     {

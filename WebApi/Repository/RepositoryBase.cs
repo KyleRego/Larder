@@ -9,13 +9,16 @@ public enum SortOptionsBase
     AnyOrder
 }
 
-public abstract class RepositoryBase<T, TSortOptions>(AppDbContext dbContext) : IRepositoryBase<T, TSortOptions>
+public abstract class RepositoryBase<T, TSortOptions>(AppDbContext dbContext)
+                                             : IRepositoryBase<T, TSortOptions>
 {
     protected readonly AppDbContext _dbContext = dbContext;
 
-    public abstract Task<T?> Get(string id);
+    public abstract Task<T?> Get(string userId, string id);
 
-    public abstract Task<List<T>> GetAllForUser(string userId, TSortOptions sortBy, string? search);
+    public abstract Task<List<T>> GetAll(string userId,
+                                            TSortOptions sortBy,
+                                            string? search);
 
     public async Task<T> Insert(T newEntity)
     {

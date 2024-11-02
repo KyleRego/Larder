@@ -35,15 +35,15 @@ public class UnitConversionRepository(AppDbContext dbContext)
         );
     }
 
-    public async override Task<UnitConversion?> Get(string id)
+    public async override Task<UnitConversion?> Get(string userId, string id)
     {
         return await _dbContext.UnitConversions
                     .Include(uc => uc.Unit)
                     .Include(uc => uc.TargetUnit).FirstOrDefaultAsync(
-                                uc => uc.Id == id); 
+                                uc => uc.Id == id && uc.UserId == userId); 
     }
 
-    public override Task<List<UnitConversion>> GetAllForUser(string userId,
+    public override Task<List<UnitConversion>> GetAll(string userId,
                             UnitConversionSortOptions sortBy, string? search)
     {
         throw new NotImplementedException();

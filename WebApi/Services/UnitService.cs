@@ -1,7 +1,6 @@
 using Larder.Dtos;
 using Larder.Models;
 using Larder.Repository;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Larder.Services;
 
@@ -37,21 +36,17 @@ public class UnitService(IServiceProviderWrapper serviceProvider,
 
     public async Task DeleteUnit(string id)
     {
-        Unit unit = await _repository.Get(id)
+        Unit unit = await _repository.Get(CurrentUserId(), id)
             ?? throw new ApplicationException("Unit was not found.");
-
-        await ThrowIfUserCannotAccess(unit);
 
         await _repository.Delete(unit);
     }
 
     public async Task<UnitDto?> GetUnit(string id)
     {
-        Unit? entity = await _repository.Get(id);
+        Unit? entity = await _repository.Get(CurrentUserId(), id);
 
         if (entity == null) return null;
-
-        await ThrowIfUserCannotAccess(entity);
 
         return UnitDto.FromEntity(entity);
     }
@@ -60,7 +55,7 @@ public class UnitService(IServiceProviderWrapper serviceProvider,
                                                                 string? search)
     {
         List<Unit> units =
-            await _repository.GetAllForUser(CurrentUserId(), sortOrder, search);
+            await _repository.GetAll(CurrentUserId(), sortOrder, search);
 
         List<UnitDto> dtos = [];
 
@@ -76,10 +71,8 @@ public class UnitService(IServiceProviderWrapper serviceProvider,
     {
         ArgumentNullException.ThrowIfNull(dto.Id);
 
-        Unit entity = await _repository.Get(dto.Id)
+        Unit entity = await _repository.Get(CurrentUserId(), dto.Id)
             ?? throw new ApplicationException("unit not found");
-
-        await ThrowIfUserCannotAccess(entity);
 
         entity.Name = dto.Name;
         entity.Type = dto.Type;

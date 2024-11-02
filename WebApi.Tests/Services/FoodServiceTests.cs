@@ -34,7 +34,7 @@ public class FoodServiceTests : ServiceTestsBase
 
         _foodMap = [];
         _foodMap[_foodItemId] = foodItem;
-        _mockFoodRepo.Setup(m => m.Get(_foodItemId)).ReturnsAsync(foodItem);
+        _mockFoodRepo.Setup(m => m.Get(mockUserId, _foodItemId)).ReturnsAsync(foodItem);
     }
 
     [Fact]
@@ -79,7 +79,7 @@ public class FoodServiceTests : ServiceTestsBase
         foodItem.Food!.TotalCalories = 0;
         foodItem.Food.TotalGramsProtein = 0;
 
-        _mockFoodRepo.Setup(m => m.Get(_foodItemId)).ReturnsAsync(foodItem);
+        _mockFoodRepo.Setup(m => m.Get(mockUserId, _foodItemId)).ReturnsAsync(foodItem);
 
         FoodService sut = new(mSP.Object, _mockFoodRepo.Object,
                                                     _mockConsFoodRepo.Object);

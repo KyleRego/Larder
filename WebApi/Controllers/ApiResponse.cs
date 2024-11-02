@@ -1,10 +1,5 @@
 namespace Larder.Controllers;
 
-public enum ApiResponseType
-{
-    Success, Danger, Warning, Info
-}
-
 public class ApiResponse<T>
 {
     public T? Data { get; set; }

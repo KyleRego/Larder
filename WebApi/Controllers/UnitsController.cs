@@ -50,9 +50,9 @@ public class UnitsController(IUnitService service) : AppControllerBase
             return new ApiResponse<UnitDto>(unit, "Unit created",
                                                     ApiResponseType.Success);
         }
-        catch (ApplicationException)
+        catch (ApplicationException e)
         {
-            return UnprocessableEntity();
+            return UnprocessableEntity(FromError(e));
         }
     }
 
@@ -64,13 +64,13 @@ public class UnitsController(IUnitService service) : AppControllerBase
 
         try
         {
-            UnitDto unit = await _service.UpdateUnit(dto);
-            return new ApiResponse<UnitDto>(unit, "Unit updated",
+            UnitDto resultDto = await _service.UpdateUnit(dto);
+            return new ApiResponse<UnitDto>(resultDto, "Unit updated",
                                                 ApiResponseType.Success);
         }
-        catch (ApplicationException)
+        catch (ApplicationException e)
         {
-            return UnprocessableEntity();
+            return UnprocessableEntity(FromError(e));
         }
     }
 
@@ -88,8 +88,7 @@ public class UnitsController(IUnitService service) : AppControllerBase
         }
         catch (ApplicationException e)
         {
-            return UnprocessableEntity(new ApiResponse<object>(e.Message,
-                                            ApiResponseType.Danger));
+            return UnprocessableEntity(FromError(e));
         }
     }
 }

@@ -25,8 +25,8 @@ public class UnitConversionServiceTests : ServiceTestsBase
         string targetUnitId = "2";
         Unit targetUnit = _unitMap[targetUnitId];
 
-        mockUnitRepo.Setup(_ => _.Get(unitId)).ReturnsAsync(unit);
-        mockUnitRepo.Setup(_ => _.Get(targetUnitId)).ReturnsAsync(targetUnit);
+        mockUnitRepo.Setup(_ => _.Get(mockUserId, unitId)).ReturnsAsync(unit);
+        mockUnitRepo.Setup(_ => _.Get(mockUserId, targetUnitId)).ReturnsAsync(targetUnit);
 
         var mockUnitConvRepo = new Mock<IUnitConversionRepository>();
 

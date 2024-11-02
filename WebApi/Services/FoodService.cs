@@ -26,11 +26,9 @@ public class FoodService(IServiceProviderWrapper serviceProvider,
 
     public async Task<FoodDto?> GetFood(string id)
     {
-        Item? item = await _repository.Get(id);
+        Item? item = await _repository.Get(CurrentUserId(), id);
         
         if (item == null) return null;
-
-        await ThrowIfUserCannotAccess(item);
 
         return FoodDto.FromEntity(item);
     }
@@ -38,7 +36,7 @@ public class FoodService(IServiceProviderWrapper serviceProvider,
     public async Task<List<FoodDto>> GetFoods(FoodSortOptions sortBy,
                                                         string? search)
     {
-        List<Item> foodItems = await _repository.GetAllForUser(CurrentUserId(),
+        List<Item> foodItems = await _repository.GetAll(CurrentUserId(),
                                                             sortBy,
                                                             search);
 
@@ -56,11 +54,9 @@ public class FoodService(IServiceProviderWrapper serviceProvider,
     {
         ArgumentNullException.ThrowIfNull(dto.FoodId);
 
-        Item foodItem = await _repository.Get(dto.FoodId)
+        Item foodItem = await _repository.Get(CurrentUserId(), dto.FoodId)
                 ?? throw new ApplicationException("food not found");
         ArgumentNullException.ThrowIfNull(foodItem.Food);
-
-        await ThrowIfUserCannotAccess(foodItem);
 
         foodItem.Food.Servings = dto.Servings;
 
@@ -78,11 +74,9 @@ public class FoodService(IServiceProviderWrapper serviceProvider,
         if (dto.Servings < 1)
             throw new ApplicationException("food servings must be >= 1");
 
-        Item item = await _repository.Get(dto.FoodId)
+        Item item = await _repository.Get(CurrentUserId(), dto.FoodId)
             ?? throw new ApplicationException("food not found");
         ArgumentNullException.ThrowIfNull(item.Food);
-
-        await ThrowIfUserCannotAccess(item);
 
         if (dto.Servings > item.Food.Servings)
             throw new ApplicationException("there are not that many servings");

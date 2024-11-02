@@ -50,10 +50,8 @@ public class ConsumedFoodService(IServiceProviderWrapper serviceProvider,
         string id = dto.Id
             ?? throw new ApplicationException("id of consumed food missing");
 
-        ConsumedFood entity = await _repository.Get(id)
+        ConsumedFood entity = await _repository.Get(CurrentUserId(), id)
             ?? throw new ApplicationException("consumed food not found");
-
-        await ThrowIfUserCannotAccess(entity);
 
         // This does not update the DateConsumed
 
@@ -79,10 +77,8 @@ public class ConsumedFoodService(IServiceProviderWrapper serviceProvider,
 
     public async Task DeleteConsumedFood(string id)
     {
-        ConsumedFood entity = await _repository.Get(id)
+        ConsumedFood entity = await _repository.Get(CurrentUserId(), id)
             ?? throw new ApplicationException("consumed food not found");
-
-        await ThrowIfUserCannotAccess(entity);
 
         await _repository.Delete(entity);
     }

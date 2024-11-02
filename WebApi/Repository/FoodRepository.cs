@@ -15,11 +15,6 @@ public enum FoodSortOptions
     TotalGramsProtein, TotalGramsProtein_Desc
 }
 
-public interface IFoodRepository : IRepositoryBase<Item, FoodSortOptions>
-{
-    public Task<Item> FindOrCreateBy(string userId, string name);
-}
-
 public class FoodRepository(AppDbContext dbContext)
             : RepositoryBase<Item, FoodSortOptions>(dbContext), IFoodRepository
 {
@@ -43,13 +38,13 @@ public class FoodRepository(AppDbContext dbContext)
         return foodItem;
     }
 
-    public override async Task<Item?> Get(string id)
+    public override async Task<Item?> Get(string userId, string id)
     {
         return await _dbContext.Items.FirstOrDefaultAsync(item =>
-            item.Id == id && item.Food != null);
+            item.Id == id && item.UserId == userId && item.Food != null);
     }
 
-    public override Task<List<Item>> GetAllForUser(string userId,
+    public override Task<List<Item>> GetAll(string userId,
                             FoodSortOptions sortBy, string? search)
     {
         var baseQuery = _dbContext.Items

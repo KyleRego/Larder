@@ -11,30 +11,40 @@ public interface IUnitConversionService
     public Task DeleteUnitConversion(string id);
 }
 
-public class UnitConversionService(IServiceProviderWrapper serviceProvider,
-                                        IUnitRepository unitRep,
-                                        IUnitConversionRepository unitConvRep)
-            : AppServiceBase(serviceProvider), IUnitConversionService
+public class UnitConversionService(
+                                IServiceProviderWrapper serviceProvider,
+                                IUnitRepository unitData,
+                                IUnitConversionRepository unitConversionData)
+                    : AppServiceBase(serviceProvider), IUnitConversionService
 {
-    private readonly IUnitRepository _unitRep = unitRep;
-    private readonly IUnitConversionRepository _unitConvRep = unitConvRep;
+    private readonly IUnitRepository _unitData = unitData;
+    private readonly IUnitConversionRepository _unitConversionData
+                                                        = unitConversionData;
+
+    private static string UnitsMustBeSameType(Unit unit1, Unit unit2) {
+        return $"""
+            A unit conversion cannot be created for {unit1.Name} and
+            {unit2.Name} 
+            because they are different types ({unit1.Type} and {unit2.Type}).
+        """;
+    }
 
     public async Task<UnitConversionDto>
                                     CreateUnitConversion(UnitConversionDto dto)
     {
-        Unit unit = await _unitRep.Get(dto.UnitId)
-                ?? throw new ApplicationException("unit not found");
+        Unit unit = await _unitData.Get(CurrentUserId(), dto.UnitId)
+                ?? throw new ApplicationException(
+                    $"Unit with id {dto.UnitId} not found");
 
-        await ThrowIfUserCannotAccess(unit);
+        Unit targetUnit = await _unitData.Get(CurrentUserId(), dto.TargetUnitId)
+                ?? throw new ApplicationException(
+                    $"Unit with id {dto.TargetUnitId} not found");
 
-        Unit targetUnit = await _unitRep.Get(dto.TargetUnitId)
-                ?? throw new ApplicationException("target unit not found");
+        if (unit.Type != targetUnit.Type) {
+            throw new ApplicationException(
+                UnitsMustBeSameType(unit, targetUnit));
+        }
 
-        await ThrowIfUserCannotAccess(targetUnit);
-
-        if (unit.Type != targetUnit.Type)
-            throw new ApplicationException("unit and target unit must be same type (e.g. mass units)");
-    
         UnitConversion unitConversion = new()
         {
             UserId = CurrentUserId(),
@@ -44,42 +54,43 @@ public class UnitConversionService(IServiceProviderWrapper serviceProvider,
             TargetUnitsPerUnit = dto.TargetUnitsPerUnit
         };
 
-        await _unitConvRep.Insert(unitConversion);
+        await _unitConversionData.Insert(unitConversion);
 
         return UnitConversionDto.FromEntity(unitConversion);
     }
 
     public async Task DeleteUnitConversion(string id)
     {
-        UnitConversion unitConversion = await _unitConvRep.Get(id)
-            ?? throw new ApplicationException("unit conversion to update not found");
+        UnitConversion unitConversion = await _unitConversionData.Get(CurrentUserId(), id)
+            ?? throw new ApplicationException("Unit conversion to update not found.");
 
-        await ThrowIfUserCannotAccess(unitConversion);
-
-        await _unitConvRep.Delete(unitConversion);
+        await _unitConversionData.Delete(unitConversion);
     }
 
     public async Task<UnitConversionDto> UpdateUnitConversion(UnitConversionDto dto)
     {
-        if (dto.Id == null) throw new ApplicationException("unit conversion id was missing");
+        if (dto.Id == null) throw new ApplicationException(
+            "Id of unit conversion to update was missing.");
 
-        UnitConversion unitConversion = await _unitConvRep.Get(dto.Id)
-                ?? throw new ApplicationException("unit conversion to update not found");
+        UnitConversion unitConversion = await _unitConversionData.Get(CurrentUserId(), dto.Id)
+                ?? throw new ApplicationException(
+                    "Unit conversion to update was not found.");
 
-        Unit unit = await _unitRep.Get(dto.UnitId)
-                ?? throw new ApplicationException("unit not found");
+        Unit unit = await _unitData.Get(CurrentUserId(), dto.UnitId)
+                ?? throw new ApplicationException("Unit not found");
 
-        Unit targetUnit = await _unitRep.Get(dto.TargetUnitId)
-                ?? throw new ApplicationException("target unit not found");
+        Unit targetUnit = await _unitData.Get(CurrentUserId(), dto.TargetUnitId)
+                ?? throw new ApplicationException("Target unit not found");
 
         if (unit.Type != targetUnit.Type)
-                throw new ApplicationException("unit and target unit must be same type (e.g. mass units)");
+                throw new ApplicationException(
+                    UnitsMustBeSameType(unit, targetUnit));
 
         unitConversion.UnitId = unit.Id;
         unitConversion.TargetUnitId = targetUnit.Id;
         unitConversion.TargetUnitsPerUnit = dto.TargetUnitsPerUnit;
 
-        await _unitConvRep.Update(unitConversion);
+        await _unitConversionData.Update(unitConversion);
 
         return UnitConversionDto.FromEntity(unitConversion);
     }

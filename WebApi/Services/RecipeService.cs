@@ -33,10 +33,8 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
     {
         CookRecipeResultDto result = new();
 
-        Recipe recipe = await _repository.Get(cookedRecipeDto.RecipeId)
+        Recipe recipe = await _repository.Get(CurrentUserId(), cookedRecipeDto.RecipeId)
                 ?? throw new ApplicationException("recipe was not found");
-
-        await ThrowIfUserCannotAccess(recipe);
 
         foreach(RecipeIngredient recipeIngredient in recipe.RecipeIngredients)
         {
@@ -136,28 +134,24 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
 
     public async Task DeleteRecipe(string id)
     {
-        Recipe recipe = await _repository.Get(id)
+        Recipe recipe = await _repository.Get(CurrentUserId(), id)
             ?? throw new ApplicationException("recipe to delete not found");
-
-        await ThrowIfUserCannotAccess(recipe);
     
         await _repository.Delete(recipe);
     }
 
     public async Task<RecipeDto?> GetRecipe(string id)
     {
-        Recipe? recipe = await _repository.Get(id);
+        Recipe? recipe = await _repository.Get(CurrentUserId(), id);
 
         if (recipe == null) return null;
-
-        await ThrowIfUserCannotAccess(recipe);
 
         return RecipeDto.FromEntity(recipe);
     }
 
     public async Task<List<RecipeDto>> GetRecipes(RecipeSortOptions sortBy, string? searchName)
     {
-        List<Recipe> recipes = await _repository.GetAllForUser(CurrentUserId(), sortBy, searchName);
+        List<Recipe> recipes = await _repository.GetAll(CurrentUserId(), sortBy, searchName);
         List<RecipeDto> recipeDtos = [];
 
         foreach (Recipe recipe in recipes)
@@ -173,10 +167,8 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
         if (recipeDto.Id == null)
                     throw new ApplicationException("recipe Id was missing");
     
-        Recipe recipe = await _repository.Get(recipeDto.Id)
+        Recipe recipe = await _repository.Get(CurrentUserId(), recipeDto.Id)
                     ?? throw new ApplicationException("recipe not found");
-
-        await ThrowIfUserCannotAccess(recipe);
 
         recipe.Name = recipeDto.Name;
 

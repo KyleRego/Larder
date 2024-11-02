@@ -42,21 +42,17 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
 
     public async Task DeleteItem(string id)
     {
-        Item item = await _itemData.Get(id) ??
+        Item item = await _itemData.Get(CurrentUserId(), id) ??
             throw new ApplicationException("No item to delete with that id");
-
-        await ThrowIfUserCannotAccess(item);
     
         await _itemData.Delete(item);
     }
 
     public async Task<ItemDto?> GetItem(string id)
     {
-        Item? item = await _itemData.Get(id);
+        Item? item = await _itemData.Get(CurrentUserId(), id);
 
         if (item == null) return null;
-
-        await ThrowIfUserCannotAccess(item);
 
         return ItemDto.FromEntity(item);
     }
@@ -67,7 +63,7 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
         string userId = CurrentUserId();
 
         List<Item> items =
-                await _itemData.GetAllForUser(userId, sortBy, search);
+                await _itemData.GetAll(userId, sortBy, search);
 
         return items.Select(ItemDto.FromEntity).ToList();
     }
@@ -76,7 +72,7 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
     {
         ArgumentNullException.ThrowIfNull(itemDto.Id);
 
-        Item item = await _itemData.Get(itemDto.Id) ??
+        Item item = await _itemData.Get(CurrentUserId(), itemDto.Id) ??
             throw new ApplicationException("Item to update not found");
 
         item.Name = itemDto.Name;
