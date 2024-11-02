@@ -111,6 +111,12 @@ app.MapPost("/logout", async (SignInManager<Larder.Models.ApplicationUser>
                                     .WithOpenApi()
                                     .RequireAuthorization();
 
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/swagger");
+    return Task.CompletedTask;
+});
+
 app.MapControllers();
 
 using (IServiceScope scope = app.Services.CreateScope())

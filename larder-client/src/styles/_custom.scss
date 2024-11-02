@@ -1,5 +1,5 @@
 $primary: #d988ff;
-$secondary: #d3fcc0;
+$secondary: #89cae8;
 
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
@@ -26,4 +26,9 @@ h1, h2 {
 .icon {
   width: 1.5rem;
   height: 1.5rem;
+}
+
+.icon-sm {
+  width: 1.4rem;
+  height: 1.4rem;
 }

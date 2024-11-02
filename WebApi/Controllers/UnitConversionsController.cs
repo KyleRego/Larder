@@ -37,7 +37,7 @@ public class UnitConversionsController(IUnitConversionService service)
         {
             UnitConversionDto resultDto = await _service.UpdateUnitConversion(dto);
             return new ApiResponse<UnitConversionDto>(
-                resultDto, "Unit conversion created", ApiResponseType.Success);
+                resultDto, "Unit conversion updated", ApiResponseType.Success);
         }
         catch (ApplicationException e)
         {
