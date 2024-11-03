@@ -95,17 +95,17 @@ public class RecipeServiceTests : ServiceTestsBase
         ingItem2.Ingredient = ing2;
 
         recipe.RecipeIngredients = [
-            new(mockUserId, recipe.Id, ingItem1.Ingredient.Id,
-                new() { Amount = 3, Unit = ing1Unit, UnitId = ing1Unit.Id })
+            new(mockUserId, recipe.Id, ingItem1.Ingredient.Id)
             {
                 Recipe = recipe,
-                Ingredient = ingItem1.Ingredient
+                Ingredient = ingItem1.Ingredient,
+                Quantity = new() { Amount = 3, Unit = ing1Unit, UnitId = ing1Unit.Id }
             },
-            new(mockUserId, recipe.Id, ingItem2.Id,
-                new() { Amount = 2, Unit = ing2Unit, UnitId = ing2Unit.Id })
+            new(mockUserId, recipe.Id, ingItem2.Id)
             {
                 Recipe = recipe,
-                Ingredient = ingItem2.Ingredient
+                Ingredient = ingItem2.Ingredient,
+                Quantity = new() { Amount = 2, Unit = ing2Unit, UnitId = ing2Unit.Id }
             }
         ];
 
@@ -167,16 +167,19 @@ public class RecipeServiceTests : ServiceTestsBase
                                         Quantity = new() { Amount = 6, Unit = cupsUnit, UnitId = cupsUnit.Id } };
         ingItem.Ingredient = ingredient;
 
-        UnitConversion conversion = new(mockUserId, cupsUnit.Id, mlUnit.Id, 237, UnitType.Volume);
+        UnitConversion conversion = new(mockUserId, cupsUnit.Id, mlUnit.Id, 237)
+        {
+            UnitType = UnitType.Volume
+        };
 
         var recipeRepo = new Mock<IRecipeRepository>();
         Recipe recipe = new(mockUserId, "Test recipe");
 
-        RecipeIngredient recipeIngredient = new(mockUserId, recipe.Id, ingredient.Id,
-            new() { Amount=474, Unit=mlUnit, UnitId=mlUnit.Id})
+        RecipeIngredient recipeIngredient = new(mockUserId, recipe.Id, ingredient.Id)
         {
             Recipe = recipe,
-            Ingredient = ingredient
+            Ingredient = ingredient,
+            Quantity = new() { Amount=474, Unit=mlUnit, UnitId=mlUnit.Id}
         };
 
         recipe.RecipeIngredients = [recipeIngredient];

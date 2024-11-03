@@ -18,8 +18,10 @@ public abstract class UITestBase
             ?? throw new InvalidOperationException("No client URL");
 
         driver = new ChromeDriver();
-        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(0.5);
+        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
         driver.Manage().Window.Maximize();
+
+        driver.Navigate().GoToUrl(clientURL);
     }
 
     [TearDown]

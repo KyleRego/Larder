@@ -2,17 +2,21 @@ import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthedContext } from "./contexts/AuthedContext";
 import { apiClient } from "./util/axios";
+import { MessageContext } from "./contexts/MessageContext";
+import { ApiResponseType } from "./types/ApiResponse";
 
 export function NavBar() {
     const [collapsed, setCollapsed] = useState(false);
     const { authed, setAuthed } = useContext(AuthedContext);
     const navigate = useNavigate();
+    const { setMessage } = useContext(MessageContext);
 
     function handleLogout() {
         apiClient.post("/logout").then(() => {
             setAuthed(false);
             setCollapsed(true);
-            navigate("/");    
+            setMessage({text: "You are now logged out.", type: ApiResponseType.Success});
+            navigate("/");
         }).catch(error => console.error(error));
     }
 

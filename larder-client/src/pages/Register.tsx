@@ -60,7 +60,7 @@ export default function Register() {
                 </div>
 
                 <div>
-                    <button id="submit-login" type="submit" className="btn btn-primary">Submit</button>
+                    <button id="submit-register" type="submit" className="btn btn-primary">Submit</button>
                 </div>     
             </form>
         </div>

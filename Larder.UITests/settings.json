@@ -1,3 +1,7 @@
 {
-    "ClientURL": "http://localhost:5173"
+    "ClientURL": "http://localhost:5173",
+    "TestUser" : {
+        "UserName" : "example100@example.com",
+        "Password" : "1234!Asdf"
+    }
 }

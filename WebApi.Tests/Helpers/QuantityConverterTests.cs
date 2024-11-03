@@ -17,7 +17,11 @@ public class QuantityConverterTests
 
         _milligramsUnit = new(mockUserId, "Milligrams", UnitType.Mass);
 
-        _gramsToMilligramsConversion = new(mockUserId, _gramsUnit.Id, _milligramsUnit.Id, 1000, UnitType.Mass);
+        _gramsToMilligramsConversion
+                = new(mockUserId, _gramsUnit.Id, _milligramsUnit.Id, 1000)
+        {
+            UnitType = UnitType.Mass
+        };
     }
 
     [Fact]
@@ -30,7 +34,9 @@ public class QuantityConverterTests
             UnitId = _gramsUnit.Id
         };
 
-        Quantity result = QuantityConverter.Convert(quantity, _gramsToMilligramsConversion, _milligramsUnit);
+        Quantity result = QuantityConverter.Convert(
+            quantity, _gramsToMilligramsConversion, _milligramsUnit);
+
         Assert.Equal(_milligramsUnit.Id, result.UnitId);
         Assert.Equal(10 * 1000, result.Amount);
     }
@@ -45,7 +51,9 @@ public class QuantityConverterTests
             UnitId = _milligramsUnit.Id
         };
 
-        Quantity result = QuantityConverter.Convert(quantity, _gramsToMilligramsConversion, _gramsUnit);
+        Quantity result = QuantityConverter.Convert(
+            quantity, _gramsToMilligramsConversion, _gramsUnit);
+
         Assert.Equal(_gramsUnit.Id, result.UnitId);
         Assert.Equal(10000 / 1000, result.Amount);
     }

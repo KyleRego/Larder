@@ -22,9 +22,11 @@ public class UnitConversionServiceTests : ServiceTestsBase
         Unit volumeUnit1 = new(mockUserId, "Cups", UnitType.Volume);
         Unit massUnit2 = new(mockUserId, "Milligrams", UnitType.Mass);
 
-        UnitConversion existingMassConversion = new(
-            mockUserId, massUnit1.Id, massUnit2.Id, 1000, UnitType.Mass
-        );
+        UnitConversion existingMassConversion
+                        = new(mockUserId, massUnit1.Id, massUnit2.Id, 1000)
+        {
+            UnitType = UnitType.Mass
+        };
 
         _massUnit1Id = massUnit1.Id;
         _volumeUnit1Id = volumeUnit1.Id;
@@ -60,7 +62,8 @@ public class UnitConversionServiceTests : ServiceTestsBase
             TargetUnitsPerUnit = 2
         };
 
-        await Assert.ThrowsAsync<ApplicationException>(async () => await sut.CreateUnitConversion(dto)); 
+        await Assert.ThrowsAsync<ApplicationException>(
+            async () => await sut.CreateUnitConversion(dto)); 
     }
 
     [Fact]
@@ -78,7 +81,8 @@ public class UnitConversionServiceTests : ServiceTestsBase
             TargetUnitsPerUnit = 2
         };
 
-        await Assert.ThrowsAsync<ApplicationException>(async () => await sut.CreateUnitConversion(dto));   
+        await Assert.ThrowsAsync<ApplicationException>(
+            async () => await sut.CreateUnitConversion(dto));   
     }
 
     [Fact]
@@ -96,6 +100,7 @@ public class UnitConversionServiceTests : ServiceTestsBase
             TargetUnitsPerUnit = 2
         };
 
-        await Assert.ThrowsAsync<ApplicationException>(async () => await sut.CreateUnitConversion(dto));   
+        await Assert.ThrowsAsync<ApplicationException>(
+            async () => await sut.CreateUnitConversion(dto));   
     }
 }

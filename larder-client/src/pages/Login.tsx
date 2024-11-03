@@ -2,10 +2,13 @@ import { useContext } from "react";
 import { AuthedContext } from "../contexts/AuthedContext";
 import { apiClient } from "../util/axios";
 import { Link, useNavigate } from "react-router-dom";
+import { ApiResponseType } from "../types/ApiResponse";
+import { MessageContext } from "../contexts/MessageContext";
 
 export default function Login() {
     const { setAuthed } = useContext(AuthedContext);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const { setMessage } = useContext(MessageContext);
 
     function handleLogin(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -19,6 +22,7 @@ export default function Login() {
             if (response.status === 200) {
                 setAuthed(true);
                 navigate("/items");
+                setMessage({text: "You are now logged in.", type: ApiResponseType.Success})
             }})
             .catch(error => console.log(error));
     };
@@ -30,15 +34,15 @@ export default function Login() {
             <form onSubmit={handleLogin}>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email address:</label>
-                    <input required type="email" className="form-control" name="email" aria-describedby="emailHelp" />
+                    <input id="email" required type="email" className="form-control" name="email" aria-describedby="emailHelp" />
                 </div>
 
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password:</label>
-                    <input required type="password" className="form-control" name="password" />
+                    <input id="password" required type="password" className="form-control" name="password" />
                 </div>
 
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button id="submit-login" type="submit" className="btn btn-primary">Submit</button>
             </form>
         </div>
 

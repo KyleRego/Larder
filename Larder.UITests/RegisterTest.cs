@@ -5,17 +5,15 @@ namespace Larder.UITests;
 public class RegisterTest : UITestBase
 {
     [Test]
-    public void Test1()
+    public void TestUserCanRegister()
     {
-        driver.Navigate().GoToUrl(clientURL);
-        
         IWebElement registerBtn = driver.FindElement(By.Id("register-btn"));
 
         registerBtn.Click();
 
         IWebElement emailInput = driver.FindElement(By.Id("email"));
         IWebElement passwordInput = driver.FindElement(By.Id("password"));
-        IWebElement submitBtn = driver.FindElement(By.Id("submit-login"));
+        IWebElement submitBtn = driver.FindElement(By.Id("submit-register"));
         
         string email = RandomEmail();
         string password = RandomPassword();
