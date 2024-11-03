@@ -1,10 +1,8 @@
-import { Unit } from "../types/Unit";
 import { UnitConversion } from "../types/UnitConversion";
 import UnitsSelect from "./UnitsSelect";
 
-export default function UnitConversionForm({unit, handleSubmit, handleCancel, unitConversion}
-    : { unit: Unit,
-        handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void,
+export default function UnitConversionForm({handleSubmit, handleCancel, unitConversion}
+    : { handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void,
         unitConversion: UnitConversion | null,
         handleCancel: () => void}) {
 
@@ -14,18 +12,25 @@ export default function UnitConversionForm({unit, handleSubmit, handleCancel, un
         <form onSubmit={handleSubmit}>
             <div className="d-flex flex-wrap column-gap-3 align-items-center row-gap-3">
                 <div className="d-flex flex-wrap align-items-center column-gap-3 row-gap-1">
-                    <div title="1 unit =">1 {unit.name} =</div>
+                    <div className="d-flex column-gap-3 align-items-center">
+                        <span>1</span>
+                        <UnitsSelect selectName="unitId"
+                                selectTitle="Choose unit"
+                                defaultValue={unitConversion?.unitId ?? null} />
+                        <span>=</span>
+                    </div>
 
                     <div>
                         <label htmlFor="targetUnitsPerUnit" hidden>Target units per unit:</label>
                         <input id="targetUnitsPerUnit" defaultValue={unitConversion?.targetUnitsPerUnit}
                                 name="targetUnitsPerUnit"
-                                title="Target units per unit" min="1" step="any" type="number" />
+                                title="Target units per unit" min="1" step="any" type="number"
+                                className="form-control" required />
                     </div>
 
                     <div>
                         <UnitsSelect selectName="targetUnitId"
-                                selectTitle="Choose the target unit"
+                                selectTitle="Choose target unit"
                                 defaultValue={unitConversion?.targetUnitId ?? null} />
                     </div>
                 </div>

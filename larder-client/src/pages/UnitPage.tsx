@@ -6,15 +6,16 @@ import Loading from "../components/Loading";
 import EditLink from "../components/EditLink";
 import UnitConversionForm from "../components/UnitConversionForm";
 import { UnitConversion } from "../types/UnitConversion";
-import { ApiResponseType } from "../types/ApiResponse";
-import { MessageContext } from "../contexts/MessageContext";
 import UnitConversionDiv from "../components/UnitConversionDiv";
+import { Link } from "react-router-dom";
+import { useApiRequest } from "../hooks/useApiRequest";
 
 export default function UnitPage() {
     const [unit, setUnit] = useState<Unit | null>(null);
     const [adding, setAdding] = useState<Boolean>(false)
     const { id } = useParams<{ id: string }>();
-    const { setMessage } = useContext(MessageContext);
+    const [refreshCounter, setRefreshCounter] = useState(0);
+    const { handleRequest } = useApiRequest();
 
     useEffect(() => {
         apiClient.get<Unit>(`/api/units/${id}`).then(res => {
@@ -22,7 +23,7 @@ export default function UnitPage() {
         }).catch(error => {
             console.error(error);
         })
-    }, []);
+    }, [refreshCounter]);
 
     if (unit === null) {
         return <Loading />
@@ -30,8 +31,8 @@ export default function UnitPage() {
 
     const unitConversions = unit.conversions.map(uc => {
         return (
-            <div className="mt-2">
-                <UnitConversionDiv key={uc.id} unitConversion={uc} />
+            <div key={uc.id} className="mt-2">
+                <UnitConversionDiv unitConversion={uc} parentRefresh={() => setRefreshCounter(refreshCounter + 1)} />
             </div>
         );
     });
@@ -49,9 +50,15 @@ export default function UnitPage() {
             targetUnitId: formData.get("targetUnitId") as string
         };
 
-        const response = await apiClient.post("/api/UnitConversions", newUnitConversion);
-        setMessage({text: response.data.message, type: ApiResponseType.Success});
-        setAdding(false);
+        const res = await handleRequest<UnitConversion>({
+            method: "post",
+            url: "/api/UnitConversions",
+            data: newUnitConversion
+        });
+
+        if (res) {
+            setAdding(false);
+        }
     }
 
     return (
@@ -69,15 +76,15 @@ export default function UnitPage() {
             <div className="mt-4">
                 <h2>Unit Conversions:</h2>
 
-                <div className="mt-4">
+                <div className="mt-4 d-flex flex-column align-items-center">
                     {unitConversions}
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-2 d-flex justify-content-center">
                 { adding ? (
-                    <UnitConversionForm unit={unit} handleSubmit={handleCreateConversion}
-                                unitConversion={null}
-                                handleCancel={() => setAdding(false)} />
+                    <UnitConversionForm handleSubmit={handleCreateConversion}
+                                        unitConversion={null}
+                                        handleCancel={() => setAdding(false)} />
                 ) : (
                     <button onClick={() => setAdding(true)} 
                             className="btn btn-secondary"
@@ -86,6 +93,10 @@ export default function UnitPage() {
                     </button> 
                 )}
                 </div>
+            </div>
+
+            <div className="mt-4">
+                <Link className="btn btn-danger" to={"/units"}>Back to units</Link>
             </div>
         </>
     );

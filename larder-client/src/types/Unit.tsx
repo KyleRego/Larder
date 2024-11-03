@@ -5,16 +5,16 @@ export class Unit {
     id: string | null;
     name: string;
     type: UnitType;
-    conversions: [UnitConversion];
-    targetConversions: [UnitConversion];
+    conversions: UnitConversion[];
 
-    constructor(id: string | null, name: string, type: UnitType, 
-            conversions: [UnitConversion], targetConversions: [UnitConversion]) {
+    constructor(id: string | null,
+                name: string,
+                type: UnitType,
+                conversions: UnitConversion[]) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.conversions = conversions;
-        this.targetConversions = targetConversions;
     }
 
     public static getType(unit: Unit): string {

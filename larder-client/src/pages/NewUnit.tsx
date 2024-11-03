@@ -17,7 +17,7 @@ export default function NewUnit() {
         const name = formData.get("name") as string;
         const unitType = parseInt(formData.get("type") as string) as UnitType;
 
-        const newUnit = new Unit(null, name, unitType);
+        const newUnit = new Unit(null, name, unitType, []);
 
         apiClient.post<ApiResponse<Unit>>("/api/units", newUnit).then(res => {
             setMessage({text: res.data.message, type: res.data.type})
@@ -31,12 +31,14 @@ export default function NewUnit() {
         <>
             <div className="page-flex-header">
                 <h1>New unit:</h1>
-
-                <Link className="btn btn-danger" to={"/units"}>Cancel</Link>
             </div>
 
             <div className="mt-4">
                 <UnitForm unit={null} handleSubmit={handleSubmit} />
+            </div>
+
+            <div className="mt-4">
+                <Link className="btn btn-danger" to={"/units"}>Cancel</Link>
             </div>
         </>
     );

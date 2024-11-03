@@ -8,7 +8,6 @@ public class UnitDto
     public required string Name { get; set; }
     public required UnitType Type { get; set; }
     public List<UnitConversionDto> Conversions { get; set; } = [];
-    public List<UnitConversionDto> TargetConversions { get; set; } = [];
 
     public static UnitDto FromEntity(Unit entity)
     {
@@ -26,7 +25,7 @@ public class UnitDto
 
         foreach (UnitConversion uc in entity.TargetConversions)
         {
-            result.TargetConversions.Add(UnitConversionDto.FromEntity(uc));
+            result.Conversions.Add(UnitConversionDto.FromEntity(uc));
         }
 
         return result;

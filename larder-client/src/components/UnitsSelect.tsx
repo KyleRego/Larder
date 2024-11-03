@@ -15,7 +15,8 @@ export default function UnitsSelect({selectName, selectTitle, defaultValue}
 
     return <select defaultValue={defaultValue ?? ""}  id={selectName}
                     name={selectName}
-                    title={selectTitle} className="form-select">
+                    title={selectTitle} className="form-select"
+                    required>
         {options}
     </select>;
 }

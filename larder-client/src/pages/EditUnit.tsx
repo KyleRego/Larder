@@ -31,7 +31,7 @@ export default function EditUnit() {
         const name = formData.get("name") as string;
         const unitType = parseInt(formData.get("type") as string) as UnitType;
 
-        const editedUnit = new Unit(unitId, name, unitType);
+        const editedUnit = new Unit(unitId, name, unitType, []);
 
         apiClient.put<ApiResponse<Unit>>(`/api/units/${unitId}`, editedUnit).then(res => {
             setMessage({text: res.data.message, type: res.data.type})
@@ -56,8 +56,6 @@ export default function EditUnit() {
             <div className="page-flex-header">
                 <div className="d-flex column-gap-5 align-items-center">
                     <h1>Editing unit: {unit.name}</h1>
-
-                    <Link className="btn btn-danger" to={`/units/${unit.id}`}>Cancel</Link>
                 </div>
 
                 <DeleteBtn handleClick={handleDelete} />
@@ -65,6 +63,10 @@ export default function EditUnit() {
 
             <div className="mt-4">
                 <UnitForm unit={unit} handleSubmit={handleSubmit} />
+            </div>
+
+            <div className="mt-4">
+                <Link className="btn btn-danger" to={`/units/${unit.id}`}>Cancel</Link>
             </div>
         </>
     );

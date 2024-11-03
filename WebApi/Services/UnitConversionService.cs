@@ -21,12 +21,21 @@ public class UnitConversionService(
     private readonly IUnitConversionRepository _unitConversionData
                                                         = unitConversionData;
 
-    private static string UnitsMustBeSameType(Unit unit1, Unit unit2) {
-        return $"""
+    private static void CheckConversionValid(Unit unit1, Unit unit2)
+    {
+        if (unit1.Type != unit2.Type) {
+            throw new ApplicationException($"""
             A unit conversion cannot be created for {unit1.Name} and
             {unit2.Name} 
             because they are different types ({unit1.Type} and {unit2.Type}).
-        """;
+        """);
+        }
+
+        if (unit1.Id == unit2.Id) {
+            throw new ApplicationException(
+                "A conversion cannot be created between a unit and itself."
+            );
+        }      
     }
 
     public async Task<UnitConversionDto>
@@ -34,16 +43,13 @@ public class UnitConversionService(
     {
         Unit unit = await _unitData.Get(CurrentUserId(), dto.UnitId)
                 ?? throw new ApplicationException(
-                    $"Unit with id {dto.UnitId} not found");
+                    $"Unit with id {dto.UnitId} not found.");
 
         Unit targetUnit = await _unitData.Get(CurrentUserId(), dto.TargetUnitId)
                 ?? throw new ApplicationException(
-                    $"Unit with id {dto.TargetUnitId} not found");
+                    $"Unit with id {dto.TargetUnitId} not found.");
 
-        if (unit.Type != targetUnit.Type) {
-            throw new ApplicationException(
-                UnitsMustBeSameType(unit, targetUnit));
-        }
+        CheckConversionValid(unit, targetUnit);
 
         UnitConversion unitConversion = new()
         {
@@ -82,9 +88,7 @@ public class UnitConversionService(
         Unit targetUnit = await _unitData.Get(CurrentUserId(), dto.TargetUnitId)
                 ?? throw new ApplicationException("Target unit not found");
 
-        if (unit.Type != targetUnit.Type)
-                throw new ApplicationException(
-                    UnitsMustBeSameType(unit, targetUnit));
+        CheckConversionValid(unit, targetUnit);
 
         unitConversion.UnitId = unit.Id;
         unitConversion.TargetUnitId = targetUnit.Id;

@@ -5,13 +5,15 @@ import { MdEdit } from "react-icons/md";
 import UnitConversionForm from "./UnitConversionForm";
 import { Unit } from "../types/Unit";
 import Loading from "./Loading";
-import { apiClient } from "../util/axios";
-import { ApiResponseType } from "../types/ApiResponse";
-import { MessageContext } from "../contexts/MessageContext";
+import { useApiRequest } from "../hooks/useApiRequest";
 
-export default function({unitConversion} : {unitConversion: UnitConversion}): ReactNode {
+
+export default function({unitConversion, parentRefresh}
+    : { unitConversion: UnitConversion,
+        parentRefresh: () => void | null}): ReactNode {
+
+    const { handleRequest } = useApiRequest();
     const { units } = useContext(UnitsContext);
-    const { setMessage } = useContext(MessageContext);
     const [editing, setEditing] = useState<boolean>(false);
 
     const unitId = unitConversion.unitId;
@@ -50,9 +52,16 @@ export default function({unitConversion} : {unitConversion: UnitConversion}): Re
             targetUnitId: formData.get("targetUnitId") as string
         };
 
-        const response = await apiClient.put(`/api/UnitConversions/${unitConversion.id}`, newUnitConversion);
-        setMessage({text: response.data.message, type: ApiResponseType.Success});
-        setEditing(false);
+        const res = await handleRequest<UnitConversion>({
+            method: "put",
+            url: `/api/UnitConversions/${unitConversion.id}`,
+            data: newUnitConversion
+        });
+
+        if (res) {
+            setEditing(false);
+            parentRefresh();
+        }
     }
     
     return (
@@ -71,7 +80,7 @@ export default function({unitConversion} : {unitConversion: UnitConversion}): Re
                 </div>
             ) : (
             <div>
-                <UnitConversionForm unit={unit} handleSubmit={handleUpdate}
+                <UnitConversionForm handleSubmit={handleUpdate}
                             unitConversion={unitConversion}
                             handleCancel={() => setEditing(false)} />
             </div>
