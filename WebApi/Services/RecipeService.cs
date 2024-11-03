@@ -112,7 +112,10 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
                 UnitId = ingredientDto.Quantity.UnitId
             };
         
-            RecipeIngredient recipeIngredient = new(CurrentUserId(), recipe.Id, ingItem.Id, quantity);
+            RecipeIngredient recipeIngredient = new(CurrentUserId(), recipe.Id, ingItem.Id)
+            {
+                Quantity = quantity
+            };
 
             recipeIngredients.Add(recipeIngredient);
         }
@@ -172,9 +175,11 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
                                             ing.Item.Name == ingDto.Name)?.Item
                 ?? await _ingRepo.FindOrCreateBy(CurrentUserId(), ingDto.Name);
 
-            RecipeIngredient newRecipeIngredient =
-                new(CurrentUserId(), recipe.Id,ingItem.Id, 
-                                            Quantity.FromDto(ingDto.Quantity));
+            RecipeIngredient newRecipeIngredient
+                            = new(CurrentUserId(), recipe.Id,ingItem.Id)
+            {
+                Quantity = Quantity.FromDto(ingDto.Quantity)
+            };
             newRecipeIngredients.Add(newRecipeIngredient);
         }
 

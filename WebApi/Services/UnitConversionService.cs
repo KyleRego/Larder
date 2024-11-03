@@ -61,8 +61,11 @@ public class UnitConversionService(
             throw new ApplicationException(
                 "A conversion already exists for those units.");
 
-        UnitConversion unitConversion = new(userId, unit.Id, targetUnit.Id,
-                                            targetUnitsPerUnit, unit.Type);
+        UnitConversion unitConversion
+            = new(userId, unit.Id, targetUnit.Id, targetUnitsPerUnit)
+        {
+            UnitType = targetUnit.Type
+        };
 
         await _unitConversionData.Insert(unitConversion);
 
