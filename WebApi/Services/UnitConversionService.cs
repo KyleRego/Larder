@@ -41,24 +41,28 @@ public class UnitConversionService(
     public async Task<UnitConversionDto>
                                     CreateUnitConversion(UnitConversionDto dto)
     {
-        Unit unit = await _unitData.Get(CurrentUserId(), dto.UnitId)
+        double targetUnitsPerUnit = dto.TargetUnitsPerUnit;
+        string userId = CurrentUserId();
+
+        Unit unit = await _unitData.Get(userId, dto.UnitId)
                 ?? throw new ApplicationException(
                     $"Unit with id {dto.UnitId} not found.");
 
-        Unit targetUnit = await _unitData.Get(CurrentUserId(), dto.TargetUnitId)
+        Unit targetUnit = await _unitData.Get(userId, dto.TargetUnitId)
                 ?? throw new ApplicationException(
                     $"Unit with id {dto.TargetUnitId} not found.");
 
         CheckConversionValid(unit, targetUnit);
 
-        UnitConversion unitConversion = new()
-        {
-            UserId = CurrentUserId(),
-            UnitId = unit.Id,
-            TargetUnitId = targetUnit.Id,
-            UnitType = unit.Type,
-            TargetUnitsPerUnit = dto.TargetUnitsPerUnit
-        };
+        UnitConversion? existingConversion = await _unitConversionData
+                    .FindByUnitIdsEitherWay(userId, unit.Id, targetUnit.Id);
+
+        if (existingConversion != null)
+            throw new ApplicationException(
+                "A conversion already exists for those units.");
+
+        UnitConversion unitConversion = new(userId, unit.Id, targetUnit.Id,
+                                            targetUnitsPerUnit, unit.Type);
 
         await _unitConversionData.Insert(unitConversion);
 

@@ -14,12 +14,7 @@ public class FoodServiceTests : ServiceTestsBase
 
     public FoodServiceTests()
     {
-        Item foodItem = new()
-        {
-            Id = _foodItemId,
-            Name = "Apples",
-            UserId = mockUserId
-        };
+        Item foodItem = new(mockUserId, "Apples");
 
         Food food = new()
         {
@@ -79,7 +74,7 @@ public class FoodServiceTests : ServiceTestsBase
         foodItem.Food!.TotalCalories = 0;
         foodItem.Food.TotalGramsProtein = 0;
 
-        _mockFoodRepo.Setup(m => m.Get(mockUserId, _foodItemId)).ReturnsAsync(foodItem);
+        _mockFoodRepo.Setup(m => m.Get(mockUserId, foodItem.Id)).ReturnsAsync(foodItem);
 
         FoodService sut = new(mSP.Object, _mockFoodRepo.Object,
                                                     _mockConsFoodRepo.Object);

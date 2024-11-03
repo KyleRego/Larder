@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Unit } from "../types/Unit";
+import { UnitDto } from "../types/UnitDto";
 import { useNavigate, useParams } from "react-router";
 import { apiClient } from "../util/axios";
 import Loading from "../components/Loading";
@@ -11,14 +11,14 @@ import { ApiResponse } from "../types/ApiResponse";
 import DeleteBtn from "../components/DeleteBtn";
 
 export default function EditUnit() {
-    const [unit, setUnit] = useState<Unit | null>(null);
+    const [unit, setUnit] = useState<UnitDto | null>(null);
     const { id } = useParams<{ id: string }>();
     const unitId = id as string;
     const navigate = useNavigate();
     const { setMessage } = useContext(MessageContext);
 
     useEffect(() => {
-        apiClient.get<Unit>(`/api/units/${id}`).then(res => {
+        apiClient.get<UnitDto>(`/api/units/${id}`).then(res => {
             setUnit(res.data);
         }).catch(error => {
             console.error(error);
@@ -31,9 +31,9 @@ export default function EditUnit() {
         const name = formData.get("name") as string;
         const unitType = parseInt(formData.get("type") as string) as UnitType;
 
-        const editedUnit = new Unit(unitId, name, unitType, []);
+        const editedUnit = new UnitDto(unitId, name, unitType, []);
 
-        apiClient.put<ApiResponse<Unit>>(`/api/units/${unitId}`, editedUnit).then(res => {
+        apiClient.put<ApiResponse<UnitDto>>(`/api/units/${unitId}`, editedUnit).then(res => {
             setMessage({text: res.data.message, type: res.data.type})
             navigate(`/units/${res.data.data.id}`);
         }).catch(error => {

@@ -28,9 +28,7 @@ public class IngredientRepository(AppDbContext dbContext)
 
         if (ingItem != null) return ingItem;
 
-        ingItem = new() {
-            UserId = userId,
-            Name = name,
+        ingItem = new(userId, name, null) {
             Amount = 1
         };
 

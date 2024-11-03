@@ -14,12 +14,7 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
     {
         string userId = CurrentUserId();
 
-        Item item = new()
-        {
-            UserId = userId,
-            Name = itemDto.Name,
-            Description = itemDto.Description 
-        };
+        Item item = new(userId, itemDto.Name, itemDto.Description);
 
         if (itemDto.Food != null)
         {

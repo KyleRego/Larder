@@ -9,19 +9,23 @@ namespace Larder.Models;
 /// also with the amount of the ingredient needed
 /// in the recipe.
 /// </summary>
-public class RecipeIngredient : UserOwnedEntity
+public class RecipeIngredient(  string userId,
+                                string recipeId,
+                                string ingredientId,
+                                Quantity? quantity) 
+                                            : UserOwnedEntity(userId)
 {
     [Required]
-    public required string RecipeId { get; set; }
+    public string RecipeId { get; set; } = recipeId;
 
     [ForeignKey(nameof(RecipeId))]
     public Recipe? Recipe { get; set; }
 
     [Required]
-    public required string IngredientId { get; set; }
+    public string IngredientId { get; set; } = ingredientId;
 
     [ForeignKey(nameof(IngredientId))]
     public Ingredient Ingredient { get; set; } = null!;
 
-    public required Quantity Quantity { get; set; } = new() { Amount = 1 };
+    public Quantity Quantity { get; set; } = quantity ?? new() { Amount = 1 };
 }

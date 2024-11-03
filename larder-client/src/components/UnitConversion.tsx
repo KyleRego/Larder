@@ -1,15 +1,14 @@
 import { ReactNode, useContext, useState } from "react";
-import { UnitConversion } from "../types/UnitConversion";
+import { UnitConversionDto } from "../types/UnitConversionDto";
 import { UnitsContext } from "../contexts/UnitsContext";
 import { MdEdit } from "react-icons/md";
 import UnitConversionForm from "./UnitConversionForm";
-import { Unit } from "../types/Unit";
+import { UnitDto } from "../types/UnitDto";
 import Loading from "./Loading";
 import { useApiRequest } from "../hooks/useApiRequest";
 
-
 export default function({unitConversion, parentRefresh}
-    : { unitConversion: UnitConversion,
+    : { unitConversion: UnitConversionDto,
         parentRefresh: () => void | null}): ReactNode {
 
     const { handleRequest } = useApiRequest();
@@ -20,8 +19,8 @@ export default function({unitConversion, parentRefresh}
     const targetUnitId = unitConversion.targetUnitId;
     const targetUnitsPerUnit = unitConversion.targetUnitsPerUnit;
 
-    let unit : Unit | undefined;
-    let targetUnit : Unit | undefined;
+    let unit : UnitDto | undefined;
+    let targetUnit : UnitDto | undefined;
 
     for (const u of units) {
         if (!unit && u.id === unitId) {
@@ -45,14 +44,14 @@ export default function({unitConversion, parentRefresh}
         const formData = new FormData(e.currentTarget);
         const targetUnitsPerUnit = parseFloat(formData.get("targetUnitsPerUnit") as string)
 
-        const newUnitConversion: UnitConversion = {
+        const newUnitConversion: UnitConversionDto = {
             id: unitConversion.id,
             unitId: unit!.id!,
             targetUnitsPerUnit: targetUnitsPerUnit,
             targetUnitId: formData.get("targetUnitId") as string
         };
 
-        const res = await handleRequest<UnitConversion>({
+        const res = await handleRequest<UnitConversionDto>({
             method: "put",
             url: `/api/UnitConversions/${unitConversion.id}`,
             data: newUnitConversion
@@ -60,6 +59,17 @@ export default function({unitConversion, parentRefresh}
 
         if (res) {
             setEditing(false);
+            parentRefresh();
+        }
+    }
+
+    async function handleDelete() {
+        if (window.confirm("Are you sure you want to delete this conversion?")) {
+            await handleRequest<object>({
+                method: "delete",
+                url: `/api/UnitConversions/${unitConversion.id}`
+            });
+
             parentRefresh();
         }
     }
@@ -79,10 +89,19 @@ export default function({unitConversion, parentRefresh}
                     </div>
                 </div>
             ) : (
-            <div>
-                <UnitConversionForm handleSubmit={handleUpdate}
-                            unitConversion={unitConversion}
-                            handleCancel={() => setEditing(false)} />
+            <div className="d-flex align-items-center column-gap-5 row-gap-3">
+                <div>
+                    <UnitConversionForm handleSubmit={handleUpdate}
+                                        unitConversion={unitConversion}
+                                        handleCancel={() => setEditing(false)} />
+                </div>
+                <div>
+                    <button onClick={handleDelete}
+                            title="Delete conversion" 
+                            className="btn btn-danger" type="button">
+                        Delete conversion
+                    </button>
+                </div>
             </div>
             )}
         </>

@@ -2,7 +2,7 @@ import { Outlet } from 'react-router';
 import { useEffect, useState } from 'react';
 import { UnitsContext } from './contexts/UnitsContext';
 import { apiClient } from './util/axios';
-import { Unit } from './types/Unit';
+import { UnitDto } from './types/UnitDto';
 import { AuthedContext } from './contexts/AuthedContext';
 import { NavBar } from './NavBar';
 import { MessageContext } from './contexts/MessageContext';
@@ -11,11 +11,11 @@ import { Message } from './types/Message';
 
 function App() {
     const [authed, setAuthed] = useState(false);
-    const [units, setUnits] = useState<Unit[]>([]);
+    const [units, setUnits] = useState<UnitDto[]>([]);
     const [message, setMessage] = useState<Message | null>(null)
 
     useEffect(() => {
-        apiClient.get<Unit[]>("/api/units").then(res => {
+        apiClient.get<UnitDto[]>("/api/units").then(res => {
             setUnits(res.data);
             setAuthed(true);
         }).catch(error => {

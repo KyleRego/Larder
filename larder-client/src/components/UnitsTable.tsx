@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { Unit } from "../types/Unit";
+import { UnitDto } from "../types/UnitDto";
 import { Dispatch, SetStateAction } from "react";
 import SortingTableHeader from "./SortingTableHeader";
 import { UnitSortOptions } from "../types/UnitSortOptions";
 
 export default function UnitsTable({units, sortOrder, setSortOrder}
-        : { units: Unit[],
+        : { units: UnitDto[],
             sortOrder: UnitSortOptions,
             setSortOrder: Dispatch<SetStateAction<UnitSortOptions>>}) {
 
@@ -34,7 +34,7 @@ export default function UnitsTable({units, sortOrder, setSortOrder}
     );
 }
 
-function UnitRow({unit} : {unit: Unit}) {
+function UnitRow({unit} : {unit: UnitDto}) {
     const navigate = useNavigate();
 
     function handleRowClick() {
@@ -44,7 +44,7 @@ function UnitRow({unit} : {unit: Unit}) {
     return (
         <tr role="button" onClick={handleRowClick}>
             <th scope="row">{unit.name}</th>
-            <td>{Unit.getType(unit)}</td>
+            <td>{UnitDto.getType(unit)}</td>
         </tr>
     );
 }

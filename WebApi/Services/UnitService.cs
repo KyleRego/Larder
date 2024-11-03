@@ -22,14 +22,9 @@ public class UnitService(IServiceProviderWrapper serviceProvider,
 
     public async Task<UnitDto> CreateUnit(UnitDto dto)
     {
-        Unit entity = new()
-        {
-            UserId = CurrentUserId(),
-            Name = dto.Name,
-            Type = dto.Type
-        };
+        Unit unit = new(CurrentUserId(), dto.Name, dto.Type); 
 
-        Unit insertedUnit = await _repository.Insert(entity);
+        Unit insertedUnit = await _repository.Insert(unit);
 
         return UnitDto.FromEntity(insertedUnit);
     }

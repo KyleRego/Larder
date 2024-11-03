@@ -1,24 +1,24 @@
-import { useContext, useEffect, useState } from "react";
-import { Unit } from "../types/Unit";
+import { useEffect, useState } from "react";
+import { UnitDto } from "../types/UnitDto";
 import { apiClient } from "../util/axios";
 import { useParams } from "react-router";
 import Loading from "../components/Loading";
 import EditLink from "../components/EditLink";
 import UnitConversionForm from "../components/UnitConversionForm";
-import { UnitConversion } from "../types/UnitConversion";
-import UnitConversionDiv from "../components/UnitConversionDiv";
+import { UnitConversionDto } from "../types/UnitConversionDto";
+import UnitConversionDiv from "../components/UnitConversion";
 import { Link } from "react-router-dom";
 import { useApiRequest } from "../hooks/useApiRequest";
 
 export default function UnitPage() {
-    const [unit, setUnit] = useState<Unit | null>(null);
+    const [unit, setUnit] = useState<UnitDto | null>(null);
     const [adding, setAdding] = useState<Boolean>(false)
     const { id } = useParams<{ id: string }>();
     const [refreshCounter, setRefreshCounter] = useState(0);
     const { handleRequest } = useApiRequest();
 
     useEffect(() => {
-        apiClient.get<Unit>(`/api/units/${id}`).then(res => {
+        apiClient.get<UnitDto>(`/api/units/${id}`).then(res => {
             setUnit(res.data);
         }).catch(error => {
             console.error(error);
@@ -43,14 +43,14 @@ export default function UnitPage() {
         const formData = new FormData(e.currentTarget);
         const targetUnitsPerUnit = parseFloat(formData.get("targetUnitsPerUnit") as string)
 
-        const newUnitConversion: UnitConversion = {
+        const newUnitConversion: UnitConversionDto = {
             id: null,
             unitId: unit!.id!,
             targetUnitsPerUnit: targetUnitsPerUnit,
             targetUnitId: formData.get("targetUnitId") as string
         };
 
-        const res = await handleRequest<UnitConversion>({
+        const res = await handleRequest<UnitConversionDto>({
             method: "post",
             url: "/api/UnitConversions",
             data: newUnitConversion
@@ -58,6 +58,7 @@ export default function UnitPage() {
 
         if (res) {
             setAdding(false);
+            setRefreshCounter(refreshCounter + 1);
         }
     }
 
@@ -70,7 +71,7 @@ export default function UnitPage() {
             </div>
 
             <div className="mt-4">
-                <p>Type: {Unit.getType(unit)}</p>
+                <p>Type: {UnitDto.getType(unit)}</p>
             </div>
 
             <div className="mt-4">
@@ -80,7 +81,7 @@ export default function UnitPage() {
                     {unitConversions}
                 </div>
 
-                <div className="mt-2 d-flex justify-content-center">
+                <div className="mt-4 d-flex justify-content-center">
                 { adding ? (
                     <UnitConversionForm handleSubmit={handleCreateConversion}
                                         unitConversion={null}

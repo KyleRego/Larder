@@ -69,27 +69,12 @@ public class RecipeServiceTests : ServiceTestsBase
     [Fact]
     public async void CookRecipeDecreasesIngredientAmountsAndCreatesFood()
     {
-        string recipeId = "1";
-        Recipe recipe = new()
-        {
-            UserId = mockUserId,
-            Id = recipeId,
-            Name = "Rice with butter"
-        };
+        Recipe recipe = new(mockUserId, "Rice with butter");
+        string recipeId = recipe.Id;
 
-        Unit ing1Unit = new()
-        {
-            UserId = mockUserId,
-            Id = "unit1",
-            Name = "Cups",
-            Type = UnitType.Volume
-        };
+        Unit ing1Unit = new(mockUserId, "Cups", UnitType.Volume);
 
-        Item ingItem1 = new()
-        {
-            UserId = mockUserId,
-            Name = "White rice",
-        };
+        Item ingItem1 = new(mockUserId, "White rice");
 
         Ingredient ing1 = new()
         {
@@ -98,19 +83,9 @@ public class RecipeServiceTests : ServiceTestsBase
         };
         ingItem1.Ingredient = ing1;
 
-        Unit ing2Unit = new()
-        {
-            UserId = mockUserId,
-            Id = "unit2",
-            Name = "Tablespoons",
-            Type = UnitType.Volume
-        };
+        Unit ing2Unit = new(mockUserId, "Tablespoons", UnitType.Volume);
 
-        Item ingItem2 = new()
-        {
-            UserId = mockUserId,
-            Name = "Butter"
-        };
+        Item ingItem2 = new(mockUserId, "Butter");
 
         Ingredient ing2 = new()
         {
@@ -120,21 +95,17 @@ public class RecipeServiceTests : ServiceTestsBase
         ingItem2.Ingredient = ing2;
 
         recipe.RecipeIngredients = [
-            new()
+            new(mockUserId, recipe.Id, ingItem1.Ingredient.Id,
+                new() { Amount = 3, Unit = ing1Unit, UnitId = ing1Unit.Id })
             {
-                UserId = mockUserId,
-                Ingredient = ingItem1.Ingredient,
-                RecipeId = recipe.Id,
-                IngredientId = ingItem1.Id,
-                Quantity = new() { Amount = 3, Unit = ing1Unit, UnitId = ing1Unit.Id }
+                Recipe = recipe,
+                Ingredient = ingItem1.Ingredient
             },
-            new()
+            new(mockUserId, recipe.Id, ingItem2.Id,
+                new() { Amount = 2, Unit = ing2Unit, UnitId = ing2Unit.Id })
             {
-                UserId = mockUserId,
-                Ingredient = ingItem2.Ingredient,
-                RecipeId = recipe.Id,
-                IngredientId = ingItem2.Id,
-                Quantity = new() { Amount = 2, Unit = ing2Unit, UnitId = ing2Unit.Id }
+                Recipe = recipe,
+                Ingredient = ingItem2.Ingredient
             }
         ];
 
@@ -147,11 +118,8 @@ public class RecipeServiceTests : ServiceTestsBase
 
         var foodRepository = new Mock<IFoodRepository>();
 
-        Item foodItem = new()
-        {
-            UserId = mockUserId,
-            Name = recipe.Name
-        };
+        Item foodItem = new(mockUserId, recipe.Name);
+
         Food food = new()
         {
             Item = foodItem,
@@ -190,60 +158,35 @@ public class RecipeServiceTests : ServiceTestsBase
     [Fact]
     public async void CookRecipeConvertsRecipeIngredientQuantityToIngredientUnitToDecreaseIngredientQuantity()
     {
-        Unit cupsUnit = new() { UserId = mockUserId, Name="Cups", Type=UnitType.Volume };
-        Unit mlUnit = new() { UserId = mockUserId, Name="ml", Type=UnitType.Volume };
+        Unit cupsUnit = new(mockUserId, "Cups",UnitType.Volume);
+        Unit mlUnit = new(mockUserId,"ml",UnitType.Volume);
 
-        Item ingItem = new()
-        {
-            Id = "ingredient1",
-            Name = "Water",
-            UserId = mockUserId
-        };
+        Item ingItem = new(mockUserId, "Water");
+
         Ingredient ingredient = new() { Item = ingItem,
                                         Quantity = new() { Amount = 6, Unit = cupsUnit, UnitId = cupsUnit.Id } };
         ingItem.Ingredient = ingredient;
 
-        UnitConversion conversion = new()
-        {
-            UserId = mockUserId,
-            UnitId = cupsUnit.Id,
-            Unit = cupsUnit,
-            TargetUnitId = mlUnit.Id,
-            TargetUnit = mlUnit,
-            TargetUnitsPerUnit = 237
-        };
+        UnitConversion conversion = new(mockUserId, cupsUnit.Id, mlUnit.Id, 237, UnitType.Volume);
 
         var recipeRepo = new Mock<IRecipeRepository>();
-        string recipeId = "1";
-        Recipe recipe = new()
-        {
-            UserId = mockUserId,
-            Id = recipeId, 
-            Name = "Test Recipe"
-        };
+        Recipe recipe = new(mockUserId, "Test recipe");
 
-        RecipeIngredient recipeIngredient = new()
+        RecipeIngredient recipeIngredient = new(mockUserId, recipe.Id, ingredient.Id,
+            new() { Amount=474, Unit=mlUnit, UnitId=mlUnit.Id})
         {
-            UserId = mockUserId,
-            RecipeId = recipeId,
-            IngredientId = ingredient.Id,
-            Ingredient = ingredient,
-            // 474 ml is 2 cups
-            Quantity = new() { Amount=474, Unit=mlUnit, UnitId=mlUnit.Id}
+            Recipe = recipe,
+            Ingredient = ingredient
         };
 
         recipe.RecipeIngredients = [recipeIngredient];
         recipe.Ingredients = [ingredient];
-        recipeRepo.Setup(_ => _.Get(mockUserId, recipeId)).ReturnsAsync(recipe);
+        recipeRepo.Setup(_ => _.Get(mockUserId, recipe.Id)).ReturnsAsync(recipe);
 
         var ingredientRepo = new Mock<IIngredientRepository>();
 
         var foodRepo = new Mock<IFoodRepository>();
-        Item foodItem = new()
-        {
-            Name = recipe.Name,
-            UserId = mockUserId
-        };
+        Item foodItem = new(mockUserId, recipe.Name);
 
         Food food = new(){ Item = foodItem };
         foodItem.Food = food;
@@ -256,7 +199,7 @@ public class RecipeServiceTests : ServiceTestsBase
         RecipeService sut = new(mSP.Object, recipeRepo.Object, ingredientRepo.Object,
                                  foodRepo.Object, unitConvRepo.Object);
 
-        CookRecipeDto dto = new() { RecipeId = recipeId };
+        CookRecipeDto dto = new() { RecipeId = recipe.Id };
 
         CookRecipeResultDto result = await sut.CookRecipe(dto);
         IngredientDto ingrResult = result.Ingredients.First();

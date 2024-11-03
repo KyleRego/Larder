@@ -28,7 +28,7 @@ public class FoodRepository(AppDbContext dbContext)
 
         if (foodItem != null) return foodItem;
 
-        foodItem = new() { Name = name, UserId = userId };
+        foodItem = new(userId, name, null);
         Food food = new() { Item = foodItem };
         foodItem.Food = food;
 

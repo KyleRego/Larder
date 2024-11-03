@@ -1,10 +1,11 @@
 namespace Larder.Models;
 
-public class Item : UserOwnedEntity
+public class Item(string userId, string name, string? description = null)
+                                                : UserOwnedEntity(userId)
 {
-    public required string Name { get; set; }
+    public string Name { get; set; } = name;
 
-    public string? Description { get; set; }
+    public string? Description { get; set; } = description;
 
     public int Amount { get; set; }
 

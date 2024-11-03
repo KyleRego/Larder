@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import UnitForm from "../components/UnitForm";
 import { UnitType } from "../types/UnitType";
 import { apiClient } from "../util/axios";
-import { Unit } from "../types/Unit";
+import { UnitDto } from "../types/UnitDto";
 import { ApiResponse } from "../types/ApiResponse";
 import { useContext } from "react";
 import { MessageContext } from "../contexts/MessageContext";
@@ -17,9 +17,9 @@ export default function NewUnit() {
         const name = formData.get("name") as string;
         const unitType = parseInt(formData.get("type") as string) as UnitType;
 
-        const newUnit = new Unit(null, name, unitType, []);
+        const newUnit = new UnitDto(null, name, unitType, []);
 
-        apiClient.post<ApiResponse<Unit>>("/api/units", newUnit).then(res => {
+        apiClient.post<ApiResponse<UnitDto>>("/api/units", newUnit).then(res => {
             setMessage({text: res.data.message, type: res.data.type})
             navigate("/units");
         }).catch(error => {

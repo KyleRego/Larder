@@ -51,7 +51,9 @@ public class UnitConversionsController(IUnitConversionService service)
         try
         {
             await _service.DeleteUnitConversion(id);
-            return Ok();
+            return new ApiResponse<object>(
+                "Unit conversion deleted", ApiResponseType.Success
+            );
         }
         catch (ApplicationException e)
         {

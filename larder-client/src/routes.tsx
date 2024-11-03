@@ -7,7 +7,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Units from './pages/Units';
 import NewUnit from './pages/NewUnit';
-import UnitPage from './pages/UnitPage';
+import UnitPage from './pages/Unit';
 import EditUnit from './pages/EditUnit';
 
 export const router = createBrowserRouter([{

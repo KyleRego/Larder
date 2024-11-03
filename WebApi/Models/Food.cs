@@ -1,5 +1,3 @@
-using Larder.Dtos;
-
 namespace Larder.Models;
 
 public class Food : ItemComponent

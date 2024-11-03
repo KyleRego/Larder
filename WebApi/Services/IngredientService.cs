@@ -54,11 +54,7 @@ public class IngredientService(IServiceProviderWrapper serviceProvider,
 
     public async Task<IngredientDto> CreateIngredient(IngredientDto dto)
     {
-        Item ingItem = new()
-        {
-            UserId = CurrentUserId(),
-            Name = dto.Name
-        };
+        Item ingItem = new(CurrentUserId(), dto.Name, dto.Description);
 
         Ingredient ingredient = new()
         {

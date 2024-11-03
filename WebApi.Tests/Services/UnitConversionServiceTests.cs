@@ -7,39 +7,95 @@ namespace Larder.Tests.Services;
 
 public class UnitConversionServiceTests : ServiceTestsBase
 {
-    private readonly Dictionary<string, Unit> _unitMap;
+    private readonly IUnitRepository _mockUnitData;
+    private readonly IUnitConversionRepository _mockUnitConversionData;
+    private readonly string _massUnit1Id;
+    private readonly string _massUnit2Id;
+    private readonly string _volumeUnit1Id;
 
     public UnitConversionServiceTests()
     {
-        _unitMap = [];
-        _unitMap["1"] = new() { UserId = mockUserId, Id = "1", Type = UnitType.Mass, Name = "Grams" };
-        _unitMap["2"] = new() { UserId = mockUserId, Id = "2", Type = UnitType.Volume, Name = "Cups" };
+        var mockUnitConversionData = new Mock<IUnitConversionRepository>();
+        var mockUnitData = new Mock<IUnitRepository>();
+
+        Unit massUnit1 = new(mockUserId, "Grams", UnitType.Mass);
+        Unit volumeUnit1 = new(mockUserId, "Cups", UnitType.Volume);
+        Unit massUnit2 = new(mockUserId, "Milligrams", UnitType.Mass);
+
+        UnitConversion existingMassConversion = new(
+            mockUserId, massUnit1.Id, massUnit2.Id, 1000, UnitType.Mass
+        );
+
+        _massUnit1Id = massUnit1.Id;
+        _volumeUnit1Id = volumeUnit1.Id;
+        _massUnit2Id = massUnit2.Id;
+
+        Unit[] units = [massUnit1, volumeUnit1];
+
+        foreach (Unit unit in units)
+        {
+            mockUnitData.Setup(_ => _.Get(mockUserId, unit.Id)).ReturnsAsync(unit);
+        }
+
+        mockUnitConversionData.Setup(_ =>
+            _.FindByUnitIdsEitherWay(mockUserId, _massUnit1Id, _massUnit2Id)
+        ).ReturnsAsync(existingMassConversion);
+
+        _mockUnitData = mockUnitData.Object;
+        _mockUnitConversionData = mockUnitConversionData.Object;
     }
 
     [Fact]
-    public async void CreateUnitConversionThrowsIfUnitsAreOfDifferentTypes()
+    public async void CreateUnitConversion_ThrowsIfUnitsAreOfDifferentTypes()
     {
-        var mockUnitRepo = new Mock<IUnitRepository>();
-        string unitId = "1";
-        Unit unit = _unitMap[unitId];
-        string targetUnitId = "2";
-        Unit targetUnit = _unitMap[targetUnitId];
-
-        mockUnitRepo.Setup(_ => _.Get(mockUserId, unitId)).ReturnsAsync(unit);
-        mockUnitRepo.Setup(_ => _.Get(mockUserId, targetUnitId)).ReturnsAsync(targetUnit);
-
         var mockUnitConvRepo = new Mock<IUnitConversionRepository>();
 
-        UnitConversionService sut = new(mSP.Object, mockUnitRepo.Object,
-                                                    mockUnitConvRepo.Object);
+        UnitConversionService sut = new(mSP.Object, _mockUnitData,
+                                                    _mockUnitConversionData);
 
         UnitConversionDto dto = new()
         {
-            UnitId = unitId,
-            TargetUnitId = targetUnitId,
+            UnitId = _massUnit1Id,
+            TargetUnitId = _volumeUnit1Id,
             TargetUnitsPerUnit = 2
         };
 
         await Assert.ThrowsAsync<ApplicationException>(async () => await sut.CreateUnitConversion(dto)); 
+    }
+
+    [Fact]
+    public async void CreateUnitConversion_ThrowsIfUnitsAreTheSameUnit()
+    {
+        var mockUnitConvRepo = new Mock<IUnitConversionRepository>();
+
+        UnitConversionService sut = new(mSP.Object, _mockUnitData,
+                                                    _mockUnitConversionData);
+
+        UnitConversionDto dto = new()
+        {
+            UnitId = _massUnit1Id,
+            TargetUnitId = _massUnit1Id,
+            TargetUnitsPerUnit = 2
+        };
+
+        await Assert.ThrowsAsync<ApplicationException>(async () => await sut.CreateUnitConversion(dto));   
+    }
+
+    [Fact]
+    public async void CreateUnitConversion_ThrowsIfUnitsAlreadyHaveAConversion()
+    {
+        var mockUnitConvRepo = new Mock<IUnitConversionRepository>();
+
+        UnitConversionService sut = new(mSP.Object, _mockUnitData,
+                                                    _mockUnitConversionData);
+
+        UnitConversionDto dto = new()
+        {
+            UnitId = _massUnit1Id,
+            TargetUnitId = _massUnit2Id,
+            TargetUnitsPerUnit = 2
+        };
+
+        await Assert.ThrowsAsync<ApplicationException>(async () => await sut.CreateUnitConversion(dto));   
     }
 }

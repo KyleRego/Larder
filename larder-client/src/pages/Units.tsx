@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import UnitsTable from "../components/UnitsTable";
 import { useContext, useEffect, useState } from "react";
 import { UnitsContext } from "../contexts/UnitsContext";
-import { Unit } from "../types/Unit";
+import { UnitDto } from "../types/UnitDto";
 import { apiClient } from "../util/axios";
 import { UnitSortOptions } from "../types/UnitSortOptions";
 import SearchBox from "../components/SearchBox";
@@ -14,7 +14,7 @@ export default function Units() {
 
     useEffect(() => {
         async function getUnits() {
-            const response = await apiClient.get<Unit[]>("api/units", 
+            const response = await apiClient.get<UnitDto[]>("api/units", 
                 { params: {sortOrder: sortOrder, search: searchParam} })
 
             setUnits(response.data);

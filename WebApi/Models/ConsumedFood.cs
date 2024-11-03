@@ -1,6 +1,6 @@
 namespace Larder.Models;
 
-public class ConsumedFood : UserOwnedEntity
+public class ConsumedFood(string userId) : UserOwnedEntity(userId)
 {
     public required string FoodName { get; set; }
     public required DateOnly DateConsumed { get; set; }

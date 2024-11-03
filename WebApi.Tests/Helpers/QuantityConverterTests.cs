@@ -13,29 +13,11 @@ public class QuantityConverterTests
     {
         string mockUserId = Guid.NewGuid().ToString();
 
-        _gramsUnit = new()
-        {
-            UserId = mockUserId,
-            Type = UnitType.Mass,
-            Name = "Grams"
-        };
+        _gramsUnit = new(mockUserId, "Grams", UnitType.Mass);
 
-        _milligramsUnit = new()
-        {
-            UserId = mockUserId,
-            Type = UnitType.Mass,
-            Name = "Milligrams"
-        };
+        _milligramsUnit = new(mockUserId, "Milligrams", UnitType.Mass);
 
-        _gramsToMilligramsConversion = new()
-        {
-            UserId = mockUserId,
-            UnitId = _gramsUnit.Id,
-            Unit = _gramsUnit,
-            TargetUnitId = _milligramsUnit.Id,
-            TargetUnit = _milligramsUnit,
-            TargetUnitsPerUnit = 1000
-        };
+        _gramsToMilligramsConversion = new(mockUserId, _gramsUnit.Id, _milligramsUnit.Id, 1000, UnitType.Mass);
     }
 
     [Fact]

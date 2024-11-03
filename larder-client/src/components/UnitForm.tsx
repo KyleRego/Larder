@@ -1,8 +1,8 @@
-import { Unit } from "../types/Unit";
+import { UnitDto } from "../types/UnitDto";
 import { UnitType } from "../types/UnitType";
 
 export default function UnitForm({unit, handleSubmit}: {
-                unit: Unit | null,
+                unit: UnitDto | null,
                 handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void
     }) {
 

@@ -7,8 +7,6 @@ public abstract class AppServiceBase(IServiceProviderWrapper serviceProvider)
 {
     private readonly IHttpContextAccessor _httpContextAccessor
                 = serviceProvider.GetRequiredService<IHttpContextAccessor>();
-    private readonly IAuthorizationService _authzService
-                = serviceProvider.GetRequiredService<IAuthorizationService>();
 
     protected string CurrentUserId()
     {

@@ -1,4 +1,4 @@
-export class UnitConversion {
+export class UnitConversionDto {
     id: string | null;
     unitId: string;
     targetUnitsPerUnit: number;

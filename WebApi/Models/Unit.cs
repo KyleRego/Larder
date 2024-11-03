@@ -9,13 +9,14 @@ public enum UnitType
     Weight
 }
 
-public class Unit : UserOwnedEntity
+public class Unit(string userId, string name, UnitType type)
+                                    : UserOwnedEntity(userId)
 {
     [Required(AllowEmptyStrings = false)]
-    public required string Name { get; set; }
+    public string Name { get; set; } = name;
 
     [Required]
-    public required UnitType Type { get; set; }
+    public UnitType Type { get; set; } = type;
 
     public List<UnitConversion> Conversions { get; set; } = [];
 

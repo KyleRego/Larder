@@ -19,9 +19,8 @@ public class ConsumedFoodService(IServiceProviderWrapper serviceProvider,
 
     public async Task<ConsumedFoodDto> CreateConsumedFood(ConsumedFoodDto dto)
     {
-        ConsumedFood entity = new()
+        ConsumedFood entity = new(CurrentUserId())
         {
-            UserId = CurrentUserId(),
             FoodName = dto.Name,
             DateConsumed = dto.DateConsumed,
 

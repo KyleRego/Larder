@@ -1,10 +1,10 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 
-import { Unit } from "../types/Unit";
+import { UnitDto } from "../types/UnitDto";
 
 interface UnitsContextType {
-    units: Unit[];
-    setUnits: Dispatch<SetStateAction<Unit[]>>;
+    units: UnitDto[];
+    setUnits: Dispatch<SetStateAction<UnitDto[]>>;
 }
 
 export const UnitsContext = createContext<UnitsContextType>({

@@ -91,11 +91,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
 
     public async Task<RecipeDto> CreateRecipe(RecipeDto recipeDto)
     {
-        Recipe recipe = new()
-        {
-            UserId = CurrentUserId(),
-            Name = recipeDto.Name
-        };
+        Recipe recipe = new(CurrentUserId(), recipeDto.Name);
 
         List<RecipeIngredient> recipeIngredients = [];
 
@@ -110,17 +106,13 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
                                 CurrentUserId(), ingredientDto.Name);
             ArgumentNullException.ThrowIfNull(ingItem.Ingredient);
 
-            RecipeIngredient recipeIngredient = new()
+            Quantity quantity = new()
             {
-                UserId = CurrentUserId(),
-                RecipeId = recipe.Id,
-                IngredientId = ingItem.Id,
-                Quantity = new()
-                {
-                    Amount = ingredientDto.Quantity.Amount,
-                    UnitId = ingredientDto.Quantity.UnitId
-                }
+                Amount = ingredientDto.Quantity.Amount,
+                UnitId = ingredientDto.Quantity.UnitId
             };
+        
+            RecipeIngredient recipeIngredient = new(CurrentUserId(), recipe.Id, ingItem.Id, quantity);
 
             recipeIngredients.Add(recipeIngredient);
         }
@@ -180,13 +172,9 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
                                             ing.Item.Name == ingDto.Name)?.Item
                 ?? await _ingRepo.FindOrCreateBy(CurrentUserId(), ingDto.Name);
 
-            RecipeIngredient newRecipeIngredient = new()
-            {
-                UserId = CurrentUserId(),
-                RecipeId = recipe.Id,
-                IngredientId = ingItem.Id,
-                Quantity = Quantity.FromDto(ingDto.Quantity)
-            };
+            RecipeIngredient newRecipeIngredient =
+                new(CurrentUserId(), recipe.Id,ingItem.Id, 
+                                            Quantity.FromDto(ingDto.Quantity));
             newRecipeIngredients.Add(newRecipeIngredient);
         }
 
