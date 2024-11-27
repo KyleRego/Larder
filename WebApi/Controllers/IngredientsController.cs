@@ -31,49 +31,4 @@ public class IngredientsController(IIngredientService ingredientService)
             return await _ingredientService.GetIngredients(IngredientSortOptions.AnyOrder, search);
         }
     }
-
-    [HttpPost]
-    public async Task<ActionResult<IngredientDto>> Create(IngredientDto ingredientDto)
-    {
-        if (ingredientDto.Id != null) return BadRequest();
-
-        ingredientDto = await _ingredientService.CreateIngredient(ingredientDto);
-
-        return ingredientDto;
-    }
-
-    [HttpPut("{id}")]
-    public async Task<ActionResult<IngredientDto>> Update(IngredientDto ingredientDto, string id)
-    {
-        if (ingredientDto.Id != id) return BadRequest();
-
-        ingredientDto = await _ingredientService.UpdateIngredient(ingredientDto);
-
-        return ingredientDto;
-    }
-
-    [HttpPatch("{id}")]
-    public async Task<ActionResult<IngredientDto>> UpdateQuantity(QuantityDto quantity, string id)
-    {
-        if (quantity.Id != id) return BadRequest();
-
-        IngredientDto? updatedIngredient = await _ingredientService.UpdateQuantity(quantity);
-
-        if (updatedIngredient != null)
-        {
-            return updatedIngredient;
-        }
-        else
-        {
-            return UnprocessableEntity();
-        }
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(string id)
-    {
-        await _ingredientService.DeleteIngredient(id);
-
-        return Ok();
-    }
 }

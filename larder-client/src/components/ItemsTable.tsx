@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import { Item } from "../types/Item";
+import { ItemDto } from "../types/Item";
 
-export default function ItemsTable({items} : {items: Item[]}) {
+export default function ItemsTable({items} : {items: ItemDto[]}) {
     const itemRows = items.map(item => {
         return <ItemRow key={item.id} item={item} />
     })
@@ -14,6 +14,7 @@ export default function ItemsTable({items} : {items: Item[]}) {
             <thead>
                 <tr>
                     <th scope="col">Name</th>
+                    <th scope="col">Amount</th>
                     <th scope="col">Description</th>
                 </tr>
             </thead>
@@ -24,10 +25,11 @@ export default function ItemsTable({items} : {items: Item[]}) {
     );
 }
 
-function ItemRow({item} : {item: Item}) : ReactNode {
+function ItemRow({item} : {item: ItemDto}) : ReactNode {
     return (
         <tr>
             <th scope="row">{item.name}</th>
+            <td>{item.amount}</td>
             <td>{item.description}</td>
         </tr>
     );

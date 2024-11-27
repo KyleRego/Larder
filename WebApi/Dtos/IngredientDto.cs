@@ -7,7 +7,6 @@ public class IngredientDto
     public string? Id { get; set; }
     public required string Name { get; set; }
     public string? Description { get; set; }
-    public required QuantityDto Quantity { get; set; }
 
     public List<IngredientRecipeDto> Recipes { get; set; } = [];
 
@@ -18,13 +17,7 @@ public class IngredientDto
         IngredientDto dto = new()
         {
             Id = item.Id,
-            Name = item.Name,
-            Quantity = new()
-            {
-                Amount = item.Ingredient.Quantity.Amount,
-                UnitId = item.Ingredient.Quantity?.UnitId,
-                UnitName = item.Ingredient.Quantity?.Unit?.Name
-            }
+            Name = item.Name
         };
 
         foreach (RecipeIngredient recIng in item.Ingredient.RecipeIngredients)

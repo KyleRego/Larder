@@ -15,7 +15,7 @@ public class FoodServiceTests : ServiceTestsBase
 
     public FoodServiceTests()
     {
-        Item foodItem = new(mockUserId, "Apples");
+        Item foodItem = new(mockUserId, "Apples", 4);
 
         Food food = new()
         {

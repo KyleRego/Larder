@@ -15,7 +15,7 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
     {
         string userId = CurrentUserId();
 
-        Item item = new(userId, itemDto.Name, itemDto.Description);
+        Item item = new(userId, itemDto.Name, itemDto.Amount, itemDto.Description);
 
         if (itemDto.Food != null)
         {
@@ -72,6 +72,7 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
             throw new ApplicationException("Item to update not found");
 
         item.Name = itemDto.Name;
+        item.Amount = itemDto.Amount;
         item.Description = itemDto.Description;
 
         FoodDto? foodDto = itemDto.Food;

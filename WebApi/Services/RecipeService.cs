@@ -39,31 +39,33 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
 
         foreach(RecipeIngredient recipeIngredient in recipe.RecipeIngredients)
         {
+            // TODO: Refactor this to use Item instead of Ingredient
+            // since item now has quantity component
             Ingredient ingredient = recipeIngredient.Ingredient;
 
-            string? ingredientUnitId = ingredient.Quantity.UnitId;
+            string? ingredientUnitId = ingredient.Item.QuantityComp!.Quantity.UnitId;
             string? recipeIngredientUnitId = recipeIngredient.Quantity.UnitId;
 
             if (ingredientUnitId == recipeIngredientUnitId)
             {
-                ingredient.Quantity.Amount -= recipeIngredient.Quantity.Amount;
+                ingredient.Item.QuantityComp.Quantity.Amount -= recipeIngredient.Quantity.Amount;
                 
             }
-            else if (ingredient.Quantity.Unit != null &&
+            else if (ingredient.Item.QuantityComp.Quantity.Unit != null &&
                         recipeIngredient.Quantity.Unit != null)
             {
                 UnitConversion? conversion = 
                     await _unitConvRepo.FindByUnitIdsEitherWay(
-                        CurrentUserId(), ingredient.Quantity.Unit.Id,
+                        CurrentUserId(), ingredient.Item.QuantityComp.Quantity.Unit.Id,
                                             recipeIngredient.Quantity.Unit.Id);
                 
                 if (conversion != null)
                 {
                     Quantity quantityUsed = QuantityConverter.Convert
                         (recipeIngredient.Quantity, conversion,
-                                                ingredient.Quantity.Unit);
+                                                ingredient.Item.QuantityComp.Quantity.Unit);
                 
-                    ingredient.Quantity.Amount -= quantityUsed.Amount;
+                    ingredient.Item.QuantityComp.Quantity.Amount -= quantityUsed.Amount;
 
                     // that could result in the ingredient quantity being below 0
                 }

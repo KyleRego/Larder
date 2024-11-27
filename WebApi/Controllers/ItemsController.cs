@@ -5,16 +5,19 @@ using Larder.Repository;
 
 namespace Larder.Controllers;
 
+using ItemActionResult = Task<ActionResult<ApiResponse<ItemDto>>>;
+
 public class ItemsController(IItemService itemService) : AppControllerBase
 {
     private readonly IItemService _itemService = itemService;
 
     [HttpPost]
-    public async Task<ActionResult<ItemDto>> Create(ItemDto itemDto)
+    public async ItemActionResult Create(ItemDto itemDto)
     {
         try
         {
-            return await _itemService.CreateItem(itemDto);
+            ItemDto item = await _itemService.CreateItem(itemDto);
+            return new ApiResponse<ItemDto>(item, "Item created", ApiResponseType.Success);
         }
         catch (ApplicationException e)
         {

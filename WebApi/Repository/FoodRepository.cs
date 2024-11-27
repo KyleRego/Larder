@@ -29,7 +29,7 @@ public class FoodRepository(AppDbContext dbContext)
 
         if (foodItem != null) return foodItem;
 
-        foodItem = new(userId, name, null);
+        foodItem = new(userId, name, 1, null);
         Food food = new() { Item = foodItem };
         foodItem.Food = food;
 

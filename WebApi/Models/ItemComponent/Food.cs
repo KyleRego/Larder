@@ -6,6 +6,7 @@ public class Food : ItemComponent
 
     public Quantity ServingSize { get; set; } = new() { Amount = 1, UnitId = null};
 
+    // Calories per serving
     public double Calories { get; set; }
 
     public double GramsProtein { get; set; }
