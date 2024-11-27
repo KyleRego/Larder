@@ -1,5 +1,6 @@
 using Larder.Dtos;
 using Larder.Models;
+using Larder.Models.ItemComponent;
 using Larder.Repository;
 
 namespace Larder.Services;
@@ -57,11 +58,12 @@ public class FoodService(   IServiceProviderWrapper serviceProvider,
 
         Item foodItem = await _foodData.Get(CurrentUserId(), dto.FoodId)
                 ?? throw new ApplicationException("food not found");
-        ArgumentNullException.ThrowIfNull(foodItem.Food);
+        Food? food = foodItem.Food;
+        ArgumentNullException.ThrowIfNull(food);
 
-        foodItem.Food.Servings = dto.Servings;
+        food.Servings = dto.Servings;
 
-        foodItem.Food.UpdateTotals();
+        food.UpdateTotals();
 
         await _foodData.Update(foodItem);
 
@@ -75,28 +77,29 @@ public class FoodService(   IServiceProviderWrapper serviceProvider,
         if (dto.Servings < 1)
             throw new ApplicationException("food servings must be >= 1");
 
-        Item item = await _foodData.Get(CurrentUserId(), dto.FoodId)
+        Item foodItem = await _foodData.Get(CurrentUserId(), dto.FoodId)
             ?? throw new ApplicationException("food not found");
-        ArgumentNullException.ThrowIfNull(item.Food);
+        Food? food = foodItem.Food;
+        ArgumentNullException.ThrowIfNull(food);
 
-        if (dto.Servings > item.Food.Servings)
+        if (dto.Servings > food.Servings)
             throw new ApplicationException("there are not that many servings");
 
         ConsumedFood consumedFood = new(CurrentUserId())
         {
-            FoodName = item.Name,
+            FoodName = foodItem.Name,
             DateConsumed = DateOnly.FromDateTime(DateTime.Now),
-            CaloriesConsumed = item.Food.Calories * dto.Servings,
-            GramsProteinConsumed = item.Food.GramsProtein * dto.Servings
+            CaloriesConsumed = food.Calories * dto.Servings,
+            GramsProteinConsumed = food.GramsProtein * dto.Servings
         };
 
-        item.Food.Servings -= dto.Servings;
+        food.Servings -= dto.Servings;
         
-        item.Food.UpdateTotals();
+        food.UpdateTotals();
 
-        await _foodData.Update(item);
+        await _foodData.Update(foodItem);
         await _consumedFoodData.Insert(consumedFood);
 
-        return (FoodDto.FromEntity(item), ConsumedFoodDto.FromEntity(consumedFood));
+        return (FoodDto.FromEntity(foodItem), ConsumedFoodDto.FromEntity(consumedFood));
     }
 }

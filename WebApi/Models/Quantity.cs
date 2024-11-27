@@ -11,7 +11,7 @@ public class Quantity
         return new()
         {
             Amount = dto.Amount,
-            UnitId =  string.IsNullOrWhiteSpace(dto.UnitId) ? null : dto.UnitId
+            UnitId = string.IsNullOrWhiteSpace(dto.UnitId) ? null : dto.UnitId
         };
     }
 

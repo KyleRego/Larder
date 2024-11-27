@@ -1,3 +1,5 @@
+using Larder.Models.ItemComponent;
+
 namespace Larder.Models;
 
 public class Item(string userId, string name, string? description = null)

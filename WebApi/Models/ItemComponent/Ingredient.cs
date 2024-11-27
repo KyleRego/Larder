@@ -1,4 +1,4 @@
-namespace Larder.Models;
+namespace Larder.Models.ItemComponent;
 
 public class Ingredient : ItemComponent
 {

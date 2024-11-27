@@ -3,6 +3,7 @@ using System;
 using Larder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Larder.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241127160402_RemoveUserItemComponentNavigations")]
+    partial class RemoveUserItemComponentNavigations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -553,7 +556,7 @@ namespace Larder.Migrations
             modelBuilder.Entity("Larder.Models.Item", b =>
                 {
                     b.HasOne("Larder.Models.ApplicationUser", "User")
-                        .WithMany("Items")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -817,8 +820,6 @@ namespace Larder.Migrations
 
             modelBuilder.Entity("Larder.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Items");
-
                     b.Navigation("Recipes");
 
                     b.Navigation("Units");

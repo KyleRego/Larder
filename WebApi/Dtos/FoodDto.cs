@@ -1,4 +1,5 @@
 using Larder.Models;
+using Larder.Models.ItemComponent;
 
 namespace Larder.Dtos;
 

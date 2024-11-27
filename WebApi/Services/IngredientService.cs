@@ -1,5 +1,6 @@
 using Larder.Dtos;
 using Larder.Models;
+using Larder.Models.ItemComponent;
 using Larder.Repository;
 
 namespace Larder.Services;
@@ -45,7 +46,8 @@ public class IngredientService(IServiceProviderWrapper serviceProvider,
 
         foreach (Item ingItem in ingItems)
         {
-            ArgumentNullException.ThrowIfNull(ingItem.Ingredient);
+            Ingredient? ingredient = ingItem.Ingredient;
+            ArgumentNullException.ThrowIfNull(ingredient);
             ingredientDtos.Add(IngredientDto.FromEntity(ingItem));
         }
 
@@ -75,10 +77,11 @@ public class IngredientService(IServiceProviderWrapper serviceProvider,
 
         Item ingItem = await _repository.Get(CurrentUserId(), dto.Id)
                 ?? throw new ApplicationException("ingredient not found");
-        ArgumentNullException.ThrowIfNull(ingItem.Ingredient);
+        Ingredient? ingredient = ingItem.Ingredient;
+        ArgumentNullException.ThrowIfNull(ingredient);
 
         ingItem.Name = dto.Name;
-        ingItem.Ingredient.Quantity = Quantity.FromDto(dto.Quantity);
+        ingredient.Quantity = Quantity.FromDto(dto.Quantity);
 
         await _repository.Update(ingItem);
 
@@ -92,9 +95,10 @@ public class IngredientService(IServiceProviderWrapper serviceProvider,
 
         Item ingItem = await _repository.Get(CurrentUserId(), dto.Id)
                     ?? throw new ApplicationException("ingredient not found");
-        ArgumentNullException.ThrowIfNull(ingItem.Ingredient);
+        Ingredient? ingredient = ingItem.Ingredient;
+        ArgumentNullException.ThrowIfNull(ingredient);
 
-        ingItem.Ingredient.Quantity = Quantity.FromDto(dto);
+        ingredient.Quantity = Quantity.FromDto(dto);
 
         ingItem = await _repository.Update(ingItem);
 

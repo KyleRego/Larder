@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Larder.Models;
+namespace Larder.Models.ItemComponent;
 
 public abstract class ItemComponent : EntityBase
 {

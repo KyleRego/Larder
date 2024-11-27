@@ -1,6 +1,7 @@
 using Larder.Dtos;
 using Larder.Helpers;
 using Larder.Models;
+using Larder.Models.ItemComponent;
 using Larder.Repository;
 
 namespace Larder.Services;

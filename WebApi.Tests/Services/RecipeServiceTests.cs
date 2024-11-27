@@ -2,6 +2,7 @@ using Larder.Models;
 using Larder.Services;
 using Larder.Repository;
 using Larder.Dtos;
+using Larder.Models.ItemComponent;
 
 namespace Larder.Tests.Services;
 

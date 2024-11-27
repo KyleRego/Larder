@@ -2,22 +2,23 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 using Larder.Models;
+using Larder.Models.ItemComponent;
 
 namespace Larder.Data;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options)
                                 : IdentityDbContext<ApplicationUser>(options)
 {
-    public DbSet<Item> Items { get; set; }
-    public DbSet<Food> Foods { get; set; }
-    public DbSet<Ingredient> Ingredients { get; set; }
-    public DbSet<Recipe> Recipes { get; set; }
-    public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
-    public DbSet<RecipeStep> RecipeSteps { get; set; }
-    public DbSet<Unit> Units { get; set; }
-    public DbSet<Utensil> Utensils { get; set; }
-    public DbSet<ConsumedFood> ConsumedFoods { get; set; }
-    public DbSet<UnitConversion> UnitConversions { get; set; }
+    public required DbSet<Item> Items { get; set; }
+    public required DbSet<Food> Foods { get; set; }
+    public required DbSet<Ingredient> Ingredients { get; set; }
+    public required DbSet<Recipe> Recipes { get; set; }
+    public required DbSet<RecipeIngredient> RecipeIngredients { get; set; }
+    public required DbSet<RecipeStep> RecipeSteps { get; set; }
+    public required DbSet<Unit> Units { get; set; }
+    public required DbSet<Utensil> Utensils { get; set; }
+    public required DbSet<ConsumedFood> ConsumedFoods { get; set; }
+    public required DbSet<UnitConversion> UnitConversions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

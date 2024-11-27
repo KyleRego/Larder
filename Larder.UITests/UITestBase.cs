@@ -10,24 +10,34 @@ public abstract class UITestBase
     protected IWebDriver driver;
     protected string clientURL;
 
-    [SetUp]
-    public void SetUp()
+    public UITestBase()
     {
         IConfiguration config = ConfigurationLoader.LoadConfiguration();
         clientURL = config["ClientURL"]
-            ?? throw new InvalidOperationException("No client URL");
+            ?? throw new InvalidOperationException(
+                                        "ClientURL is missing in config");
 
         driver = new ChromeDriver();
-        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
-        driver.Manage().Window.Maximize();
-
-        driver.Navigate().GoToUrl(clientURL);
     }
 
     [TearDown]
     public void TearDown()
     {
         driver.Close();
+    }
+    
+    [OneTimeTearDown]
+    public void Dispose()
+    {
+        driver.Dispose();
+    }
+
+    [SetUp]
+    public void SetUp()
+    {
+        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(0.5);
+        driver.Manage().Window.Maximize();
+        driver.Navigate().GoToUrl(clientURL);
     }
 
     protected void AssertMessage(string text)
