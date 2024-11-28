@@ -1,14 +1,14 @@
 # Larder
 
-Larder is a free software application for tracking your personal inventories of foods and ingredients; as you cook and eat them, Larder will track some nutritional statistics for you.
+Larder is a free software application (that is a work in progress) for tracking your personal inventories of foods and ingredients; as you cook and eat them, Larder will track some nutritional statistics for you. 
 
-## client
+## larder-client
 
-React app; run from `client` directory with `npm start`
+Typescript React vite app; run from `larder-client` directory with `npm run dev`
 
-## WebApi
+## Larder
 
-ASP.NET Core project; run from `WebApi` directory with `dotnet run`
+ASP.NET Core project; run from `Larder` directory with `dotnet run`
 
 Install the dotnet-ef CLI tool globally to scaffold migrations from model classes:
 
@@ -16,25 +16,12 @@ Install the dotnet-ef CLI tool globally to scaffold migrations from model classe
 dotnet tool install --global dotnet-ef
 ```
 
-### Architecture and Design
+This project has a controller-service-repository architecture; all database access is done through the repositories, the services handle most of the domain logic, and the controllers parse query parameters, bind incoming data into the Data Transfer Object (DTO) types, and handle exceptions with appropriate status codes.
 
-The frontend is a React app that was created with Create React App and refactored to use Vite. The backend is a monolithic ASP.NET Core project with a controller-service-repository architecture.
+## Larder.Tests
 
-#### Authentication
+XUnit test project for unit tests of `Larder` where the repository interface is mocked
 
-The backend uses cookie-based authentication with ASP.NET Core Identity. Since React is being used without a framework, the client has a React context called `AuthedContext` to track the user authentication state client side. The initial test of whether the client is authenticated is a fetch call to the units index endpoint. Since units are used throughout the app (like for ingredient quantities), there is a React context `UnitsContext`, so this has the dual purpose of checking if there are valid cookies and setting up the user's units context.
+## Larder.UITests
 
-#### Controllers, services, repository
-
-Controllers bind incoming HTTP request data into data transfer objects (DTOs), invoke services, and return appropriate responses, with the preferred return type `Task<ActionResult<DataTransferObject>>`. The abstract controller `ApplicationControllerBase` establishes the convention for the base resource URL (`api/[controllername]`), uses `[ApiController]` so all requests that do not successfully bind data into valid DTOs (the parameters of the controller actions) send 400 responses automatically, and `[Authorize]` to require the user be authenticated, sending 401 responses if not.
-
-Services compose the business logic layer. The abstract `ApplicationServiceBase` provides `CurrentUserId()` which accesses the HTTP context to get the user id.
-
-Database access is done through the repositories.
-
-### Style guide
-
-#### Bootstrap
-
-- Prefer `btn-primary` for `<Link>` buttons that change the page and `type="submit"` buttons that redirect
-- Prefer `btn-secondary` for `type="button"` buttons that change the state of the current page component
+NUnit Selenium WebDriver test project for end-to-end browser testing of `larder-client` and `Larder`; both must be running for this to test against

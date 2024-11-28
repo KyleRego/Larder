@@ -7,6 +7,7 @@ public class FoodDto
 {
     public string? Id { get; set; }
     public double Servings { get; set; }
+    public required QuantityDto ServingSize { get; set; }
     public double Calories { get; set; }
 
     public double GramsProtein { get; set; }
@@ -36,6 +37,7 @@ public class FoodDto
         {
             Id = food.Id,
             Servings = food.Servings,
+            ServingSize = QuantityDto.FromEntity(food.ServingSize),
 
             Calories = food.Calories,
             GramsProtein = food.GramsProtein,
@@ -56,31 +58,10 @@ public class FoodDto
         };
     }
 
-    // TODO: Remove this
     public static FoodDto FromEntity(Item foodItem)
     {
         ArgumentNullException.ThrowIfNull(foodItem.Food);
 
-        return new()
-        {
-            Servings = foodItem.Food.Servings,
-
-            Calories = foodItem.Food.Calories,
-            GramsProtein = foodItem.Food.GramsProtein,
-
-            GramsTotalFat = foodItem.Food.GramsTotalFat,
-            GramsSaturatedFat = foodItem.Food.GramsSaturatedFat,
-            GramsTransFat = foodItem.Food.GramsTransFat,
-
-            MilligramsCholesterol = foodItem.Food.MilligramsCholesterol,
-            MilligramsSodium = foodItem.Food.MilligramsSodium,
-
-            GramsTotalCarbs = foodItem.Food.GramsTotalCarbs,
-            GramsDietaryFiber = foodItem.Food.GramsDietaryFiber,
-            GramsTotalSugars = foodItem.Food.GramsTotalSugars,
-
-            TotalCalories = foodItem.Food.TotalCalories,
-            TotalGramsProtein = foodItem.Food.TotalGramsProtein
-        };
+        return FromEntity(foodItem.Food);
     }
 }

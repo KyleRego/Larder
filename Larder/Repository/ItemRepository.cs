@@ -9,6 +9,8 @@ public enum ItemSortOptions
     AnyOrder,
     Name,
     Name_Desc,
+    Amount,
+    Amount_Desc,
     Description,
     Description_Desc
 }
@@ -43,6 +45,18 @@ public class ItemRepository(AppDbContext dbContext)
                 break;
             case ItemSortOptions.Name_Desc:
                 query = query.OrderByDescending(item => item.Name);
+                break;
+            case ItemSortOptions.Amount:
+                query = query.OrderBy(item => item.Amount);
+                break;
+            case ItemSortOptions.Amount_Desc:
+                query = query.OrderByDescending(item => item.Amount);
+                break;
+            case ItemSortOptions.Description:
+                query = query.OrderBy(item => item.Description);
+                break;
+            case ItemSortOptions.Description_Desc:
+                query = query.OrderByDescending(item => item.Description);
                 break;
             default:
                 break;

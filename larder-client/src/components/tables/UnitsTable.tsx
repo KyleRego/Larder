@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { UnitDto } from "../types/UnitDto";
+import { UnitDto } from "../../types/UnitDto";
 import { Dispatch, SetStateAction } from "react";
-import SortingTableHeader from "./SortingTableHeader";
-import { UnitSortOptions } from "../types/UnitSortOptions";
+import SortingTableHeader from "../SortingTableHeader";
+import { UnitSortOptions } from "../../types/UnitSortOptions";
 
 export default function UnitsTable({units, sortOrder, setSortOrder}
         : { units: UnitDto[],

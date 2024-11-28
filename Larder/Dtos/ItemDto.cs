@@ -1,4 +1,5 @@
 using Larder.Models;
+using Larder.Models.ItemComponent;
 
 namespace Larder.Dtos;
 
@@ -21,6 +22,19 @@ public class ItemDto
             Amount = item.Amount,
             Description = item.Description
         };
+
+        Food? food = item.Food;
+        if (food != null)
+        {
+            FoodDto foodDto = new()
+            {
+                 Id = food.Id,
+                 Servings = food.Servings,
+                 ServingSize = QuantityDto.FromEntity(food.ServingSize),
+                 Calories = food.Calories,
+            };
+            itemDto.Food = foodDto;
+        }
 
         return itemDto;
     }

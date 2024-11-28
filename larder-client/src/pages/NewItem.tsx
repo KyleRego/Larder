@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ItemDto } from "../types/Item";
-import { Food } from "../types/Food";
+import { FoodDto } from "../types/FoodDto";
 import FoodFormControls from "../components/FoodFormControls";
 import QuantityComponentFormControls from "../components/IngredientFormControls";
 import { useApiRequest } from "../hooks/useApiRequest";
@@ -36,9 +36,14 @@ export default function NewItem() {
         };
 
         if (checkboxStates.isFood === true) {
-            let food: Food = {
+            let food: FoodDto = {
                 calories: parseFloat(formData.get("calories") as string),
-                servings: parseFloat(formData.get("servings") as string)
+                servings: parseFloat(formData.get("servings") as string),
+                servingSize: {
+                    id: null, unitName: null,
+                    amount: parseFloat(formData.get("servingSize") as string),
+                    unitId: formData.get("servingSizeUnit") as string
+                }
             }
 
             newItem.food = food;
@@ -99,17 +104,17 @@ export default function NewItem() {
                         </div>
                     </div>
 
-                    {checkboxStates.isFood && (
-                    <>
-                        <div className="mt-4">
-                            <FoodFormControls />
-                        </div>
-                    </>)}
-
-                    {checkboxStates.isIngredient && (
+                    {(checkboxStates.isFood || checkboxStates.isIngredient) && (
                     <>
                         <div className="mt-4">
                             <QuantityComponentFormControls item={null} />
+                        </div>
+                    </>)}
+
+                    {checkboxStates.isFood && (
+                    <>
+                        <div className="mt-4">
+                            <FoodFormControls item={null} />
                         </div>
                     </>)}
 

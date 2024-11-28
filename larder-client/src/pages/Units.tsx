@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import UnitsTable from "../components/UnitsTable";
+import UnitsTable from "../components/tables/UnitsTable";
 import { useContext, useEffect, useState } from "react";
 import { UnitsContext } from "../contexts/UnitsContext";
 import { UnitDto } from "../types/UnitDto";

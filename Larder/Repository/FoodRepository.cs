@@ -12,8 +12,18 @@ public enum FoodSortOptions
     Name, Name_Desc,
     Servings, Servings_Desc,
     Calories, Calories_Desc,
+    GramsProtein, GramsProtein_Desc,
+    GramsTotalFat, GramsTotalFat_Desc,
+    GramsSaturatedFat, GramsSaturatedFat_Desc,
+    GramsTransFat, GramsTransFat_Desc,
+    MilligramsCholesterol, MilligramsCholesterol_Desc,
+    MilligramsSodium, MilligramsSodium_Desc,
+    GramsTotalCarbs, GramsTotalCarbs_Desc,
+    GramsDietaryFiber, GramsDietaryFiber_Desc,
+    GramsTotalSugars, GramsTotalSugars_Desc,
+
     TotalCalories, TotalCalories_Desc,
-    TotalGramsProtein, TotalGramsProtein_Desc
+    TotalGramsProtein, TotalGramsProtein_Desc,
 }
 
 public class FoodRepository(AppDbContext dbContext)
@@ -48,39 +58,107 @@ public class FoodRepository(AppDbContext dbContext)
     public override Task<List<Item>> GetAll(string userId,
                             FoodSortOptions sortBy, string? search)
     {
-        var baseQuery = _dbContext.Items
+        var query = _dbContext.Items
                                 .Include(item => item.Food)
                                 .Where(item =>
             item.UserId == userId && item.Food != null);
 
-        var withSearch = (search == null) ? baseQuery : baseQuery.Where(
+        query = (search == null) ? query : query.Where(
             food => food.Name.Contains(search)
         );
 
         switch(sortBy)
         {
             case FoodSortOptions.Name:
-                return withSearch.OrderBy(item => item.Name).ToListAsync();
+                query = query.OrderBy(item => item.Name);
+                break;
             case FoodSortOptions.Name_Desc:
-                return withSearch.OrderByDescending(item => item.Name).ToListAsync();
+                query = query.OrderByDescending(item => item.Name);
+                break;
             case FoodSortOptions.Servings:
-                return withSearch.OrderBy(item => item.Food!.Servings).ToListAsync();
+                query = query.OrderBy(item => item.Food!.Servings);
+                break;
             case FoodSortOptions.Servings_Desc:
-                return withSearch.OrderByDescending(item => item.Food!.Servings).ToListAsync();
+                query = query.OrderByDescending(item => item.Food!.Servings);
+                break;
             case FoodSortOptions.Calories:
-                return withSearch.OrderBy(item => item.Food!.Calories).ToListAsync();
+                query = query.OrderBy(item => item.Food!.Calories);
+                break;
             case FoodSortOptions.Calories_Desc:
-                return withSearch.OrderByDescending(item => item.Food!.Calories).ToListAsync();
+                query = query.OrderByDescending(item => item.Food!.Calories);
+                break;
+            case FoodSortOptions.GramsProtein:
+                query = query.OrderBy(item => item.Food!.GramsProtein);
+                break;
+            case FoodSortOptions.GramsProtein_Desc:
+                query = query.OrderBy(item => item.Food!.GramsProtein);
+                break;
+            case FoodSortOptions.GramsTotalFat:
+                query = query.OrderBy(item => item.Food!.GramsProtein);
+                break;
+            case FoodSortOptions.GramsTotalFat_Desc:
+                query = query.OrderBy(item => item.Food!.GramsProtein);
+                break;
+            case FoodSortOptions.GramsSaturatedFat:
+                query = query.OrderBy(item => item.Food!.GramsProtein);
+                break;
+            case FoodSortOptions.GramsSaturatedFat_Desc:
+                query = query.OrderBy(item => item.Food!.GramsProtein);
+                break;
+            case FoodSortOptions.GramsTransFat:
+                query = query.OrderBy(item => item.Food!.GramsProtein);
+                break;
+            case FoodSortOptions.GramsTransFat_Desc:
+                query = query.OrderBy(item => item.Food!.GramsProtein);
+                break;
+            case FoodSortOptions.MilligramsCholesterol:
+                query = query.OrderBy(item => item.Food!.GramsProtein);
+                break;
+            case FoodSortOptions.MilligramsCholesterol_Desc:
+                query = query.OrderBy(item => item.Food!.GramsProtein);
+                break;
+            case FoodSortOptions.MilligramsSodium:
+                query = query.OrderBy(item => item.Food!.GramsProtein);
+                break;
+            case FoodSortOptions.MilligramsSodium_Desc:
+                query = query.OrderBy(item => item.Food!.GramsProtein);
+                break;
+            case FoodSortOptions.GramsTotalCarbs:
+                query = query.OrderBy(item => item.Food!.GramsProtein);
+                break;
+            case FoodSortOptions.GramsTotalCarbs_Desc:
+                query = query.OrderBy(item => item.Food!.GramsProtein);
+                break;
+            case FoodSortOptions.GramsDietaryFiber:
+                query = query.OrderBy(item => item.Food!.GramsProtein);
+                break;
+            case FoodSortOptions.GramsDietaryFiber_Desc:
+                query = query.OrderBy(item => item.Food!.GramsProtein);
+                break;
+            case FoodSortOptions.GramsTotalSugars:
+                query = query.OrderBy(item => item.Food!.GramsProtein);
+                break;
+            case FoodSortOptions.GramsTotalSugars_Desc:
+                query = query.OrderBy(item => item.Food!.GramsProtein);
+                break;
+
+
             case FoodSortOptions.TotalCalories:
-                return withSearch.OrderBy(item => item.Food!.TotalCalories).ToListAsync();
+                query = query.OrderBy(item => item.Food!.TotalCalories);
+                break;
             case FoodSortOptions.TotalCalories_Desc:
-                return withSearch.OrderByDescending(item => item.Food!.TotalCalories).ToListAsync();
+                query = query.OrderByDescending(item => item.Food!.TotalCalories);
+                break;
             case FoodSortOptions.TotalGramsProtein:
-                return withSearch.OrderBy(item => item.Food!.TotalGramsProtein).ToListAsync();
+                query = query.OrderBy(item => item.Food!.TotalGramsProtein);
+                break;
             case FoodSortOptions.TotalGramsProtein_Desc:
-                return withSearch.OrderByDescending(item => item.Food!.TotalGramsProtein).ToListAsync();
+                query = query.OrderByDescending(item => item.Food!.TotalGramsProtein);
+                break;
             default:
-                return withSearch.ToListAsync();
+                break;
         }
+
+        return query.ToListAsync();
     }
 }

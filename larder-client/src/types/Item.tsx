@@ -1,4 +1,4 @@
-import { Food } from "./Food"
+import { FoodDto } from "./FoodDto"
 import { Ingredient } from "./Ingredient"
 
 export type ItemDto = {
@@ -6,6 +6,6 @@ export type ItemDto = {
     name: string,
     amount: string,
     description: string | null,
-    food: Food | null,
+    food: FoodDto | null,
     ingredient: Ingredient | null
 }

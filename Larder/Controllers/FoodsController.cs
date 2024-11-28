@@ -29,7 +29,7 @@ public class FoodsController(IFoodService foodService)
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<FoodDto>>> Index(string? sortOrder, string? search)
+    public async Task<ActionResult<List<ItemDto>>> Index(string? sortOrder, string? search)
     {
         if (sortOrder != null && Enum.TryParse(sortOrder, out FoodSortOptions sortBy))
         {

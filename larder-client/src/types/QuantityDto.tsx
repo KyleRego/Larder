@@ -1,6 +1,6 @@
-import { UnitDto } from "./UnitDto"
-
 export type QuantityDto = {
+    id: string | null,
     amount: Number,
-    unit: UnitDto
+    unitId: string | null,
+    unitName: string | null
 }

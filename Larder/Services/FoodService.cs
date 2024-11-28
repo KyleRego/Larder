@@ -9,7 +9,7 @@ public interface IFoodService
 {
     public Task<FoodDto?> GetFood(string id);
 
-    public Task<List<FoodDto>> GetFoods(FoodSortOptions sortOrder,
+    public Task<List<ItemDto>> GetFoods(FoodSortOptions sortOrder,
                                                     string? search);
 
     public Task<FoodDto> UpdateServings(FoodServingsDto dto);
@@ -35,21 +35,11 @@ public class FoodService(   IServiceProviderWrapper serviceProvider,
         return FoodDto.FromEntity(item);
     }
 
-    public async Task<List<FoodDto>> GetFoods(FoodSortOptions sortBy,
+    public async Task<List<ItemDto>> GetFoods(FoodSortOptions sortBy,
                                                         string? search)
     {
-        List<Item> foodItems = await _foodData.GetAll(CurrentUserId(),
-                                                            sortBy,
-                                                            search);
-
-        List<FoodDto> result = [];
-
-        foreach (Item foodItem in foodItems)
-        {
-            result.Add(FoodDto.FromEntity(foodItem));
-        }
-
-        return result;
+        return (await _foodData.GetAll(CurrentUserId(), sortBy, search))
+                                .Select(ItemDto.FromEntity).ToList();
     }
 
     public async Task<FoodDto> UpdateServings(FoodServingsDto dto)
