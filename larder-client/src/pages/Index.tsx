@@ -1,11 +1,21 @@
 import { useContext } from "react";
 import { AuthedContext } from "../contexts/AuthedContext";
+import { useApiRequest } from "../hooks/useApiRequest";
+import { useNavigate } from "react-router";
 
 export default function Index() {
-    const { authed } = useContext(AuthedContext)
+    const { authed, setAuthed } = useContext(AuthedContext)
+    const { handleRequest } = useApiRequest();
+    const navigate  = useNavigate();
 
-    function handleCreateDemo() {
-        // TODO
+    async function handleCreateDemo() {
+        await handleRequest({
+            method: "post",
+            url: "/api/Demos"
+        });
+
+        setAuthed(true);
+        navigate("/items/new");
     }
 
     return (

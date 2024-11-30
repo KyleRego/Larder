@@ -1,4 +1,3 @@
-using Larder.Dtos;
 using Larder.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,17 +9,18 @@ public class DemosController(IDemoService demoService) : AppControllerBase
     private readonly IDemoService _demoService = demoService;
 
     [AllowAnonymous, HttpPost]
-    public async Task<ActionResult> Create()
+    public async Task<ActionResult<ApiResponse<object>>> Create()
     {
         try
         {
             await _demoService.CreateDemo();
+            return new ApiResponse<object>(
+                "Demo set up successfully! Thank you for trying Larder 🤍 it is a work in progress!",
+                                                ApiResponseType.Success);
         }
-        catch (ApplicationException)
+        catch (ApplicationException e)
         {
-            return UnprocessableEntity();
+            return UnprocessableEntity(FromError(e));
         }
-
-        return Ok();
     }
 }
