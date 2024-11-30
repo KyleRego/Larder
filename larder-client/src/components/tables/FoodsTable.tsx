@@ -2,6 +2,7 @@ import { Dispatch, ReactNode, SetStateAction } from "react";
 import { ItemDto } from "../../types/Item";
 import { FoodSortOptions } from "../../types/FoodSortOptions";
 import SortingTableHeader from "../SortingTableHeader";
+import { useNavigate } from "react-router";
 
 export default function FoodsTable({items, sortOrder, setSortOrder}
             : {items: ItemDto[],
@@ -14,7 +15,7 @@ export default function FoodsTable({items, sortOrder, setSortOrder}
     });
 
     return (
-        <table className="table table-striped text-break">
+        <table className="table table-striped table-bordered table-hover text-break">
             <caption>
                 Your foods
             </caption>
@@ -58,8 +59,14 @@ export default function FoodsTable({items, sortOrder, setSortOrder}
 }
 
 function FoodRow({item} : {item: ItemDto}) : ReactNode {
+    const navigate = useNavigate();
+
+    function handleRowClick() {
+        navigate(`/foods/${item.id}`);
+    }
+
     return (
-        <tr>
+        <tr role="button" onClick={handleRowClick}>
             <th scope="row">{item.name}</th>
             <td>{String(item.food!.servings)}</td>
             <td>{String(item.food!.calories)}</td>

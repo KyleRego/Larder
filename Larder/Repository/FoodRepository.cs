@@ -40,7 +40,10 @@ public class FoodRepository(AppDbContext dbContext)
         if (foodItem != null) return foodItem;
 
         foodItem = new(userId, name, 1, null);
-        Food food = new() { Item = foodItem };
+        Food food = new()
+        {
+            Item = foodItem,
+        };
         foodItem.Food = food;
 
         _dbContext.Items.Add(foodItem);
@@ -51,7 +54,9 @@ public class FoodRepository(AppDbContext dbContext)
 
     public override async Task<Item?> Get(string userId, string id)
     {
-        return await _dbContext.Items.FirstOrDefaultAsync(item =>
+        return await _dbContext.Items.Include(item => item.Food)
+                                        .Include(item => item.QuantityComp)
+                                        .FirstOrDefaultAsync(item =>
             item.Id == id && item.UserId == userId && item.Food != null);
     }
 

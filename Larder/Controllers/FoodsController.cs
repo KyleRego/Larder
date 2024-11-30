@@ -12,19 +12,19 @@ public class FoodsController(IFoodService foodService)
     private readonly IFoodService _foodService = foodService;
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ApiResponse<FoodDto>>> Show(string id)
+    public async Task<ActionResult<ApiResponse<ItemDto>>> Show(string id)
     {
         try
         {
-            FoodDto? food = await _foodService.GetFood(id);
+            ItemDto? foodItem = await _foodService.GetFood(id);
 
-            if (food == null) return NotFound();
+            if (foodItem == null) return NotFound();
 
-            return new ApiResponse<FoodDto>(food, "", ApiResponseType.Success);
+            return new ApiResponse<ItemDto>(foodItem, "", ApiResponseType.Success);
         }
-        catch (ApplicationException)
+        catch (ApplicationException e)
         {
-            return UnprocessableEntity();
+            return UnprocessableEntity(FromError(e));
         }
     }
 

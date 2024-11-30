@@ -58,6 +58,7 @@ public class FoodDto
         };
     }
 
+    // TODO: Remove this
     public static FoodDto FromEntity(Item foodItem)
     {
         ArgumentNullException.ThrowIfNull(foodItem.Food);

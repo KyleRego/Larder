@@ -1,5 +1,6 @@
 import { FoodDto } from "./FoodDto"
-import { Ingredient } from "./Ingredient"
+import { IngredientDto } from "./Ingredient"
+import { QuantityComponentDto } from "./QuantityComponentDto"
 
 export type ItemDto = {
     id: string | null,
@@ -7,5 +8,6 @@ export type ItemDto = {
     amount: string,
     description: string | null,
     food: FoodDto | null,
-    ingredient: Ingredient | null
+    ingredient: IngredientDto | null,
+    quantityComp: QuantityComponentDto | null
 }

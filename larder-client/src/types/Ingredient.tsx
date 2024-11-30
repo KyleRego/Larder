@@ -1,5 +1,3 @@
-import { QuantityDto } from "./QuantityDto"
-
-export type Ingredient = {
-    quantity: QuantityDto
+export type IngredientDto = {
+    id: string | null
 }

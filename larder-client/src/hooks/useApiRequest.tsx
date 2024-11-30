@@ -13,7 +13,11 @@ export function useApiRequest() {
             const response: AxiosResponse<ApiResponse<T>>
                                             = await apiClient.request(config);
 
-            setMessage({text: response.data.message, type: response.data.type});
+            const msg = response.data.message
+
+            if (msg !== "") {
+                setMessage({text: msg, type: response.data.type});
+            }
 
             return response.data.data;
         } catch (error) {

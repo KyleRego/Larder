@@ -3,8 +3,10 @@ import { useState } from "react";
 import { ItemDto } from "../types/Item";
 import { FoodDto } from "../types/FoodDto";
 import FoodFormControls from "../components/FoodFormControls";
-import QuantityComponentFormControls from "../components/IngredientFormControls";
+import QuantityComponentFormControls from "../components/QuantityComponentFormControls";
 import { useApiRequest } from "../hooks/useApiRequest";
+import { IngredientDto } from "../types/Ingredient";
+import { QuantityComponentDto } from "../types/QuantityComponentDto";
 
 export default function NewItem() {
     const { handleRequest } = useApiRequest();
@@ -22,6 +24,10 @@ export default function NewItem() {
         }));
     };
 
+    function itemHasQuantity(): boolean {
+        return checkboxStates.isFood === true || checkboxStates.isIngredient === true
+    }
+
     async function handleSubmit(e : React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
@@ -32,8 +38,26 @@ export default function NewItem() {
             amount: formData.get("amount") as string,
             description: formData.get("description") as string,
             food: null,
-            ingredient: null
+            ingredient: null,
+            quantityComp: null
         };
+
+        if (itemHasQuantity()) {
+            let quantityComp: QuantityComponentDto = {
+                quantity: {
+                    id: null, unitName: null,
+                    amount: parseFloat(formData.get("quantity") as string),
+                    unitId: formData.get("quantityUnit") as string
+                },
+                quantityPerItem: {
+                    id: null, unitName: null,
+                    amount: parseFloat(formData.get("quantityPerItem") as string),
+                    unitId: formData.get("quantityPerItemUnit") as string
+                }
+            };
+
+            newItem.quantityComp = quantityComp;
+        }
 
         if (checkboxStates.isFood === true) {
             let food: FoodDto = {
@@ -43,10 +67,29 @@ export default function NewItem() {
                     id: null, unitName: null,
                     amount: parseFloat(formData.get("servingSize") as string),
                     unitId: formData.get("servingSizeUnit") as string
-                }
+                },
+                gramsProtein: parseFloat(formData.get("gramsProtein") as string),
+                gramsTotalFat: parseFloat(formData.get("gramsTotalFat") as string),
+                gramsSaturatedFat: parseFloat(formData.get("gramsSaturatedFat") as string),
+                gramsTransFat: parseFloat(formData.get("gramsTransFat") as string),
+                milligramsCholesterol: parseFloat(formData.get("milligramsCholesterol") as string),
+                milligramsSodium: parseFloat(formData.get("milligramsSodium") as string),
+                gramsTotalCarbs: parseFloat(formData.get("gramsTotalCarbs") as string),
+                gramsDietaryFiber: parseFloat(formData.get("gramsDietaryFiber") as string),
+                gramsTotalSugars: parseFloat(formData.get("gramsTotalSugars") as string),
+                totalCalories: 0,
+                totalGramsProtein: 0
             }
 
             newItem.food = food;
+        }
+
+        if (checkboxStates.isIngredient === true) {
+            let ingredient: IngredientDto = {
+                id: null
+            };
+
+            newItem.ingredient = ingredient;
         }
 
         const res = await handleRequest<ItemDto>({
@@ -63,7 +106,7 @@ export default function NewItem() {
     return (
         <>
             <div className="page-flex-header">
-                <h1>New item:</h1>
+                <h1>New item 🤔</h1>
 
                 <div>
                     <div>
@@ -85,7 +128,8 @@ export default function NewItem() {
             
             <div className="mt-4 container">
                 <form onSubmit={handleSubmit}>
-                    <div>
+                    <div className="new-element border border-black p-4">
+                        <h3>Basic details ✅</h3>
                         <div className="d-flex align-items-center column-gap-3">
                             <div className="flex-grow-1">
                                 <label htmlFor="nameInput">Name:</label>
@@ -104,22 +148,23 @@ export default function NewItem() {
                         </div>
                     </div>
 
-                    {(checkboxStates.isFood || checkboxStates.isIngredient) && (
+                    {(itemHasQuantity() === true) && (
                     <>
-                        <div className="mt-4">
+                        <div className="new-element border border-black p-4 mt-4">
+                            <h3>Quantity ⚖️</h3>
                             <QuantityComponentFormControls item={null} />
                         </div>
                     </>)}
 
                     {checkboxStates.isFood && (
                     <>
-                        <div className="mt-4">
+                        <div className="new-element border border-black p-4 my-4">
                             <FoodFormControls item={null} />
                         </div>
                     </>)}
 
                     <div className="mt-4 d-flex justify-content-center">
-                        <button type="submit" className="btn btn-primary">Create item</button>
+                        <button id="submit-new-item" type="submit" className="btn btn-primary">Create item</button>
                     </div>
                 </form>
             </div>

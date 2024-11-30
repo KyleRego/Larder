@@ -26,5 +26,9 @@ public static class ChromeDriverExtension
         passwordInput.SendKeys(password);
 
         submitBtn.Click();
+
+        // TODO: Refactor to use an ID selector here
+        IWebElement shooMessageBtn = driver.FindElement(By.CssSelector(".btn-outline-success"));
+        shooMessageBtn.Click();
     }
 }

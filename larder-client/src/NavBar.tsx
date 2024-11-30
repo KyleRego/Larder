@@ -42,6 +42,7 @@ export function NavBar() {
                 <div className={`collapse navbar-collapse ${collapsed === false && "show"}`} id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item"><Link className="nav-link" to="/items">Items</Link></li>
+                        <li className="nav-item"><Link className="nav-link" to="/items/new">New item</Link></li>
                         <li className="nav-item"><Link className="nav-link" to="/foods">Foods</Link></li> 
                         <li className="nav-item"><Link className="nav-link" to="/units">Units</Link></li>
                     </ul>

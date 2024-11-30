@@ -1,20 +1,24 @@
-import { ItemDto } from "../types/Item";
+import { QuantityDto } from "../types/QuantityDto";
 import UnitsSelect from "./UnitsSelect";
 
-export default function QuantityInput({name, title, item}
-                            : {name: string, title: string, item: ItemDto | null}) {
+export default function QuantityInput({name, title, initialQuantity, required = false}
+            : { name: string,
+                title: string,
+                initialQuantity: QuantityDto | null,
+                required?: boolean}) {
     return (
         <>
-            <div className="d-flex column-gap-3" title={title}>
-                <div className="flex-grow-1">
+            <div className="d-flex justify-content-center column-gap-3" title={title}>
+                <div className="">
                     <input className="form-control" type="number" name={name} title={`${title} amount:`}
-                        defaultValue={String(item?.ingredient?.quantity?.amount) ?? null}></input>
+                        defaultValue={String(initialQuantity?.amount ?? 0)}
+                        required={required}></input>
                 </div>
 
-                <div>
+                <div className="flex-grow-1">
                     <UnitsSelect selectName={`${name}Unit`}
                             selectTitle = {`${title} unit:`}
-                            defaultValue={item?.ingredient?.quantity?.unit?.id ?? null} />
+                            defaultValue={initialQuantity?.unitId ?? null} />
                 </div>
             </div>  
         </>

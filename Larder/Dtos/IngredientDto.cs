@@ -1,26 +1,22 @@
 using Larder.Models;
+using Larder.Models.ItemComponent;
 
 namespace Larder.Dtos;
 
 public class IngredientDto
 {
     public string? Id { get; set; }
-    public required string Name { get; set; }
-    public string? Description { get; set; }
 
     public List<IngredientRecipeDto> Recipes { get; set; } = [];
 
-    public static IngredientDto FromEntity(Item item)
+    public static IngredientDto FromEntity(Ingredient ingredient)
     {
-        ArgumentNullException.ThrowIfNull(item.Ingredient);
-
         IngredientDto dto = new()
         {
-            Id = item.Id,
-            Name = item.Name
+            Id = ingredient.Id
         };
 
-        foreach (RecipeIngredient recIng in item.Ingredient.RecipeIngredients)
+        foreach (RecipeIngredient recIng in ingredient.RecipeIngredients)
         {
             Recipe? recipe = recIng.Recipe;
             ArgumentNullException.ThrowIfNull(recipe);
@@ -35,6 +31,14 @@ public class IngredientDto
         }
 
         return dto;
+    }
+
+    // TODO: Remove this
+    public static IngredientDto FromEntity(Item item)
+    {
+        ArgumentNullException.ThrowIfNull(item.Ingredient);
+
+        return FromEntity(item.Ingredient);
     }
 }
 

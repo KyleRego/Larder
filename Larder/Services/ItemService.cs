@@ -17,19 +17,21 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
 
         Item item = new(userId, itemDto.Name, itemDto.Amount, itemDto.Description);
 
-        if (itemDto.Food != null)
+        if (itemDto.QuantityComp != null)
         {
-            FoodDto foodDto = itemDto.Food;
+            QuantityComponentDto quantCompDto = itemDto.QuantityComp;
 
-            Food food = new()
+            QuantityComponent quantityComponent = new()
             {
                 Item = item,
-                Calories = foodDto.Calories,
-                Servings = foodDto.Servings
+                Quantity = Quantity.FromDto(quantCompDto.Quantity),
+                QuantityPerItem = quantCompDto.QuantityPerItem != null ?
+                         Quantity.FromDto(quantCompDto.QuantityPerItem) : null
             };
-            food.UpdateTotals();
-            item.Food = food;
+            item.QuantityComp = quantityComponent;
         }
+
+        item.Food = (itemDto.Food != null) ? Food.FromDto(itemDto.Food, item) : null;
 
         item = await _itemData.Insert(item);
 
@@ -75,32 +77,7 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
         item.Amount = itemDto.Amount;
         item.Description = itemDto.Description;
 
-        FoodDto? foodDto = itemDto.Food;
-
-        if (foodDto == null)
-        {
-            item.Food = null;
-        }
-        else
-        {
-            Food? food = item.Food;
-
-            if (food == null)
-            {
-                food = new()
-                {
-                    Item = item,
-                    Calories = foodDto.Calories,
-                    Servings = foodDto.Servings
-                };
-                item.Food = food;
-            }
-            else
-            {
-                food.Calories = foodDto.Calories;
-                food.Servings = foodDto.Servings;
-            }     
-        }
+        item.Food = (itemDto.Food != null) ? Food.FromDto(itemDto.Food, item) : null;
         
         return ItemDto.FromEntity(await _itemData.Update(item));
     }

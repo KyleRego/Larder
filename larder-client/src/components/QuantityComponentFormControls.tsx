@@ -6,13 +6,15 @@ export default function QuantityComponentFormControls({item} : {item: ItemDto | 
         <>
             <div className="d-flex column-gap-3">
                 <div className="flex-grow-1">
-                    <label>Quantity per item amount:</label>
-                    <QuantityInput item={item} />
+                    <label>Quantity per item:</label>
+                    <QuantityInput name="quantityPerItem" title="Quantity per item"
+                        initialQuantity={item?.quantityComp?.quantity ?? null} />
                 </div>
 
                 <div className="flex-grow-1">
                     <label>Quantity:</label>
-                    <QuantityInput item={item} />
+                    <QuantityInput name="quantity" title="Quantity"
+                        initialQuantity={item?.quantityComp?.quantityPerItem ?? null} />
                 </div>
             </div>
         </>

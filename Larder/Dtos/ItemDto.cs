@@ -11,7 +11,7 @@ public class ItemDto
     public string? Description { get; set; }
     public FoodDto? Food { get; set; }
     public IngredientDto? Ingredient { get; set; }
-    public QuantityDto? Quantity { get; set; }
+    public QuantityComponentDto? QuantityComp { get; set; }
 
     public static ItemDto FromEntity(Item item)
     {
@@ -20,21 +20,16 @@ public class ItemDto
             Id = item.Id,
             Name = item.Name,
             Amount = item.Amount,
-            Description = item.Description
-        };
+            Description = item.Description,
+            Food = (item.Food != null)
+                        ? FoodDto.FromEntity(item.Food) : null,
 
-        Food? food = item.Food;
-        if (food != null)
-        {
-            FoodDto foodDto = new()
-            {
-                 Id = food.Id,
-                 Servings = food.Servings,
-                 ServingSize = QuantityDto.FromEntity(food.ServingSize),
-                 Calories = food.Calories,
-            };
-            itemDto.Food = foodDto;
-        }
+            Ingredient = (item.Ingredient != null)
+                        ? IngredientDto.FromEntity(item.Ingredient) : null,
+
+            QuantityComp = (item.QuantityComp != null)
+                ? QuantityComponentDto.FromEntity(item.QuantityComp) : null
+        };
 
         return itemDto;
     }

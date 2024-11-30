@@ -21,7 +21,9 @@ export default function Foods() {
                 <h1>Foods</h1>
             </div>
 
-            <FoodsTable items={items} sortOrder={sortOrder} setSortOrder={setSortOrder} />
+            <div className="mt-4">
+                <FoodsTable items={items} sortOrder={sortOrder} setSortOrder={setSortOrder} />
+            </div>    
         </>
     );
 }

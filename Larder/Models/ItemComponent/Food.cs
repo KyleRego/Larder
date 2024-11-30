@@ -1,3 +1,5 @@
+using Larder.Dtos;
+
 namespace Larder.Models.ItemComponent;
 
 public class Food : ItemComponent
@@ -31,10 +33,31 @@ public class Food : ItemComponent
     public double TotalCalories { get; set; }
     public double TotalGramsProtein { get; set; }
 
-    // TODO: Unit tests for this
     public void UpdateTotals()
     {
         TotalCalories = Calories * Servings;
         TotalGramsProtein = GramsProtein * Servings;
+    }
+
+    public static Food FromDto(FoodDto dto, Item item)
+    {
+        Food food = new()
+        {
+            Item = item,
+            Calories = dto.Calories,
+            Servings = dto.Servings,
+            ServingSize = Quantity.FromDto(dto.ServingSize),
+            GramsProtein = dto.GramsProtein,
+            GramsTotalFat = dto.GramsTotalFat,
+            GramsSaturatedFat = dto.GramsSaturatedFat,
+            GramsTransFat = dto.GramsTransFat,
+            GramsTotalCarbs = dto.GramsTotalCarbs,
+            GramsTotalSugars = dto.GramsTotalSugars,
+            GramsDietaryFiber = dto.GramsDietaryFiber,
+            MilligramsCholesterol = dto.MilligramsCholesterol,
+            MilligramsSodium = dto.MilligramsSodium
+        };
+        food.UpdateTotals();
+        return food;
     }
 }

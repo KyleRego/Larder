@@ -7,7 +7,7 @@ namespace Larder.Services;
 
 public interface IFoodService
 {
-    public Task<FoodDto?> GetFood(string id);
+    public Task<ItemDto?> GetFood(string id);
 
     public Task<List<ItemDto>> GetFoods(FoodSortOptions sortOrder,
                                                     string? search);
@@ -26,13 +26,21 @@ public class FoodService(   IServiceProviderWrapper serviceProvider,
     private readonly IConsumedFoodRepository _consumedFoodData
                                                     = consumedFoodRepository;
 
-    public async Task<FoodDto?> GetFood(string id)
+    private static void ValidateFoodItem(Item item)
+    {
+        if (item.Food == null) throw new ApplicationException(
+            "Item is not a food"
+        );
+    }
+
+    public async Task<ItemDto?> GetFood(string id)
     {
         Item? item = await _foodData.Get(CurrentUserId(), id);
-        
-        if (item == null) return null;
 
-        return FoodDto.FromEntity(item);
+        if (item == null) return null;
+        ValidateFoodItem(item);
+
+        return ItemDto.FromEntity(item);
     }
 
     public async Task<List<ItemDto>> GetFoods(FoodSortOptions sortBy,
