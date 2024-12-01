@@ -42,14 +42,14 @@ jobs:
         with:
             dotnet-version: '8.0.x'
       - name: Run tests
-        run: dotnet test WebApi.Tests
+        run: dotnet test Larder.Tests
       - name: Publish self-contained executable
-        run: dotnet publish WebApi -r linux-arm64 --self-contained true
+        run: dotnet publish Larder -r linux-arm64 --self-contained true
       - name: SCP dotnet executable to VM
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_SSH_KEY }}
-          source: "./WebApi/bin/Release/net8.0/linux-arm64/publish"
+          source: "./Larder/bin/Release/net8.0/linux-arm64/publish"
           target: ${{ secrets.WEBAPI_DEPLOY_DIRECTORY }}
