@@ -3,12 +3,12 @@ import { FoodDto } from "../../types/FoodDto";
 
 export default function FoodNutritionTable({food} : {food: FoodDto}) {
     const tableRows = foodNutritionData.map(entry => {
-        const field = entry[0];
-        const label = entry[1];
+        const field = entry.field;
+        const label = entry.label;
 
         return <tr>
                 <td scope="row">{label}</td>
-                <td>{(food as any)[field]}</td>
+                <td>{`${(food as any)[field]} ${entry.unitName}`}</td>
             </tr>;
     })
 
