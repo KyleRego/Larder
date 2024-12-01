@@ -29,16 +29,20 @@ export default function NewUnit() {
 
     return (
         <>
+            <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                    <li className="breadcrumb-item active" aria-current="page">
+                        <Link to={"/units"}>Back to units</Link>
+                    </li>
+                </ol>
+            </nav>
+
             <div className="page-flex-header">
-                <h1>New unit:</h1>
+                <h1>New unit 📏</h1>
             </div>
 
             <div className="mt-4">
                 <UnitForm unit={null} handleSubmit={handleSubmit} />
-            </div>
-
-            <div className="mt-4">
-                <Link className="btn btn-danger" to={"/units"}>Cancel</Link>
             </div>
         </>
     );

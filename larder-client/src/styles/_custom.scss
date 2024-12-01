@@ -32,6 +32,10 @@ label, input, textarea {
 }
 
 .form-control[type='number'] {
+  max-width: 7rem;
+}
+
+select.form-select {
   max-width: 10rem;
 }
 

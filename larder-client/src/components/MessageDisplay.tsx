@@ -38,18 +38,20 @@ export default function MessageDisplay() {
 
     return (
         <div className="container position-absolute bottom-0 start-50 translate-middle">
-            <div className={`card text-center border border-0`}>
-                <div className={`card-body ${bgColorCss} border ${borderCss} rounded`}>
-                    <div className="d-flex justify-content-center column-gap-3 align-items-center card-text">
-                        <div id="message-text">
-                            {message.text}
-                        </div>
-                        <div>
-                            <button type="button" className={`btn ${btnCss}`} onClick={handleClose}>OK</button>
+            <div className="d-flex justify-content-center">
+                <div className="card text-center border border-0 w-75">
+                    <div className={`card-body ${bgColorCss} border ${borderCss} rounded`}>
+                        <div className="d-flex justify-content-center column-gap-3 align-items-center card-text">
+                            <div id="message-text">
+                                {message.text}
+                            </div>
+                            <div>
+                                <button type="button" className={`btn ${btnCss}`} onClick={handleClose}>OK</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>  
         </div>
     );
 };

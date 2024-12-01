@@ -105,6 +105,14 @@ export default function NewItem() {
 
     return (
         <>
+        <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                    <li className="breadcrumb-item active" aria-current="page">
+                        <Link to={"/items"}>Back to items</Link>
+                    </li>
+                </ol>
+            </nav>
+    
             <div className="page-flex-header">
                 <h1>New item 🤔</h1>
 
@@ -122,8 +130,6 @@ export default function NewItem() {
                         <label className="btn btn-outline-primary" htmlFor="isIngredient">Ingredient</label>
                     </div>
                 </div>
-
-                <Link className="btn btn-danger" to={"/items"}>Cancel</Link>
             </div>
             
             <div className="mt-4 container">
@@ -148,18 +154,18 @@ export default function NewItem() {
                         </div>
                     </div>
 
+                    {checkboxStates.isFood && (
+                    <>
+                        <div className="new-element border border-black p-4 my-4">
+                            <FoodFormControls item={null} />
+                        </div>
+                    </>)}
+
                     {(itemHasQuantity() === true) && (
                     <>
                         <div className="new-element border border-black p-4 mt-4">
                             <h3>Quantity ⚖️</h3>
                             <QuantityComponentFormControls item={null} />
-                        </div>
-                    </>)}
-
-                    {checkboxStates.isFood && (
-                    <>
-                        <div className="new-element border border-black p-4 my-4">
-                            <FoodFormControls item={null} />
                         </div>
                     </>)}
 
