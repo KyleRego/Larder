@@ -1,4 +1,4 @@
-import { ItemDto } from "../types/Item";
+import { ItemDto } from "../types/ItemDto";
 import QuantityInput from "./QuantityInput";
 
 export default function QuantityComponentFormControls({item} : {item: ItemDto | null}) {

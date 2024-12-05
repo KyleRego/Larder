@@ -1,5 +1,5 @@
 import { Dispatch, ReactNode, SetStateAction } from "react";
-import { ItemDto } from "../../types/Item";
+import { ItemDto } from "../../types/ItemDto";
 import { ItemSortOptions } from "../../types/ItemSortOptions";
 import SortingTableHeader from "../SortingTableHeader";
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ItemDto } from "../types/Item";
+import { ItemDto } from "../types/ItemDto";
 import { useApiRequest } from "../hooks/useApiRequest";
 import EditLink from "../components/EditLink";
 import Loading from "../components/Loading";

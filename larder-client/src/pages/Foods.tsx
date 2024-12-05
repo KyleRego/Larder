@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ItemDto } from "../types/Item";
+import { ItemDto } from "../types/ItemDto";
 import { apiClient } from "../util/axios";
 import FoodsTable from "../components/tables/FoodsTable";
 import { FoodSortOptions } from "../types/FoodSortOptions";

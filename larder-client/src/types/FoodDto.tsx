@@ -1,19 +1,20 @@
 import { QuantityDto } from "./QuantityDto"
 
 export type FoodDto = {
-    servings: Number,
+    servingsPerItem: number,
+    servings: number,
     servingSize: QuantityDto,
-    calories: Number,
-    gramsProtein: Number,
-    gramsTotalFat: Number,
-    gramsSaturatedFat: Number,
-    gramsTransFat: Number,
-    milligramsCholesterol: Number,
-    milligramsSodium: Number,
-    gramsTotalCarbs: Number,
-    gramsDietaryFiber: Number,
-    gramsTotalSugars: Number,
+    calories: number,
+    gramsProtein: number,
+    gramsTotalFat: number,
+    gramsSaturatedFat: number,
+    gramsTransFat: number,
+    milligramsCholesterol: number,
+    milligramsSodium: number,
+    gramsTotalCarbs: number,
+    gramsDietaryFiber: number,
+    gramsTotalSugars: number,
 
-    totalCalories: Number,
-    totalGramsProtein: Number
+    totalCalories: number,
+    totalGramsProtein: number
 }

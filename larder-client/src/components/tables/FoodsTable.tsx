@@ -1,5 +1,5 @@
 import { Dispatch, ReactNode, SetStateAction } from "react";
-import { ItemDto } from "../../types/Item";
+import { ItemDto } from "../../types/ItemDto";
 import { FoodSortOptions } from "../../types/FoodSortOptions";
 import SortingTableHeader from "../SortingTableHeader";
 import { useNavigate } from "react-router";

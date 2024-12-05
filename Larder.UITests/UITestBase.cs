@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 
 namespace Larder.UITests;
 
@@ -42,7 +43,10 @@ public abstract class UITestBase
 
     protected void AssertMessage(string text)
     {
-        IWebElement message = driver.FindElement(By.Id("message-text"));
+        By selector = By.Id("message-text");
+        WebDriverWait wait = new(driver, TimeSpan.FromSeconds(10));
+        wait.Until(d => d.FindElement(selector).Displayed);
+        IWebElement message = driver.FindElement(selector);
         Assert.That(text, Is.EqualTo(message.Text));
     }
 }

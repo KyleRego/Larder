@@ -5,7 +5,7 @@ namespace Larder.UITests.Extension;
 
 public static class ChromeDriverExtension
 {
-    public static void LoginTestUser(this IWebDriver driver)
+    public static void LoginTestUser(this IWebDriver driver, bool shooMessage = true)
     {
         IConfiguration config = ConfigurationLoader.LoadConfiguration();
 
@@ -27,8 +27,11 @@ public static class ChromeDriverExtension
 
         submitBtn.Click();
 
-        // TODO: Refactor to use an ID selector here
-        IWebElement shooMessageBtn = driver.FindElement(By.CssSelector(".btn-outline-success"));
-        shooMessageBtn.Click();
+        if (shooMessage == true)
+        {
+            // TODO: Refactor to use an ID selector here
+            IWebElement shooMessageBtn = driver.FindElement(By.CssSelector(".btn-outline-success"));
+            shooMessageBtn.Click();
+        }
     }
 }

@@ -5,7 +5,7 @@ import { QuantityComponentDto } from "./QuantityComponentDto"
 export type ItemDto = {
     id: string | null,
     name: string,
-    amount: string,
+    amount: number,
     description: string | null,
     food: FoodDto | null,
     ingredient: IngredientDto | null,
