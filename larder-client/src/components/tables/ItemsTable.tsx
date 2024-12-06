@@ -41,7 +41,7 @@ export default function ItemsTable({items, sortOrder, setSortOrder}
 
 function ItemRow({item} : {item: ItemDto}) : ReactNode {
     return (
-        <tr>
+        <tr id={item.id!}>
             <th scope="row">{item.name}</th>
             <td>{item.amount}</td>
             <td>{item.description}</td>

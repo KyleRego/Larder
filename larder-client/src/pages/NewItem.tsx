@@ -135,8 +135,9 @@ export default function NewItem() {
                         <strong>Item is a/an:</strong>
                     </div>
                     <div className="btn-group" role="group">
-                        <input type="checkbox" className="btn-check" id="isFood" name="isFood" autoComplete="off"
-                            checked={checkboxStates.isFood} onChange={(e) => {
+                        <input type="checkbox" className="btn-check" id="is-food-toggle" autoComplete="off"
+                            title="Food"
+                            checked={item.food !== null} onChange={(e) => {
                                 if (e.target.checked) {
                                     // Instantiating initial food may need to be moved somewhere to be reused 
                                     const initialFood: FoodDto = {
@@ -165,11 +166,12 @@ export default function NewItem() {
                                     updateItem("quantityComp", null);
                                 }
                             }} />
-                        <label className="btn btn-outline-primary" htmlFor="isFood">Food</label>
+                        <label className="btn btn-outline-primary" htmlFor="is-food-toggle">Food</label>
 
-                        <input type="checkbox" className="btn-check" id="isIngredient" name="isIngredient" autoComplete="off"
+                        <input type="checkbox" className="btn-check" id="is-ingredient-toggle" autoComplete="off"
+                                title="Ingredient"
                                 checked={checkboxStates.isIngredient} onChange={handleCheckboxChange} />
-                        <label className="btn btn-outline-primary" htmlFor="isIngredient">Ingredient</label>
+                        <label className="btn btn-outline-primary" htmlFor="is-ingredient-toggle">Ingredient</label>
                     </div>
                 </div>
             </div>
@@ -180,21 +182,21 @@ export default function NewItem() {
                         <h3>Basic details ✅</h3>
                         <div className="d-flex align-items-center column-gap-3">
                             <div className="flex-grow-1">
-                                <label htmlFor="nameInput">Name:</label>
-                                <input className="form-control" id="nameInput" type="text" name="name" title="Item name:" required
+                                <label htmlFor="name-input">Name:</label>
+                                <input className="form-control" id="name-input" type="text" name="name" title="Item name:" required
                                     value={item.name} onChange={(e) => updateItem("name", e.target.value)} />
                             </div>
 
                             <div className="flex-grow-1">
-                                <label htmlFor="amountInput">Amount:</label>
-                                <input className="form-control" type="number" id="amountInput" name="amount" title="Item amount:" required
+                                <label htmlFor="amount-input">Amount:</label>
+                                <input className="form-control" type="number" id="amount-input" name="amount" title="Item amount:" required
                                     value={item.amount} onChange={(e) => updateItem("amount", parseFloat(e.target.value))} />
                             </div>
                         </div>
     
                         <div className="mt-2">
-                            <label htmlFor="descriptionInput">Description:</label>
-                            <textarea className="form-control" rows={1} id="descriptionInput" name="description" title="Item description:"
+                            <label htmlFor="description-input">Description:</label>
+                            <textarea className="form-control" rows={1} id="description-input" name="description" title="Item description:"
                                 value={item.description ?? ""} onChange={(e) => updateItem("description", e.target.value)} />
                         </div>
                     </div>

@@ -1,7 +1,4 @@
-using Larder.UITests.Extension;
-using OpenQA.Selenium;
-
-namespace Larder.UITests;
+namespace Larder.UITests.Tests;
 
 public class LogoutTest : UITestBase
 {

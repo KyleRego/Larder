@@ -66,7 +66,7 @@ function FoodRow({item} : {item: ItemDto}) : ReactNode {
     }
 
     return (
-        <tr role="button" onClick={handleRowClick}>
+        <tr role="button" onClick={handleRowClick} id={item.id!}>
             <th scope="row">{item.name}</th>
             <td>{String(item.food!.servings)}</td>
             <td>{String(item.food!.calories)}</td>

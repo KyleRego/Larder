@@ -1,6 +1,4 @@
-using OpenQA.Selenium;
-
-namespace Larder.UITests;
+namespace Larder.UITests.Tests;
 
 public class RegisterTest : UITestBase
 {
@@ -14,7 +12,7 @@ public class RegisterTest : UITestBase
         IWebElement emailInput = driver.FindElement(By.Id("email"));
         IWebElement passwordInput = driver.FindElement(By.Id("password"));
         IWebElement submitBtn = driver.FindElement(By.Id("submit-register"));
-        
+
         string email = RandomEmail();
         string password = RandomPassword();
 

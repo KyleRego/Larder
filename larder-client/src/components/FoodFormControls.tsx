@@ -29,7 +29,8 @@ export default function FoodFormControls({item, setItem}
                 <label style={{width: "108px"}} className={`col-form-label ${entry.emphasized === true ? "fw-bold" : ""}`} htmlFor={field}>{label}:</label>
             </div>
             <div className="col-auto">
-                <input className="form-control" id={field} type="number" step="any" name={field} title={label}
+                <input className="form-control" type="number" step="any" name={field} title={label}
+                    id={`${field}-input`}
                     defaultValue={initialValue} onChange={(e) => updateItemFood(field, Number(e.target.value))} />
             </div>
             <div className="col-auto font-monospace">
@@ -44,20 +45,21 @@ export default function FoodFormControls({item, setItem}
 
             <div className="d-flex column-gap-3 mt-2">
                 <div className="flex-grow-1">
-                    <label className="form-label">Servings per item:</label>
+                    <label className="form-label" htmlFor="servings-per-item-input">Servings per item:</label>
                     <input className="form-control" type="number" value={item.food!.servingsPerItem}
+                        id="servings-per-item-input"
                         onChange={(e) => updateItemFood("servingsPerItem" as keyof FoodDto, parseFloat(e.target.value))} />
                 </div>
                 <div className="flex-grow-1">
-                    <label className="form-label" htmlFor="servings">Servings:</label>
-                    <input className="form-control" id="servings" type="number" name="servings" title="Food servings:"
+                    <label className="form-label" htmlFor="servings-input">Servings:</label>
+                    <input className="form-control" id="servings-input" type="number" name="servings" title="Food servings:"
                        value={String(item.food?.servings)} onChange={(e) => updateItemFood("servings", parseFloat(e.target.value))} required />
                 </div>
             </div>
 
             <div className="mt-2">
                 <label className="form-label">Serving size:</label>
-                <QuantityInput title="Serving size" name="servingSize" initialQuantity={null} required={true} />
+                <QuantityInput title="Serving size" name="servingSize" initialQuantity={null} />
             </div>
 
             <h3 className="mt-4">Nutrition per item 🍑</h3>

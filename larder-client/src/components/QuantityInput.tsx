@@ -12,7 +12,7 @@ export default function QuantityInput({name, title, initialQuantity, required = 
                 <div className="">
                     <input className="form-control" type="number" name={name} title={`${title} amount:`}
                         defaultValue={String(initialQuantity?.amount ?? 0)}
-                        required={required}></input>
+                        required = {required}></input>
                 </div>
 
                 <div className="flex-grow-1">

@@ -1,6 +1,4 @@
-using Larder.UITests.Extension;
-
-namespace Larder.UITests;
+namespace Larder.UITests.Tests;
 
 public class LoginTest : UITestBase
 {
