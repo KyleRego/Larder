@@ -1,29 +1,75 @@
-import { useEffect, useState } from "react";
-import { ItemDto } from "../types/ItemDto";
-import { apiClient } from "../util/axios";
+import { Dispatch, SetStateAction, useState } from "react";
 import ItemsTable from "../components/tables/ItemsTable";
 import { Link } from "react-router-dom";
-import { ItemSortOptions } from "../types/ItemSortOptions";
+import SearchBox from "../components/SearchBox";
+import FoodsTable from "../components/tables/FoodsTable";
+
+enum TableVersions {
+    AllItems = "All Items",
+    Foods = "Foods",
+    Ingredients = "Ingredients"
+}
 
 export default function Items() {
-    const [items, setItems] = useState<ItemDto[]>([]); 
-    const [searchParam] = useState("");
-    const [sortOrder, setSortOrder] = useState(ItemSortOptions.Name);
+    
+    const [currentTable, setCurrentTable] = useState<TableVersions>(TableVersions.AllItems);
+    const [searchParam, setSearchParam] = useState("");
 
-    useEffect(() => {
-        apiClient.get<ItemDto[]>("/api/items", { params: {search: searchParam, sortOrder: sortOrder}})
-            .then(res => setItems(res.data))
-            .catch(error => console.log(error));
-    }, [searchParam, sortOrder])
+    function renderCurrentTable() {
+        switch (currentTable) {
+            case TableVersions.AllItems:
+                return <ItemsTable searchParam={searchParam} />
+            case TableVersions.Foods:
+                return <FoodsTable searchParam={searchParam} />
+            case TableVersions.Ingredients:
+                return <div>Ingredients table placeholder</div>
+        }
+    }
+
+    function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setSearchParam(e.currentTarget.value);
+    }
 
     return (
         <>
-            <div className="page-flex-header">
+            <div className="page-flex-header align-items-end">
                 <h1>Items</h1>
-                <Link className="btn btn-primary" to={"/items/new"}>New item</Link>
+
+                <SearchBox handleOnChange={handleSearchChange} />
+
+                <TableVersionDropdown currentVariant={currentTable} setCurrentTable={setCurrentTable} />
+
+                <Link className="btn btn-secondary border-black" to={"/items/new"}>New item</Link>
             </div>
 
-            <ItemsTable items={items} sortOrder={sortOrder} setSortOrder={setSortOrder} />
+            <div className="table-responsive">
+                {renderCurrentTable()}
+            </div>
         </>
     );
+}
+
+function TableVersionDropdown({currentVariant, setCurrentTable}
+                        : { currentVariant: TableVersions,
+                            setCurrentTable: Dispatch<SetStateAction<TableVersions>> }) {
+    const [expanded, setExpanded] = useState(false);
+
+    const dropdownOptions = Object.values(TableVersions).filter((mem) => mem != currentVariant).map((mem, indx) => {
+        return <li key={indx} onClick={() => {
+            setCurrentTable(mem);
+            setExpanded(false);
+        }}>
+            <a className="dropdown-item" href="#">{mem}</a>
+        </li>;
+    });
+
+    return <div className="dropdown">
+            <button className="btn btn-secondary dropdown-toggle border-black" type="button" aria-expanded="false"
+                onClick={() => setExpanded(!expanded)}    >
+                {currentVariant}
+            </button>
+            <ul className={`dropdown-menu ${expanded === true ? "d-block" : "d-none"}`}>
+                {dropdownOptions}
+            </ul>
+        </div>;
 }

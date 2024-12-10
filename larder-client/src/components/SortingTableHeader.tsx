@@ -24,9 +24,9 @@ export default function SortingTableHeader<T>({ascending, descending, sortOrder,
 
         return (
             <th title="Change ordering" role="button" onClick={handleClick} scope="col">
-                <div className="d-flex justify-content-center column-gap-1 flex-wrap column-gap-1 align-items-center">
+                <div className="d-flex justify-content-center column-gap-1">
                     <span className="">{headerText}</span>
-                    <span className="flex-grow-1">{icon}</span>
+                    <span className="mt-1 flex-grow-1 d-inline-flex align-items-center">{icon}</span>
                 </div>
             </th>
         );

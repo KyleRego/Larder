@@ -1,21 +1,27 @@
-import { Dispatch, ReactNode, SetStateAction } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { ItemDto } from "../../types/ItemDto";
 import { FoodSortOptions } from "../../types/FoodSortOptions";
 import SortingTableHeader from "../SortingTableHeader";
 import { useNavigate } from "react-router";
+import { apiClient } from "../../util/axios";
 
-export default function FoodsTable({items, sortOrder, setSortOrder}
-            : {items: ItemDto[],
-                sortOrder: FoodSortOptions,
-                setSortOrder: Dispatch<SetStateAction<FoodSortOptions>>
-            }) {
+export default function FoodsTable({searchParam} : {searchParam: string }) {
+
+    const [items, setItems] = useState<ItemDto[]>([]);         
+    const [sortOrder, setSortOrder] = useState(FoodSortOptions.Name);
 
     const foodRows = items.map(item => {
         return <FoodRow key={item.id} item={item} />
     });
 
+    useEffect(() => {
+        apiClient.get<ItemDto[]>("/api/foods", { params: {search: searchParam, sortBy: sortOrder}})
+            .then(res => setItems(res.data))
+            .catch(error => console.log(error));
+    }, [searchParam, sortOrder])
+
     return (
-        <table className="table table-striped table-bordered table-hover text-break">
+        <table className="table table-striped table-hover">
             <caption>
                 Your foods
             </caption>

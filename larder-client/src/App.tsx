@@ -33,7 +33,7 @@ function App() {
                 <MessageContext.Provider value={{message, setMessage}}>
                     <div className="bg-secondary min-vh-100">
                         <NavBar />
-                        <div className="container d-flex flex-column justify-content-center">
+                        <div className="container-fluid d-flex flex-column justify-content-center">
                             <div className="card shadow-sm mt-4">
                                 <div className="card-body">
                                     <Outlet />

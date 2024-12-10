@@ -1,18 +1,26 @@
-import { Dispatch, ReactNode, SetStateAction } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { ItemDto } from "../../types/ItemDto";
 import { ItemSortOptions } from "../../types/ItemSortOptions";
 import SortingTableHeader from "../SortingTableHeader";
+import { apiClient } from "../../util/axios";
+import { useNavigate } from "react-router";
 
-export default function ItemsTable({items, sortOrder, setSortOrder}
-                : {items: ItemDto[]
-                sortOrder: ItemSortOptions,
-                setSortOrder: Dispatch<SetStateAction<ItemSortOptions>> }) {
+export default function ItemsTable({searchParam} : {searchParam: string }) {
+    const [items, setItems] = useState<ItemDto[]>([]);         
+    const [sortOrder, setSortOrder] = useState(ItemSortOptions.Name);
+
     const itemRows = items.map(item => {
         return <ItemRow key={item.id} item={item} />
     })
+
+    useEffect(() => {
+        apiClient.get<ItemDto[]>("/api/items", { params: {search: searchParam}})
+            .then(res => setItems(res.data))
+            .catch(error => console.log(error));
+    }, [searchParam, sortOrder])
     
     return (
-        <table className="table table-striped text-break">
+        <table className="table table-striped">
             <caption>
                 Your items
             </caption>
@@ -40,8 +48,14 @@ export default function ItemsTable({items, sortOrder, setSortOrder}
 }
 
 function ItemRow({item} : {item: ItemDto}) : ReactNode {
+    const navigate = useNavigate();
+
+    function handleRowClick() {
+        navigate(`/foods/${item.id}`);
+    }
+
     return (
-        <tr id={item.id!}>
+        <tr id={item.id!} onClick={handleRowClick}>
             <th scope="row">{item.name}</th>
             <td>{item.amount}</td>
             <td>{item.description}</td>

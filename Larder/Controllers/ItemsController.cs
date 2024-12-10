@@ -62,7 +62,7 @@ public class ItemsController(IItemService itemService) : AppControllerBase
         catch(ApplicationException)
         {
             return UnprocessableEntity(
-                new {error = "Something went wrong fetching the items"});
+                new {error = "Something went wrong retrieving the items"});
         }
     }
 

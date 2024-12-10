@@ -35,7 +35,7 @@ public class ItemRepository(AppDbContext dbContext)
 
         if (search != null)
         {
-            query = query.Where(item => item.Name == search);
+            query = query.Where(item => item.Name.Contains(search));
         }
 
         switch(sortBy)
