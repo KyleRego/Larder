@@ -38,9 +38,6 @@ public class CreateFoodTest : UITestBase
         submitBtn.Click();
 
         AssertMessage("Item created");
-
-        IWebElement foodsBtn = driver.FindElement(By.LinkText("Foods"));
-        foodsBtn.Click();
     }
 
     private void SendKeysToInput(string inputId, string keys)

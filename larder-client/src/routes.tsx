@@ -9,7 +9,7 @@ import Units from './pages/Units';
 import NewUnit from './pages/NewUnit';
 import UnitPage from './pages/Unit';
 import EditUnit from './pages/EditUnit';
-import Food from './pages/Food';
+import Item from './pages/Item';
 
 export const router = createBrowserRouter([{
     path: "/",
@@ -20,7 +20,7 @@ export const router = createBrowserRouter([{
         { path: '/register', element: <Register />},
         { path: '/items', element: <Items /> },
         { path: '/items/new', element: <NewItem /> },
-        { path: '/foods/:id', element: <Food /> },
+        { path: '/items/:id', element: <Item /> },
         { path: '/units', element: <Units /> },
         { path: '/units/:id', element: <UnitPage /> },
         { path: '/units/:id/edit', element: <EditUnit /> },

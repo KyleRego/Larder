@@ -20,7 +20,7 @@ export default function ItemsTable({searchParam} : {searchParam: string }) {
     }, [searchParam, sortOrder])
     
     return (
-        <table className="table table-striped">
+        <table className="table table-striped table-hover">
             <caption>
                 Your items
             </caption>
@@ -51,11 +51,11 @@ function ItemRow({item} : {item: ItemDto}) : ReactNode {
     const navigate = useNavigate();
 
     function handleRowClick() {
-        navigate(`/foods/${item.id}`);
+        navigate(`/items/${item.id}`);
     }
 
     return (
-        <tr id={item.id!} onClick={handleRowClick}>
+        <tr id={item.id!} onClick={handleRowClick} role="button">
             <th scope="row">{item.name}</th>
             <td>{item.amount}</td>
             <td>{item.description}</td>

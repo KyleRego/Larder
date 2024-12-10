@@ -68,7 +68,7 @@ function FoodRow({item} : {item: ItemDto}) : ReactNode {
     const navigate = useNavigate();
 
     function handleRowClick() {
-        navigate(`/foods/${item.id}`);
+        navigate(`/items/${item.id}`);
     }
 
     return (

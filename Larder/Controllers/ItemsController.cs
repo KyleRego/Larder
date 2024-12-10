@@ -26,7 +26,7 @@ public class ItemsController(IItemService itemService) : AppControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ItemDto>> Show(string id)
+    public async ItemActionResult Show(string id)
     {
         try
         {
@@ -34,7 +34,7 @@ public class ItemsController(IItemService itemService) : AppControllerBase
 
             if (itemDto == null) return NotFound();
 
-            return itemDto;
+            return new ApiResponse<ItemDto>(itemDto, "", ApiResponseType.Success);
         }
         catch (ApplicationException)
         {
