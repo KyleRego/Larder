@@ -52,4 +52,10 @@ public class UnitRepository(AppDbContext dbContext)
                 return await baseSearchQuery.ToListAsync();
         }
     }
+
+    public async Task InsertAll(IEnumerable<Unit> units)
+    {
+        _dbContext.Units.AddRange(units);
+        await _dbContext.SaveChangesAsync();
+    }
 }

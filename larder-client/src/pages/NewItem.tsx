@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ItemDto } from "../types/ItemDto";
-import FoodFormControls from "../components/FoodFormControls";
+import { FoodNutritionFormControls, FoodStockFormControls } from "../components/FoodFormControls";
 import QuantityComponentFormControls from "../components/QuantityComponentFormControls";
 import { useApiRequest } from "../hooks/useApiRequest";
 import { FoodDto } from "../types/FoodDto";
@@ -43,73 +43,11 @@ export default function NewItem() {
 
     async function handleSubmit(e : React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        // const formData = new FormData(e.currentTarget);
-
-        let newItem = item;
-        // let newItem: ItemDto = {
-        //     id: null,
-        //     name: formData.get("name") as string,
-        //     amount: formData.get("amount") as string,
-        //     description: formData.get("description") as string,
-        //     food: null,
-        //     ingredient: null,
-        //     quantityComp: null
-        // };
-
-        // if (itemHasQuantity()) {
-        //     let quantityComp: QuantityComponentDto = {
-        //         quantity: {
-        //             id: null, unitName: null,
-        //             amount: parseFloat(formData.get("quantity") as string),
-        //             unitId: formData.get("quantityUnit") as string
-        //         },
-        //         quantityPerItem: {
-        //             id: null, unitName: null,
-        //             amount: parseFloat(formData.get("quantityPerItem") as string),
-        //             unitId: formData.get("quantityPerItemUnit") as string
-        //         }
-        //     };
-
-        //     newItem.quantityComp = quantityComp;
-        // }
-
-        // if (checkboxStates.isFood === true) {
-        //     let food: FoodDto = {
-        //         calories: parseFloat(formData.get("calories") as string),
-        //         servings: parseFloat(formData.get("servings") as string),
-        //         servingSize: {
-        //             id: null, unitName: null,
-        //             amount: parseFloat(formData.get("servingSize") as string),
-        //             unitId: formData.get("servingSizeUnit") as string
-        //         },
-        //         gramsProtein: parseFloat(formData.get("gramsProtein") as string),
-        //         gramsTotalFat: parseFloat(formData.get("gramsTotalFat") as string),
-        //         gramsSaturatedFat: parseFloat(formData.get("gramsSaturatedFat") as string),
-        //         gramsTransFat: parseFloat(formData.get("gramsTransFat") as string),
-        //         milligramsCholesterol: parseFloat(formData.get("milligramsCholesterol") as string),
-        //         milligramsSodium: parseFloat(formData.get("milligramsSodium") as string),
-        //         gramsTotalCarbs: parseFloat(formData.get("gramsTotalCarbs") as string),
-        //         gramsDietaryFiber: parseFloat(formData.get("gramsDietaryFiber") as string),
-        //         gramsTotalSugars: parseFloat(formData.get("gramsTotalSugars") as string),
-        //         totalCalories: 0,
-        //         totalGramsProtein: 0
-        //     }
-
-        //     newItem.food = food;
-        // }
-
-        // if (checkboxStates.isIngredient === true) {
-        //     let ingredient: IngredientDto = {
-        //         id: null
-        //     };
-
-        //     newItem.ingredient = ingredient;
-        // }
 
         const res = await handleRequest<ItemDto>({
             method: "post",
             url: "/api/Items",
-            data: newItem
+            data: item
         });
 
         if (res) {
@@ -204,7 +142,7 @@ export default function NewItem() {
                     {item.food !== null && (
                     <>
                         <div className="new-element border border-black p-4 my-4">
-                            <FoodFormControls item={item} setItem={setItem} />
+                            <FoodStockFormControls item={item} setItem={setItem} />
                         </div>
                     </>)}
 
@@ -212,7 +150,14 @@ export default function NewItem() {
                     <>
                         <div className="new-element border border-black p-4 mt-4">
                             <h3>Quantity ⚖️</h3>
-                            <QuantityComponentFormControls item={null} />
+                            <QuantityComponentFormControls item={item} setItem={setItem} />
+                        </div>
+                    </>)}
+
+                    {item.food !== null && (
+                    <>
+                        <div className="new-element border border-black p-4 my-4">
+                            <FoodNutritionFormControls item={item} setItem={setItem} />
                         </div>
                     </>)}
 

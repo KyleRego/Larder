@@ -1,11 +1,12 @@
 import { useContext } from "react";
 import { UnitsContext } from "../contexts/UnitsContext";
 
-export default function UnitsSelect({selectName, selectTitle, defaultValue, required = false}
+export default function UnitsSelect({selectName, selectTitle, value, required = false, onChange = () => {}}
     : { selectName : string,
         selectTitle: string,
-        defaultValue: string | null,
-        required?: boolean }) {
+        value: string | null,
+        required?: boolean,
+        onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void }) {
     const { units } = useContext(UnitsContext);
 
     const options = units.map(u => {
@@ -14,10 +15,13 @@ export default function UnitsSelect({selectName, selectTitle, defaultValue, requ
         </option>
     });
 
-    return <select defaultValue={defaultValue ?? ""}  id={selectName}
+    return <select id={selectName} value={value ?? ""} style={{maxWidth: "7rem"}} 
                     name={selectName}
                     title={selectTitle} className="form-select"
-                    required = {required}>
+                    required = {required} onChange={onChange}>
+        <option value="">
+            No unit
+        </option>
         {options}
     </select>;
 }

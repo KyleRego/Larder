@@ -19,6 +19,14 @@ public class UnitService(IServiceProviderWrapper serviceProvider,
         return UnitDto.FromEntity(insertedUnit);
     }
 
+    public async Task CreateUnits(List<UnitDto> unitDtos)
+    {
+        IEnumerable<Unit> units = unitDtos.Select<UnitDto, Unit>
+                (dto => new(CurrentUserId(), dto.Name,dto.Type));
+
+        await _repository.InsertAll(units);
+    }
+
     public async Task DeleteUnit(string id)
     {
         Unit unit = await _repository.Get(CurrentUserId(), id)
