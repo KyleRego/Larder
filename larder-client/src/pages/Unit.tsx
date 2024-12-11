@@ -84,7 +84,7 @@ export default function UnitPage() {
                 <div className="mt-4 d-flex justify-content-center">
                 { adding ? (
                     <UnitConversionForm handleSubmit={handleCreateConversion}
-                                        unitConversion={null}
+                                        initialUnitConversion={null}
                                         handleCancel={() => setAdding(false)} />
                 ) : (
                     <button onClick={() => setAdding(true)} 

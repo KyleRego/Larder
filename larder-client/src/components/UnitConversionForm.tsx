@@ -1,12 +1,21 @@
+import { useState } from "react";
 import { UnitConversionDto } from "../types/UnitConversionDto";
 import UnitsSelect from "./UnitsSelect";
 
-export default function UnitConversionForm({handleSubmit, handleCancel, unitConversion}
+export default function UnitConversionForm({handleSubmit, handleCancel, initialUnitConversion}
     : { handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void,
-        unitConversion: UnitConversionDto | null,
+        initialUnitConversion: UnitConversionDto | null,
         handleCancel: () => void}) {
-
+    const [unitConversion, setUnitConversion] = useState<UnitConversionDto>(
+        initialUnitConversion ?? { id: null, unitId: "", targetUnitId: "", targetUnitsPerUnit: 1}
+    )
     const submitBtnText = unitConversion ? "Update conversion" : "Create conversion";
+
+    function updateUnitConversion<K extends keyof UnitConversionDto>(field: K, value: UnitConversionDto[K]) {
+        setUnitConversion(
+            { ...unitConversion, [field]: value}
+        );
+    }
 
     return (
         <div className="shadow-sm p-4 border">
@@ -17,7 +26,8 @@ export default function UnitConversionForm({handleSubmit, handleCancel, unitConv
                             <span>1</span>
                             <UnitsSelect selectName="unitId"
                                     selectTitle="Choose unit"
-                                    defaultValue={unitConversion?.unitId ?? null} />
+                                    value={unitConversion?.unitId ?? null}
+                                    onChange={(e) => updateUnitConversion("unitId", e.target.value)} />
                             <span>=</span>
                         </div>
 
@@ -26,13 +36,16 @@ export default function UnitConversionForm({handleSubmit, handleCancel, unitConv
                             <input id="targetUnitsPerUnit" defaultValue={unitConversion?.targetUnitsPerUnit}
                                     name="targetUnitsPerUnit"
                                     title="Target units per unit" min="1" step="any" type="number"
-                                    className="form-control" required />
+                                    className="form-control" required
+                                    value={unitConversion.targetUnitsPerUnit}
+                                    onChange={(e) => updateUnitConversion("targetUnitsPerUnit", parseFloat(e.target.value))} />
                         </div>
 
                         <div>
                             <UnitsSelect selectName="targetUnitId"
                                     selectTitle="Choose target unit"
-                                    defaultValue={unitConversion?.targetUnitId ?? null} />
+                                    value={unitConversion?.targetUnitId ?? null}
+                                    onChange={(e) => updateUnitConversion("targetUnitId", e.target.value)} />
                         </div>
                     </div>
 

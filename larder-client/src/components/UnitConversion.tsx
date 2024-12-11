@@ -92,7 +92,7 @@ export default function({unitConversion, parentRefresh}
             <div className="d-flex align-items-center column-gap-5 row-gap-3">
                 <div>
                     <UnitConversionForm handleSubmit={handleUpdate}
-                                        unitConversion={unitConversion}
+                                        initialUnitConversion={unitConversion}
                                         handleCancel={() => setEditing(false)} />
                 </div>
                 <div>
