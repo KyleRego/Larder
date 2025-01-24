@@ -11,7 +11,8 @@ public class QuantityMathService(IServiceProviderWrapper serviceProvider,
     private readonly IUnitConversionService _unitConvService = unitConvService;
 
     /// <summary>
-    /// Returns a quantity with the unit of minuend by subtracting the subtrahend
+    /// Subtracts subtrahend from minuend and returns
+    /// a quantity with the unit of minuend
     /// </summary>
     /// <param name="minuend"></param>
     /// <param name="subtrahend"></param>
@@ -63,10 +64,12 @@ public class QuantityMathService(IServiceProviderWrapper serviceProvider,
     /// <param name="conversion"></param>
     /// <param name="targetUnit"></param>
     /// <returns></returns>
-    public static Quantity ConvertQuantity(Quantity quantity, UnitConversionDto conversion, Unit desiredUnit)
+    public static Quantity ConvertQuantity(Quantity quantity,
+                                            UnitConversionDto conversion,
+                                            Unit desiredUnit)
     {
         if (quantity.Unit == null)
-            throw new ApplicationException("quantity must have a unit to be converted");
+            throw new ApplicationException("Quantity must have a unit to be converted");
 
         if (quantity.Unit.Id == desiredUnit.Id)
             return quantity;
@@ -91,7 +94,7 @@ public class QuantityMathService(IServiceProviderWrapper serviceProvider,
         }
         else
         {
-            throw new ApplicationException("conversion is not valid to convert this quantity with");
+            throw new ApplicationException("Conversion is not valid to convert this quantity with");
         }
     }
 }

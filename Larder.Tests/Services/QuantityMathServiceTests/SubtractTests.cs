@@ -1,3 +1,4 @@
+using Larder.Dtos;
 using Larder.Models;
 using Larder.Services;
 using Larder.Services.Impl;
@@ -15,6 +16,7 @@ public class SubtractTests : ServiceTestsBase
         {
            UnitId = null, Unit = null, Amount = 6 
         };
+
         Quantity subtrahend = new()
         {
             UnitId = null, Unit = null, Amount = 3.5
@@ -53,4 +55,43 @@ public class SubtractTests : ServiceTestsBase
         Assert.Equal(104-78, result.Amount);
         Assert.Equal(unit.Id, result.UnitId);
     }
+
+    [Fact]
+    public async void SubtractQuantityWithCompatibleUnitsDoesConversion()
+    {
+        Unit grams = new(mockUserId, "g", UnitType.Mass);
+        Unit milligrams = new(mockUserId, "mg", UnitType.Mass);
+
+        UnitConversionDto conversion = UnitConversionDto.FromEntity(
+            new(mockUserId, grams.Id, milligrams.Id, 1000)
+            {
+                UnitType = UnitType.Mass
+            }
+        );
+
+        Quantity minuend = new()
+        {
+            Amount = 2000,
+            UnitId = milligrams.Id,
+            Unit = milligrams
+        };
+
+        Quantity subtrahend = new()
+        {
+            Amount = 1,
+            UnitId = grams.Id,
+            Unit = grams
+        };
+
+        _unitConversionService.Setup(
+            m => m.FindConversion(minuend, subtrahend)
+        ).ReturnsAsync(conversion);
+
+        QuantityMathService sut = new(mSP.Object, _unitConversionService.Object);
+
+        Quantity result = await sut.Subtract(minuend, subtrahend);
+
+        Assert.Equal(1000, result.Amount);
+        Assert.Equal(milligrams.Id, result.UnitId);
+    } 
 }
