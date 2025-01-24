@@ -28,4 +28,29 @@ public class RecipeIngredient(  string userId,
     public Ingredient Ingredient { get; set; } = null!;
 
     public required Quantity Quantity { get; set; } = new() { Amount = 1 };
+
+    public Quantity QuantityAvailable()
+    {
+        if (Ingredient == null)
+            throw new ApplicationException("Recipe ingredient has null ingredient");
+        if (Ingredient.Item == null)
+            throw new ApplicationException("Recipe ingredient ingredient has null item");
+        if (Ingredient.Item.QuantityComp == null)
+            throw new ApplicationException($"Ingredient item {Ingredient.Item} does not have a quantity");
+        
+        return Ingredient.Item.QuantityComp.Quantity;
+    }
+
+    public void SetItemQuantity(Quantity quantity)
+    {
+        if (Ingredient.Item.QuantityComp == null)
+            throw new ApplicationException("Ingredient item does not have a quantity");
+
+        Ingredient.Item.QuantityComp.Quantity = quantity;
+    }
+
+    public string Name()
+    {
+        return Ingredient.Item.Name;
+    }
 }

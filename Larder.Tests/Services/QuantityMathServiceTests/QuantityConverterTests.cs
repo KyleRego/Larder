@@ -1,15 +1,18 @@
-using Larder.Helpers;
+using Larder.Dtos;
 using Larder.Models;
+using Larder.Services.Impl;
 
-namespace Larder.Tests.Helpers;
+namespace Larder.Tests.Services.QuantityMathServiceTests;
 
-public class QuantityConverterTests
+// This is testing a static method so there is no need
+// to inherit ServiceTestsBase
+public class ConvertQuantityTests
 {
     private readonly Unit _gramsUnit;
     private readonly Unit _milligramsUnit;
-    private readonly UnitConversion _gramsToMilligramsConversion;
+    private readonly UnitConversionDto _gramsToMilligramsConversion;
 
-    public QuantityConverterTests()
+    public ConvertQuantityTests()
     {
         string mockUserId = Guid.NewGuid().ToString();
 
@@ -18,10 +21,12 @@ public class QuantityConverterTests
         _milligramsUnit = new(mockUserId, "Milligrams", UnitType.Mass);
 
         _gramsToMilligramsConversion
-                = new(mockUserId, _gramsUnit.Id, _milligramsUnit.Id, 1000)
-        {
-            UnitType = UnitType.Mass
-        };
+                = UnitConversionDto.FromEntity(
+                    new(mockUserId, _gramsUnit.Id, _milligramsUnit.Id, 1000)
+            {
+                UnitType = UnitType.Mass
+            }
+        );
     }
 
     [Fact]
@@ -34,7 +39,7 @@ public class QuantityConverterTests
             UnitId = _gramsUnit.Id
         };
 
-        Quantity result = QuantityConverter.Convert(
+        Quantity result = QuantityMathService.ConvertQuantity(
             quantity, _gramsToMilligramsConversion, _milligramsUnit);
 
         Assert.Equal(_milligramsUnit.Id, result.UnitId);
@@ -51,7 +56,7 @@ public class QuantityConverterTests
             UnitId = _milligramsUnit.Id
         };
 
-        Quantity result = QuantityConverter.Convert(
+        Quantity result = QuantityMathService.ConvertQuantity(
             quantity, _gramsToMilligramsConversion, _gramsUnit);
 
         Assert.Equal(_gramsUnit.Id, result.UnitId);

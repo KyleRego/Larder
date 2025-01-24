@@ -9,6 +9,7 @@ public interface IUnitConversionService
     public Task<UnitConversionDto> CreateUnitConversion(UnitConversionDto dto);
     public Task<UnitConversionDto> UpdateUnitConversion(UnitConversionDto dto);
     public Task DeleteUnitConversion(string id);
+    public Task<UnitConversionDto?> FindConversion(Quantity first, Quantity second);
 }
 
 public class UnitConversionService(
@@ -78,6 +79,17 @@ public class UnitConversionService(
             ?? throw new ApplicationException("Unit conversion to update not found.");
 
         await _unitConversionData.Delete(unitConversion);
+    }
+
+    public async Task<UnitConversionDto?> FindConversion(Quantity first, Quantity second)
+    {
+        if (first.UnitId == null || second.UnitId == null)
+            throw new ApplicationException("There must be units to find a conversion for");
+
+        UnitConversion? conversion = 
+                    await _unitConversionData.FindByUnitIdsEitherWay(
+                        CurrentUserId(), first.UnitId, second.UnitId);
+        return (conversion != null) ? UnitConversionDto.FromEntity(conversion) : null;
     }
 
     public async Task<UnitConversionDto> UpdateUnitConversion(UnitConversionDto dto)

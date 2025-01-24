@@ -16,6 +16,12 @@ public class RecipeRepository(AppDbContext dbContext)
                 : RepositoryBase<Recipe, RecipeSortOptions>(dbContext),
                                                         IRecipeRepository
 {
+    /// <summary>
+    /// Get recipe, eager load recipe ingredients and ingredients
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public override async Task<Recipe?> Get(string userId, string id)
     {
         return await _dbContext.Recipes

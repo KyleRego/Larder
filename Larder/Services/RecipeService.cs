@@ -1,8 +1,7 @@
 using Larder.Dtos;
-using Larder.Helpers;
 using Larder.Models;
-using Larder.Models.ItemComponent;
 using Larder.Repository;
+using Larder.Services.Interface;
 
 namespace Larder.Services;
 
@@ -13,8 +12,7 @@ public interface IRecipeService
                                                 string? searchName);
     public Task<RecipeDto> CreateRecipe(RecipeDto recipeDto);
     public Task<RecipeDto> UpdateRecipe(RecipeDto recipeDto);
-    public Task<CookRecipeResultDto> CookRecipe(
-                                    CookRecipeDto cookedRecipeDto);
+    public Task CookRecipe(CookRecipeDto cookRecipeDto);
     public Task DeleteRecipe(string id);
 }
 
@@ -22,74 +20,35 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
                                     IRecipeRepository repository,
                                     IIngredientRepository ingRepo,
                                     IFoodRepository foodRepo,
-                                    IUnitConversionRepository unitConvRepo)
+                                    IQuantityMathService quantMathService)
                      : AppServiceBase(serviceProvider), IRecipeService
 {
     private readonly IRecipeRepository _repository = repository;
     private readonly IIngredientRepository _ingRepo = ingRepo;
     private readonly IFoodRepository _foodRepo = foodRepo;
-    private readonly IUnitConversionRepository _unitConvRepo = unitConvRepo;
+    private readonly IQuantityMathService _quantMathService = quantMathService;
 
-    public async Task<CookRecipeResultDto> CookRecipe(CookRecipeDto cookedRecipeDto)
+    public async Task CookRecipe(CookRecipeDto cookedRecipeDto)
     {
-        CookRecipeResultDto result = new();
-
-        Recipe recipe = await _repository.Get(CurrentUserId(), cookedRecipeDto.RecipeId)
-                ?? throw new ApplicationException("recipe was not found");
+        Recipe recipe = await _repository.Get(CurrentUserId(),
+                                            cookedRecipeDto.RecipeId)
+            ?? throw new ApplicationException("Recipe was not found");
 
         foreach(RecipeIngredient recipeIngredient in recipe.RecipeIngredients)
         {
-            // TODO: Refactor this to use Item instead of Ingredient
-            // since item now has quantity component
-            Ingredient ingredient = recipeIngredient.Ingredient;
+            Quantity quantNeeded = recipeIngredient.Quantity;
+            Quantity quantAvail = recipeIngredient.QuantityAvailable();
 
-            string? ingredientUnitId = ingredient.Item.QuantityComp!.Quantity.UnitId;
-            string? recipeIngredientUnitId = recipeIngredient.Quantity.UnitId;
-
-            if (ingredientUnitId == recipeIngredientUnitId)
-            {
-                ingredient.Item.QuantityComp.Quantity.Amount -= recipeIngredient.Quantity.Amount;
-                
-            }
-            else if (ingredient.Item.QuantityComp.Quantity.Unit != null &&
-                        recipeIngredient.Quantity.Unit != null)
-            {
-                UnitConversion? conversion = 
-                    await _unitConvRepo.FindByUnitIdsEitherWay(
-                        CurrentUserId(), ingredient.Item.QuantityComp.Quantity.Unit.Id,
-                                            recipeIngredient.Quantity.Unit.Id);
-                
-                if (conversion != null)
-                {
-                    Quantity quantityUsed = QuantityConverter.Convert
-                        (recipeIngredient.Quantity, conversion,
-                                                ingredient.Item.QuantityComp.Quantity.Unit);
-                
-                    ingredient.Item.QuantityComp.Quantity.Amount -= quantityUsed.Amount;
-
-                    // that could result in the ingredient quantity being below 0
-                }
-                else
-                {
-                    throw new ApplicationException("recipe ingredient and ingredient units do not have a conversion");
-                }
-            }
-            else
-            {
-                throw new ApplicationException("recipe ingredient quantity and ingredient do not both have units");
-            }
-
-            result.Ingredients.Add(IngredientDto.FromEntity(ingredient.Item));
+            recipeIngredient.SetItemQuantity(await _quantMathService.Subtract(quantAvail, quantNeeded));
         }
 
         Item foodItem = await _foodRepo.FindOrCreateBy(CurrentUserId(), recipe.Name);
         ArgumentNullException.ThrowIfNull(foodItem.Food);
+
         foodItem.Food.Servings += recipe.ServingsProduced;
 
         await _repository.Update(recipe);
         await _foodRepo.Update(foodItem);
-
-        return result;
     }
 
     public async Task<RecipeDto> CreateRecipe(RecipeDto recipeDto)
