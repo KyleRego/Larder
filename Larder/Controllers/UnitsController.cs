@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Larder.Repository;
 using Larder.Dtos;
-using Larder.Services;
+using Larder.Services.Interface;
 
 namespace Larder.Controllers;
 

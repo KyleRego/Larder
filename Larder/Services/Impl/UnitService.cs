@@ -1,8 +1,9 @@
 using Larder.Dtos;
 using Larder.Models;
 using Larder.Repository;
+using Larder.Services.Interface;
 
-namespace Larder.Services;
+namespace Larder.Services.Impl;
 
 public class UnitService(IServiceProviderWrapper serviceProvider,
                                                     IUnitRepository repository)

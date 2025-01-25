@@ -7,6 +7,8 @@ using Larder.Repository;
 using Larder.Services;
 using Larder.Policies.Requirements;
 using Larder.Policies.Handlers;
+using Larder.Services.Interface;
+using Larder.Services.Impl;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -36,8 +38,6 @@ builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<IIngredientService, IngredientService>();
 builder.Services.AddScoped<IFoodService, FoodService>();
 builder.Services.AddScoped<IUnitService, UnitService>();
-builder.Services.AddScoped<ITimelineService, TimelineService>();
-builder.Services.AddScoped<IConsumedFoodService, ConsumedFoodService>();
 builder.Services.AddScoped<IUnitConversionService, UnitConversionService>();
 builder.Services.AddScoped<IDemoService, DemoService>();
 builder.Services.AddScoped<IServiceProviderWrapper, ServiceProviderWrapper>();

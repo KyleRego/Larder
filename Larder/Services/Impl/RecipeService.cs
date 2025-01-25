@@ -3,18 +3,7 @@ using Larder.Models;
 using Larder.Repository;
 using Larder.Services.Interface;
 
-namespace Larder.Services;
-
-public interface IRecipeService
-{
-    public Task<RecipeDto?> GetRecipe(string id);
-    public Task<List<RecipeDto>> GetRecipes(RecipeSortOptions sortBy,
-                                                string? searchName);
-    public Task<RecipeDto> CreateRecipe(RecipeDto recipeDto);
-    public Task<RecipeDto> UpdateRecipe(RecipeDto recipeDto);
-    public Task CookRecipe(CookRecipeDto cookRecipeDto);
-    public Task DeleteRecipe(string id);
-}
+namespace Larder.Services.Impl;
 
 public class RecipeService(IServiceProviderWrapper serviceProvider,
                                     IRecipeRepository repository,

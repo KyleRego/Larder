@@ -1,13 +1,9 @@
 using Larder.Dtos;
 using Larder.Models;
+using Larder.Services.Interface;
 using Microsoft.AspNetCore.Identity;
 
-namespace Larder.Services;
-
-public interface IDemoService
-{
-    public Task CreateDemo();
-}
+namespace Larder.Services.Impl;
 
 public class DemoService(UserManager<ApplicationUser> userManager,
                         SignInManager<ApplicationUser> signInManager,

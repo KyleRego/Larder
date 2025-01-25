@@ -2,20 +2,9 @@ using Larder.Dtos;
 using Larder.Models;
 using Larder.Models.ItemComponent;
 using Larder.Repository;
+using Larder.Services.Interface;
 
-namespace Larder.Services;
-
-public interface IFoodService
-{
-    public Task<ItemDto?> GetFood(string id);
-
-    public Task<List<ItemDto>> GetFoods(FoodSortOptions sortOrder,
-                                                    string? search);
-
-    public Task<FoodDto> UpdateServings(FoodServingsDto dto);
-
-    public Task<(FoodDto, ConsumedFoodDto)> EatFood(FoodServingsDto dto);
-}
+namespace Larder.Services.Impl;
 
 public class FoodService(   IServiceProviderWrapper serviceProvider,
                             IFoodRepository foodRepository,

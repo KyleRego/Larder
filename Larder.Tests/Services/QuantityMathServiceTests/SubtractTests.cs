@@ -1,7 +1,7 @@
 using Larder.Dtos;
 using Larder.Models;
-using Larder.Services;
 using Larder.Services.Impl;
+using Larder.Services.Interface;
 
 namespace Larder.Tests.Services.QuantityMathServiceTests;
 

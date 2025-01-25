@@ -1,16 +1,11 @@
 using Larder.Dtos;
 using Larder.Models;
 using Larder.Repository;
+using Larder.Services.Interface;
 
-namespace Larder.Services;
+namespace Larder.Services.Impl;
 
-public interface IUnitConversionService
-{
-    public Task<UnitConversionDto> CreateUnitConversion(UnitConversionDto dto);
-    public Task<UnitConversionDto> UpdateUnitConversion(UnitConversionDto dto);
-    public Task DeleteUnitConversion(string id);
-    public Task<UnitConversionDto?> FindConversion(Quantity first, Quantity second);
-}
+
 
 public class UnitConversionService(
                                 IServiceProviderWrapper serviceProvider,

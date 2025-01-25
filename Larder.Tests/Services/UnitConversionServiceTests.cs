@@ -1,7 +1,7 @@
 using Larder.Dtos;
 using Larder.Models;
 using Larder.Repository;
-using Larder.Services;
+using Larder.Services.Impl;
 
 namespace Larder.Tests.Services;
 

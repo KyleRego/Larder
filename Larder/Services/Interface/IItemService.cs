@@ -1,7 +1,7 @@
 using Larder.Dtos;
 using Larder.Repository;
 
-namespace Larder.Services;
+namespace Larder.Services.Interface;
 
 public interface IItemService
 {

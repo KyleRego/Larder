@@ -1,5 +1,5 @@
 using Larder.Dtos;
-using Larder.Services;
+using Larder.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Larder.Controllers;

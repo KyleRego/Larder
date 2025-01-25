@@ -2,8 +2,9 @@ using Larder.Dtos;
 using Larder.Models;
 using Larder.Models.ItemComponent;
 using Larder.Repository;
+using Larder.Services.Interface;
 
-namespace Larder.Services;
+namespace Larder.Services.Impl;
 
 public class ItemService(IServiceProviderWrapper serviceProvider,
                                         IItemRepository itemData)

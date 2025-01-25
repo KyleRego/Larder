@@ -1,4 +1,4 @@
-using Larder.Services;
+using Larder.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
