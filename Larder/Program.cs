@@ -41,6 +41,7 @@ builder.Services.AddScoped<IUnitService, UnitService>();
 builder.Services.AddScoped<IUnitConversionService, UnitConversionService>();
 builder.Services.AddScoped<IDemoService, DemoService>();
 builder.Services.AddScoped<IServiceProviderWrapper, ServiceProviderWrapper>();
+builder.Services.AddScoped<IQuantityMathService, QuantityMathService>();
 
 builder.Services.AddSingleton<IAuthorizationHandler, UserCanAccessEntityHandler>();
 
