@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Larder.Models.ItemComponent;
+using Larder.Models.ItemComponents;
 
 namespace Larder.Models;
 
@@ -32,21 +32,36 @@ public class RecipeIngredient(  string userId,
     public Quantity QuantityAvailable()
     {
         if (Ingredient == null)
-            throw new ApplicationException("Recipe ingredient has null ingredient");
+            throw new ApplicationException(
+                "Recipe ingredient does not have an associated ingredient");
         if (Ingredient.Item == null)
-            throw new ApplicationException("Recipe ingredient ingredient has null item");
-        if (Ingredient.Item.QuantityComp == null)
-            throw new ApplicationException($"Ingredient item {Ingredient.Item} does not have a quantity");
-        
-        return Ingredient.Item.QuantityComp.Quantity;
+            throw new ApplicationException(
+                "Recipe ingredient does not have an associated item");
+
+        return Ingredient.Item.Quantity();
     }
 
     public void SetItemQuantity(Quantity quantity)
     {
         if (Ingredient.Item.QuantityComp == null)
-            throw new ApplicationException("Ingredient item does not have a quantity");
-
-        Ingredient.Item.QuantityComp.Quantity = quantity;
+        {
+            if (quantity.Unit == null)
+            {
+                Ingredient.Item.Amount = (int)quantity.Amount;
+            }
+            else
+            {
+                Ingredient.Item.QuantityComp = new()
+                {
+                    Item = Ingredient.Item,
+                    Quantity = quantity
+                };
+            }
+        }
+        else
+        {
+            Ingredient.Item.QuantityComp.Quantity = quantity;
+        }
     }
 
     public string Name()

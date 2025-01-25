@@ -1,6 +1,6 @@
 using Larder.Dtos;
 
-namespace Larder.Models.ItemComponent;
+namespace Larder.Models.ItemComponents;
 
 public class Food : ItemComponent
 {

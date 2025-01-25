@@ -1,4 +1,4 @@
-using Larder.Models.ItemComponent;
+using Larder.Models.ItemComponents;
 
 namespace Larder.Models;
 
@@ -23,4 +23,15 @@ public class Item(string userId, string name, int amount,
 
     // TODO: Allow uploading an image for the item
 
+    public Quantity Quantity()
+    {
+        if (QuantityComp == null)
+        {
+            return new() { Amount = Amount };
+        }
+        else
+        {
+            return QuantityComp.Quantity;
+        }
+    }
 }

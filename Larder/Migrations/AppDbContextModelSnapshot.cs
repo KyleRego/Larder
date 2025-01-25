@@ -184,7 +184,7 @@ namespace Larder.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("Larder.Models.ItemComponent.Food", b =>
+            modelBuilder.Entity("Larder.Models.ItemComponents.Food", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -239,7 +239,7 @@ namespace Larder.Migrations
                     b.ToTable("Foods");
                 });
 
-            modelBuilder.Entity("Larder.Models.ItemComponent.Ingredient", b =>
+            modelBuilder.Entity("Larder.Models.ItemComponents.Ingredient", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -255,7 +255,7 @@ namespace Larder.Migrations
                     b.ToTable("Ingredients");
                 });
 
-            modelBuilder.Entity("Larder.Models.ItemComponent.QuantityComponent", b =>
+            modelBuilder.Entity("Larder.Models.ItemComponents.QuantityComponent", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -542,7 +542,7 @@ namespace Larder.Migrations
 
             modelBuilder.Entity("IngredientRecipe", b =>
                 {
-                    b.HasOne("Larder.Models.ItemComponent.Ingredient", null)
+                    b.HasOne("Larder.Models.ItemComponents.Ingredient", null)
                         .WithMany()
                         .HasForeignKey("IngredientsId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -577,11 +577,11 @@ namespace Larder.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Larder.Models.ItemComponent.Food", b =>
+            modelBuilder.Entity("Larder.Models.ItemComponents.Food", b =>
                 {
                     b.HasOne("Larder.Models.Item", "Item")
                         .WithOne("Food")
-                        .HasForeignKey("Larder.Models.ItemComponent.Food", "ItemId");
+                        .HasForeignKey("Larder.Models.ItemComponents.Food", "ItemId");
 
                     b.OwnsOne("Larder.Models.Quantity", "ServingSize", b1 =>
                         {
@@ -616,20 +616,20 @@ namespace Larder.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Larder.Models.ItemComponent.Ingredient", b =>
+            modelBuilder.Entity("Larder.Models.ItemComponents.Ingredient", b =>
                 {
                     b.HasOne("Larder.Models.Item", "Item")
                         .WithOne("Ingredient")
-                        .HasForeignKey("Larder.Models.ItemComponent.Ingredient", "ItemId");
+                        .HasForeignKey("Larder.Models.ItemComponents.Ingredient", "ItemId");
 
                     b.Navigation("Item");
                 });
 
-            modelBuilder.Entity("Larder.Models.ItemComponent.QuantityComponent", b =>
+            modelBuilder.Entity("Larder.Models.ItemComponents.QuantityComponent", b =>
                 {
                     b.HasOne("Larder.Models.Item", "Item")
                         .WithOne("QuantityComp")
-                        .HasForeignKey("Larder.Models.ItemComponent.QuantityComponent", "ItemId");
+                        .HasForeignKey("Larder.Models.ItemComponents.QuantityComponent", "ItemId");
 
                     b.OwnsOne("Larder.Models.Quantity", "Quantity", b1 =>
                         {
@@ -706,7 +706,7 @@ namespace Larder.Migrations
 
             modelBuilder.Entity("Larder.Models.RecipeIngredient", b =>
                 {
-                    b.HasOne("Larder.Models.ItemComponent.Ingredient", "Ingredient")
+                    b.HasOne("Larder.Models.ItemComponents.Ingredient", "Ingredient")
                         .WithMany("RecipeIngredients")
                         .HasForeignKey("IngredientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -887,7 +887,7 @@ namespace Larder.Migrations
                     b.Navigation("QuantityComp");
                 });
 
-            modelBuilder.Entity("Larder.Models.ItemComponent.Ingredient", b =>
+            modelBuilder.Entity("Larder.Models.ItemComponents.Ingredient", b =>
                 {
                     b.Navigation("RecipeIngredients");
                 });

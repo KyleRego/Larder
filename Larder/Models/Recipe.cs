@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Larder.Models.ItemComponent;
+using Larder.Models.ItemComponents;
 
 namespace Larder.Models;
 

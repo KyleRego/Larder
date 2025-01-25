@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Larder.Models;
 using Larder.Policies.Requirements;
 using Larder.Services;
+using Larder.Tests.TestData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 
@@ -10,9 +11,8 @@ namespace Larder.Tests.Services;
 public abstract class ServiceTestsBase
 {
     protected readonly Mock<IServiceProviderWrapper> mSP;
-    protected static readonly string mockUserId = Guid.NewGuid().ToString();
-    protected readonly Claim mockUserClaim = new(ClaimTypes.NameIdentifier,
-                                                                mockUserId);
+    protected static readonly string mockUserId = TestUser.TestUserId();
+    protected readonly Claim mockUserClaim = TestUser.TestUserClaim();
 
     public ServiceTestsBase()
     {

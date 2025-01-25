@@ -6,21 +6,21 @@ using Larder.Services.Interface;
 namespace Larder.Services.Impl;
 
 public class RecipeService(IServiceProviderWrapper serviceProvider,
-                                    IRecipeRepository repository,
-                                    IIngredientRepository ingRepo,
-                                    IFoodRepository foodRepo,
+                                    IRecipeRepository recipeData,
+                                    IIngredientRepository ingredientData,
+                                    IFoodRepository foodData,
                                     IQuantityMathService quantMathService)
                      : AppServiceBase(serviceProvider), IRecipeService
 {
-    private readonly IRecipeRepository _repository = repository;
-    private readonly IIngredientRepository _ingRepo = ingRepo;
-    private readonly IFoodRepository _foodRepo = foodRepo;
+    private readonly IRecipeRepository _recipeData = recipeData;
+    private readonly IIngredientRepository _ingredientData = ingredientData;
+    private readonly IFoodRepository _foodData = foodData;
     private readonly IQuantityMathService _quantMathService = quantMathService;
 
-    public async Task CookRecipe(CookRecipeDto cookedRecipeDto)
+    public async Task CookRecipe(CookRecipeDto cookRecipeDto)
     {
-        Recipe recipe = await _repository.Get(CurrentUserId(),
-                                            cookedRecipeDto.RecipeId)
+        Recipe recipe = await _recipeData.Get(CurrentUserId(),
+                                            cookRecipeDto.RecipeId)
             ?? throw new ApplicationException("Recipe was not found");
 
         foreach(RecipeIngredient recipeIngredient in recipe.RecipeIngredients)
@@ -28,16 +28,18 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
             Quantity quantNeeded = recipeIngredient.Quantity;
             Quantity quantAvail = recipeIngredient.QuantityAvailable();
 
-            recipeIngredient.SetItemQuantity(await _quantMathService.Subtract(quantAvail, quantNeeded));
+            recipeIngredient.SetItemQuantity(
+                await _quantMathService.Subtract(quantAvail, quantNeeded)
+            );
         }
 
-        Item foodItem = await _foodRepo.FindOrCreateBy(CurrentUserId(), recipe.Name);
+        Item foodItem = await _foodData.FindOrCreateBy(CurrentUserId(), recipe.Name);
         ArgumentNullException.ThrowIfNull(foodItem.Food);
 
         foodItem.Food.Servings += recipe.ServingsProduced;
 
-        await _repository.Update(recipe);
-        await _foodRepo.Update(foodItem);
+        await _recipeData.Update(recipe);
+        await _foodData.Update(foodItem);
     }
 
     public async Task<RecipeDto> CreateRecipe(RecipeDto recipeDto)
@@ -53,7 +55,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
                 ingredientDto.Quantity.UnitId = null;
             }
 
-            Item ingItem = await _ingRepo.FindOrCreateBy(
+            Item ingItem = await _ingredientData.FindOrCreateBy(
                                 CurrentUserId(), ingredientDto.Name);
             ArgumentNullException.ThrowIfNull(ingItem.Ingredient);
 
@@ -73,22 +75,22 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
 
         recipe.RecipeIngredients = recipeIngredients;
 
-        await _repository.Insert(recipe);
+        await _recipeData.Insert(recipe);
 
         return recipeDto;
     }
 
     public async Task DeleteRecipe(string id)
     {
-        Recipe recipe = await _repository.Get(CurrentUserId(), id)
+        Recipe recipe = await _recipeData.Get(CurrentUserId(), id)
             ?? throw new ApplicationException("recipe to delete not found");
     
-        await _repository.Delete(recipe);
+        await _recipeData.Delete(recipe);
     }
 
     public async Task<RecipeDto?> GetRecipe(string id)
     {
-        Recipe? recipe = await _repository.Get(CurrentUserId(), id);
+        Recipe? recipe = await _recipeData.Get(CurrentUserId(), id);
 
         if (recipe == null) return null;
 
@@ -97,7 +99,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
 
     public async Task<List<RecipeDto>> GetRecipes(RecipeSortOptions sortBy, string? searchName)
     {
-        List<Recipe> recipes = await _repository.GetAll(CurrentUserId(), sortBy, searchName);
+        List<Recipe> recipes = await _recipeData.GetAll(CurrentUserId(), sortBy, searchName);
         List<RecipeDto> recipeDtos = [];
 
         foreach (Recipe recipe in recipes)
@@ -113,7 +115,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
         if (recipeDto.Id == null)
                     throw new ApplicationException("recipe Id was missing");
     
-        Recipe recipe = await _repository.Get(CurrentUserId(), recipeDto.Id)
+        Recipe recipe = await _recipeData.Get(CurrentUserId(), recipeDto.Id)
                     ?? throw new ApplicationException("recipe not found");
 
         recipe.Name = recipeDto.Name;
@@ -124,7 +126,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
         {
             Item ingItem = recipe.Ingredients.FirstOrDefault(ing =>
                                             ing.Item.Name == ingDto.Name)?.Item
-                ?? await _ingRepo.FindOrCreateBy(CurrentUserId(), ingDto.Name);
+                ?? await _ingredientData.FindOrCreateBy(CurrentUserId(), ingDto.Name);
 
             RecipeIngredient newRecipeIngredient
                             = new(CurrentUserId(), recipe.Id,ingItem.Id)
@@ -136,6 +138,6 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
 
         recipe.RecipeIngredients = newRecipeIngredients;
 
-        return RecipeDto.FromEntity(await _repository.Update(recipe));
+        return RecipeDto.FromEntity(await _recipeData.Update(recipe));
     }
 }

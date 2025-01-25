@@ -4,7 +4,7 @@ using Larder.Dtos;
 using Larder.Services.Interface;
 using Larder.Services.Impl;
 
-namespace Larder.Tests.Services;
+namespace Larder.Tests.Services.RecipeServiceTests;
 
 public class RecipeServiceTests : ServiceTestsBase
 {

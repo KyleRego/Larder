@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Larder.Data;
 using Larder.Models;
-using Larder.Models.ItemComponent;
+using Larder.Models.ItemComponents;
 
 namespace Larder.Repository;
 
