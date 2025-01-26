@@ -65,7 +65,7 @@ public class FoodsController(IFoodService foodService)
 
         try
         {
-            (FoodDto result, ConsumedFoodDto _) = await _foodService.EatFood(dto);
+            FoodDto result = await _foodService.EatFood(dto);
 
             return new ApiResponse<FoodDto>(result, "Food eaten!",
                                                         ApiResponseType.Success);

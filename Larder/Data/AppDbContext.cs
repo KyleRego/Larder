@@ -17,7 +17,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public required DbSet<RecipeStep> RecipeSteps { get; set; }
     public required DbSet<Unit> Units { get; set; }
     public required DbSet<Utensil> Utensils { get; set; }
-    public required DbSet<ConsumedFood> ConsumedFoods { get; set; }
     public required DbSet<UnitConversion> UnitConversions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -7,13 +7,10 @@ using Larder.Services.Interface;
 namespace Larder.Services.Impl;
 
 public class FoodService(   IServiceProviderWrapper serviceProvider,
-                            IFoodRepository foodRepository,
-                            IConsumedFoodRepository consumedFoodRepository)
+                            IFoodRepository foodRepository)
                                 : AppServiceBase(serviceProvider), IFoodService
 {
     private readonly IFoodRepository _foodData = foodRepository;
-    private readonly IConsumedFoodRepository _consumedFoodData
-                                                    = consumedFoodRepository;
 
     private static void ValidateFoodItem(Item item)
     {
@@ -57,7 +54,7 @@ public class FoodService(   IServiceProviderWrapper serviceProvider,
         return FoodDto.FromEntity(foodItem);
     }
 
-    public async Task<(FoodDto, ConsumedFoodDto)> EatFood(FoodServingsDto dto)
+    public async Task<FoodDto> EatFood(FoodServingsDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto.FoodId);
 
@@ -72,21 +69,12 @@ public class FoodService(   IServiceProviderWrapper serviceProvider,
         if (dto.Servings > food.Servings)
             throw new ApplicationException("there are not that many servings");
 
-        ConsumedFood consumedFood = new(CurrentUserId())
-        {
-            FoodName = foodItem.Name,
-            DateConsumed = DateOnly.FromDateTime(DateTime.Now),
-            CaloriesConsumed = food.Calories * dto.Servings,
-            GramsProteinConsumed = food.GramsProtein * dto.Servings
-        };
-
         food.Servings -= dto.Servings;
         
         food.UpdateTotals();
 
         await _foodData.Update(foodItem);
-        await _consumedFoodData.Insert(consumedFood);
 
-        return (FoodDto.FromEntity(foodItem), ConsumedFoodDto.FromEntity(consumedFood));
+        return FoodDto.FromEntity(food);
     }
 }

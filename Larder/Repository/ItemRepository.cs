@@ -47,10 +47,10 @@ public class ItemRepository(AppDbContext dbContext)
                 query = query.OrderByDescending(item => item.Name);
                 break;
             case ItemSortOptions.Amount:
-                query = query.OrderBy(item => item.Amount);
+                query = query.OrderBy(item => item.Quantity.Amount);
                 break;
             case ItemSortOptions.Amount_Desc:
-                query = query.OrderByDescending(item => item.Amount);
+                query = query.OrderByDescending(item => item.Quantity.Amount);
                 break;
             case ItemSortOptions.Description:
                 query = query.OrderBy(item => item.Description);

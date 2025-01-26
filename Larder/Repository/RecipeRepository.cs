@@ -33,21 +33,22 @@ public class RecipeRepository(AppDbContext dbContext)
     public override async Task<List<Recipe>> GetAll(string userId,
                                 RecipeSortOptions sortBy, string? search)
     {
-        var baseQuery = _dbContext.Recipes.Where(recipe => recipe.UserId == userId);
+        var searchQuery = _dbContext.Recipes.Where(recipe => recipe.UserId == userId);
 
-        var baseSearchQuery = (search == null) ? baseQuery : baseQuery.Where(
-                                            recipe => recipe.Name.Contains(search));
+        searchQuery = (search == null) ? searchQuery : searchQuery.Where(
+                                    recipe => recipe.Name.Contains(search));
 
         switch (sortBy)
         {
             case RecipeSortOptions.Name:
-                return await baseSearchQuery.OrderBy(rec => rec.Name).ToListAsync();
+                searchQuery = searchQuery.OrderBy(rec => rec.Name);
+                break;
 
             case RecipeSortOptions.Name_Desc:
-                return await baseSearchQuery.OrderByDescending(rec => rec.Name).ToListAsync();
-
-            default:
-                return await baseSearchQuery.ToListAsync();
+                searchQuery = searchQuery.OrderByDescending(rec => rec.Name);
+                break;
         }
+
+        return await searchQuery.ToListAsync();
     }
 }

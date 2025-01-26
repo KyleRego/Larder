@@ -24,30 +24,26 @@ public class IngredientRepository(AppDbContext dbContext)
         if (string.IsNullOrWhiteSpace(name))
             throw new ApplicationException("ingredient name cannot be null or whitespace");
         
-        Item? ingredientItem = _dbContext.Items.FirstOrDefault(item =>
+        Item? item = _dbContext.Items.FirstOrDefault(item =>
             item.UserId == userId && item.Name == name && item.Ingredient != null);
 
-        if (ingredientItem != null) return ingredientItem;
+        if (item != null) return item;
 
-        ingredientItem = new(userId, name, 1, null);
-
-        QuantityComponent quantityComponent = new()
+        item = new(userId, name, null)
         {
-            Item = ingredientItem,
             Quantity = new() { Amount = 1 }
         };
-        ingredientItem.QuantityComp = quantityComponent;
 
         Ingredient ing = new()
         {
-            Item = ingredientItem
+            Item = item
         };
-        ingredientItem.Ingredient = ing;
+        item.Ingredient = ing;
 
-        _dbContext.Items.Add(ingredientItem);
+        _dbContext.Items.Add(item);
         await _dbContext.SaveChangesAsync();
 
-        return ingredientItem;
+        return item;
     }
 
     public override async Task<Item?> Get(string userId, string id)
@@ -66,31 +62,31 @@ public class IngredientRepository(AppDbContext dbContext)
                                                 IngredientSortOptions sortBy,
                                                                 string? search)
     {
-        var baseQuery = _dbContext.Items
+        var searchQuery = _dbContext.Items
                                     .Include(item => item.Ingredient)
-                                    .Include(item => item.QuantityComp)
+                                    .Include(item => item.Quantity)
                                     .Where(item => 
             item.UserId == userId && item.Ingredient != null);
 
-        var baseSearchQuery = (search == null) ? baseQuery
-            : baseQuery.Where(ingredient => ingredient.Name.Contains(search));
+        searchQuery = (search == null) ? searchQuery
+            : searchQuery.Where(ingredient => ingredient.Name.Contains(search));
 
         switch (sortBy)
         {
             case IngredientSortOptions.Name:
-                return await baseSearchQuery.OrderBy(item => item.Name).ToListAsync();
-
+                searchQuery = searchQuery.OrderBy(item => item.Name);
+                break;
             case IngredientSortOptions.Name_Desc:
-                return await baseSearchQuery.OrderByDescending(item => item.Name).ToListAsync();
-
+                searchQuery = searchQuery.OrderByDescending(item => item.Name);
+                break;
             case IngredientSortOptions.Quantity:
-                return await baseSearchQuery.OrderBy(item => item.QuantityComp!.Quantity.Amount).ToListAsync();
-
+                searchQuery = searchQuery.OrderBy(item => item.Quantity.Amount);
+                break;
             case IngredientSortOptions.Quantity_Desc:
-                return await baseSearchQuery.OrderByDescending(item => item.QuantityComp!.Quantity.Amount).ToListAsync();
-
-            default:
-                return await baseSearchQuery.ToListAsync();
+                searchQuery = searchQuery.OrderByDescending(item => item.Quantity.Amount);
+                break;
         }
+
+        return await searchQuery.ToListAsync();
     }
 }

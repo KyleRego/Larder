@@ -28,8 +28,6 @@ builder.Services.AddScoped<IUnitRepository, UnitRepository>();
 builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
 builder.Services.AddScoped<IIngredientRepository, IngredientRepository>();
 builder.Services.AddScoped<IFoodRepository, FoodRepository>();
-builder.Services.AddScoped<IConsumedFoodRepository,
-                                                ConsumedFoodRepository>();
 builder.Services.AddScoped<IUnitConversionRepository,
                                                 UnitConversionRepository>();
 

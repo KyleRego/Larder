@@ -19,34 +19,39 @@ public class CookRecipeTests : ServiceTestsBase
         {
             ServingsProduced = 1
         };
-        Item foodItemCreated = new(userId, recipe.Name, recipe.ServingsProduced);
+        Item foodItemCreated = new(userId, recipe.Name)
+        {
+            Quantity = new() { Amount = 1 }
+        };
         foodItemCreated.Food = new()
         {
             Item = foodItemCreated
         };
 
-        Item rice = new(userId, "Family size rice roni box", 2);
+        Item rice = new(userId, "Family size rice roni box")
+        {
+            Quantity = new() { Amount = 2 }
+        };
         rice.Ingredient = new()
         {
             Item = rice,
             Recipes = [recipe]
         };
 
-        Item butter = new(userId, "Butter", 1);
+        Item butter = new(userId, "Butter")
+        {
+            Quantity = new() { Amount = 1 }
+        };
         butter.Ingredient = new()
         {
             Item = butter,
             Recipes = [recipe]
         };
-        butter.QuantityComp = new()
+        butter.Quantity = new()
         {
-            Item = butter,
-            Quantity = new()
-            {
-                UnitId = tablespoons.Id,
-                Unit = tablespoons,
-                Amount = 16
-            }
+            UnitId = tablespoons.Id,
+            Unit = tablespoons,
+            Amount = 16
         };
 
         RecipeIngredient riceRecIng = new(userId, recipe.Id, rice.Id)
@@ -55,7 +60,7 @@ public class CookRecipeTests : ServiceTestsBase
             Ingredient = rice.Ingredient
         };
 
-        RecipeIngredient butRecIng =  new(userId, recipe.Id, butter.Id)
+        RecipeIngredient butRecIng = new(userId, recipe.Id, butter.Id)
         {
             Quantity = new()
             {
@@ -83,7 +88,7 @@ public class CookRecipeTests : ServiceTestsBase
             .ReturnsAsync((Quantity)
                 new() { Amount = 1 });
         mockQuantMathService.Setup(
-            m => m.Subtract(butter.Quantity(), butRecIng.Quantity))
+            m => m.Subtract(butter.Quantity, butRecIng.Quantity))
             .ReturnsAsync((Quantity)
                 new()
                 {

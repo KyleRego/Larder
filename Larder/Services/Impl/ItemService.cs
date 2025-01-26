@@ -15,22 +15,13 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
     public async Task<ItemDto> CreateItem(ItemDto itemDto)
     {
         string userId = CurrentUserId();
+        Quantity quantity = itemDto.Quantity != null ?
+            Quantity.FromDto(itemDto.Quantity) : new() { Amount = 1 };
 
-        Item item = new(userId, itemDto.Name, itemDto.Amount, itemDto.Description);
-
-        if (itemDto.QuantityComp != null)
+        Item item = new(userId, itemDto.Name, itemDto.Description)
         {
-            QuantityComponentDto quantCompDto = itemDto.QuantityComp;
-
-            QuantityComponent quantityComponent = new()
-            {
-                Item = item,
-                Quantity = Quantity.FromDto(quantCompDto.Quantity),
-                QuantityPerItem = quantCompDto.QuantityPerItem != null ?
-                         Quantity.FromDto(quantCompDto.QuantityPerItem) : null
-            };
-            item.QuantityComp = quantityComponent;
-        }
+            Quantity = quantity
+        };
 
         item.Food = (itemDto.Food != null) ? Food.FromDto(itemDto.Food, item) : null;
 
@@ -75,9 +66,10 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
             throw new ApplicationException("Item to update not found");
 
         item.Name = itemDto.Name;
-        item.Amount = itemDto.Amount;
-        item.Description = itemDto.Description;
+        if (itemDto.Quantity != null)
+            item.Quantity = Quantity.FromDto(itemDto.Quantity);
 
+        item.Description = itemDto.Description;
         item.Food = (itemDto.Food != null) ? Food.FromDto(itemDto.Food, item) : null;
         
         return ItemDto.FromEntity(await _itemData.Update(item));

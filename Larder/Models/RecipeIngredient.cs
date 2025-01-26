@@ -38,30 +38,12 @@ public class RecipeIngredient(  string userId,
             throw new ApplicationException(
                 "Recipe ingredient does not have an associated item");
 
-        return Ingredient.Item.Quantity();
+        return Ingredient.Item.Quantity;
     }
 
     public void SetItemQuantity(Quantity quantity)
     {
-        if (Ingredient.Item.QuantityComp == null)
-        {
-            if (quantity.Unit == null)
-            {
-                Ingredient.Item.Amount = (int)quantity.Amount;
-            }
-            else
-            {
-                Ingredient.Item.QuantityComp = new()
-                {
-                    Item = Ingredient.Item,
-                    Quantity = quantity
-                };
-            }
-        }
-        else
-        {
-            Ingredient.Item.QuantityComp.Quantity = quantity;
-        }
+        Ingredient.Item.Quantity = quantity;
     }
 
     public string Name()

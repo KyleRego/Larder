@@ -39,7 +39,10 @@ public class FoodRepository(AppDbContext dbContext)
 
         if (foodItem != null) return foodItem;
 
-        foodItem = new(userId, name, 1, null);
+        foodItem = new(userId, name, null)
+        {
+            Quantity = new() { Amount = 1 }
+        };
         Food food = new()
         {
             Item = foodItem,
@@ -55,7 +58,7 @@ public class FoodRepository(AppDbContext dbContext)
     public override async Task<Item?> Get(string userId, string id)
     {
         return await _dbContext.Items.Include(item => item.Food)
-                                        .Include(item => item.QuantityComp)
+                                        .Include(item => item.Quantity)
                                         .FirstOrDefaultAsync(item =>
             item.Id == id && item.UserId == userId && item.Food != null);
     }

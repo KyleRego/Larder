@@ -2,7 +2,7 @@ using Larder.Dtos;
 using Larder.Models;
 using Larder.Models.ItemComponents;
 
-namespace Larder.Tests.Model;
+namespace Larder.Tests.Models;
 
 public class FoodTests
 {
@@ -11,7 +11,10 @@ public class FoodTests
     [Fact]
     public void FromDtoCreatesFoodEntity()
     {
-        Item item = new(userId, "Test item", 1);
+        Item item = new(userId, "Test item")
+        {
+            Quantity = new() { Amount = 1 }
+        };
         FoodDto dto = new()
         {
             Servings = 11,

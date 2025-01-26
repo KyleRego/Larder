@@ -29,28 +29,31 @@ public class UnitRepository(AppDbContext dbContext)
     public override async Task<List<Unit>> GetAll(string userId,
                                     UnitSortOptions sortBy, string? search)
     {
-        var baseQuery = _dbContext.Units.Where(unit => unit.UserId == userId);
+        var searchQuery = _dbContext.Units.Where(unit => unit.UserId == userId);
 
-        var baseSearchQuery = (search == null) ? baseQuery
-                    : baseQuery.Where(unit => unit.Name.Contains(search));
+        searchQuery = (search == null) ? searchQuery
+                    : searchQuery.Where(unit => unit.Name.Contains(search));
 
         switch (sortBy)
         {
             case UnitSortOptions.Name:
-                return await baseSearchQuery.OrderBy(u => u.Name).ToListAsync();
+                searchQuery = searchQuery.OrderBy(u => u.Name);
+                break;
 
             case UnitSortOptions.Name_Desc:
-                return await baseSearchQuery.OrderByDescending(u => u.Name).ToListAsync();
+                searchQuery = searchQuery.OrderByDescending(u => u.Name);
+                break;
 
             case UnitSortOptions.Type:
-                return await baseSearchQuery.OrderBy(u => u.Type).ToListAsync();
+                searchQuery = searchQuery.OrderBy(u => u.Type);
+                break;
 
             case UnitSortOptions.Type_Desc:
-                return await baseSearchQuery.OrderByDescending(u => u.Type).ToListAsync();
-
-            default:
-                return await baseSearchQuery.ToListAsync();
+                searchQuery = searchQuery.OrderByDescending(u => u.Type);
+                break;
         }
+
+        return await searchQuery.ToListAsync();
     }
 
     public async Task InsertAll(IEnumerable<Unit> units)

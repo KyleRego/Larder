@@ -7,11 +7,10 @@ public class ItemDto
 {
     public string? Id { get; set; }
     public required string Name { get; set; }
-    public required int Amount { get; set; }
     public string? Description { get; set; }
     public FoodDto? Food { get; set; }
     public IngredientDto? Ingredient { get; set; }
-    public QuantityComponentDto? QuantityComp { get; set; }
+    public QuantityDto? Quantity { get; set; }
 
     public static ItemDto FromEntity(Item item)
     {
@@ -19,7 +18,6 @@ public class ItemDto
         {
             Id = item.Id,
             Name = item.Name,
-            Amount = item.Amount,
             Description = item.Description,
             Food = (item.Food != null)
                         ? FoodDto.FromEntity(item.Food) : null,
@@ -27,8 +25,8 @@ public class ItemDto
             Ingredient = (item.Ingredient != null)
                         ? IngredientDto.FromEntity(item.Ingredient) : null,
 
-            QuantityComp = (item.QuantityComp != null)
-                ? QuantityComponentDto.FromEntity(item.QuantityComp) : null
+            Quantity = (item.Quantity != null)
+                ? QuantityDto.FromEntity(item.Quantity) : null
         };
 
         return itemDto;

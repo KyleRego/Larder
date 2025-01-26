@@ -12,5 +12,5 @@ public interface IFoodService
 
     public Task<FoodDto> UpdateServings(FoodServingsDto dto);
 
-    public Task<(FoodDto, ConsumedFoodDto)> EatFood(FoodServingsDto dto);
+    public Task<FoodDto> EatFood(FoodServingsDto dto);
 }
