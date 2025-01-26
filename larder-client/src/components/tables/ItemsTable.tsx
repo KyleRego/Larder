@@ -4,6 +4,7 @@ import { ItemSortOptions } from "../../types/ItemSortOptions";
 import SortingTableHeader from "../SortingTableHeader";
 import { apiClient } from "../../util/axios";
 import { useNavigate } from "react-router";
+import QuantitySpan from "../QuantitySpan";
 
 export default function ItemsTable({searchParam} : {searchParam: string }) {
     const [items, setItems] = useState<ItemDto[]>([]);         
@@ -14,7 +15,7 @@ export default function ItemsTable({searchParam} : {searchParam: string }) {
     })
 
     useEffect(() => {
-        apiClient.get<ItemDto[]>("/api/items", { params: {search: searchParam}})
+        apiClient.get<ItemDto[]>("/api/items", { params: {search: searchParam, sortOrder: sortOrder}})
             .then(res => setItems(res.data))
             .catch(error => console.log(error));
     }, [searchParam, sortOrder])
@@ -57,7 +58,12 @@ function ItemRow({item} : {item: ItemDto}) : ReactNode {
     return (
         <tr id={item.id!} onClick={handleRowClick} role="button">
             <th scope="row">{item.name}</th>
-            <td>{item.amount}</td>
+            <td>
+                { item.quantity ?
+                    <QuantitySpan quantity={item.quantity} />
+                    : "N/a"
+                }
+            </td>
             <td>{item.description}</td>
         </tr>
     );

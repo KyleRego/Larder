@@ -1,29 +1,45 @@
+import { useState } from "react";
 import { QuantityDto } from "../types/QuantityDto";
 import UnitsSelect from "./UnitsSelect";
 
-export default function QuantityInput({name, title, quantity, required = false,
-                                    onChangeAmount = () => {}, onChangeUnit = () => {}}
-            : { name: string,
-                title: string,
-                quantity: QuantityDto | null,
-                required?: boolean,
-                onChangeAmount?: (e: React.ChangeEvent<HTMLInputElement>) => void,
-                onChangeUnit?: (e: React.ChangeEvent<HTMLSelectElement>) => void}) {
+export default function QuantityInput({quantity, handleAmountChange, handleUnitChange}
+    : { quantity: QuantityDto | null,
+        handleAmountChange:  (e: React.ChangeEvent<HTMLInputElement>) => void,
+        handleUnitChange:  (e: React.ChangeEvent<HTMLSelectElement>) => void }) {
+
+    const [withUnit, setWithUnit] = useState<boolean>(false);
+
     return (
         <>
-            <div className="d-flex justify-content-center column-gap-3" title={title}>
-                <div>
-                    <input  name={name} title={`${title} amount:`}
-                            className="form-control" type="number"
-                            value={String(quantity?.amount ?? 0)}
-                            required={required}
-                            onChange={onChangeAmount} />
-                </div>
-
+            <div className="d-flex flex-wrap row-gap-3 column-gap-3">
                 <div className="flex-grow-1">
-                    <UnitsSelect selectName={`${name}Unit`}
-                            selectTitle={`${title} unit:`}
-                            value={quantity?.unitId ?? null} onChange={onChangeUnit} />
+                    <div className="d-flex align-items-center column-gap-3" title="Quantity:">
+                    <div>
+                        <input  title={`Amount:`}
+                                className="form-control" type="number"
+                                value={String(quantity?.amount ?? 0)}
+                                onChange={handleAmountChange} />
+                    </div>
+
+                    { withUnit === false &&
+                    <div>
+                        <button type="button"
+                            className="btn btn-outline-primary"
+                            onClick={() => setWithUnit(true)}>
+                            + unit
+                        </button>
+                    </div>
+                    }
+
+                    { withUnit === true &&
+                    <div className="">
+                        <UnitsSelect selectName={`${name}Unit`}
+                                selectTitle={`Unit:`}
+                                value={quantity?.unitId ?? null}
+                                onChange={handleUnitChange} />
+                    </div>
+                    }
+                </div>
                 </div>
             </div>
         </>

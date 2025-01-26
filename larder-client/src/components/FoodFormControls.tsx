@@ -3,7 +3,6 @@ import { foodNutritionData } from "../data/foodNutritionData";
 import { ItemDto } from "../types/ItemDto";
 import QuantityInput from "./QuantityInput";
 import { FoodDto } from "../types/FoodDto";
-import { QuantityComponentDto } from "../types/QuantityComponentDto";
 import { QuantityDto } from "../types/QuantityDto";
 
 export function FoodStockFormControls({item, setItem}
@@ -23,47 +22,21 @@ export function FoodStockFormControls({item, setItem}
         });
     }
 
-    function updateItemQuantity<K extends keyof QuantityComponentDto>(field: K, value: QuantityComponentDto[K]) {
+    function updateItemQuantity<K extends keyof QuantityDto>(field: K, value: QuantityDto[K]) {
         setItem((prevItem) => {
-            return { ...prevItem, quantityComp: { ...prevItem.quantityComp, [field]: value } } as ItemDto;
+            return { ...prevItem, quantity: { ...prevItem.quantity, [field]: value } } as ItemDto;
         })
     }
 
     useEffect(() => {
         const numServings = item.amount * item.food!.servingsPerItem;
-
         updateItemFood("servings" as keyof FoodDto, numServings);
-
     }, [item.amount, item.food!.servingsPerItem]);
 
     useEffect(() => {
         const newAmount = item.food!.servings * item.food!.servingSize.amount;
-        const newQuantity : QuantityDto = {
-            id: null, unitName: null, amount: newAmount,
-            unitId: item.quantityComp?.quantity?.unitId ?? null
-        };
-
-        updateItemQuantity("quantity" as keyof QuantityComponentDto, newQuantity);
+        updateItemQuantity("amount" as keyof QuantityDto, newAmount);
     }, [item.food!.servings]);
-
-    useEffect(() => {
-        const newAmountPerItem = item.food!.servingsPerItem * item.food!.servingSize.amount;
-        const newUnit = item.food!.servingSize.unitId;
-
-        const newQuantityPerItem: QuantityDto = {id: null, unitName: null, amount: newAmountPerItem, unitId: newUnit};
-
-        updateItemQuantity("quantityPerItem" as keyof QuantityComponentDto, newQuantityPerItem);
-    }, [item.food!.servingSize, item.food?.servingsPerItem]);
-
-    useEffect(() => {
-        if (!item.quantityComp?.quantityPerItem) return;
-
-        const newAmount = item.amount * item.quantityComp!.quantityPerItem!.amount;
-        const newUnit = item.quantityComp?.quantityPerItem.unitId ?? "";
-        const newQuantity : QuantityDto = {id: null, unitName: null, amount: newAmount, unitId: newUnit };
-
-        updateItemQuantity("quantity" as keyof QuantityComponentDto, newQuantity);
-    }, [item.quantityComp?.quantityPerItem])
 
     return (<>
         <h3>Food stock 🥫</h3>
@@ -84,9 +57,9 @@ export function FoodStockFormControls({item, setItem}
 
         <div className="mt-2">
             <label className="form-label">Serving size:</label>
-            <QuantityInput title="Serving size" name="servingSize" quantity={item.food!.servingSize}
-                onChangeAmount={(e) => updateItemFoodServingSize("amount", parseFloat(e.target.value))}
-                onChangeUnit={(e) => updateItemFoodServingSize("unitId", e.target.value)} />
+            <QuantityInput quantity={item.food!.servingSize}
+                handleAmountChange={(e) => updateItemFoodServingSize("amount", parseFloat(e.target.value))}
+                handleUnitChange={(e) => updateItemFoodServingSize("unitId", e.target.value)} />
         </div>
     </>)
 }

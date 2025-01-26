@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ItemDto } from "../types/ItemDto";
 import { useApiRequest } from "../hooks/useApiRequest";
-import EditLink from "../components/EditLink";
 import Loading from "../components/Loading";
 import { formatQuantity } from "../types/QuantityDto";
 import FoodNutritionTable from "../components/tables/FoodNutritionTable";
+import QuantitySpan from "../components/QuantitySpan";
 
 export default function Item() {
     const { id } = useParams<{id: string}>();
@@ -41,10 +41,14 @@ export default function Item() {
                 </ol>
             </nav>
 
-            <div className="page-flex-header">
-                <h1>{item.name}</h1>
+            <div className="d-flex justify-content-around align-items-center">
+                <h1>{`${item.name}`}</h1>
 
-                <EditLink path={`/items/${id}/edit`} title="Edit" />
+                { item.quantity &&
+                <h2>
+                    <QuantitySpan quantity={item.quantity} />
+                </h2>
+                }
             </div>
 
             {item.food !== null &&
@@ -78,7 +82,7 @@ export default function Item() {
                     <div className="card">
                         <div className="card-body">
                             <h4 className="card-title">Eat quantity:</h4>
-                            <p>Quantity available: {item.quantityComp !== null ? formatQuantity(item.quantityComp.quantity!) : "N/a"}</p>
+                            <p>Quantity available: {item.quantity !== null ? formatQuantity(item.quantity!) : "N/a"}</p>
                 
                             <p>Serving size: {formatQuantity(item.food!.servingSize)}</p>
                         </div>

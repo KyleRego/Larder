@@ -2,14 +2,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ItemDto } from "../types/ItemDto";
 import { FoodNutritionFormControls, FoodStockFormControls } from "../components/FoodFormControls";
-import QuantityComponentFormControls from "../components/QuantityComponentFormControls";
+import QuantityInput from "../components/QuantityInput";
 import { useApiRequest } from "../hooks/useApiRequest";
 import { FoodDto } from "../types/FoodDto";
+import { QuantityDto } from "../types/QuantityDto";
 
 export default function NewItem() {
     const [item, setItem] = useState<ItemDto>({
         id: null, name: "", amount: 1, description: null,
-        food: null, ingredient: null, quantityComp: null
+        food: null, ingredient: null, quantity: null
     });
 
     useEffect(() => {
@@ -20,6 +21,19 @@ export default function NewItem() {
         setItem((prevItem) => {
             return { ...prevItem, food: prevItem.food, [field]: value }
         });
+    }
+
+    function updateItemQuantity<Q extends keyof QuantityDto>(
+        field: Q,
+        value: QuantityDto[Q]
+        ) {
+        setItem((prevItem) => ({
+            ...prevItem,
+            quantity: {
+            ...prevItem.quantity ?? { id: null, amount: 0, unitId: null, unitName: null },
+            [field]: value,
+            }
+        }));
     }
 
     const { handleRequest } = useApiRequest();
@@ -36,10 +50,6 @@ export default function NewItem() {
             [name]: checked
         }));
     };
-
-    function itemNeedsQuantity(): boolean {
-        return item.food !== null || item.ingredient !== null
-    }
 
     async function handleSubmit(e : React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -100,9 +110,7 @@ export default function NewItem() {
                                 } else {
                                     updateItem("food", null)
                                 }
-                                if (!itemNeedsQuantity()) {
-                                    updateItem("quantityComp", null);
-                                }
+
                             }} />
                         <label className="btn btn-outline-primary" htmlFor="is-food-toggle">Food</label>
 
@@ -126,9 +134,10 @@ export default function NewItem() {
                             </div>
 
                             <div className="flex-grow-1">
-                                <label htmlFor="amount-input">Amount:</label>
-                                <input className="form-control" type="number" id="amount-input" name="amount" title="Item amount:" required
-                                    value={item.amount} onChange={(e) => updateItem("amount", parseFloat(e.target.value))} />
+                                <label htmlFor="amount-input">Quantity:</label>
+                                <QuantityInput quantity={item.quantity}
+                                    handleAmountChange={(e) => updateItemQuantity("amount", parseFloat(e.target.value))}
+                                    handleUnitChange={(e) => updateItemQuantity("unitId", e.target.value)} />
                             </div>
                         </div>
     
@@ -143,14 +152,6 @@ export default function NewItem() {
                     <>
                         <div className="new-element border border-black p-4 my-4">
                             <FoodStockFormControls item={item} setItem={setItem} />
-                        </div>
-                    </>)}
-
-                    {(itemNeedsQuantity() === true) && (
-                    <>
-                        <div className="new-element border border-black p-4 mt-4">
-                            <h3>Quantity ⚖️</h3>
-                            <QuantityComponentFormControls item={item} setItem={setItem} />
                         </div>
                     </>)}
 
