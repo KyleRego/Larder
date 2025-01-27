@@ -31,11 +31,11 @@ function App() {
         <AuthedContext.Provider value={{authed, setAuthed}}>
             <UnitsContext.Provider value={{units, setUnits}}>
                 <MessageContext.Provider value={{message, setMessage}}>
-                    <div className="bg-secondary min-vh-100 d-flex flex-column">
+                    <div className="bg-secondary-subtle min-vh-100 d-flex flex-column">
                         <NavBar />
-                        <div className="container-fluid flex-grow-1 h-100 d-flex flex-column justify-content-center">
-                            <div className="flex-grow-1 m-4 mb-5 card shadow-sm">
-                                <div className="card-body">
+                        <div className="container mt-2 d-flex flex-column justify-content-center">
+                            <div className="">
+                                <div className="">
                                     <Outlet />
                                 </div>
                             </div>

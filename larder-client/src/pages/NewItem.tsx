@@ -163,7 +163,7 @@ export default function NewItem() {
                     </>)}
 
                     <div className="mt-4 d-flex justify-content-center">
-                        <button id="submit-new-item" type="submit" className="btn btn-primary">Create item</button>
+                        <button id="submit-new-item" type="submit" className="btn btn-secondary">Create item</button>
                     </div>
                 </form>
             </div>
