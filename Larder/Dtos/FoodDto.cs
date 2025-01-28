@@ -28,12 +28,11 @@ public class FoodDto
     public double TotalCalories { get; set; }
     public double TotalGramsProtein { get; set; }
 
-    public static FoodDto FromEntity(Food food)
+    public static FoodDto FromEntity(Nutrition food)
     {
         return new()
         {
             Id = food.Id,
-            Servings = food.Servings,
             ServingSize = QuantityDto.FromEntity(food.ServingSize),
 
             Calories = food.Calories,
@@ -50,8 +49,6 @@ public class FoodDto
             GramsDietaryFiber = food.GramsDietaryFiber,
             GramsTotalSugars = food.GramsTotalSugars,
 
-            TotalCalories = food.TotalCalories,
-            TotalGramsProtein = food.TotalGramsProtein
         };
     }
 

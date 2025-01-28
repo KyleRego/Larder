@@ -19,14 +19,11 @@ public class FoodServiceTests : ServiceTestsBase
             Quantity = new() { Amount = 4 }
         };
 
-        Food food = new()
+        Nutrition food = new()
         {
             Item = foodItem,
-            Servings = 4,
             Calories = 100,
-            GramsProtein = 2,
-            TotalCalories = 400,
-            TotalGramsProtein = 8
+            GramsProtein = 2
         };
         foodItem.Food = food;
 
@@ -35,50 +32,50 @@ public class FoodServiceTests : ServiceTestsBase
         _mockFoodRepo.Setup(m => m.Get(mockUserId, _foodItemId)).ReturnsAsync(foodItem);
     }
 
-    [Fact]
-    public async void EatServings_CreatesAConsumedFoodAndDecreasesServingsOfFood()
-    {
-        Item foodItem = _foodMap[_foodItemId];
+    // [Fact]
+    // public async void EatServings_CreatesAConsumedFoodAndDecreasesServingsOfFood()
+    // {
+    //     Item foodItem = _foodMap[_foodItemId];
 
-        FoodServingsDto dto = new()
-        {
-            FoodId = "1",
-            Servings = 1
-        };
-        FoodService sut = new(mSP.Object, _mockFoodRepo.Object);
+    //     FoodServingsDto dto = new()
+    //     {
+    //         FoodId = "1",
+    //         Servings = 1
+    //     };
+    //     FoodService sut = new(mSP.Object, _mockFoodRepo.Object);
 
-        FoodDto foodDtoResult = await sut.EatFood(dto);
+    //     FoodDto foodDtoResult = await sut.EatFood(dto);
 
-        double expectedCalories = dto.Servings * foodItem.Food!.Calories;
-        double expectedProtein = dto.Servings * foodItem.Food.GramsProtein;
+    //     double expectedCalories = dto.Servings * foodItem.Food!.Calories;
+    //     double expectedProtein = dto.Servings * foodItem.Food.GramsProtein;
 
-        Assert.Equal(3, foodDtoResult.Servings);
+    //     Assert.Equal(3, foodDtoResult.Servings);
 
-        _mockFoodRepo.Verify(_ => _.Update(It.Is<Item>(item =>
-            item.Food!.Servings == 3
-        )), Times.Once);
-    }
+    //     _mockFoodRepo.Verify(_ => _.Update(It.Is<Item>(item =>
+    //         item.Food!.Servings == 3
+    //     )), Times.Once);
+    // }
 
-    [Fact]
-    public async void EatFood_UpdatesFoodTotalProperties()
-    {
-        Item foodItem = _foodMap[_foodItemId];
-        foodItem.Food!.TotalCalories = 0;
-        foodItem.Food.TotalGramsProtein = 0;
+    // [Fact]
+    // public async void EatFood_UpdatesFoodTotalProperties()
+    // {
+    //     Item foodItem = _foodMap[_foodItemId];
+    //     foodItem.Food!.TotalCalories = 0;
+    //     foodItem.Food.TotalGramsProtein = 0;
 
-        _mockFoodRepo.Setup(m => m.Get(mockUserId, foodItem.Id)).ReturnsAsync(foodItem);
+    //     _mockFoodRepo.Setup(m => m.Get(mockUserId, foodItem.Id)).ReturnsAsync(foodItem);
 
-        FoodService sut = new(mSP.Object, _mockFoodRepo.Object);
+    //     FoodService sut = new(mSP.Object, _mockFoodRepo.Object);
 
-        FoodServingsDto dto = new()
-        {
-            FoodId = foodItem.Id,
-            Servings = 1
-        };
+    //     FoodServingsDto dto = new()
+    //     {
+    //         FoodId = foodItem.Id,
+    //         Servings = 1
+    //     };
 
-        FoodDto foodDto = await sut.EatFood(dto);
+    //     FoodDto foodDto = await sut.EatFood(dto);
 
-        Assert.Equal(foodDto.Calories * foodDto.Servings, foodDto.TotalCalories);
-        Assert.Equal(foodDto.GramsProtein * foodDto.Servings, foodDto.TotalGramsProtein);
-    }
+    //     Assert.Equal(foodDto.Calories * foodDto.Servings, foodDto.TotalCalories);
+    //     Assert.Equal(foodDto.GramsProtein * foodDto.Servings, foodDto.TotalGramsProtein);
+    // }
 }

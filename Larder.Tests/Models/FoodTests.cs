@@ -35,9 +35,8 @@ public class FoodTests
             TotalCalories = 0
         };
 
-        Food food = Food.FromDto(dto, item);
+        Nutrition food = Nutrition.FromDto(dto, item);
 
-        Assert.Equal(11, food.Servings);
         Assert.Equal(363, food.ServingSize.Amount);
         Assert.Equal(17, food.Calories);
         Assert.Equal(19, food.GramsProtein);
@@ -47,7 +46,5 @@ public class FoodTests
         Assert.Equal(2, food.GramsDietaryFiber);
         Assert.Equal(283, food.GramsTotalCarbs);
         Assert.Equal(284, food.GramsTotalSugars);
-        Assert.Equal(food.Servings * food.Calories, food.TotalCalories);
-        Assert.Equal(food.Servings * food.GramsProtein, food.TotalGramsProtein);
     }
 }

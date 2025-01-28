@@ -2,13 +2,12 @@ using Larder.Dtos;
 
 namespace Larder.Models.ItemComponents;
 
-public class Food : ItemComponent
+
+public class Nutrition : ItemComponent
 {
-    public double Servings { get; set; }
+    public Quantity ServingSize { get; set; }
+            = new() { Amount = 1, UnitId = null};
 
-    public Quantity ServingSize { get; set; } = new() { Amount = 1, UnitId = null};
-
-    // Calories per serving
     public double Calories { get; set; }
 
     public double GramsProtein { get; set; }
@@ -29,23 +28,12 @@ public class Food : ItemComponent
 
     public double GramsTotalSugars { get; set; }
 
-    // TotalCalories should be equal to Servings X Calories etc
-    public double TotalCalories { get; set; }
-    public double TotalGramsProtein { get; set; }
-
-    public void UpdateTotals()
+    public static Nutrition FromDto(FoodDto dto, Item item)
     {
-        TotalCalories = Calories * Servings;
-        TotalGramsProtein = GramsProtein * Servings;
-    }
-
-    public static Food FromDto(FoodDto dto, Item item)
-    {
-        Food food = new()
+        Nutrition food = new()
         {
             Item = item,
             Calories = dto.Calories,
-            Servings = dto.Servings,
             ServingSize = Quantity.FromDto(dto.ServingSize),
             GramsProtein = dto.GramsProtein,
             GramsTotalFat = dto.GramsTotalFat,
@@ -57,7 +45,6 @@ public class Food : ItemComponent
             MilligramsCholesterol = dto.MilligramsCholesterol,
             MilligramsSodium = dto.MilligramsSodium
         };
-        food.UpdateTotals();
         return food;
     }
 }

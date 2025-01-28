@@ -43,7 +43,7 @@ public class FoodRepository(AppDbContext dbContext)
         {
             Quantity = new() { Amount = 1 }
         };
-        Food food = new()
+        Nutrition food = new()
         {
             Item = foodItem,
         };
@@ -82,12 +82,6 @@ public class FoodRepository(AppDbContext dbContext)
                 break;
             case FoodSortOptions.Name_Desc:
                 query = query.OrderByDescending(item => item.Name);
-                break;
-            case FoodSortOptions.Servings:
-                query = query.OrderBy(item => item.Food!.Servings);
-                break;
-            case FoodSortOptions.Servings_Desc:
-                query = query.OrderByDescending(item => item.Food!.Servings);
                 break;
             case FoodSortOptions.Calories:
                 query = query.OrderBy(item => item.Food!.Calories);
@@ -148,20 +142,6 @@ public class FoodRepository(AppDbContext dbContext)
                 break;
             case FoodSortOptions.GramsTotalSugars_Desc:
                 query = query.OrderBy(item => item.Food!.GramsProtein);
-                break;
-
-
-            case FoodSortOptions.TotalCalories:
-                query = query.OrderBy(item => item.Food!.TotalCalories);
-                break;
-            case FoodSortOptions.TotalCalories_Desc:
-                query = query.OrderByDescending(item => item.Food!.TotalCalories);
-                break;
-            case FoodSortOptions.TotalGramsProtein:
-                query = query.OrderBy(item => item.Food!.TotalGramsProtein);
-                break;
-            case FoodSortOptions.TotalGramsProtein_Desc:
-                query = query.OrderByDescending(item => item.Food!.TotalGramsProtein);
                 break;
             default:
                 break;

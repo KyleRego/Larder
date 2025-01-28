@@ -42,12 +42,8 @@ public class FoodService(   IServiceProviderWrapper serviceProvider,
 
         Item foodItem = await _foodData.Get(CurrentUserId(), dto.FoodId)
                 ?? throw new ApplicationException("food not found");
-        Food? food = foodItem.Food;
+        Nutrition? food = foodItem.Food;
         ArgumentNullException.ThrowIfNull(food);
-
-        food.Servings = dto.Servings;
-
-        food.UpdateTotals();
 
         await _foodData.Update(foodItem);
 
@@ -63,15 +59,8 @@ public class FoodService(   IServiceProviderWrapper serviceProvider,
 
         Item foodItem = await _foodData.Get(CurrentUserId(), dto.FoodId)
             ?? throw new ApplicationException("food not found");
-        Food? food = foodItem.Food;
+        Nutrition? food = foodItem.Food;
         ArgumentNullException.ThrowIfNull(food);
-
-        if (dto.Servings > food.Servings)
-            throw new ApplicationException("there are not that many servings");
-
-        food.Servings -= dto.Servings;
-        
-        food.UpdateTotals();
 
         await _foodData.Update(foodItem);
 

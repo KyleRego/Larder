@@ -10,7 +10,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
                                 : IdentityDbContext<ApplicationUser>(options)
 {
     public required DbSet<Item> Items { get; set; }
-    public required DbSet<Food> Foods { get; set; }
+    public required DbSet<Nutrition> Foods { get; set; }
     public required DbSet<Ingredient> Ingredients { get; set; }
     public required DbSet<Recipe> Recipes { get; set; }
     public required DbSet<RecipeIngredient> RecipeIngredients { get; set; }
