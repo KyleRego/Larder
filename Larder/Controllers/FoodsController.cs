@@ -42,7 +42,7 @@ public class FoodsController(IFoodService foodService)
     }
 
     [HttpPatch("{id}")]
-    public async Task<ActionResult<FoodDto>>
+    public async Task<ActionResult<NutritionDto>>
                                 UpdateQuantity(string id, FoodServingsDto dto)
     {
         if (dto.FoodId != id) return BadRequest();
@@ -58,16 +58,16 @@ public class FoodsController(IFoodService foodService)
     }
 
     [HttpPost("EatFood/{id}")]
-    public async Task<ActionResult<ApiResponse<FoodDto>>>
+    public async Task<ActionResult<ApiResponse<NutritionDto>>>
                                 ConsumeServings(string id, FoodServingsDto dto)
     {
         if (dto.FoodId != id) return BadRequest();
 
         try
         {
-            FoodDto result = await _foodService.EatFood(dto);
+            NutritionDto result = await _foodService.EatFood(dto);
 
-            return new ApiResponse<FoodDto>(result, "Food eaten!",
+            return new ApiResponse<NutritionDto>(result, "Food eaten!",
                                                         ApiResponseType.Success);
         }
         catch(ApplicationException)

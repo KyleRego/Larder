@@ -23,7 +23,7 @@ public class CookRecipeTests : ServiceTestsBase
         {
             Quantity = new() { Amount = 1 }
         };
-        foodItemCreated.Food = new()
+        foodItemCreated.Nutrition = new()
         {
             Item = foodItemCreated
         };

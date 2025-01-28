@@ -1,8 +1,6 @@
 import { QuantityDto } from "./QuantityDto"
 
-export type FoodDto = {
-    servingsPerItem: number,
-    servings: number,
+export type NutritionDto = {
     servingSize: QuantityDto,
     calories: number,
     gramsProtein: number,
@@ -13,8 +11,5 @@ export type FoodDto = {
     milligramsSodium: number,
     gramsTotalCarbs: number,
     gramsDietaryFiber: number,
-    gramsTotalSugars: number,
-
-    totalCalories: number,
-    totalGramsProtein: number
+    gramsTotalSugars: number
 }

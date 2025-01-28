@@ -1,14 +1,14 @@
 import { foodNutritionData } from "../../data/foodNutritionData";
-import { FoodDto } from "../../types/FoodDto";
+import { NutritionDto } from "../../types/NutritionDto";
 
-export default function FoodNutritionTable({food} : {food: FoodDto}) {
+export default function NutritionTable({nutrition} : {nutrition: NutritionDto}) {
     const tableRows = foodNutritionData.map(entry => {
         const field = entry.field;
         const label = entry.label;
 
         return <tr>
                 <td scope="row">{label}</td>
-                <td>{`${(food as any)[field]} ${entry.unitName}`}</td>
+                <td>{`${(nutrition as any)[field]} ${entry.unitName}`}</td>
             </tr>;
     })
 

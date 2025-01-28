@@ -25,7 +25,7 @@ public class FoodServiceTests : ServiceTestsBase
             Calories = 100,
             GramsProtein = 2
         };
-        foodItem.Food = food;
+        foodItem.Nutrition = food;
 
         _foodMap = [];
         _foodMap[_foodItemId] = foodItem;

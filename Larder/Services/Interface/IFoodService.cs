@@ -10,7 +10,7 @@ public interface IFoodService
     public Task<List<ItemDto>> GetFoods(FoodSortOptions sortOrder,
                                                     string? search);
 
-    public Task<FoodDto> UpdateServings(FoodServingsDto dto);
+    public Task<NutritionDto> UpdateServings(FoodServingsDto dto);
 
-    public Task<FoodDto> EatFood(FoodServingsDto dto);
+    public Task<NutritionDto> EatFood(FoodServingsDto dto);
 }

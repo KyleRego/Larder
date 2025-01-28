@@ -31,18 +31,10 @@ export default function FoodsTable({searchParam} : {searchParam: string }) {
                                             descending={FoodSortOptions.Name_Desc}
                                             sortOrder={sortOrder} setSortOrder={setSortOrder}
                                             headerText="Name" />
-                    <SortingTableHeader<FoodSortOptions> ascending={FoodSortOptions.Servings}
-                                            descending={FoodSortOptions.Servings_Desc}
-                                            sortOrder={sortOrder} setSortOrder={setSortOrder}
-                                            headerText="Servings" />
                     <SortingTableHeader<FoodSortOptions> ascending={FoodSortOptions.Calories}
                                             descending={FoodSortOptions.Calories_Desc}
                                             sortOrder={sortOrder} setSortOrder={setSortOrder}
                                             headerText="Calories" />
-                    <SortingTableHeader<FoodSortOptions> ascending={FoodSortOptions.TotalCalories}
-                                            descending={FoodSortOptions.TotalCalories_Desc}
-                                            sortOrder={sortOrder} setSortOrder={setSortOrder}
-                                            headerText="Total Calories" />
                     <SortingTableHeader<FoodSortOptions> ascending={FoodSortOptions.GramsProtein}
                                             descending={FoodSortOptions.GramsProtein_Desc}
                                             sortOrder={sortOrder} setSortOrder={setSortOrder}
@@ -74,12 +66,10 @@ function FoodRow({item} : {item: ItemDto}) : ReactNode {
     return (
         <tr role="button" onClick={handleRowClick} id={item.id!}>
             <th scope="row">{item.name}</th>
-            <td>{String(item.food!.servings)}</td>
-            <td>{String(item.food!.calories)}</td>
-            <td>{String(item.food!.totalCalories)}</td>
-            <td>{String(item.food!.gramsProtein)}</td>
-            <td>{String(item.food!.gramsTotalCarbs)}</td>
-            <td>{String(item.food!.gramsTotalFat)}</td>
+            <td>{String(item.nutrition!.calories)}</td>
+            <td>{String(item.nutrition!.gramsProtein)}</td>
+            <td>{String(item.nutrition!.gramsTotalCarbs)}</td>
+            <td>{String(item.nutrition!.gramsTotalFat)}</td>
         </tr>
     );
 }

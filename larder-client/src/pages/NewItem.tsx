@@ -1,16 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ItemDto } from "../types/ItemDto";
-import { FoodNutritionFormControls, FoodStockFormControls } from "../components/FoodFormControls";
+import { NutritionInputs } from "../components/NutritionInputs";
 import QuantityInput from "../components/QuantityInput";
 import { useApiRequest } from "../hooks/useApiRequest";
-import { FoodDto } from "../types/FoodDto";
+import { NutritionDto } from "../types/NutritionDto";
 import { QuantityDto } from "../types/QuantityDto";
 
 export default function NewItem() {
     const [item, setItem] = useState<ItemDto>({
         id: null, name: "", amount: 1, description: null,
-        food: null, ingredient: null, quantity: null
+        nutrition: null, ingredient: null, quantity: null
     });
 
     useEffect(() => {
@@ -19,7 +19,7 @@ export default function NewItem() {
 
     function updateItem<K extends keyof ItemDto>(field: K, value: ItemDto[K]) {
         setItem((prevItem) => {
-            return { ...prevItem, food: prevItem.food, [field]: value }
+            return { ...prevItem, food: prevItem.nutrition, [field]: value }
         });
     }
 
@@ -85,12 +85,10 @@ export default function NewItem() {
                     <div className="btn-group" role="group">
                         <input type="checkbox" className="btn-check" id="is-food-toggle" autoComplete="off"
                             title="Food"
-                            checked={item.food !== null} onChange={(e) => {
+                            checked={item.nutrition !== null} onChange={(e) => {
                                 if (e.target.checked) {
                                     // Instantiating initial food may need to be moved somewhere to be reused 
-                                    const initialFood: FoodDto = {
-                                        servingsPerItem: 1,
-                                        servings: 1 * item.amount,
+                                    const initialFood: NutritionDto = {
                                         servingSize: { id: null, amount: 0, unitId: null, unitName: null },
                                         calories: 0,
                                         gramsProtein: 0,
@@ -101,14 +99,12 @@ export default function NewItem() {
                                         milligramsSodium: 0,
                                         gramsDietaryFiber: 0,
                                         gramsTotalSugars: 0,
-                                        gramsTotalCarbs: 0,
-                                        totalCalories: 0,
-                                        totalGramsProtein: 0,
+                                        gramsTotalCarbs: 0
                                     };
-                                    updateItem("food", initialFood);
+                                    updateItem("nutrition", initialFood);
                                     console.log(item);
                                 } else {
-                                    updateItem("food", null)
+                                    updateItem("nutrition", null)
                                 }
 
                             }} />
@@ -122,10 +118,9 @@ export default function NewItem() {
                 </div>
             </div>
             
-            <div className="mt-4 container">
+            <div className="container">
                 <form onSubmit={handleSubmit}>
-                    <div className="new-element border border-black p-4">
-                        <h3>Basic details ✅</h3>
+                    <div className="new-element p-2">
                         <div className="d-flex align-items-center column-gap-3">
                             <div className="flex-grow-1">
                                 <label htmlFor="name-input">Name:</label>
@@ -148,22 +143,19 @@ export default function NewItem() {
                         </div>
                     </div>
 
-                    {item.food !== null && (
+                    {item.nutrition !== null && (
                     <>
                         <div className="new-element border border-black p-4 my-4">
-                            <FoodStockFormControls item={item} setItem={setItem} />
-                        </div>
-                    </>)}
-
-                    {item.food !== null && (
-                    <>
-                        <div className="new-element border border-black p-4 my-4">
-                            <FoodNutritionFormControls item={item} setItem={setItem} />
+                            <NutritionInputs item={item} setItem={setItem} />
                         </div>
                     </>)}
 
                     <div className="mt-4 d-flex justify-content-center">
-                        <button id="submit-new-item" type="submit" className="btn btn-secondary">Create item</button>
+                        <button id="submit-new-item"
+                                type="submit"
+                                className="btn btn-primary">
+                            Create item
+                        </button>
                     </div>
                 </form>
             </div>

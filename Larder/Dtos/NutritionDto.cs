@@ -3,7 +3,7 @@ using Larder.Models.ItemComponents;
 
 namespace Larder.Dtos;
 
-public class FoodDto
+public class NutritionDto
 {
     public string? Id { get; set; }
 
@@ -28,7 +28,7 @@ public class FoodDto
     public double TotalCalories { get; set; }
     public double TotalGramsProtein { get; set; }
 
-    public static FoodDto FromEntity(Nutrition food)
+    public static NutritionDto FromEntity(Nutrition food)
     {
         return new()
         {
@@ -53,10 +53,10 @@ public class FoodDto
     }
 
     // TODO: Remove this
-    public static FoodDto FromEntity(Item foodItem)
+    public static NutritionDto FromEntity(Item foodItem)
     {
-        ArgumentNullException.ThrowIfNull(foodItem.Food);
+        ArgumentNullException.ThrowIfNull(foodItem.Nutrition);
 
-        return FromEntity(foodItem.Food);
+        return FromEntity(foodItem.Nutrition);
     }
 }

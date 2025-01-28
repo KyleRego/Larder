@@ -8,7 +8,7 @@ public class ItemDto
     public string? Id { get; set; }
     public required string Name { get; set; }
     public string? Description { get; set; }
-    public FoodDto? Food { get; set; }
+    public NutritionDto? Nutrition { get; set; }
     public IngredientDto? Ingredient { get; set; }
     public QuantityDto? Quantity { get; set; }
 
@@ -19,8 +19,8 @@ public class ItemDto
             Id = item.Id,
             Name = item.Name,
             Description = item.Description,
-            Food = (item.Food != null)
-                        ? FoodDto.FromEntity(item.Food) : null,
+            Nutrition = (item.Nutrition != null)
+                        ? NutritionDto.FromEntity(item.Nutrition) : null,
 
             Ingredient = (item.Ingredient != null)
                         ? IngredientDto.FromEntity(item.Ingredient) : null,

@@ -21,7 +21,7 @@ public class ItemRepository(AppDbContext dbContext)
     public override async Task<Item?> Get(string userId, string id)
     {
         return await _dbContext.Items
-                                .Include(item => item.Food)
+                                .Include(item => item.Nutrition)
                                 .Include(item => item.Ingredient)
                                 .FirstOrDefaultAsync(
                             item => item.Id == id && item.UserId == userId);

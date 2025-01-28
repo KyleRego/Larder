@@ -34,7 +34,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
         }
 
         Item foodItem = await _foodData.FindOrCreateBy(CurrentUserId(), recipe.Name);
-        ArgumentNullException.ThrowIfNull(foodItem.Food);
+        ArgumentNullException.ThrowIfNull(foodItem.Nutrition);
 
         await _recipeData.Update(recipe);
         await _foodData.Update(foodItem);

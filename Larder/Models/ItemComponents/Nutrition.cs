@@ -28,7 +28,7 @@ public class Nutrition : ItemComponent
 
     public double GramsTotalSugars { get; set; }
 
-    public static Nutrition FromDto(FoodDto dto, Item item)
+    public static Nutrition FromDto(NutritionDto dto, Item item)
     {
         Nutrition food = new()
         {

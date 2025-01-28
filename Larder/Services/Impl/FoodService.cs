@@ -14,7 +14,7 @@ public class FoodService(   IServiceProviderWrapper serviceProvider,
 
     private static void ValidateFoodItem(Item item)
     {
-        if (item.Food == null) throw new ApplicationException(
+        if (item.Nutrition == null) throw new ApplicationException(
             "Item is not a food"
         );
     }
@@ -36,21 +36,21 @@ public class FoodService(   IServiceProviderWrapper serviceProvider,
                                 .Select(ItemDto.FromEntity).ToList();
     }
 
-    public async Task<FoodDto> UpdateServings(FoodServingsDto dto)
+    public async Task<NutritionDto> UpdateServings(FoodServingsDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto.FoodId);
 
         Item foodItem = await _foodData.Get(CurrentUserId(), dto.FoodId)
                 ?? throw new ApplicationException("food not found");
-        Nutrition? food = foodItem.Food;
+        Nutrition? food = foodItem.Nutrition;
         ArgumentNullException.ThrowIfNull(food);
 
         await _foodData.Update(foodItem);
 
-        return FoodDto.FromEntity(foodItem);
+        return NutritionDto.FromEntity(foodItem);
     }
 
-    public async Task<FoodDto> EatFood(FoodServingsDto dto)
+    public async Task<NutritionDto> EatFood(FoodServingsDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto.FoodId);
 
@@ -59,11 +59,11 @@ public class FoodService(   IServiceProviderWrapper serviceProvider,
 
         Item foodItem = await _foodData.Get(CurrentUserId(), dto.FoodId)
             ?? throw new ApplicationException("food not found");
-        Nutrition? food = foodItem.Food;
+        Nutrition? food = foodItem.Nutrition;
         ArgumentNullException.ThrowIfNull(food);
 
         await _foodData.Update(foodItem);
 
-        return FoodDto.FromEntity(food);
+        return NutritionDto.FromEntity(food);
     }
 }

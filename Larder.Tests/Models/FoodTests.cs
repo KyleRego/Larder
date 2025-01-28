@@ -15,7 +15,7 @@ public class FoodTests
         {
             Quantity = new() { Amount = 1 }
         };
-        FoodDto dto = new()
+        NutritionDto dto = new()
         {
             Servings = 11,
             ServingSize = new() { Amount = 363, UnitId = null},

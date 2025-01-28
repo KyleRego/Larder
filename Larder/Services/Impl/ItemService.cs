@@ -23,7 +23,7 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
             Quantity = quantity
         };
 
-        item.Food = (itemDto.Food != null) ? Nutrition.FromDto(itemDto.Food, item) : null;
+        item.Nutrition = (itemDto.Nutrition != null) ? Nutrition.FromDto(itemDto.Nutrition, item) : null;
 
         item = await _itemData.Insert(item);
 
@@ -70,7 +70,7 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
             item.Quantity = Quantity.FromDto(itemDto.Quantity);
 
         item.Description = itemDto.Description;
-        item.Food = (itemDto.Food != null) ? Nutrition.FromDto(itemDto.Food, item) : null;
+        item.Nutrition = (itemDto.Nutrition != null) ? Nutrition.FromDto(itemDto.Nutrition, item) : null;
         
         return ItemDto.FromEntity(await _itemData.Update(item));
     }
