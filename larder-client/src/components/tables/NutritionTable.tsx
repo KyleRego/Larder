@@ -1,8 +1,8 @@
-import { foodNutritionData } from "../../data/foodNutritionData";
+import { UINutrientData } from "../../data/UINutrientData";
 import { NutritionDto } from "../../types/NutritionDto";
 
 export default function NutritionTable({nutrition} : {nutrition: NutritionDto}) {
-    const tableRows = foodNutritionData.map(entry => {
+    const tableRows = UINutrientData.map(entry => {
         const field = entry.field;
         const label = entry.label;
 

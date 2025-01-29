@@ -1,11 +1,11 @@
-interface FoodNutrition {
+interface UINutrient {
     field: string,
     label: string,
     unitName: string,
     emphasized: boolean
 }
 
-export const foodNutritionData: FoodNutrition[] = [
+export const UINutrientData: UINutrient[] = [
         {field: "calories", label: "Calories", unitName: "", emphasized: true},
         {field: "gramsProtein", label: "Protein", unitName: "g", emphasized: true},
         {field: "gramsTotalFat", label: "Total fat", unitName: "g", emphasized: true},

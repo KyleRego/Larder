@@ -12,7 +12,7 @@ public class CreateFoodTest : UITestBase
         IWebElement newItemLink = driver.FindElement(By.LinkText("New item"));
         newItemLink.Click();
 
-        IWebElement isFoodToggle = driver.FindElement(By.CssSelector("[for='is-food-toggle']"));
+        IWebElement isFoodToggle = driver.FindElement(By.CssSelector("[for='is-nutrition-toggle']"));
         isFoodToggle.Click();
 
         SendKeysToInput("name-input", foodItemName);

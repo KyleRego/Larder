@@ -39,7 +39,7 @@ export default function NewItem() {
     const { handleRequest } = useApiRequest();
     const navigate = useNavigate();
     const [checkboxStates, setCheckboxStates] = useState({
-        isFood: false,
+        isNutrition: false,
         isIngredient: false
     });
 
@@ -80,15 +80,15 @@ export default function NewItem() {
 
                 <div>
                     <div>
-                        <strong>Item is a/an:</strong>
+                        <strong>Item components:</strong>
                     </div>
                     <div className="btn-group" role="group">
-                        <input type="checkbox" className="btn-check" id="is-food-toggle" autoComplete="off"
-                            title="Food"
+                        <input type="checkbox" className="btn-check" id="is-nutrition-toggle" autoComplete="off"
+                            title="Nutrition"
                             checked={item.nutrition !== null} onChange={(e) => {
                                 if (e.target.checked) {
-                                    // Instantiating initial food may need to be moved somewhere to be reused 
-                                    const initialFood: NutritionDto = {
+                                    // Instantiating initial nutrition may need to be moved somewhere to be reused 
+                                    const initialNutrition: NutritionDto = {
                                         servingSize: { id: null, amount: 0, unitId: null, unitName: null },
                                         calories: 0,
                                         gramsProtein: 0,
@@ -101,14 +101,14 @@ export default function NewItem() {
                                         gramsTotalSugars: 0,
                                         gramsTotalCarbs: 0
                                     };
-                                    updateItem("nutrition", initialFood);
+                                    updateItem("nutrition", initialNutrition);
                                     console.log(item);
                                 } else {
                                     updateItem("nutrition", null)
                                 }
 
                             }} />
-                        <label className="btn btn-outline-primary" htmlFor="is-food-toggle">Food</label>
+                        <label className="btn btn-outline-primary" htmlFor="is-nutrition-toggle">Nutrition</label>
 
                         <input type="checkbox" className="btn-check" id="is-ingredient-toggle" autoComplete="off"
                                 title="Ingredient"
@@ -120,7 +120,7 @@ export default function NewItem() {
             
             <div className="container">
                 <form onSubmit={handleSubmit}>
-                    <div className="new-element p-2">
+                    <div className="new-element p-2 my-2">
                         <div className="d-flex align-items-center column-gap-3">
                             <div className="flex-grow-1">
                                 <label htmlFor="name-input">Name:</label>
@@ -145,7 +145,7 @@ export default function NewItem() {
 
                     {item.nutrition !== null && (
                     <>
-                        <div className="new-element border border-black p-4 my-4">
+                        <div className="new-element border border-black p-2 my-4">
                             <NutritionInputs item={item} setItem={setItem} />
                         </div>
                     </>)}

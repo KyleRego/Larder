@@ -7,8 +7,6 @@ public class NutritionDto
 {
     public string? Id { get; set; }
 
-    public double ServingsPerItem { get; set; }
-    public double Servings { get; set; }
     public required QuantityDto ServingSize { get; set; }
 
     public double Calories { get; set; }

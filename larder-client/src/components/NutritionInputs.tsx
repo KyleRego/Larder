@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { foodNutritionData } from "../data/foodNutritionData";
+import { UINutrientData } from "../data/UINutrientData";
 import { ItemDto } from "../types/ItemDto";
 import { NutritionDto } from "../types/NutritionDto";
 import QuantityInput from "./QuantityInput";
@@ -31,7 +31,7 @@ export function NutritionInputs({item, setItem}
         })
     }
 
-    const nutritionInputs = foodNutritionData.map(entry => {
+    const nutritionInputs = UINutrientData.map(entry => {
         const field = entry.field as keyof NutritionDto;
         const label = entry.label;
         const unit = entry.unitName;
@@ -64,17 +64,17 @@ export function NutritionInputs({item, setItem}
 
     return (
         <>
-            <h3>Nutrition 🍑</h3>
+            <div className="d-flex justify-content-around align-items-center flex-wrap row-gap-3 mb-4">
+                <h3 className="m-0">Nutrition 🍑</h3>
 
-            <div className="d-flex column-gap-3 align-items-center my-4">
-                <h4>Serving size:</h4>
+                <div className="d-flex column-gap-3 align-items-center">
+                    <h4 className="m-0">Serving size:</h4>
 
-                <QuantityInput quantity={item.nutrition?.servingSize ?? null }
-                            handleAmountChange={updateServingAmount}
-                            handleUnitChange={updateServingUnit} />
+                    <QuantityInput quantity={item.nutrition?.servingSize ?? null }
+                                handleAmountChange={updateServingAmount}
+                                handleUnitChange={updateServingUnit} />
+                </div>
             </div>
-            
-
             {nutritionInputs}
         </> 
     );

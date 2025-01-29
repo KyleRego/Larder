@@ -4,7 +4,7 @@ using Larder.Models.ItemComponents;
 
 namespace Larder.Tests.Models;
 
-public class FoodTests
+public class NutritionTests
 {
     private readonly string userId = "1";
 
@@ -15,9 +15,9 @@ public class FoodTests
         {
             Quantity = new() { Amount = 1 }
         };
+
         NutritionDto dto = new()
         {
-            Servings = 11,
             ServingSize = new() { Amount = 363, UnitId = null},
             Calories = 17,
             GramsProtein = 19,
