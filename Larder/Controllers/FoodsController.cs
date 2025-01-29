@@ -6,27 +6,9 @@ using Larder.Services.Interface;
 
 namespace Larder.Controllers;
 
-public class FoodsController(IFoodService foodService)
-                                        : AppControllerBase
+public class FoodsController(IFoodService foodService) : AppControllerBase
 {
     private readonly IFoodService _foodService = foodService;
-
-    [HttpGet("{id}")]
-    public async Task<ActionResult<ApiResponse<ItemDto>>> Show(string id)
-    {
-        try
-        {
-            ItemDto? foodItem = await _foodService.GetFood(id);
-
-            if (foodItem == null) return NotFound();
-
-            return new ApiResponse<ItemDto>(foodItem, "", ApiResponseType.Success);
-        }
-        catch (ApplicationException e)
-        {
-            return UnprocessableEntity(FromError(e));
-        }
-    }
 
     [HttpGet]
     public async Task<ActionResult<List<ItemDto>>> Index(string? sortOrder, string? search)
@@ -41,34 +23,17 @@ public class FoodsController(IFoodService foodService)
         }
     }
 
-    [HttpPatch("{id}")]
-    public async Task<ActionResult<NutritionDto>>
-                                UpdateQuantity(string id, FoodServingsDto dto)
-    {
-        if (dto.FoodId != id) return BadRequest();
-
-        try
-        {
-            return await _foodService.UpdateServings(dto);
-        }
-        catch(ApplicationException)
-        {
-            return NotFound();
-        }
-    }
-
     [HttpPost("EatFood/{id}")]
-    public async Task<ActionResult<ApiResponse<NutritionDto>>>
+    public async Task<ActionResult<ApiResponse<object>>>
                                 ConsumeServings(string id, FoodServingsDto dto)
     {
         if (dto.FoodId != id) return BadRequest();
 
         try
         {
-            NutritionDto result = await _foodService.EatFood(dto);
+            await _foodService.EatFood(dto);
 
-            return new ApiResponse<NutritionDto>(result, "Food eaten!",
-                                                        ApiResponseType.Success);
+            return new ApiResponse<object>("Food eaten!", ApiResponseType.Success);
         }
         catch(ApplicationException)
         {

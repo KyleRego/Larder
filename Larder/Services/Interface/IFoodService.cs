@@ -5,12 +5,9 @@ namespace Larder.Services.Interface;
 
 public interface IFoodService
 {
-    public Task<ItemDto?> GetFood(string id);
-
     public Task<List<ItemDto>> GetFoods(FoodSortOptions sortOrder,
                                                     string? search);
 
-    public Task<NutritionDto> UpdateServings(FoodServingsDto dto);
 
-    public Task<NutritionDto> EatFood(FoodServingsDto dto);
+    public Task EatFood(FoodServingsDto dto);
 }

@@ -4,5 +4,5 @@ public class FoodServingsDto
 {
     public required string FoodId { get; set; }
 
-    public required double Servings { get; set; }
+    public required QuantityDto QuantityEaten { get; set; }
 }
