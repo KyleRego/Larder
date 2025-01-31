@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 import { UINutrientData } from "../data/UINutrientData";
 import { ItemDto } from "../types/ItemDto";
 import { NutritionDto } from "../types/NutritionDto";
-import QuantityInput from "./QuantityInput";
+import QuantityInput from "../forms/QuantityInput";
 
 export function NutritionInputs({item, setItem}
         : {item: ItemDto, setItem: Dispatch<SetStateAction<ItemDto>> }) {

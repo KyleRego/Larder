@@ -9,12 +9,12 @@ export default function QuantitySpan({quantity} : {
         const { units } = useContext(UnitsContext);
 
         for (const u of units) {
-            if (!quantity.unitName && u.id === quantity.unitId) {
-                quantity.unitName = u.name
-            }
-
             if (quantity.unitName) {
                 break;
+            }
+
+            if (u.id === quantity.unitId) {
+                quantity.unitName = u.name
             }
         }
     }

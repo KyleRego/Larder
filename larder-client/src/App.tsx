@@ -25,7 +25,7 @@ function App() {
                 console.error("An unexpected error occured", error);
             }
         })
-    }, [setUnits]);
+    }, [authed]);
 
     return (
         <AuthedContext.Provider value={{authed, setAuthed}}>

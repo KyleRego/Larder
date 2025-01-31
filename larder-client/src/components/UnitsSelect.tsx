@@ -1,7 +1,11 @@
 import { useContext } from "react";
 import { UnitsContext } from "../contexts/UnitsContext";
 
-export default function UnitsSelect({selectName, selectTitle, value, required = false, onChange = () => {}}
+export default function UnitsSelect({selectName,
+                                    selectTitle,
+                                    value,
+                                    required = false,
+                                    onChange}
     : { selectName : string,
         selectTitle: string,
         value: string | null,

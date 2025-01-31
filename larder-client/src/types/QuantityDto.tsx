@@ -1,5 +1,4 @@
 export type QuantityDto = {
-    id: string | null,
     amount: number,
     unitId: string | null,
     unitName: string | null
