@@ -13,10 +13,10 @@ public class CreateItemTest : UITestBase
         IWebElement nameInput = driver.FindElement(By.Id("name-input"));
         nameInput.SendKeys("New item");
 
-        IWebElement amountInput = driver.FindElement(By.Id("amount-input"));
+        IWebElement amountInput = driver.FindElement(By.Id("Quantity-amount-input"));
         amountInput.SendKeys("2");
 
-        IWebElement submitBtn = driver.FindElement(By.Id("submit-new-item"));
+        IWebElement submitBtn = driver.FindElement(By.Id("item-form-submit"));
         submitBtn.Click();
 
         AssertMessage("Item created");

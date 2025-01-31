@@ -50,7 +50,7 @@ export default function NewItem2() {
 
         <div>
             <button type="submit" form="item-form"
-                    className="btn btn-outline-primary">
+                    className="btn btn-outline-primary" id="item-form-submit">
                 Create item
             </button>
         </div>

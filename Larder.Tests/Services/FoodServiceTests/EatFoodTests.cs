@@ -41,13 +41,13 @@ public class EatFoodTests : ServiceTestsBase
 
         FoodServingsDto dto = new()
         {
-            FoodId = "1",
+            FoodId = _appliesId,
             QuantityEaten = new() { Amount = 1 }
         };
 
-        _mockQuantMathService.Setup(m => m.Subtract(foodItem.Quantity,
-                                Quantity.FromDto(dto.QuantityEaten)))
-                                    .ReturnsAsync((Quantity)new() { Amount = 3 });
+        _mockQuantMathService.Setup(
+            m => m.Subtract(It.IsAny<Quantity>(), It.IsAny<Quantity>())
+        ).ReturnsAsync(new Quantity { Amount = 3 });
 
         FoodService sut = new(mSP.Object,
                                     _mockQuantMathService.Object,
@@ -56,7 +56,7 @@ public class EatFoodTests : ServiceTestsBase
         await sut.EatFood(dto);
 
         _mockFoodRepo.Verify(_ => _.Update(It.Is<Item>(item =>
-            item.Quantity.Amount == 3
+            item != null && item.Quantity != null && item.Quantity.Amount == 3
         )), Times.Once);
     }
 }

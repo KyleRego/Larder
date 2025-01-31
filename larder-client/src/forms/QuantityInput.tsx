@@ -41,7 +41,8 @@ export default function QuantityInput(
                         <input  title={`Quantity amount`}
                                 className="form-control" type="number"
                                 value={String(quantity?.amount ?? 0)}
-                                onChange={handleAmountChange} />
+                                onChange={handleAmountChange}
+                                id={`${quantityLabel}-amount-input`} />
                         { withUnit === false &&
                         <span role="button"
                             className="input-group-text"

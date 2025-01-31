@@ -3,6 +3,7 @@ import { ItemDto } from "../types/ItemDto";
 import { NutritionDto } from "../types/NutritionDto";
 import QuantityInput from "./QuantityInput";
 import { QuantityDto } from "../types/QuantityDto";
+import NutritionInput from "./NutritionInput";
 
 export default function ItemForm({initialItem, submitFormItem}
         : {initialItem: ItemDto,
@@ -38,18 +39,22 @@ export default function ItemForm({initialItem, submitFormItem}
         setItem({...item, name: name});
     }
 
+    function setDescription(description: string) {
+        setItem({...item, description: description});
+    }
+
     function setQuantity(quantity: QuantityDto) {
-        console.log(quantity);
         setItem({...item,
             quantity: { amount: quantity.amount,
                         unitId: quantity.unitId,
                         unitName: quantity.unitName}
         });
-        console.log(item);
     }
 
-    function setDescription(description: string) {
-        setItem({...item, description: description});
+    function setNutrition(nutrition: NutritionDto) {
+        setItem({...item,
+            nutrition: nutrition
+        })
     }
 
     async function handleSubmit(e : React.FormEvent<HTMLFormElement>) {
@@ -73,20 +78,32 @@ export default function ItemForm({initialItem, submitFormItem}
 
         <div className="my-4">
             <form id="item-form" onSubmit={handleSubmit}>
-                <div className="input-group mb-2">
-                    <span className="input-group-text">Name</span>
-                    <input type="text" className="form-control" aria-label="name"
-                        onChange={(e) => setName(e.currentTarget.value)} />
+                <div className="d-flex align-items-center column-gap-3 mb-2">
+                    <div className="input-group w-50">
+                        <span className="input-group-text">Name</span>
+                        <input type="text" className="form-control" aria-label="name"
+                            onChange={(e) => setName(e.currentTarget.value)}
+                            required id="name-input" />
+                    </div>
+                    <div className="flex-grow-1">
+                        <QuantityInput quantityLabel="Quantity" initialQuantity={item.quantity}
+                                handleQuantityChange={setQuantity} />
+                    </div>
                 </div>
-                <div className="mb-2">
-                    <QuantityInput quantityLabel="Quantity" initialQuantity={item.quantity}
-                            handleQuantityChange={setQuantity} />
-                </div>
+                
                 <div className="input-group mb-2">
                     <span className="input-group-text">Description</span>
                     <textarea className="form-control" aria-label="description" rows={1}
-                        onChange={(e) => setDescription(e.currentTarget.value)} />
+                        onChange={(e) => setDescription(e.currentTarget.value)}
+                        id="description-input" />
                 </div>
+
+                { item.nutrition && 
+                    <div className="my-4">
+                        <NutritionInput initialNutrition={item.nutrition}
+                        handleNutritionChange={setNutrition} />
+                    </div>  
+                }
             </form>
         </div>
     </div>;

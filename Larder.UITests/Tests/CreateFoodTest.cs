@@ -16,9 +16,8 @@ public class CreateFoodTest : UITestBase
         isFoodToggle.Click();
 
         SendKeysToInput("name-input", foodItemName);
-        SendKeysToInput("amount-input", "2");
+        SendKeysToInput("Quantity-amount-input", "2");
         SendKeysToInput("description-input", "A box of rice and seasoning ");
-        SendKeysToInput("servings-per-item-input", "4");
 
         // At this point the servings should be 8
         // Skip testing the quantity per serving for now
@@ -34,7 +33,7 @@ public class CreateFoodTest : UITestBase
         SendKeysToInput("milligramsSodium-input", "570");
         SendKeysToInput("milligramsCholesterol-input", "50");
 
-        IWebElement submitBtn = driver.FindElement(By.Id("submit-new-item"));
+        IWebElement submitBtn = driver.FindElement(By.Id("item-form-submit"));
         submitBtn.Click();
 
         AssertMessage("Item created");

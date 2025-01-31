@@ -34,7 +34,7 @@ export default function ItemsTable({searchParam} : {searchParam: string }) {
                     <SortingTableHeader<ItemSortOptions> ascending={ItemSortOptions.Amount}
                                             descending={ItemSortOptions.Amount_Desc}
                                             sortOrder={sortOrder} setSortOrder={setSortOrder}
-                                            headerText="Amount" />
+                                            headerText="Quantity" />
                     <SortingTableHeader<ItemSortOptions> ascending={ItemSortOptions.Description}
                                             descending={ItemSortOptions.Description_Desc}
                                             sortOrder={sortOrder} setSortOrder={setSortOrder}
