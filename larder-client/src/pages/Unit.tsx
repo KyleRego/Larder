@@ -64,7 +64,18 @@ export default function UnitPage() {
 
     return (
         <>
-            <div className="page-flex-header">
+            <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                    <li className="breadcrumb-item" aria-current="page">
+                        <Link to={"/units"}>Units</Link>
+                    </li>
+                    <li className="breadcrumb-item active">
+                        {unit.name}
+                    </li>
+                </ol>
+            </nav>
+
+            <div className="d-flex align-items-center column-gap-3">
                 <h1>{unit.name}</h1>
 
                 <EditLink path={`/units/${unit.id}/edit`} title="Edit unit" />
@@ -81,23 +92,19 @@ export default function UnitPage() {
                     {unitConversions}
                 </div>
 
-                <div className="mt-4 d-flex justify-content-center">
+                <div className="mt-2 d-flex justify-content-start">
                 { adding ? (
                     <UnitConversionForm handleSubmit={handleCreateConversion}
                                         initialUnitConversion={null}
                                         handleCancel={() => setAdding(false)} />
                 ) : (
                     <button onClick={() => setAdding(true)} 
-                            className="btn btn-secondary"
+                            className="btn btn-outline-primary"
                             type="button">
                         Add conversion
                     </button> 
                 )}
                 </div>
-            </div>
-
-            <div className="mt-4">
-                <Link className="btn btn-danger" to={"/units"}>Back to units</Link>
             </div>
         </>
     );

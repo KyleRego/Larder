@@ -29,12 +29,12 @@ export default function Units() {
 
     return (
         <>
-            <div className="page-flex-header">
+            <div className="page-flex-header align-items-end">
                 <h1>Units</h1>
 
                 <SearchBox handleOnChange={handleSearchChange} />
 
-                <Link className="btn btn-primary" to={"/units/new"}>New unit</Link>
+                <Link className="btn btn-secondary border-black" to={"/units/new"}>New unit</Link>
             </div>
 
             <div className="mt-4">
