@@ -78,10 +78,10 @@ export default function ItemForm({initialItem, submitFormItem}
 
         <div className="my-4">
             <form id="item-form" onSubmit={handleSubmit}>
-                <div className="d-flex align-items-center column-gap-3 mb-2">
+                <div className="d-flex align-items-center column-gap-3 mb-2 flex-wrap row-gap-2">
                     <div className="input-group w-50">
                         <span className="input-group-text">Name</span>
-                        <input type="text" className="form-control" aria-label="name"
+                        <input value={item.name} type="text" className="form-control" aria-label="name"
                             onChange={(e) => setName(e.currentTarget.value)}
                             required id="name-input" />
                     </div>
@@ -93,7 +93,7 @@ export default function ItemForm({initialItem, submitFormItem}
                 
                 <div className="input-group mb-2">
                     <span className="input-group-text">Description</span>
-                    <textarea className="form-control" aria-label="description" rows={1}
+                    <textarea value={item.description ?? ""} className="form-control" aria-label="description" rows={1}
                         onChange={(e) => setDescription(e.currentTarget.value)}
                         id="description-input" />
                 </div>

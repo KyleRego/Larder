@@ -67,13 +67,16 @@ public class ItemsController(IItemService itemService) : AppControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<ItemDto>> Update(ItemDto itemDto, string id)
+    public async ItemActionResult Update(ItemDto itemDto, string id)
     {
         if (itemDto.Id != id) return BadRequest();
 
         try
         {
-            return await _itemService.UpdateItem(itemDto);
+            ItemDto result = await _itemService.UpdateItem(itemDto);
+            return new ApiResponse<ItemDto>(result,
+                $"Item \"{result.Name}\" was successfully updated",
+                ApiResponseType.Success);
         }
         catch (ApplicationException e)
         {

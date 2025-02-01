@@ -17,8 +17,8 @@ export default function NutritionInput(
     }
 
     return <div>
-        <div className="d-flex align-items-start justify-content-between flex-wrap">
-            <div className="d-flex flex-column row-gap-1">
+        <div className="d-flex align-items-start justify-content-between flex-wrap row-gap-3">
+            <div className="d-flex flex-column row-gap-2">
                 <div className="input-group">
                     <span className="input-group-text">Calories</span>
                     <input value={nutrition.calories}
@@ -38,7 +38,7 @@ export default function NutritionInput(
                 </div>
             </div>
 
-            <div className="d-flex flex-column row-gap-1">
+            <div className="d-flex flex-column row-gap-2">
                 <div className="input-group">
                     <span className="input-group-text">Total carbs (g)</span>
                     <input value={nutrition.gramsTotalCarbs}
@@ -65,7 +65,7 @@ export default function NutritionInput(
                 </div>
             </div>
 
-            <div className="d-flex flex-column row-gap-1">
+            <div className="d-flex flex-column row-gap-2">
                 <div className="input-group">
                     <span className="input-group-text">Total fat (g)</span>
                     <input value={nutrition.gramsTotalFat}
@@ -91,7 +91,7 @@ export default function NutritionInput(
                             id="gramsTransFat-input" />
                 </div>
             </div>
-            <div className="d-flex flex-column row-gap-1">
+            <div className="d-flex flex-column row-gap-2">
                 <div className="input-group">
                     <span className="input-group-text">Sodium (mg)</span>
                     <input value={nutrition.milligramsSodium}
@@ -101,8 +101,8 @@ export default function NutritionInput(
                             id="milligramsSodium-input" />
                 </div>
                 <div className="input-group">
-                    <span className="input-group-text">Cholesterol</span>
-                    <input value={nutrition.gramsTransFat}
+                    <span className="input-group-text">Cholesterol (mg)</span>
+                    <input value={nutrition.milligramsCholesterol}
                             onChange={handleChange("milligramsCholesterol")}
                             type="number"
                             step="any" className="form-control"

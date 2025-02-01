@@ -6,6 +6,7 @@ import Loading from "../components/Loading";
 import { formatQuantity } from "../types/QuantityDto";
 import QuantitySpan from "../components/QuantitySpan";
 import NutritionCard from "../components/cards/NutritionCard";
+import EditLink from "../components/EditLink";
 
 export default function Item() {
     const { id } = useParams<{id: string}>();
@@ -35,21 +36,27 @@ export default function Item() {
         <>
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
-                    <li className="breadcrumb-item active" aria-current="page">
-                        <Link to={"/items"}>Back to items</Link>
+                    <li className="breadcrumb-item" aria-current="page">
+                        <Link to={"/items"}>Items</Link>
+                    </li>
+                    <li className="breadcrumb-item active">
+                        {item.name}
                     </li>
                 </ol>
             </nav>
 
-            <div className="d-flex justify-content-around align-items-center">
+            <div className="d-flex align-items-center column-gap-3">
                 <h1>{`${item.name}`}</h1>
 
-                { item.quantity &&
-                <h2>
-                    <QuantitySpan quantity={item.quantity} />
-                </h2>
-                }
+                <EditLink   path={`/items/${item.id}/edit`}
+                            title={`Edit ${item.name}`} />
             </div>
+
+            { item.quantity &&
+            <h2 className="my-4">
+                Quantity: <QuantitySpan quantity={item.quantity} />
+            </h2>
+            }
 
             {item.nutrition !== null &&
                 <div>

@@ -11,7 +11,6 @@ enum TableVersions {
 }
 
 export default function Items() {
-    
     const [currentTable, setCurrentTable] = useState<TableVersions>(TableVersions.AllItems);
     const [searchParam, setSearchParam] = useState("");
 
@@ -64,7 +63,8 @@ function TableVersionDropdown({currentVariant, setCurrentTable}
     });
 
     return <div className="dropdown">
-            <button className="btn btn-secondary dropdown-toggle border-black" type="button" aria-expanded="false"
+            <button className="btn btn-secondary dropdown-toggle border-black"
+                    type="button" aria-expanded="false"
                 onClick={() => setExpanded(!expanded)}    >
                 {currentVariant}
             </button>

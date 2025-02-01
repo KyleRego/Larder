@@ -9,4 +9,4 @@ Before running the tests, the React app and API should be running, and a test us
 ## Troubleshooting
 
 An error like `OneTimeSetUp: System.InvalidOperationException : session not created: This version of ChromeDriver only supports Chrome version 130
-Current browser version is 132.0.6834.160 with binary path ...` may be addressed by updating the `Selenium.WebDriver.ChromeDriver` package version in the `.csproj` file (for example from 130 to 132). 
+Current browser version is 132.0.6834.160 with binary path ...` may be addressed by updating the `Selenium.WebDriver.ChromeDriver` package version in the `.csproj` file (for example from 130 to 132).
