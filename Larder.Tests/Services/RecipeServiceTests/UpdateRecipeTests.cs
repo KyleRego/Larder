@@ -3,6 +3,7 @@ using Larder.Repository;
 using Larder.Dtos;
 using Larder.Services.Interface;
 using Larder.Services.Impl;
+using Larder.Repository.Interface;
 
 namespace Larder.Tests.Services.RecipeServiceTests;
 
