@@ -35,7 +35,7 @@ export default function QuantityInput(
         <>
             <div className="d-flex flex-wrap row-gap-3 column-gap-3">
                 <div className="flex-grow-1">
-                    <div className="d-flex align-items-center column-gap-3" title="Quantity:">
+                    <div className="d-flex align-items-center column-gap-3" title="Quantity">
                     <div className="input-group">
                         <span className="input-group-text">{quantityLabel}</span>
                         <input  title={`Quantity amount`}
@@ -44,7 +44,7 @@ export default function QuantityInput(
                                 onChange={handleAmountChange}
                                 id={`${quantityLabel}-amount-input`} />
                         { withUnit === false &&
-                        <span role="button"
+                        <span role="button" title="+ unit"
                             className="input-group-text"
                             onClick={() => setWithUnit(true)}>
                             + unit
@@ -58,7 +58,7 @@ export default function QuantityInput(
                                     selectTitle={"Quantity unit"}
                                     value={quantity?.unitId ?? null}
                                     onChange={handleUnitSelect} />
-                                <span className="input-group-text"
+                                <span className="input-group-text" title="- unit"
                                         role="button"
                                         onClick={removeUnit}>
                                     - unit
