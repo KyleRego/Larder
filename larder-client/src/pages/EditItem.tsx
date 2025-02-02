@@ -61,7 +61,7 @@ export default function EditItem() {
             <ItemForm initialItem={item} submitFormItem={submitFormItem} />
         </div>
 
-        <div>
+        <div className="my-4">
             <button type="submit" form="item-form"
                     className="btn btn-outline-primary"
                     id="item-form-submit">

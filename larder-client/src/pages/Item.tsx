@@ -6,7 +6,7 @@ import Loading from "../components/Loading";
 import { formatQuantity } from "../types/QuantityDto";
 import QuantitySpan from "../components/QuantitySpan";
 import NutritionCard from "../components/cards/NutritionCard";
-import EditLink from "../components/EditLink";
+import ItemCard from "../components/cards/ItemCard";
 
 export default function Item() {
     const { id } = useParams<{id: string}>();
@@ -26,7 +26,7 @@ export default function Item() {
         }
 
         getItem();
-    }, [])
+    }, [id])
 
     if (item === null) {
         return <Loading />
@@ -45,22 +45,9 @@ export default function Item() {
                 </ol>
             </nav>
 
-            <div className="my-4 d-flex column-gap-3 justify-content-start align-items-start">
+            <div className=" d-sm-flex-row flex-column align-items-sm-start align-items-end my-4 d-flex column-gap-3 row-gap-3 flex-wrap">
             { item.quantity &&
-            <div className="card" style={{maxWidth: "424px", wordBreak: "break-all"}}>
-                <div className="card-body">
-                    <div className="d-flex column-gap-1 align-items-start">
-                    <h1 className="fs-3">
-                        <div className="d-flex column-gap-1 row-gap-3 flex-wrap">
-                            <span> {item.name}</span>
-                             <span className="fs-4"> Quantity: <QuantitySpan quantity={item.quantity!} /> </span>
-                        </div>
-                    </h1>
-                    <EditLink   path={`/items/${item.id}/edit`}
-                            title={`Edit ${item.name}`} />
-                    </div>
-                </div>
-            </div>
+                <ItemCard item={item} />
             }
 
             {item.nutrition &&

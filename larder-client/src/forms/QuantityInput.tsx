@@ -10,7 +10,7 @@ export default function QuantityInput(
 
     const [quantity, setQuantity] = useState<QuantityDto>(
                 initialQuantity ?? { amount: 0, unitId: null, unitName: ""})
-    const [withUnit, setWithUnit] = useState<boolean>(initialQuantity?.amount !== null);
+    const [withUnit, setWithUnit] = useState<boolean>(initialQuantity?.unitId !== null);
 
     function handleAmountChange(e: React.ChangeEvent<HTMLInputElement>) {
         const newQuantity = {...quantity, amount: parseFloat(e.currentTarget.value)}
