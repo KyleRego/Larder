@@ -14,11 +14,11 @@ export default function NutritionTable({nutrition} : {nutrition: NutritionDto}) 
 
     return <table className="table">
         <caption>
-            Nutrition per serving
+            Nutrition per serving size quantity
         </caption>
         <thead>
             <th scope="col">Nutrient</th>
-            <th scope="col">Amount</th>
+            <th scope="col">Quantity</th>
         </thead>
         <tbody>
             {tableRows}
