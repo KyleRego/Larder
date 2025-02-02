@@ -35,10 +35,10 @@ export default function QuantityInput(
         <>
             <div className="d-flex flex-wrap row-gap-3 column-gap-3">
                 <div className="flex-grow-1">
-                    <div className="d-flex align-items-center column-gap-3" title="Quantity">
+                    <div className="d-flex align-items-center column-gap-3" title={quantityLabel}>
                     <div className="input-group">
                         <span className="input-group-text">{quantityLabel}</span>
-                        <input  title={`Quantity amount`}
+                        <input  title={`${quantityLabel} amount`}
                                 className="form-control" type="number"
                                 value={String(quantity?.amount ?? 0)}
                                 onChange={handleAmountChange}
@@ -55,7 +55,7 @@ export default function QuantityInput(
                         <div className="ms-2">
                             <div className="input-group">
                                 <UnitsSelect selectName={"Unit"}
-                                    selectTitle={"Quantity unit"}
+                                    selectTitle={`Serving size unit`}
                                     value={quantity?.unitId ?? null}
                                     onChange={handleUnitSelect} />
                                 <span className="input-group-text" title="- unit"

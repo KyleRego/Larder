@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { NutritionDto } from "../types/NutritionDto";
+import QuantityInput from "./QuantityInput";
+import { QuantityDto } from "../types/QuantityDto";
 
 export default function NutritionInput(
                         {initialNutrition, handleNutritionChange}
@@ -16,7 +18,18 @@ export default function NutritionInput(
         };
     }
 
+    function updateServingSize(servingSize: QuantityDto) {
+        const newNutrition = {...nutrition, servingSize: servingSize};
+        setNutrition(newNutrition);
+        handleNutritionChange(newNutrition);
+    }
+
     return <div>
+        <div className="my-2">
+            <QuantityInput quantityLabel="Serving size"
+                            initialQuantity={nutrition.servingSize} 
+                            handleQuantityChange={updateServingSize}/>
+        </div>
         <div className="d-flex align-items-start justify-content-between flex-wrap row-gap-3">
             <div className="d-flex flex-column row-gap-2">
                 <div className="input-group">
