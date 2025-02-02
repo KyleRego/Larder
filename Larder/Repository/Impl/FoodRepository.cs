@@ -3,28 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Larder.Data;
 using Larder.Models;
 using Larder.Models.ItemComponents;
+using Larder.Repository.Interface;
+using Larder.Models.SortOptions;
 
-namespace Larder.Repository;
-
-public enum FoodSortOptions
-{
-    AnyOrder,
-    Name, Name_Desc,
-    Servings, Servings_Desc,
-    Calories, Calories_Desc,
-    GramsProtein, GramsProtein_Desc,
-    GramsTotalFat, GramsTotalFat_Desc,
-    GramsSaturatedFat, GramsSaturatedFat_Desc,
-    GramsTransFat, GramsTransFat_Desc,
-    MilligramsCholesterol, MilligramsCholesterol_Desc,
-    MilligramsSodium, MilligramsSodium_Desc,
-    GramsTotalCarbs, GramsTotalCarbs_Desc,
-    GramsDietaryFiber, GramsDietaryFiber_Desc,
-    GramsTotalSugars, GramsTotalSugars_Desc,
-
-    TotalCalories, TotalCalories_Desc,
-    TotalGramsProtein, TotalGramsProtein_Desc,
-}
+namespace Larder.Repository.Impl;
 
 public class FoodRepository(AppDbContext dbContext)
             : RepositoryBase<Item, FoodSortOptions>(dbContext), IFoodRepository

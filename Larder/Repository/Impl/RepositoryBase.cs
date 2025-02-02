@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 
 using Larder.Data;
+using Larder.Repository.Interface;
 
-namespace Larder.Repository;
+namespace Larder.Repository.Impl;
 
 public enum SortOptionsBase
 {

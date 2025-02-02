@@ -2,15 +2,10 @@ using Microsoft.EntityFrameworkCore;
 
 using Larder.Data;
 using Larder.Models;
+using Larder.Repository.Interface;
+using Larder.Models.SortOptions;
 
-namespace Larder.Repository;
-
-public enum RecipeSortOptions
-{
-    AnyOrder,
-    Name,
-    Name_Desc
-}
+namespace Larder.Repository.Impl;
 
 public class RecipeRepository(AppDbContext dbContext)
                 : RepositoryBase<Recipe, RecipeSortOptions>(dbContext),

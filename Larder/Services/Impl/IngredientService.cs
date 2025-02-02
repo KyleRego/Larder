@@ -1,7 +1,8 @@
 using Larder.Dtos;
 using Larder.Models;
 using Larder.Models.ItemComponents;
-using Larder.Repository;
+using Larder.Models.SortOptions;
+using Larder.Repository.Interface;
 using Larder.Services.Interface;
 
 namespace Larder.Services.Impl;

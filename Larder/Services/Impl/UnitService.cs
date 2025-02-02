@@ -1,6 +1,8 @@
+using System.Linq;
 using Larder.Dtos;
 using Larder.Models;
-using Larder.Repository;
+using Larder.Repository.Impl;
+using Larder.Repository.Interface;
 using Larder.Services.Interface;
 
 namespace Larder.Services.Impl;
@@ -9,36 +11,38 @@ public class UnitService(IServiceProviderWrapper serviceProvider,
                                                     IUnitRepository repository)
                         : AppServiceBase(serviceProvider), IUnitService
 {
-    private readonly IUnitRepository _repository = repository;
+    private readonly IUnitRepository _unitData = repository;
 
     public async Task<UnitDto> CreateUnit(UnitDto dto)
     {
         Unit unit = new(CurrentUserId(), dto.Name, dto.Type); 
 
-        Unit insertedUnit = await _repository.Insert(unit);
+        Unit insertedUnit = await _unitData.Insert(unit);
 
         return UnitDto.FromEntity(insertedUnit);
     }
 
-    public async Task CreateUnits(List<UnitDto> unitDtos)
+    public async Task<IEnumerable<UnitDto>> CreateUnits(IEnumerable<UnitDto> unitDtos)
     {
-        IEnumerable<Unit> units = unitDtos.Select<UnitDto, Unit>
-                (dto => new(CurrentUserId(), dto.Name,dto.Type));
+        List<Unit> units = [.. unitDtos.Select<UnitDto, Unit>
+                (dto => new(CurrentUserId(), dto.Name, dto.Type))];
 
-        await _repository.InsertAll(units);
+        IEnumerable<Unit> insertedUnits = await _unitData.InsertAll(units);
+
+        return insertedUnits.Select(UnitDto.FromEntity);
     }
 
     public async Task DeleteUnit(string id)
     {
-        Unit unit = await _repository.Get(CurrentUserId(), id)
+        Unit unit = await _unitData.Get(CurrentUserId(), id)
             ?? throw new ApplicationException("Unit was not found.");
 
-        await _repository.Delete(unit);
+        await _unitData.Delete(unit);
     }
 
     public async Task<UnitDto?> GetUnit(string id)
     {
-        Unit? entity = await _repository.Get(CurrentUserId(), id);
+        Unit? entity = await _unitData.Get(CurrentUserId(), id);
 
         if (entity == null) return null;
 
@@ -49,7 +53,7 @@ public class UnitService(IServiceProviderWrapper serviceProvider,
                                                                 string? search)
     {
         List<Unit> units =
-            await _repository.GetAll(CurrentUserId(), sortOrder, search);
+            await _unitData.GetAll(CurrentUserId(), sortOrder, search);
 
         List<UnitDto> dtos = [];
 
@@ -65,13 +69,13 @@ public class UnitService(IServiceProviderWrapper serviceProvider,
     {
         ArgumentNullException.ThrowIfNull(dto.Id);
 
-        Unit entity = await _repository.Get(CurrentUserId(), dto.Id)
+        Unit entity = await _unitData.Get(CurrentUserId(), dto.Id)
             ?? throw new ApplicationException("unit not found");
 
         entity.Name = dto.Name;
         entity.Type = dto.Type;
 
-        Unit updatedUnit = await _repository.Update(entity);
+        Unit updatedUnit = await _unitData.Update(entity);
 
         return UnitDto.FromEntity(updatedUnit);
     }

@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 
 using Larder.Data;
-using Larder.Repository;
 using Larder.Services;
 using Larder.Policies.Requirements;
 using Larder.Policies.Handlers;
 using Larder.Services.Interface;
 using Larder.Services.Impl;
+using Larder.Repository.Interface;
+using Larder.Repository.Impl;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

@@ -1,6 +1,6 @@
 using Larder.Dtos;
 using Larder.Models;
-using Larder.Repository;
+using Larder.Repository.Interface;
 using Larder.Services.Interface;
 
 namespace Larder.Services.Impl;
@@ -40,11 +40,11 @@ public class UnitConversionService(
 
         Unit unit = await _unitData.Get(userId, dto.UnitId)
                 ?? throw new ApplicationException(
-                    $"Unit with id {dto.UnitId} not found.");
+                    $"Unit with ID {dto.UnitId} not found.");
 
         Unit targetUnit = await _unitData.Get(userId, dto.TargetUnitId)
                 ?? throw new ApplicationException(
-                    $"Unit with id {dto.TargetUnitId} not found.");
+                    $"Unit with Target ID {dto.TargetUnitId} not found.");
 
         CheckConversionValid(unit, targetUnit);
 

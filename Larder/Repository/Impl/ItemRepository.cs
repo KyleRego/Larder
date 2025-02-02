@@ -2,18 +2,12 @@ using Larder.Data;
 using Larder.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Larder.Repository;
+namespace Larder.Repository.Impl;
 
-public enum ItemSortOptions
-{
-    AnyOrder,
-    Name,
-    Name_Desc,
-    Amount,
-    Amount_Desc,
-    Description,
-    Description_Desc
-}
+using Larder.Models.SortOptions;
+using Larder.Repository.Interface;
+
+
 
 public class ItemRepository(AppDbContext dbContext)
             : RepositoryBase<Item, ItemSortOptions>(dbContext), IItemRepository

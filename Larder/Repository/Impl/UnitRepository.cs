@@ -2,7 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using Larder.Data;
 using Larder.Models;
 
-namespace Larder.Repository;
+namespace Larder.Repository.Impl;
+
+using System.Linq;
+using Larder.Repository.Interface;
 
 public enum UnitSortOptions
 {
@@ -56,9 +59,18 @@ public class UnitRepository(AppDbContext dbContext)
         return await searchQuery.ToListAsync();
     }
 
-    public async Task InsertAll(IEnumerable<Unit> units)
+    public async Task<List<Unit>> InsertAll(List<Unit> units)
     {
         _dbContext.Units.AddRange(units);
         await _dbContext.SaveChangesAsync();
+
+        string userId = units.First().UserId;
+        List<string> unitNames = [.. units.Select(u => u.Name)];
+
+        List<Unit> savedUnits =
+            [.. _dbContext.Units.Where(
+                u => u.UserId == userId && unitNames.Contains(u.Name))];
+        
+        return savedUnits;
     }
 }

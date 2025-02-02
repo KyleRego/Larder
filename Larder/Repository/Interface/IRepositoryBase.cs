@@ -1,4 +1,4 @@
-namespace Larder.Repository;
+namespace Larder.Repository.Interface;
 
 public interface IRepositoryBase<T, TSortOptions>
 {

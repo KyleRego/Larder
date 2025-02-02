@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 
 using Larder.Dtos;
-using Larder.Repository;
 using Larder.Services.Interface;
+using Larder.Models.SortOptions;
 
 namespace Larder.Controllers;
 
 public class IngredientsController(IIngredientService ingredientService)
-                                        : AppControllerBase
+                                                        : AppControllerBase
 {
     private readonly IIngredientService _ingredientService = ingredientService;
 

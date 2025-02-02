@@ -2,21 +2,12 @@ using Larder.Data;
 using Larder.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Larder.Repository;
+namespace Larder.Repository.Impl;
 
-public enum UnitConversionSortOptions
-{
-    AnyOrder,
-    UnitType
-}
+using Larder.Models.SortOptions;
+using Larder.Repository.Interface;
 
-public interface IUnitConversionRepository
-                : IRepositoryBase<UnitConversion, UnitConversionSortOptions>
-{
-    public Task<UnitConversion?> FindByUnitIdsEitherWay(string userId,
-                                                        string unitId1,
-                                                        string unitId2);
-}
+
 
 public class UnitConversionRepository(AppDbContext dbContext)
         : RepositoryBase<UnitConversion, UnitConversionSortOptions>(dbContext),

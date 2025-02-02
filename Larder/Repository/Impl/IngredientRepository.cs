@@ -3,17 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Larder.Data;
 using Larder.Models;
 using Larder.Models.ItemComponents;
+using Larder.Repository.Interface;
+using Larder.Models.SortOptions;
 
-namespace Larder.Repository;
-
-public enum IngredientSortOptions
-{
-    AnyOrder,
-    Name,
-    Name_Desc,
-    Quantity,
-    Quantity_Desc
-}
+namespace Larder.Repository.Impl;
 
 public class IngredientRepository(AppDbContext dbContext)
     : RepositoryBase<Item, IngredientSortOptions>(dbContext),
