@@ -16,7 +16,7 @@ export default function FoodsTable({searchParam} : {searchParam: string }) {
 
     useEffect(() => {
         apiClient.get<ItemDto[]>("/api/foods",
-            { params: {search: searchParam, sortBy: sortOrder}})
+            { params: {search: searchParam, sortOrder: sortOrder}})
             .then(res => setItems(res.data))
             .catch(error => console.log(error));
     }, [searchParam, sortOrder])
