@@ -4,18 +4,19 @@ import { FoodSortOptions } from "../../types/FoodSortOptions";
 import SortingTableHeader from "../SortingTableHeader";
 import { useNavigate } from "react-router";
 import { apiClient } from "../../util/axios";
+import { NutritionDto } from "../../types/NutritionDto";
 
 export default function FoodsTable({searchParam} : {searchParam: string }) {
-
     const [items, setItems] = useState<ItemDto[]>([]);         
     const [sortOrder, setSortOrder] = useState(FoodSortOptions.Name);
 
     const foodRows = items.map(item => {
-        return <FoodRow key={item.id} item={item} />
+        return <NutritionRow key={item.id} nutrition={item.nutrition!} item={item} />
     });
 
     useEffect(() => {
-        apiClient.get<ItemDto[]>("/api/foods", { params: {search: searchParam, sortBy: sortOrder}})
+        apiClient.get<ItemDto[]>("/api/foods",
+            { params: {search: searchParam, sortBy: sortOrder}})
             .then(res => setItems(res.data))
             .catch(error => console.log(error));
     }, [searchParam, sortOrder])
@@ -56,20 +57,24 @@ export default function FoodsTable({searchParam} : {searchParam: string }) {
     );
 }
 
-function FoodRow({item} : {item: ItemDto}) : ReactNode {
+function NutritionRow({item, nutrition}
+        : {item: ItemDto, nutrition: NutritionDto}) : ReactNode {
     const navigate = useNavigate();
+    const itemId: string = item.id!
 
     function handleRowClick() {
-        navigate(`/items/${item.id}`);
+        navigate(`/items/${itemId}`);
     }
 
     return (
-        <tr role="button" onClick={handleRowClick} id={item.id!}>
-            <th scope="row">{item.name}</th>
-            <td>{String(item.nutrition!.calories)}</td>
-            <td>{String(item.nutrition!.gramsProtein)}</td>
-            <td>{String(item.nutrition!.gramsTotalCarbs)}</td>
-            <td>{String(item.nutrition!.gramsTotalFat)}</td>
+        <tr role="button" onClick={handleRowClick} id={itemId} >
+            <th scope="row" style={{maxWidth: "10rem", overflowX: "hidden"}}>
+                {item.name}
+            </th>
+            <td>{String(nutrition.calories)}</td>
+            <td>{String(nutrition.gramsProtein)}</td>
+            <td>{String(nutrition.gramsTotalCarbs)}</td>
+            <td>{String(nutrition.gramsTotalFat)}</td>
         </tr>
     );
 }
