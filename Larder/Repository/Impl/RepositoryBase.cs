@@ -6,11 +6,6 @@ using Larder.Models;
 
 namespace Larder.Repository.Impl;
 
-public enum SortOptionsBase
-{
-    AnyOrder
-}
-
 public abstract class RepositoryBase<T, TSortOptions>(AppDbContext dbContext)
                                 : IRepositoryBase<T, TSortOptions>
                                             where T : EntityBase
