@@ -3,8 +3,7 @@ import ItemForm from "../forms/ItemForm";
 import { ItemDto } from "../types/ItemDto";
 import { useApiRequest } from "../hooks/useApiRequest";
 
-
-export default function NewItem2() {
+export default function NewItem() {
     const { handleRequest } = useApiRequest();
     const navigate = useNavigate();
 
