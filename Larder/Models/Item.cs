@@ -1,3 +1,4 @@
+using Larder.Dtos;
 using Larder.Models.ItemComponents;
 
 namespace Larder.Models;
@@ -5,6 +6,22 @@ namespace Larder.Models;
 public class Item(string userId, string name, string? description = null)
                                                 : UserOwnedEntity(userId)
 {
+    public static Item FromDto(ItemDto dto, string userId)
+    {
+        Quantity quantity = dto.Quantity != null
+            ? Quantity.FromDto(dto.Quantity) : Quantity.One();
+
+        Item item = new(userId, dto.Name, dto.Description)
+        {
+            Quantity = quantity
+        };
+
+        item.Nutrition = dto.Nutrition != null
+            ? Nutrition.FromDto(dto.Nutrition, item) : null;
+
+        return item;
+    }
+
     public Item(string userId, string name) : this(userId, name, null) { }
 
     public string Name { get; set; } = name;

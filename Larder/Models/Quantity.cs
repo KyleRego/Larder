@@ -15,6 +15,15 @@ public class Quantity
         };
     }
 
+    public static Quantity One()
+    {
+        return new()
+        {
+            Amount = 1,
+            UnitId = null
+        };
+    }
+
     public double Amount { get; set; }
 
     public string? UnitId { get; set; }

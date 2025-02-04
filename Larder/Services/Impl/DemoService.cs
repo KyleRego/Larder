@@ -5,29 +5,28 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Larder.Services.Impl;
 
-public class DemoService(UserManager<ApplicationUser> userManager,
-                        SignInManager<ApplicationUser> signInManager,
-                        IFoodService foodService,
-                        IRecipeService recipeService,
-                        IUnitService unitService,
-                        IUnitConversionService unitConversionService)
+public class DemoService(   UserManager<ApplicationUser> userManager,
+                            SignInManager<ApplicationUser> signInManager,
+                            IUnitService unitService,
+                            IUnitConversionService unitConversionService,
+                            IItemService itemService)
                                                         : IDemoService
 {
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly SignInManager<ApplicationUser> _signInManager
                                                             = signInManager;
-    private readonly IFoodService _foodService = foodService;
-    private readonly IRecipeService _recipeService = recipeService;
     private readonly IUnitService _unitService = unitService;
     private readonly IUnitConversionService _unitConversionService
                                                     = unitConversionService;
+    private readonly IItemService _itemService = itemService;
 
     private static readonly List<UnitDto> _demoUnits = [
         new() { Name="mg", Type=UnitType.Mass },
         new() { Name="g", Type=UnitType.Mass},
         new() { Name="ml", Type=UnitType.Volume},
         new() { Name="cups", Type=UnitType.Volume},
-        new() { Name="tablespoons", Type=UnitType.Volume }
+        new() { Name="tablespoons", Type=UnitType.Volume },
+        new() { Name="half butter sticks", Type=UnitType.Volume}
     ];
 
     public async Task CreateDemo()
@@ -54,6 +53,7 @@ public class DemoService(UserManager<ApplicationUser> userManager,
         UnitDto milligrams = demoUnits.First(u => u.Name == "mg");
         UnitDto cups = demoUnits.First(u => u.Name == "cups");
         UnitDto tablespoons = demoUnits.First(u => u.Name == "tablespoons");
+        UnitDto halfSticks = demoUnits.First(u => u.Name == "half butter sticks");
 
         UnitConversionDto gramsConversion = new()
         {
@@ -71,5 +71,43 @@ public class DemoService(UserManager<ApplicationUser> userManager,
 
         await _unitConversionService.CreateUnitConversion(gramsConversion);
         await _unitConversionService.CreateUnitConversion(cupsConversion);
+
+        ItemDto butter = new()
+        {
+            Name = "Butter",
+            Description = "",
+            Quantity = new() { Amount = 3, UnitId = halfSticks.Id },
+            Nutrition = new()
+            {
+                ServingSize = new() { Amount = 1, UnitId = tablespoons.Id },
+                Calories = 100,
+                GramsTotalFat = 11,
+                GramsSaturatedFat = 7,
+                MilligramsCholesterol = 30,
+                MilligramsSodium = 90,
+                GramsTotalCarbs = 0,
+                GramsProtein = 0
+            }
+        };
+
+        ItemDto riceBox = new()
+        {
+            Name = "Rice Roni chicken (family size)",
+            Description = "Family size",
+            Quantity = QuantityDto.One(),
+            Nutrition = new()
+            {
+                ServingSize = new() { Amount = 56, UnitId = grams.Id},
+                Calories = 190,
+                GramsTotalFat = 5,
+                MilligramsSodium = 730,
+                GramsTotalCarbs = 41,
+                GramsDietaryFiber = 1,
+                GramsTotalSugars = 1,
+                GramsProtein = 5
+            }
+        };
+
+        await _itemService.CreateItems([butter, riceBox]);
     }
 }

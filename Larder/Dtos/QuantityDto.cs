@@ -18,4 +18,12 @@ public class QuantityDto
             UnitName = quantity.Unit?.Name
         };
     }
+
+    public static QuantityDto One()
+    {
+        return new()
+        {
+            Amount = 1, UnitId = null, UnitName = null
+        };
+    }
 }

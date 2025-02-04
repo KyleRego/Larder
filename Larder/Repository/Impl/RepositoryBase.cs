@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Larder.Data;
 using Larder.Repository.Interface;
+using Larder.Models;
 
 namespace Larder.Repository.Impl;
 
@@ -11,9 +12,11 @@ public enum SortOptionsBase
 }
 
 public abstract class RepositoryBase<T, TSortOptions>(AppDbContext dbContext)
-                                             : IRepositoryBase<T, TSortOptions>
+                                : IRepositoryBase<T, TSortOptions>
+                                            where T : EntityBase
 {
     protected readonly AppDbContext _dbContext = dbContext;
+    protected readonly DbSet<T> _dbSet = dbContext.Set<T>();
 
     public abstract Task<T?> Get(string userId, string id);
 
@@ -30,6 +33,16 @@ public abstract class RepositoryBase<T, TSortOptions>(AppDbContext dbContext)
         await _dbContext.SaveChangesAsync();
 
         return newEntity;
+    }
+
+    public async Task<List<T>> InsertAll(List<T> newEntities)
+    {
+        ArgumentNullException.ThrowIfNull(newEntities);
+
+        await _dbSet.AddRangeAsync(newEntities);
+        await _dbContext.SaveChangesAsync();
+
+        return [.. newEntities];
     }
 
     public async Task<T> Update(T editedEntity)

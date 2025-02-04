@@ -8,6 +8,7 @@ public interface IRepositoryBase<T, TSortOptions>
                                                     string? search);
 
     public Task<T> Insert(T newEntity);
+    public Task<List<T>> InsertAll(List<T> newEntities);
 
     public Task<T> Update(T editedEntity);
 

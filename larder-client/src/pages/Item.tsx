@@ -40,7 +40,7 @@ export default function Item() {
                         <Link to={"/items"}>Items</Link>
                     </li>
                     <li className="breadcrumb-item active">
-                        <h1 className="fs-6">{item.name}</h1>
+                        <h1 className="d-inline fs-6">{item.name}</h1>
                     </li>
                 </ol>
             </nav>

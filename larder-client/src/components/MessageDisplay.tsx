@@ -31,8 +31,8 @@ export default function MessageDisplay() {
             break;
         case ApiResponseType.Danger:
             bgColorCss = "bg-danger";
-            borderCss = "border-danger";
-            btnCss = "btn-outline-danger"
+            borderCss = "border-black";
+            btnCss = "btn-primary"
             break;
     }
 

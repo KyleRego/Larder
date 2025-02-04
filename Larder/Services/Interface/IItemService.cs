@@ -9,6 +9,7 @@ public interface IItemService
     public Task<List<ItemDto>> GetItems(ItemSortOptions sortBy,
                                                 string? search);
     public Task<ItemDto> CreateItem(ItemDto itemDto);
+    public Task<List<ItemDto>> CreateItems(List<ItemDto> itemDtos);
     public Task<ItemDto> UpdateItem(ItemDto itemDto);
     public Task DeleteItem(string id);
 }

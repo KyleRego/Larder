@@ -15,20 +15,19 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
 
     public async Task<ItemDto> CreateItem(ItemDto itemDto)
     {
-        string userId = CurrentUserId();
-        Quantity quantity = itemDto.Quantity != null ?
-            Quantity.FromDto(itemDto.Quantity) : new() { Amount = 1 };
-
-        Item item = new(userId, itemDto.Name, itemDto.Description)
-        {
-            Quantity = quantity
-        };
-
-        item.Nutrition = (itemDto.Nutrition != null) ? Nutrition.FromDto(itemDto.Nutrition, item) : null;
-
-        item = await _itemData.Insert(item);
+        Item item = await _itemData.Insert(Item.FromDto(itemDto, CurrentUserId()));
 
         return ItemDto.FromEntity(item);
+    }
+
+    public async Task<List<ItemDto>> CreateItems(List<ItemDto> itemDtos)
+    {
+        string userId = CurrentUserId();
+        List<Item> items = [.. itemDtos.Select(dto => Item.FromDto(dto, userId))];
+
+        IEnumerable<Item> insertedItems = await _itemData.InsertAll(items);
+
+        return [.. insertedItems.Select(ItemDto.FromEntity)];
     }
 
     public async Task DeleteItem(string id)

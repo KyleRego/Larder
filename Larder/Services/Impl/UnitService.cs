@@ -22,14 +22,14 @@ public class UnitService(IServiceProviderWrapper serviceProvider,
         return UnitDto.FromEntity(insertedUnit);
     }
 
-    public async Task<IEnumerable<UnitDto>> CreateUnits(IEnumerable<UnitDto> unitDtos)
+    public async Task<List<UnitDto>> CreateUnits(List<UnitDto> unitDtos)
     {
         List<Unit> units = [.. unitDtos.Select<UnitDto, Unit>
                 (dto => new(CurrentUserId(), dto.Name, dto.Type))];
 
-        IEnumerable<Unit> insertedUnits = await _unitData.InsertAll(units);
+        List<Unit> insertedUnits = await _unitData.InsertAll(units);
 
-        return insertedUnits.Select(UnitDto.FromEntity);
+        return [ .. insertedUnits.Select(UnitDto.FromEntity) ];
     }
 
     public async Task DeleteUnit(string id)
