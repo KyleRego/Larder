@@ -3,8 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import { ItemDto } from "../types/ItemDto";
 import { useApiRequest } from "../hooks/useApiRequest";
 import Loading from "../components/Loading";
-import { formatQuantity } from "../types/QuantityDto";
-import QuantitySpan from "../components/QuantitySpan";
 import NutritionCard from "../components/cards/NutritionCard";
 import ItemCard from "../components/cards/ItemCard";
 import EditLink from "../components/EditLink";
@@ -48,27 +46,20 @@ export default function Item() {
 
             <div className="d-flex align-items-start column-gap-3 row-gap-3 flex-wrap">
             
-            <div className="d-flex flex-column align-items-center row-gap-3">
-                <ItemCard item={item} />
-                <EditLink   path={`/items/${item.id}/edit`}
-                                                    title={`Edit ${item.name}`} />
-            </div>
-            
-
-            {item.nutrition &&
-                <NutritionCard nutrition={item.nutrition} />
-            }
-
-            {item.nutrition &&
-                <div className="card">
-                        <div className="card-body">
-                            <h4 className="card-title">Eat quantity:</h4>
-                            <p>Quantity available: {item.quantity !== null ? formatQuantity(item.quantity!) : "N/a"}</p>
+                <div className="d-flex flex-row flex-sm-column column-gap-3 align-items-center row-gap-3">
+                    <ItemCard item={item} />
+                    <EditLink   path={`/items/${item.id}/edit`}
+                                                        title={`Edit ${item.name}`} />
+                </div>
                 
-                            <p>Serving size: <QuantitySpan quantity={item.nutrition!.servingSize} /></p>
-                        </div>
+                {item.nutrition &&
+                    <div className="d-flex flex-row flex-sm-column column-gap-3 align-items-center row-gap-3">
+                        <NutritionCard nutrition={item.nutrition} />
+                        <Link to={`/items/${item.id}/eat`} title={`Eat ${item.name}`} className="btn btn-dark">
+                            Eat food
+                        </Link>
                     </div>
-            }
+                }
             </div>
         </>
     )

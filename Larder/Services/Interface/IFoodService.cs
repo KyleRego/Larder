@@ -9,5 +9,5 @@ public interface IFoodService
                                                     string? search);
 
 
-    public Task EatFood(FoodServingsDto dto);
+    public Task<ItemDto> EatFood(EatFoodDto dto);
 }

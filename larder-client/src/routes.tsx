@@ -11,6 +11,7 @@ import UnitPage from './pages/Unit';
 import EditUnit from './pages/EditUnit';
 import Item from './pages/Item';
 import EditItem from './pages/EditItem';
+import EatFood from './pages/EatFood';
 
 export const router = createBrowserRouter([{
     path: "/",
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([{
         { path: '/items/new', element: <NewItem /> },
         { path: '/items/:id', element: <Item /> },
         { path: '/items/:id/edit', element: <EditItem /> },
+        { path: '/items/:id/eat', element: <EatFood /> },
         { path: '/units', element: <Units /> },
         { path: '/units/:id', element: <UnitPage /> },
         { path: '/units/:id/edit', element: <EditUnit /> },

@@ -9,7 +9,7 @@ export default function ItemCard({item} : {item: ItemDto}) {
                             {item.name}
                         </h2>
                         { item.quantity && 
-                        <div>
+                        <div className="fs-4" title="Quantity">
                             <QuantitySpan quantity={item.quantity} />
                         </div>
                         }

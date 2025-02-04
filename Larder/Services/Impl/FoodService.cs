@@ -23,15 +23,15 @@ public class FoodService(  IServiceProviderWrapper serviceProvider,
                                     .Select(ItemDto.FromEntity)];
     }
 
-    public async Task EatFood(FoodServingsDto dto)
+    public async Task<ItemDto> EatFood(EatFoodDto dto)
     {
-        Item foodItem = await _foodData.Get(CurrentUserId(), dto.FoodId)
+        Item foodItem = await _foodData.Get(CurrentUserId(), dto.ItemId)
             ?? throw new ApplicationException(
-                $"Food with id {dto.FoodId} not found");
+                $"Food with id {dto.ItemId} not found");
 
         Nutrition nutrition = foodItem.Nutrition
             ?? throw new ApplicationException(
-                $"Food with id {dto.FoodId} has no nutrition component");
+                $"Food with id {dto.ItemId} has no nutrition component");
 
         Quantity foodQuantity = foodItem.Quantity;
         Quantity quantityEaten = Quantity.FromDto(dto.QuantityEaten);
@@ -39,6 +39,8 @@ public class FoodService(  IServiceProviderWrapper serviceProvider,
         Quantity quantityLeft = await _quantityMathService.Subtract(foodQuantity, quantityEaten);
         foodItem.Quantity = quantityLeft;
 
-        await _foodData.Update(foodItem);
+        Item updatedItem = await _foodData.Update(foodItem);
+
+        return ItemDto.FromEntity(updatedItem);
     }
 }

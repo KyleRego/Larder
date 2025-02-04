@@ -1,8 +1,8 @@
 namespace Larder.Dtos;
 
-public class FoodServingsDto
+public class EatFoodDto
 {
-    public required string FoodId { get; set; }
+    public required string ItemId { get; set; }
 
     public required QuantityDto QuantityEaten { get; set; }
 }
