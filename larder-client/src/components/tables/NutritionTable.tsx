@@ -1,27 +1,53 @@
-import { UINutrientData } from "../../data/UINutrientData";
 import { NutritionDto } from "../../types/NutritionDto";
 
 export default function NutritionTable({nutrition} : {nutrition: NutritionDto}) {
-    const tableRows = UINutrientData.map(entry => {
-        const field = entry.field;
-        const label = entry.label;
-
-        return <tr>
-                <td scope="row">{label}</td>
-                <td>{`${(nutrition as any)[field]} ${entry.unitName}`}</td>
-            </tr>;
-    })
-
     return <table className="table">
         <caption>
             Nutrition per serving size quantity
         </caption>
         <thead>
-            <th scope="col">Nutrient</th>
-            <th scope="col">Quantity</th>
-        </thead>
+        <tr>
+            <th scope="col" colSpan={2}>Macronutrients</th>
+            <th scope="col" colSpan={2}>Micronutrients</th>
+        </tr>
+    </thead>
         <tbody>
-            {tableRows}
+            <tr>
+                <td>Calories</td>
+                <td>{nutrition.calories}</td>
+                <td>Sodium</td>
+                <td>{nutrition.milligramsSodium}</td>
+            </tr>
+            <tr>
+                <td>Protein</td>
+                <td>{nutrition.gramsProtein} g</td>
+                <td>Cholesterol</td>
+                <td>{nutrition.milligramsCholesterol} mg</td>
+            </tr>
+            <tr>
+                <td>Total carbs</td>
+                <td>{nutrition.gramsTotalCarbs} g</td>
+            </tr>
+            <tr>
+                <td>Total fat</td>
+                <td>{nutrition.gramsTotalFat} g</td>
+            </tr>
+            <tr>
+                <td>Total sugars</td>
+                <td>{nutrition.gramsTotalSugars} g</td>
+            </tr>
+            <tr>
+                <td>Dietary fiber</td>
+                <td>{nutrition.gramsDietaryFiber} g</td>
+            </tr>
+            <tr>
+                <td>Saturated fat</td>
+                <td>{nutrition.gramsSaturatedFat} g</td>
+            </tr>
+            <tr>
+                <td>Trans fat</td>
+                <td>{nutrition.gramsTransFat} g</td>
+            </tr>
         </tbody>
     </table>;
 }

@@ -7,6 +7,7 @@ import { formatQuantity } from "../types/QuantityDto";
 import QuantitySpan from "../components/QuantitySpan";
 import NutritionCard from "../components/cards/NutritionCard";
 import ItemCard from "../components/cards/ItemCard";
+import EditLink from "../components/EditLink";
 
 export default function Item() {
     const { id } = useParams<{id: string}>();
@@ -45,10 +46,14 @@ export default function Item() {
                 </ol>
             </nav>
 
-            <div className=" d-sm-flex-row flex-column align-items-sm-start align-items-end my-4 d-flex column-gap-3 row-gap-3 flex-wrap">
-            { item.quantity &&
+            <div className="d-flex align-items-start column-gap-3 row-gap-3 flex-wrap">
+            
+            <div className="d-flex flex-column align-items-center row-gap-3">
                 <ItemCard item={item} />
-            }
+                <EditLink   path={`/items/${item.id}/edit`}
+                                                    title={`Edit ${item.name}`} />
+            </div>
+            
 
             {item.nutrition &&
                 <NutritionCard nutrition={item.nutrition} />
