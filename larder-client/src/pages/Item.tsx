@@ -44,16 +44,16 @@ export default function Item() {
                 </ol>
             </nav>
 
-            <div className="d-flex align-items-start column-gap-3 row-gap-3 flex-wrap">
+            <div className="d-flex align-items-start column-gap-3 row-gap-3 flex-wrap my-4">
             
-                <div className="d-flex flex-row flex-sm-column column-gap-3 align-items-center row-gap-3">
+                <div className="d-flex flex-row flex-md-column column-gap-3 align-items-center row-gap-3 flex-wrap">
                     <ItemCard item={item} />
                     <EditLink   path={`/items/${item.id}/edit`}
                                                         title={`Edit ${item.name}`} />
                 </div>
                 
                 {item.nutrition &&
-                    <div className="d-flex flex-row flex-sm-column column-gap-3 align-items-center row-gap-3">
+                    <div className="d-flex flex-row flex-md-column column-gap-3 align-items-center row-gap-3 flex-wrap">
                         <NutritionCard nutrition={item.nutrition} />
                         <Link to={`/items/${item.id}/eat`} title={`Eat ${item.name}`} className="btn btn-dark">
                             Eat food
