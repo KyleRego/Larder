@@ -5,20 +5,23 @@ import SortingTableHeader from "../SortingTableHeader";
 import { apiClient } from "../../util/axios";
 import { useNavigate } from "react-router";
 import QuantitySpan from "../QuantitySpan";
+import Loading from "../Loading";
 
 export default function ItemsTable({searchParam} : {searchParam: string }) {
-    const [items, setItems] = useState<ItemDto[]>([]);         
+    const [items, setItems] = useState<ItemDto[] | null>(null);         
     const [sortOrder, setSortOrder] = useState(ItemSortOptions.Name);
-
-    const itemRows = items.map(item => {
-        return <ItemRow key={item.id} item={item} />
-    })
 
     useEffect(() => {
         apiClient.get<ItemDto[]>("/api/items", { params: {search: searchParam, sortOrder: sortOrder}})
             .then(res => setItems(res.data))
             .catch(error => console.log(error));
     }, [searchParam, sortOrder])
+
+    if (items === null) return <Loading />
+
+    const itemRows = items.map(item => {
+        return <ItemRow key={item.id} item={item} />
+    })
     
     return (
         <table className="table table-striped table-hover">

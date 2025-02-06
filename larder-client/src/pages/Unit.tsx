@@ -9,6 +9,8 @@ import { UnitConversionDto } from "../types/UnitConversionDto";
 import UnitConversionDiv from "../components/UnitConversion";
 import { Link } from "react-router-dom";
 import { useApiRequest } from "../hooks/useApiRequest";
+import BreadCrumbs from "../Breadcrumbs";
+import ActionBar from "../ActionBar";
 
 export default function UnitPage() {
     const [unit, setUnit] = useState<UnitDto | null>(null);
@@ -63,49 +65,52 @@ export default function UnitPage() {
     }
 
     return (
-        <>
-            <nav aria-label="breadcrumb">
-                <ol className="breadcrumb">
-                    <li className="breadcrumb-item" aria-current="page">
-                        <Link to={"/units"}>Units</Link>
-                    </li>
-                    <li className="breadcrumb-item active">
-                        {unit.name}
-                    </li>
-                </ol>
-            </nav>
+        <div className="d-flex flex-column h-100">
+            <BreadCrumbs>
+                <li className="breadcrumb-item" aria-current="page">
+                    <Link to={"/units"}>Units</Link>
+                </li>
+                <li className="breadcrumb-item active">
+                    {unit.name}
+                </li>
+            </BreadCrumbs>
 
-            <div className="d-flex align-items-center column-gap-3">
-                <h1>{unit.name}</h1>
-
-                <EditLink path={`/units/${unit.id}/edit`} title="Edit unit" />
-            </div>
-
-            <div className="mt-4">
-                <p>Type: {UnitDto.getType(unit)}</p>
-            </div>
-
-            <div className="mt-4">
-                <h2>Unit Conversions:</h2>
-
-                <div className="mt-4 d-flex flex-column align-items-center">
-                    {unitConversions}
+            <div className="container flex-grow-1">
+                <h1>
+                    {unit.name}
+                </h1>
+                <div className="mt-4">
+                    <p>Type: {UnitDto.getType(unit)}</p>
                 </div>
 
-                <div className="mt-2 d-flex justify-content-start">
-                { adding ? (
-                    <UnitConversionForm handleSubmit={handleCreateConversion}
-                                        initialUnitConversion={null}
-                                        handleCancel={() => setAdding(false)} />
-                ) : (
-                    <button onClick={() => setAdding(true)} 
-                            className="btn btn-outline-primary"
-                            type="button">
-                        Add conversion
-                    </button> 
-                )}
+                <div className="mt-4">
+                    <h2 className="fs-3">Unit Conversions:</h2>
+
+                    <div className="mt-4 d-flex flex-column align-items-start">
+                        {unitConversions}
+                    </div>
+
+                    <div className="mt-2 d-flex justify-content-start">
+                    { adding ? (
+                        <UnitConversionForm handleSubmit={handleCreateConversion}
+                                            initialUnitConversion={null}
+                                            handleCancel={() => setAdding(false)} />
+                    ) : (
+                        <button onClick={() => setAdding(true)} 
+                                className="btn btn-outline-primary"
+                                type="button">
+                            Add conversion
+                        </button> 
+                    )}
+                    </div>
                 </div>
             </div>
-        </>
+
+            <ActionBar>
+                <div className="d-flex justify-content-center">
+                    <EditLink path={`/units/${unit.id}/edit`} title="Edit unit" />
+                </div>
+            </ActionBar>
+        </div>
     );
 }

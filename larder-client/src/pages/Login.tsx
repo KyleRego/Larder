@@ -27,8 +27,8 @@ export default function Login() {
             .catch(error => console.log(error));
     };
 
-    return <>
-        <h1 className="mt-2 mb-4 text-center">Login:</h1>
+    return <div className="container">
+        <h1 className="my-4 text-center">Login:</h1>
 
         <div>
             <form onSubmit={handleLogin}>
@@ -50,5 +50,5 @@ export default function Login() {
             Would you like to <Link to={"/register"}>register</Link> instead?
         </p>
 
-    </>;
+    </div>;
 }

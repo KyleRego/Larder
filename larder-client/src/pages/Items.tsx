@@ -3,6 +3,7 @@ import ItemsTable from "../components/tables/ItemsTable";
 import { Link } from "react-router-dom";
 import SearchBox from "../components/SearchBox";
 import FoodsTable from "../components/tables/FoodsTable";
+import ActionBar from "../ActionBar";
 
 enum TableVersions {
     AllItems = "All Items",
@@ -30,21 +31,27 @@ export default function Items() {
     }
 
     return (
-        <>
-            <div className="page-flex-header align-items-end">
+        <div className="h-100 d-flex flex-column">
+            <div className="mt-2 container d-flex align-items-end column-gap-5 flex-wrap row-gap-1 px-4 pt-2 pb-4">
                 <h1>Items</h1>
-
-                <SearchBox handleOnChange={handleSearchChange} />
 
                 <TableVersionDropdown currentVariant={currentTable} setCurrentTable={setCurrentTable} />
 
-                <Link className="btn btn-secondary border-black" to={"/items/new"}>New item</Link>
+                <SearchBox handleOnChange={handleSearchChange} />
             </div>
 
-            <div className="table-responsive">
+            <div className="table-responsive flex-grow-1 container">
                 {renderCurrentTable()}
             </div>
-        </>
+
+            <ActionBar>
+                <div className="d-flex justify-content-center">
+                    <Link className="btn btn-outline-light text-black border-black" to={"/items/new"}>
+                        New item
+                    </Link>
+                </div>
+            </ActionBar>
+        </div>
     );
 }
 
@@ -63,7 +70,7 @@ function TableVersionDropdown({currentVariant, setCurrentTable}
     });
 
     return <div className="dropdown">
-            <button className="btn btn-secondary dropdown-toggle border-black"
+            <button className="btn btn-light dropdown-toggle border-black"
                     type="button" aria-expanded="false"
                 onClick={() => setExpanded(!expanded)}    >
                 {currentVariant}

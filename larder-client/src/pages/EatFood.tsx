@@ -6,6 +6,8 @@ import { useApiRequest } from "../hooks/useApiRequest";
 import QuantityInput from "../forms/QuantityInput";
 import { QuantityDto } from "../types/QuantityDto";
 import { EatFoodDto } from "../types/EatFoodDto";
+import BreadCrumbs from "../Breadcrumbs";
+import ActionBar from "../ActionBar";
 
 export default function EatFood({}) {
     const { id } = useParams<{id: string}>();
@@ -57,27 +59,25 @@ export default function EatFood({}) {
         }
     }
 
-    return <>
-        <nav aria-label="breadcrumb">
-            <ol className="breadcrumb">
-                <li className="breadcrumb-item" aria-current="page">
-                    <Link to={"/items"}>Items</Link>
-                </li>
-                <li className="breadcrumb-item">
-                    <h1 className="d-inline fs-6">
-                        <Link to={`/items/${item.id}`}>
-                            {item.name}
-                        </Link>
-                    </h1>
-                </li>
-                <li className="breadcrumb-item">
-                    Eating item
-                </li>
-            </ol>
-        </nav>
+    return <div className="d-flex flex-column h-100">
+        <BreadCrumbs>
+            <li className="breadcrumb-item" aria-current="page">
+                <Link to={"/items"}>Items</Link>
+            </li>
+            <li className="breadcrumb-item">
+                <h1 className="d-inline fs-6">
+                    <Link to={`/items/${item.id}`}>
+                        {item.name}
+                    </Link>
+                </h1>
+            </li>
+            <li className="breadcrumb-item">
+                Eating item
+            </li>
+        </BreadCrumbs>
 
-        <div>
-            <h2 className="my-2">Eat item quantity:</h2>
+        <div className="container flex-grow-1">
+            <h2 className="my-4">Eat item quantity:</h2>
 
             <form id="eat-food-form" onSubmit={postEatFood}>
                 <div className="my-2">
@@ -85,11 +85,16 @@ export default function EatFood({}) {
                                 initialQuantity={null}
                                 handleQuantityChange={updateEatFoodDto} />
                 </div>
-
-                <button type="submit" className="btn btn-outline-primary">
-                    Eat food
-                </button>
             </form>
         </div>
-    </>
+
+        <ActionBar>
+            <div className="d-flex justify-content-center">
+                <button type="submit" form="eat-food-form"
+                        className="btn btn-outline-light border-black text-black">
+                    Eat food
+                </button>
+            </div>
+        </ActionBar>
+    </div>
 }

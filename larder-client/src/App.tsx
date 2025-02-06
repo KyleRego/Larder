@@ -9,7 +9,7 @@ import { MessageContext } from './contexts/MessageContext';
 import MessageDisplay from './components/MessageDisplay';
 import { Message } from './types/Message';
 
-function App() {
+export default function App() {
     const [authed, setAuthed] = useState(false);
     const [units, setUnits] = useState<UnitDto[]>([]);
     const [message, setMessage] = useState<Message | null>(null)
@@ -31,14 +31,10 @@ function App() {
         <AuthedContext.Provider value={{authed, setAuthed}}>
             <UnitsContext.Provider value={{units, setUnits}}>
                 <MessageContext.Provider value={{message, setMessage}}>
-                    <div className="bg-secondary-subtle min-vh-100 d-flex flex-column">
+                    <div className="bg-white vh-100 d-flex flex-column justify-content-start">
                         <NavBar />
-                        <div className="container mt-2 d-flex flex-column justify-content-center">
-                            <div className="">
-                                <div className="">
-                                    <Outlet />
-                                </div>
-                            </div>
+                        <div className="flex-grow-1">
+                            <Outlet />
                         </div>
                     </div>
                     <MessageDisplay />
@@ -47,5 +43,3 @@ function App() {
         </AuthedContext.Provider>
     );
 }
-
-export default App

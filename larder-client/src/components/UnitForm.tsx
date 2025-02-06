@@ -5,11 +5,9 @@ export default function UnitForm({unit, handleSubmit}: {
                 unit: UnitDto | null,
                 handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void
     }) {
-
-    const submitText = unit === null ? "Create unit" : "Update unit";
     
     return (
-        <form onSubmit={handleSubmit}>
+        <form id="unit-form" onSubmit={handleSubmit}>
             <div>
                 <label className="form-label" htmlFor="name">Unit name:</label>
                 <input required className="form-control" 
@@ -30,10 +28,6 @@ export default function UnitForm({unit, handleSubmit}: {
                         Weight
                     </option>
                 </select>
-            </div>
-
-            <div className="mt-4 d-flex justify-content-center">
-                <button className="btn btn-primary" type="submit">{submitText}</button>
             </div>
         </form>
     );

@@ -6,6 +6,8 @@ import { UnitDto } from "../types/UnitDto";
 import { ApiResponse } from "../types/ApiResponse";
 import { useContext } from "react";
 import { MessageContext } from "../contexts/MessageContext";
+import BreadCrumbs from "../Breadcrumbs";
+import ActionBar from "../ActionBar";
 
 export default function NewUnit() {
     const navigate = useNavigate();
@@ -28,22 +30,28 @@ export default function NewUnit() {
     }
 
     return (
-        <>
-            <nav aria-label="breadcrumb">
-                <ol className="breadcrumb">
-                    <li className="breadcrumb-item active" aria-current="page">
-                        <Link to={"/units"}>Back to units</Link>
-                    </li>
-                </ol>
-            </nav>
+        <div className="d-flex flex-column h-100">
+            <BreadCrumbs>
+                <li className="breadcrumb-item" aria-current="page">
+                    <Link to={"/units"}>Units</Link>
+                </li>
+                <li className="breadcrumb-item active">
+                    New unit
+                </li>
+            </BreadCrumbs>
 
-            <div className="page-flex-header">
-                <h1>New unit 📏</h1>
-            </div>
-
-            <div className="mt-4">
+            <div className="flex-grow-1 container">
                 <UnitForm unit={null} handleSubmit={handleSubmit} />
             </div>
-        </>
+
+            <ActionBar>
+                <div className="d-flex justify-content-center">
+                    <button type="submit" form="unit-form"
+                        className="btn btn-outline-light text-black border-black">
+                        Create unit
+                    </button>
+                </div>
+            </ActionBar>
+        </div>
     );
 }

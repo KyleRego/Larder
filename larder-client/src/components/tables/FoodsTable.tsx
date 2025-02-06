@@ -5,14 +5,11 @@ import SortingTableHeader from "../SortingTableHeader";
 import { useNavigate } from "react-router";
 import { apiClient } from "../../util/axios";
 import { NutritionDto } from "../../types/NutritionDto";
+import Loading from "../Loading";
 
 export default function FoodsTable({searchParam} : {searchParam: string }) {
-    const [items, setItems] = useState<ItemDto[]>([]);         
+    const [items, setItems] = useState<ItemDto[] | null>(null);         
     const [sortOrder, setSortOrder] = useState(FoodSortOptions.Name);
-
-    const foodRows = items.map(item => {
-        return <NutritionRow key={item.id} nutrition={item.nutrition!} item={item} />
-    });
 
     useEffect(() => {
         apiClient.get<ItemDto[]>("/api/foods",
@@ -20,6 +17,12 @@ export default function FoodsTable({searchParam} : {searchParam: string }) {
             .then(res => setItems(res.data))
             .catch(error => console.log(error));
     }, [searchParam, sortOrder])
+
+    if (items === null) return <Loading />
+
+    const foodRows = items.map(item => {
+        return <NutritionRow key={item.id} nutrition={item.nutrition!} item={item} />
+    });
 
     return (
         <table className="table table-striped table-hover">

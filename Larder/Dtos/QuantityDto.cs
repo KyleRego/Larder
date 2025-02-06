@@ -27,4 +27,12 @@ public class QuantityDto : IQuantity
             Amount = 1, UnitId = null, UnitName = null
         };
     }
+
+    public static QuantityDto Scalar(int amount)
+    {
+        return new()
+        {
+            Amount = amount, UnitId = null, UnitName = null
+        };
+    }
 }

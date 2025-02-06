@@ -25,6 +25,15 @@ public class Quantity : IQuantity
         };
     }
 
+    public static Quantity Scalar(int amount)
+    {
+        return new()
+        {
+            Amount = amount,
+            UnitId = null
+        };
+    }
+
     public double Amount { get; set; }
 
     public string? UnitId { get; set; }

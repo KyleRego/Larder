@@ -108,6 +108,26 @@ public class DemoService(   UserManager<ApplicationUser> userManager,
             }
         };
 
-        await _itemService.CreateItems([butter, riceBox]);
+        ItemDto apples = new()
+        {
+            Name = "Apples",
+            Description = "Crunchy red fruit",
+            Quantity = QuantityDto.Scalar(5),
+            Nutrition = new()
+            {
+                ServingSize = QuantityDto.One(),
+                Calories = 95,
+                GramsProtein = 0.5,
+                GramsTotalFat = 0.3,
+                GramsSaturatedFat = 0.1,
+                GramsTotalCarbs = 25,
+                GramsDietaryFiber = 4.4,
+                GramsTotalSugars = 19,
+                MilligramsCholesterol = 0,
+                MilligramsSodium = 2
+            }
+        };
+
+        await _itemService.CreateItems([butter, riceBox, apples]);
     }
 }

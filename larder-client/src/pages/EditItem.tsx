@@ -5,6 +5,8 @@ import { ItemDto } from "../types/ItemDto";
 import { useApiRequest } from "../hooks/useApiRequest";
 import Loading from "../components/Loading";
 import { Link } from "react-router-dom";
+import BreadCrumbs from "../Breadcrumbs";
+import ActionBar from "../ActionBar";
 
 export default function EditItem() {
     const { handleRequest } = useApiRequest();
@@ -42,31 +44,31 @@ export default function EditItem() {
 
     if (item === null) return <Loading />
 
-    return <>
-        <nav aria-label="breadcrumb">
-            <ol className="breadcrumb">
-                <li className="breadcrumb-item">
+    return <div className="h-100 d-flex flex-column">
+        <BreadCrumbs>
+            <li className="breadcrumb-item">
                     <Link to={"/items"}>Items</Link>
-                </li>
-                <li className="breadcrumb-item">
-                    <Link to={`/items/${item.id}`}>{item.name}</Link>
-                </li>
-                <li className="breadcrumb-item active">
-                    Editing item
-                </li>
-            </ol>
-        </nav>
+            </li>
+            <li className="breadcrumb-item">
+                <Link to={`/items/${item.id}`}>{item.name}</Link>
+            </li>
+            <li className="breadcrumb-item active">
+                Editing item
+            </li>
+        </BreadCrumbs>
 
-        <div>
+        <div className="container flex-grow-1">
             <ItemForm initialItem={item} submitFormItem={submitFormItem} />
         </div>
 
-        <div className="my-4">
-            <button type="submit" form="item-form"
-                    className="btn btn-outline-primary"
-                    id="item-form-submit">
-                Update item
-            </button>
-        </div>
-    </>;
+        <ActionBar>
+            <div className="d-flex justify-content-center">
+                <button type="submit" form="item-form"
+                        className="btn btn-outline-light text-black border-black"
+                        id="item-form-submit">
+                    Update item
+                </button>
+            </div>
+        </ActionBar>
+    </div>;
 }

@@ -37,7 +37,7 @@ export default function MessageDisplay() {
     }
 
     return (
-        <div className="container position-absolute bottom-0 start-50 translate-middle">
+        <div className="container position-fixed bottom-0 start-50 translate-middle" style={{zIndex: 9999, bottom: 0}}>
             <div className="d-flex justify-content-center">
                 <div className="card text-center border border-0 w-75">
                     <div className={`card-body ${bgColorCss} border ${borderCss} rounded`}>

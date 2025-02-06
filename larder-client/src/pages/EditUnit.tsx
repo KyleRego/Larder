@@ -4,11 +4,12 @@ import { useNavigate, useParams } from "react-router";
 import { apiClient } from "../util/axios";
 import Loading from "../components/Loading";
 import { UnitType } from "../types/UnitType";
-import { Link } from "react-router-dom";
 import UnitForm from "../components/UnitForm";
 import { MessageContext } from "../contexts/MessageContext";
 import { ApiResponse } from "../types/ApiResponse";
-import DeleteBtn from "../components/DeleteBtn";
+import ActionBar from "../ActionBar";
+import BreadCrumbs from "../Breadcrumbs";
+import { Link } from "react-router-dom";
 
 export default function EditUnit() {
     const [unit, setUnit] = useState<UnitDto | null>(null);
@@ -52,22 +53,37 @@ export default function EditUnit() {
     if (unit === null) return <Loading />;
 
     return (
-        <>
-            <div className="page-flex-header">
-                <div className="d-flex column-gap-5 align-items-center">
-                    <h1>Editing unit: {unit.name}</h1>
-                </div>
+        <div className="d-flex flex-column h-100">
+            <BreadCrumbs>
+                <li className="breadcrumb-item">
+                    <Link to={"/units"}>Units</Link>
+                </li>
+                <li className="breadcrumb-item">
+                    <Link to={`/units/${unit.id}`}>{unit.name}</Link>
+                </li>
+                <li className="breadcrumb-item active">
+                    Editing unit
+                </li>
+            </BreadCrumbs>
 
-                <DeleteBtn handleClick={handleDelete} />
-            </div>
-
-            <div className="mt-4">
+            <div className="container flex-grow-1">
                 <UnitForm unit={unit} handleSubmit={handleSubmit} />
             </div>
 
-            <div className="mt-4">
-                <Link className="btn btn-danger" to={`/units/${unit.id}`}>Cancel</Link>
-            </div>
-        </>
+            <ActionBar>
+                <div className="d-flex justify-content-between">
+                    <span className="invisible btn">Delete unit</span>
+                    <button type="submit" form="unit-form"
+                        className="btn btn-outline-light text-black border-black">
+                        Update unit
+                    </button>
+
+                    <button type="button" onClick={handleDelete}
+                        className="btn btn-danger">
+                        Delete unit
+                    </button>
+                </div>
+            </ActionBar>
+        </div>
     );
 }

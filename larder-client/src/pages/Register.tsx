@@ -42,8 +42,8 @@ export default function Register() {
         {errors.map(er => <li key={er}>{er}</li>)}
     </ol>;
 
-    return <>
-        <h1 className="mt-2 mb-4 text-center">Register:</h1>
+    return <div className="container">
+        <h1 className="my-4 text-center">Register:</h1>
 
         <div>
             {errorsInfo}
@@ -68,5 +68,5 @@ export default function Register() {
         <p className="text-center pt-4">
             Would you like to <Link to={"/login"}>login</Link> instead?
         </p>
-    </>;
+    </div>;
 }
