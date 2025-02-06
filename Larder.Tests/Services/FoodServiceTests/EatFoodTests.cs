@@ -4,64 +4,39 @@ using Larder.Models.ItemComponents;
 using Larder.Repository.Interface;
 using Larder.Services.Impl;
 using Larder.Services.Interface;
+using Larder.Tests.Repository;
 
 namespace Larder.Tests.Services.FoodServiceTests;
 
 public class EatFoodTests : ServiceTestsBase
 {
-    private readonly string _appliesId = "1";
-    private readonly Dictionary<string, Item> _foodMap;
     private readonly Mock<IQuantityMathService> _mockQuantMathService = new();
-    private readonly Mock<IFoodRepository> _mockFoodRepo = new();
-
-    public EatFoodTests()
-    {
-        Item apples = new(mockUserId, "Apples")
-        {
-            Quantity = new() { Amount = 4 }
-        };
-
-        Nutrition applesNutrition = new()
-        {
-            Item = apples,
-            Calories = 100,
-            GramsProtein = 2
-        };
-        apples.Nutrition = applesNutrition;
-
-        _foodMap = [];
-        _foodMap[_appliesId] = apples;
-        _mockFoodRepo.Setup(m => m.Get(mockUserId, _appliesId)).ReturnsAsync(apples);
-    }
 
     [Fact]
-    public async void EatFoodDecreasesItemQuantity()
+    public async void EatAppleDecreasesAmount()
     {
-        Item foodItem = _foodMap[_appliesId];
-        Quantity expectedNewQuantity = new() { Amount = 3 };
+        MockFoodRepository foodData = new();
+        Item apples = await foodData.Get(mockUserId, "apples")
+            ?? throw new ApplicationException("Data missing");
 
         EatFoodDto dto = new()
         {
-            ItemId = _appliesId,
+            ItemId = "apples",
             QuantityEaten = new() { Amount = 1 }
         };
+
+        Quantity expectedNewQuantity = new() { Amount = 3 };
 
         _mockQuantMathService.Setup(
             m => m.Subtract(It.IsAny<Quantity>(), It.IsAny<Quantity>())
         ).ReturnsAsync(expectedNewQuantity);
 
-        _mockFoodRepo.Setup(m =>
-            m.Update(foodItem)
-        ).ReturnsAsync(foodItem);
-
         FoodService sut = new(mSP.Object,
                                     _mockQuantMathService.Object,
-                                    _mockFoodRepo.Object);
+                                    foodData);
 
-        await sut.EatFood(dto);
+        ItemDto foodAfterEat = await sut.EatFood(dto);
 
-        _mockFoodRepo.Verify(_ => _.Update(It.Is<Item>(item =>
-            item != null && item.Quantity != null && item.Quantity.Amount == expectedNewQuantity.Amount
-        )), Times.Once);
+        Assert.Equal(expectedNewQuantity.Amount, foodAfterEat.Quantity?.Amount);
     }
 }
