@@ -2,16 +2,16 @@ using Larder.Models;
 using Larder.Models.SortOptions;
 using Larder.Repository.Interface;
 
-namespace Larder.Tests.Repository;
+namespace Larder.Tests.Mocks.Repository;
 
-public class MockUnitConversionRepository : MockRepositoryBase,
+public class MockUnitConversionData : MockRepositoryBase,
                                         IUnitConversionRepository
 {
     private readonly List<UnitConversion> unitConversions = [];
 
-    public MockUnitConversionRepository()
+    public MockUnitConversionData()
     {
-        MockUnitRepository unitData = new();
+        MockUnitData unitData = new();
 
         Unit grams = unitData.Get(testUserId, "grams").GetAwaiter().GetResult()!;
         Unit milligrams = unitData.Get(testUserId, "milligrams").GetAwaiter().GetResult()!;

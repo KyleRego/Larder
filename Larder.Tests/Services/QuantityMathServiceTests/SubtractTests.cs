@@ -1,6 +1,7 @@
+using Larder.Dtos;
 using Larder.Models;
 using Larder.Services.Impl;
-using Larder.Tests.Repository;
+using Larder.Tests.Mocks.Repository;
 
 namespace Larder.Tests.Services.QuantityMathServiceTests;
 
@@ -9,10 +10,10 @@ public class SubtractTests : ServiceTestsBase
     [Fact]
     public async void SubtractUnitlessQuantitiesSubtractsTheAmount()
     {
-        MockUnitRepository unitData = new();
+        MockUnitData unitData = new();
         UnitService unitService = new(mSP.Object, unitData);
         UnitConversionService unitConversionService = new(mSP.Object,
-                unitData, new MockUnitConversionRepository());
+                unitData, new MockUnitConversionData());
 
         Quantity minuend = new()
         {
@@ -25,19 +26,19 @@ public class SubtractTests : ServiceTestsBase
         };
 
         QuantityMathService sut = new(mSP.Object, unitService, unitConversionService);
-        Quantity result = await sut.Subtract(minuend, subtrahend);
+        QuantityDto result = await sut.Subtract(minuend, subtrahend);
 
         Assert.Equal(2.5, result.Amount);
-        Assert.Null(result.Unit);
+        Assert.Null(result.UnitId);
     }
 
     [Fact]
     public async void SubtractQuantityWithSameUnitSubtractsTheAmount()
     {
-        MockUnitRepository unitData = new();
+        MockUnitData unitData = new();
         UnitService unitService = new(mSP.Object, unitData);
         UnitConversionService unitConversionService = new(mSP.Object,
-                unitData, new MockUnitConversionRepository());
+                unitData, new MockUnitConversionData());
 
         Unit unit = (await unitData.Get(mockUserId, "pounds"))!;
 
@@ -57,7 +58,7 @@ public class SubtractTests : ServiceTestsBase
 
         QuantityMathService sut = new(mSP.Object, unitService, unitConversionService);
 
-        Quantity result = await sut.Subtract(minuend, subtrahend);
+        QuantityDto result = await sut.Subtract(minuend, subtrahend);
 
         Assert.Equal(minuend.Amount - subtrahend.Amount, result.Amount);
         Assert.Equal(unit.Id, result.UnitId);
@@ -66,10 +67,10 @@ public class SubtractTests : ServiceTestsBase
     [Fact]
     public async void SubtractQuantityWithCompatibleUnitsDoesConversion()
     {
-        MockUnitRepository unitData = new();
+        MockUnitData unitData = new();
         UnitService unitService = new(mSP.Object, unitData);
         UnitConversionService unitConversionService = new(mSP.Object,
-                unitData, new MockUnitConversionRepository());
+                unitData, new MockUnitConversionData());
 
         Unit grams = (await unitData.Get(mockUserId, "grams"))!;
         Unit milligrams = (await unitData.Get(mockUserId, "milligrams"))!;
@@ -90,7 +91,7 @@ public class SubtractTests : ServiceTestsBase
 
         QuantityMathService sut = new(mSP.Object, unitService, unitConversionService);
 
-        Quantity result = await sut.Subtract(minuend, subtrahend);
+        QuantityDto result = await sut.Subtract(minuend, subtrahend);
 
         Assert.Equal(1000, result.Amount);
         Assert.Equal(milligrams.Id, result.UnitId);

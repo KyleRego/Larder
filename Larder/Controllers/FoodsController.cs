@@ -31,9 +31,9 @@ public class FoodsController(IFoodService foodService) : AppControllerBase
 
         try
         {
-            ItemDto result = await _foodService.EatFood(dto);
+            (ItemDto updatedFood, ItemDto eatenFood) = await _foodService.EatFood(dto);
 
-            return new ApiResponse<ItemDto>(result, "Food eaten!", ApiResponseType.Success);
+            return new ApiResponse<ItemDto>(updatedFood, "Food eaten!", ApiResponseType.Success);
         }
         catch(ApplicationException e)
         {

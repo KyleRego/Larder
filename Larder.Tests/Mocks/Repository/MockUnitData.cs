@@ -2,13 +2,13 @@ using Larder.Models;
 using Larder.Repository.Impl;
 using Larder.Repository.Interface;
 
-namespace Larder.Tests.Repository;
+namespace Larder.Tests.Mocks.Repository;
 
-public class MockUnitRepository : MockRepositoryBase, IUnitRepository
+public class MockUnitData : MockRepositoryBase, IUnitRepository
 {
     private readonly List<Unit> units = [];
 
-    public MockUnitRepository()
+    public MockUnitData()
     {
         Unit grams = new(testUserId, "grams", UnitType.Mass)
         {

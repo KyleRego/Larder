@@ -30,7 +30,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
             Quantity quantAvail = recipeIngredient.QuantityAvailable();
 
             recipeIngredient.SetItemQuantity(
-                await _quantMathService.Subtract(quantAvail, quantNeeded)
+                Quantity.FromDto(await _quantMathService.Subtract(quantAvail, quantNeeded))
             );
         }
 

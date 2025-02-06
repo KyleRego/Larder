@@ -1,6 +1,6 @@
 using Larder.Tests.TestData;
 
-namespace Larder.Tests.Repository;
+namespace Larder.Tests.Mocks.Repository;
 
 public abstract class MockRepositoryBase
 {

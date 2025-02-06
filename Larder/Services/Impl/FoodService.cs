@@ -23,7 +23,7 @@ public class FoodService(  IServiceProviderWrapper serviceProvider,
                                     .Select(ItemDto.FromEntity)];
     }
 
-    public async Task<ItemDto> EatFood(EatFoodDto dto)
+    public async Task<(ItemDto, ItemDto)> EatFood(EatFoodDto dto)
     {
         Item foodItem = await _foodData.Get(CurrentUserId(), dto.ItemId)
             ?? throw new ApplicationException(
@@ -34,13 +34,44 @@ public class FoodService(  IServiceProviderWrapper serviceProvider,
                 $"Food with id {dto.ItemId} has no nutrition component");
 
         Quantity foodQuantity = foodItem.Quantity;
-        Quantity quantityEaten = Quantity.FromDto(dto.QuantityEaten);
+        Quantity eatFoodQuantity = Quantity.FromDto(dto.QuantityEaten);
 
-        Quantity quantityLeft = await _quantityMathService.Subtract(foodQuantity, quantityEaten);
-        foodItem.Quantity = quantityLeft;
+        QuantityDto quantityLeft = await _quantityMathService
+                    .SubtractUpToZero(foodQuantity, eatFoodQuantity);
+        foodItem.Quantity = Quantity.FromDto(quantityLeft);
 
-        Item updatedItem = await _foodData.Update(foodItem);
+        Quantity quantityEaten;
+        if (quantityLeft.Amount == 0)
+        {
+            quantityEaten = foodQuantity;
+        }
+        else
+        {
+            quantityEaten = eatFoodQuantity;
+        }
 
-        return ItemDto.FromEntity(updatedItem);
+        Item updatedFood = await _foodData.Update(foodItem);
+
+        Item eatenFoodResult = new(CurrentUserId(),
+                    $"{foodItem.Name} - Eaten")
+        {
+            Quantity = quantityEaten
+        };
+        ConsumedTime consumedTime = new()
+        {
+            ConsumedAt = DateTimeOffset.Now,
+            Item = eatenFoodResult
+        };
+        eatenFoodResult.ConsumedTime = consumedTime;
+
+        return (ItemDto.FromEntity(updatedFood),
+                    ItemDto.FromEntity(eatenFoodResult));
+    }
+
+    public async Task<List<ItemDto>> ConsumedFoods()
+    {
+        List<Item> items = await _foodData.GetConsumedFoods(CurrentUserId());
+
+        return [.. items.Select(ItemDto.FromEntity)];
     }
 }

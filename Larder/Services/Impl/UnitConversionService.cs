@@ -74,15 +74,15 @@ public class UnitConversionService(
         await _unitConversionData.Delete(unitConversion);
     }
 
-    public async Task<UnitConversionDto?> FindConversion(Quantity first, Quantity second)
+    public async Task<UnitConversionDto?> FindConversion(string unitId1, string unitId2)
     {
-        if (first.UnitId == null || second.UnitId == null)
-            throw new ApplicationException("There must be units to find a conversion for");
-
         UnitConversion? conversion = 
                     await _unitConversionData.FindByUnitIdsEitherWay(
-                        CurrentUserId(), first.UnitId, second.UnitId);
-        return (conversion != null) ? UnitConversionDto.FromEntity(conversion) : null;
+                        CurrentUserId(), unitId1, unitId2);
+
+        if (conversion == null) return null;
+
+        return  UnitConversionDto.FromEntity(conversion);
     }
 
     public async Task<UnitConversionDto> UpdateUnitConversion(UnitConversionDto dto)

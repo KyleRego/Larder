@@ -1,10 +1,9 @@
 using Larder.Dtos;
 using Larder.Models;
-using Larder.Models.ItemComponents;
-using Larder.Repository.Interface;
+using Larder.Models.Interface;
 using Larder.Services.Impl;
 using Larder.Services.Interface;
-using Larder.Tests.Repository;
+using Larder.Tests.Mocks.Repository;
 
 namespace Larder.Tests.Services.FoodServiceTests;
 
@@ -13,9 +12,9 @@ public class EatFoodTests : ServiceTestsBase
     private readonly Mock<IQuantityMathService> _mockQuantMathService = new();
 
     [Fact]
-    public async void EatAppleDecreasesAmount()
+    public async void EatApple()
     {
-        MockFoodRepository foodData = new();
+        MockFoodData foodData = new();
         Item apples = await foodData.Get(mockUserId, "apples")
             ?? throw new ApplicationException("Data missing");
 
@@ -25,18 +24,20 @@ public class EatFoodTests : ServiceTestsBase
             QuantityEaten = new() { Amount = 1 }
         };
 
-        Quantity expectedNewQuantity = new() { Amount = 3 };
+        QuantityDto expectedNewQuantity = new() { Amount = 3 };
 
         _mockQuantMathService.Setup(
-            m => m.Subtract(It.IsAny<Quantity>(), It.IsAny<Quantity>())
+            m => m.SubtractUpToZero(It.IsAny<IQuantity>(), It.IsAny<IQuantity>())
         ).ReturnsAsync(expectedNewQuantity);
 
         FoodService sut = new(mSP.Object,
                                     _mockQuantMathService.Object,
                                     foodData);
 
-        ItemDto foodAfterEat = await sut.EatFood(dto);
+        (ItemDto foodAfterEat, ItemDto consumedFood) = await sut.EatFood(dto);
 
         Assert.Equal(expectedNewQuantity.Amount, foodAfterEat.Quantity?.Amount);
+
+        Assert.Equal("apples - Eaten", consumedFood.Name);
     }
 }

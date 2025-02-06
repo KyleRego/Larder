@@ -85,15 +85,14 @@ public class CookRecipeTests : ServiceTestsBase
         var mockQuantMathService = new Mock<IQuantityMathService>();
         mockQuantMathService.Setup(
             m => m.Subtract(It.IsAny<Quantity>(), riceRecIng.Quantity))
-            .ReturnsAsync((Quantity)
+            .ReturnsAsync((QuantityDto)
                 new() { Amount = 1 });
         mockQuantMathService.Setup(
             m => m.Subtract(butter.Quantity, butRecIng.Quantity))
-            .ReturnsAsync((Quantity)
+            .ReturnsAsync((QuantityDto)
                 new()
                 {
                     Amount = 12,
-                    Unit = tablespoons,
                     UnitId = tablespoons.Id
                 });
 

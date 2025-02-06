@@ -1,10 +1,11 @@
 using Larder.Dtos;
+using Larder.Models.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace Larder.Models;
 
 [Owned]
-public class Quantity
+public class Quantity : IQuantity
 {
     public static Quantity FromDto(QuantityDto dto)
     {

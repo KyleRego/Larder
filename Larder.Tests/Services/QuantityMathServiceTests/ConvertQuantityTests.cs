@@ -1,7 +1,7 @@
 using Larder.Dtos;
 using Larder.Models;
 using Larder.Services.Impl;
-using Larder.Tests.Repository;
+using Larder.Tests.Mocks.Repository;
 
 namespace Larder.Tests.Services.QuantityMathServiceTests;
 
@@ -13,8 +13,8 @@ public class ConvertQuantityTests : ServiceTestsBase
 
     public ConvertQuantityTests()
     {
-        MockUnitRepository unitData = new();
-        MockUnitConversionRepository unitConversionData = new();
+        MockUnitData unitData = new();
+        MockUnitConversionData unitConversionData = new();
 
         _gramsUnit = unitData.Get(mockUserId, "grams").GetAwaiter().GetResult()!;
         _milligramsUnit = unitData.Get(mockUserId, "milligrams").GetAwaiter().GetResult()!;
@@ -34,7 +34,7 @@ public class ConvertQuantityTests : ServiceTestsBase
             UnitId = _gramsUnit.Id
         };
 
-        Quantity result = QuantityMathService.ConvertQuantity(
+        QuantityDto result = QuantityMathService.ConvertQuantity(
             quantity, _gramsToMilligramsConversion, UnitDto.FromEntity(_milligramsUnit));
 
         Assert.Equal(_milligramsUnit.Id, result.UnitId);
@@ -51,7 +51,7 @@ public class ConvertQuantityTests : ServiceTestsBase
             UnitId = _milligramsUnit.Id
         };
 
-        Quantity result = QuantityMathService.ConvertQuantity(
+        QuantityDto result = QuantityMathService.ConvertQuantity(
             quantity, _gramsToMilligramsConversion, UnitDto.FromEntity(_gramsUnit));
 
         Assert.Equal(_gramsUnit.Id, result.UnitId);

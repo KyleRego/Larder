@@ -3,13 +3,13 @@ using Larder.Models.ItemComponents;
 using Larder.Models.SortOptions;
 using Larder.Repository.Interface;
 
-namespace Larder.Tests.Repository;
+namespace Larder.Tests.Mocks.Repository;
 
-public class MockFoodRepository : MockRepositoryBase, IFoodRepository
+public class MockFoodData : MockRepositoryBase, IFoodRepository
 {
     private readonly List<Item> foodItems = [];
 
-    public MockFoodRepository()
+    public MockFoodData()
     {
         Item apples = new(testUserId, "apples")
         {
@@ -62,6 +62,11 @@ public class MockFoodRepository : MockRepositoryBase, IFoodRepository
     }
 
     public Task<List<Item>> GetAll(string userId, FoodSortOptions sortBy, string? search)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<Item>> GetConsumedFoods(string userId)
     {
         throw new NotImplementedException();
     }

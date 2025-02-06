@@ -1,8 +1,9 @@
 using Larder.Models;
+using Larder.Models.Interface;
 
 namespace Larder.Dtos;
 
-public class QuantityDto
+public class QuantityDto : IQuantity
 {
     public string? Id { get; set; }
     public double Amount { get; set; }

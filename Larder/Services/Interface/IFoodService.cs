@@ -9,5 +9,7 @@ public interface IFoodService
                                                     string? search);
 
 
-    public Task<ItemDto> EatFood(EatFoodDto dto);
+    public Task<(ItemDto, ItemDto)> EatFood(EatFoodDto dto);
+
+    public Task<List<ItemDto>> ConsumedFoods();
 }

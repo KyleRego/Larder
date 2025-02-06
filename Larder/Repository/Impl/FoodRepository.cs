@@ -11,13 +11,26 @@ namespace Larder.Repository.Impl;
 public class FoodRepository(AppDbContext dbContext)
             : RepositoryBase<Item, FoodSortOptions>(dbContext), IFoodRepository
 {
+    public Task<List<Item>> GetConsumedFoods(string userId)
+    {
+        var query = _dbContext.Items
+                                .Include(item => item.Nutrition)
+                                .Include(item => item.ConsumedTime)
+                                .Where(item => item.UserId == userId
+            && item.Nutrition != null && item.ConsumedTime != null);
+
+        return query.OrderByDescending(
+            item => item.ConsumedTime!.ConsumedAt).ToListAsync();
+    }
+
     public async Task<Item> FindOrCreateBy(string userId, string name)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ApplicationException("ingredient name cannot be null or whitespace");
+            throw new ApplicationException("Name cannot be null or whitespace");
 
         Item? foodItem = await _dbContext.Items.FirstOrDefaultAsync(item =>
-            item.UserId == userId && item.Name == name && item.Nutrition != null);
+            item.UserId == userId && item.Name == name
+                            && item.Nutrition != null);
 
         if (foodItem != null) return foodItem;
 

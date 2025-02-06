@@ -1,5 +1,6 @@
 using Larder.Dtos;
 using Larder.Models;
+using Larder.Models.Interface;
 using Larder.Services.Interface;
 
 namespace Larder.Services.Impl;
@@ -20,13 +21,13 @@ public class QuantityMathService(IServiceProviderWrapper serviceProvider,
     /// <param name="subtrahend"></param>
     /// <returns></returns>
     /// <exception cref="ApplicationException"></exception>
-    public async Task<Quantity> Subtract(Quantity minuend, Quantity subtrahend)
+    public async Task<QuantityDto> Subtract(IQuantity minuend, IQuantity subtrahend)
     {
         if (minuend.UnitId == null && subtrahend.UnitId == null)
         {
             return new()
             {
-                UnitId = null, Unit = null,
+                UnitId = null,
                 Amount = minuend.Amount - subtrahend.Amount
             };
         }
@@ -34,24 +35,33 @@ public class QuantityMathService(IServiceProviderWrapper serviceProvider,
         {
             return new()
             {
-                UnitId = minuend.UnitId, Unit = minuend.Unit,
+                UnitId = minuend.UnitId,
                 Amount = minuend.Amount - subtrahend.Amount
             };
         }
         else if (minuend.UnitId != null && subtrahend.UnitId != null)
         {
+            UnitDto minuendUnit = await _unitService.GetUnit(minuend.UnitId)
+                ?? throw new ApplicationException("Unit not found for unit ID 1");
+            UnitDto subtrahendUnit = await _unitService.GetUnit(subtrahend.UnitId)
+                ?? throw new ApplicationException("Unit not found for unit ID 2");
+
+            if (minuendUnit.Type != subtrahendUnit.Type)
+            {
+                throw new ApplicationException
+                    ("Cannot subtract quantities of different unit type");
+            }
+
             UnitConversionDto conversion = await _unitConvService
-                                        .FindConversion(minuend, subtrahend) ??
-                throw new ApplicationException("There is no compatible unit conversion");
+                                        .FindConversion(minuend.UnitId, subtrahend.UnitId) ??
+                throw new ApplicationException(
+                    "There is no unit conversion configured for these units");
 
-            UnitDto minuendUnit = (await _unitService.GetUnit(minuend.UnitId))!;
-
-            Quantity convertedSubtrahend = ConvertQuantity(subtrahend, conversion, minuendUnit);
+            QuantityDto convertedSubtrahend = ConvertQuantity(subtrahend, conversion, minuendUnit);
 
             return new()
             {
                 UnitId = minuend.UnitId,
-                Unit = minuend.Unit,
                 Amount = minuend.Amount - convertedSubtrahend.Amount
             };
         }
@@ -68,15 +78,15 @@ public class QuantityMathService(IServiceProviderWrapper serviceProvider,
     /// <param name="conversion"></param>
     /// <param name="targetUnit"></param>
     /// <returns></returns>
-    public static Quantity ConvertQuantity(Quantity quantity,
+    public static QuantityDto ConvertQuantity(IQuantity quantity,
                                             UnitConversionDto conversion,
                                             UnitDto desiredUnit)
     {
-        if (quantity.Unit == null)
+        if (quantity.UnitId == null)
             throw new ApplicationException("Quantity must have a unit to be converted");
 
-        if (quantity.Unit.Id == desiredUnit.Id)
-            return quantity;
+        if (quantity.UnitId == desiredUnit.Id)
+            return (QuantityDto)quantity;
 
         if (quantity.UnitId == conversion.UnitId && desiredUnit.Id == conversion.TargetUnitId)
         {
@@ -98,7 +108,25 @@ public class QuantityMathService(IServiceProviderWrapper serviceProvider,
         }
         else
         {
-            throw new ApplicationException("Conversion is not valid to convert this quantity with");
+            throw new ApplicationException(
+                "Conversion is not valid to convert this quantity with");
+        }
+    }
+
+    public async Task<QuantityDto> SubtractUpToZero(IQuantity minuend, IQuantity subtrahend)
+    {
+        QuantityDto fullSubtractResult = await Subtract(minuend, subtrahend);
+
+        if (fullSubtractResult.UnitId != minuend.UnitId)
+            throw new InvalidOperationException();
+
+        if (fullSubtractResult.Amount <= 0)
+        {
+            return new() { UnitId = minuend.UnitId, Amount = 0 };
+        }
+        else
+        {
+            return fullSubtractResult;
         }
     }
 }
