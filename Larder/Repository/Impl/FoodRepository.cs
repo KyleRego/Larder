@@ -78,6 +78,18 @@ public class FoodRepository(AppDbContext dbContext)
             case FoodSortOptions.Name_Desc:
                 query = query.OrderByDescending(item => item.Name);
                 break;
+            case FoodSortOptions.Quantity:
+                query = query.OrderBy(item => item.Quantity.Amount);
+                break;
+            case FoodSortOptions.Quantity_Desc:
+                query = query.OrderByDescending(item => item.Quantity.Amount);
+                break;
+            case FoodSortOptions.ServingSize:
+                query = query.OrderBy(item => item.Nutrition!.ServingSize.Amount);
+                break;
+            case FoodSortOptions.ServingSize_Desc:
+                query = query.OrderByDescending(item => item.Nutrition!.ServingSize.Amount);
+                break;
             case FoodSortOptions.Calories:
                 query = query.OrderBy(item => item.Nutrition!.Calories);
                 break;
@@ -88,55 +100,55 @@ public class FoodRepository(AppDbContext dbContext)
                 query = query.OrderBy(item => item.Nutrition!.GramsProtein);
                 break;
             case FoodSortOptions.GramsProtein_Desc:
-                query = query.OrderBy(item => item.Nutrition!.GramsProtein);
+                query = query.OrderByDescending(item => item.Nutrition!.GramsProtein);
                 break;
             case FoodSortOptions.GramsTotalFat:
                 query = query.OrderBy(item => item.Nutrition!.GramsProtein);
                 break;
             case FoodSortOptions.GramsTotalFat_Desc:
-                query = query.OrderBy(item => item.Nutrition!.GramsProtein);
+                query = query.OrderByDescending(item => item.Nutrition!.GramsProtein);
                 break;
             case FoodSortOptions.GramsSaturatedFat:
-                query = query.OrderBy(item => item.Nutrition!.GramsProtein);
+                query = query.OrderBy(item => item.Nutrition!.GramsSaturatedFat);
                 break;
             case FoodSortOptions.GramsSaturatedFat_Desc:
-                query = query.OrderBy(item => item.Nutrition!.GramsProtein);
+                query = query.OrderByDescending(item => item.Nutrition!.GramsSaturatedFat);
                 break;
             case FoodSortOptions.GramsTransFat:
-                query = query.OrderBy(item => item.Nutrition!.GramsProtein);
+                query = query.OrderBy(item => item.Nutrition!.GramsTransFat);
                 break;
             case FoodSortOptions.GramsTransFat_Desc:
-                query = query.OrderBy(item => item.Nutrition!.GramsProtein);
+                query = query.OrderByDescending(item => item.Nutrition!.GramsTransFat);
                 break;
             case FoodSortOptions.MilligramsCholesterol:
-                query = query.OrderBy(item => item.Nutrition!.GramsProtein);
+                query = query.OrderBy(item => item.Nutrition!.MilligramsCholesterol);
                 break;
             case FoodSortOptions.MilligramsCholesterol_Desc:
-                query = query.OrderBy(item => item.Nutrition!.GramsProtein);
+                query = query.OrderByDescending(item => item.Nutrition!.MilligramsCholesterol);
                 break;
             case FoodSortOptions.MilligramsSodium:
-                query = query.OrderBy(item => item.Nutrition!.GramsProtein);
+                query = query.OrderBy(item => item.Nutrition!.MilligramsSodium);
                 break;
             case FoodSortOptions.MilligramsSodium_Desc:
-                query = query.OrderBy(item => item.Nutrition!.GramsProtein);
+                query = query.OrderByDescending(item => item.Nutrition!.MilligramsSodium);
                 break;
             case FoodSortOptions.GramsTotalCarbs:
-                query = query.OrderBy(item => item.Nutrition!.GramsProtein);
+                query = query.OrderBy(item => item.Nutrition!.GramsTotalCarbs);
                 break;
             case FoodSortOptions.GramsTotalCarbs_Desc:
-                query = query.OrderBy(item => item.Nutrition!.GramsProtein);
+                query = query.OrderByDescending(item => item.Nutrition!.GramsTotalCarbs);
                 break;
             case FoodSortOptions.GramsDietaryFiber:
-                query = query.OrderBy(item => item.Nutrition!.GramsProtein);
+                query = query.OrderBy(item => item.Nutrition!.GramsDietaryFiber);
                 break;
             case FoodSortOptions.GramsDietaryFiber_Desc:
-                query = query.OrderBy(item => item.Nutrition!.GramsProtein);
+                query = query.OrderByDescending(item => item.Nutrition!.GramsDietaryFiber);
                 break;
             case FoodSortOptions.GramsTotalSugars:
-                query = query.OrderBy(item => item.Nutrition!.GramsProtein);
+                query = query.OrderBy(item => item.Nutrition!.GramsTotalSugars);
                 break;
             case FoodSortOptions.GramsTotalSugars_Desc:
-                query = query.OrderBy(item => item.Nutrition!.GramsProtein);
+                query = query.OrderByDescending(item => item.Nutrition!.GramsTotalSugars);
                 break;
             default:
                 break;

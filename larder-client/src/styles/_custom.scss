@@ -1,5 +1,5 @@
-$primary: #F5A9B8;
-$secondary: #5BCEFA;
+$primary: #5BCEFA;
+$secondary: #F5A9B8;
 
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
@@ -16,6 +16,30 @@ $secondary: #5BCEFA;
 
 .new-element {
   animation: slideIn 0.5s ease-out;
+}
+
+.table td, .table th {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.sticky-column {
+  position: sticky;
+  left: 0;
+  background-color: white;
+  z-index: 2;
+  border-right: 1px solid #ddd;
+}
+
+caption.sticky-caption {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  padding: 8px;
+  text-align: left;
+  width: max-content;
 }
 
 label, input, textarea {

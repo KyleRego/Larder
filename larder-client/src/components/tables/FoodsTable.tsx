@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import { apiClient } from "../../util/axios";
 import { NutritionDto } from "../../types/NutritionDto";
 import Loading from "../Loading";
+import QuantitySpan from "../QuantitySpan";
 
 export default function FoodsTable({searchParam} : {searchParam: string }) {
     const [items, setItems] = useState<ItemDto[] | null>(null);         
@@ -26,7 +27,7 @@ export default function FoodsTable({searchParam} : {searchParam: string }) {
 
     return (
         <table className="table table-striped table-hover">
-            <caption>
+            <caption className="sticky-caption">
                 Your foods
             </caption>
             <thead>
@@ -34,7 +35,16 @@ export default function FoodsTable({searchParam} : {searchParam: string }) {
                     <SortingTableHeader<FoodSortOptions> ascending={FoodSortOptions.Name}
                                             descending={FoodSortOptions.Name_Desc}
                                             sortOrder={sortOrder} setSortOrder={setSortOrder}
-                                            headerText="Name" />
+                                            headerText="Name"
+                                            stickyColumn={true}/>
+                    <SortingTableHeader<FoodSortOptions> ascending={FoodSortOptions.Quantity}
+                                            descending={FoodSortOptions.Quantity_Desc}
+                                            sortOrder={sortOrder} setSortOrder={setSortOrder}
+                                            headerText="Quantity" />
+                    <SortingTableHeader<FoodSortOptions> ascending={FoodSortOptions.ServingSize}
+                                            descending={FoodSortOptions.ServingSize_Desc}
+                                            sortOrder={sortOrder} setSortOrder={setSortOrder}
+                                            headerText="Serving size" />
                     <SortingTableHeader<FoodSortOptions> ascending={FoodSortOptions.Calories}
                                             descending={FoodSortOptions.Calories_Desc}
                                             sortOrder={sortOrder} setSortOrder={setSortOrder}
@@ -71,9 +81,15 @@ function NutritionRow({item, nutrition}
 
     return (
         <tr role="button" onClick={handleRowClick} id={itemId} >
-            <th scope="row" style={{maxWidth: "10rem", overflowX: "hidden"}}>
+            <td scope="row" className="sticky-column">
                 {item.name}
-            </th>
+            </td>
+            <td>
+                {item.quantity !== null ? <QuantitySpan quantity={item.quantity} /> : "N/a"}
+            </td>
+            <td>
+                <QuantitySpan quantity={nutrition.servingSize} />
+            </td>
             <td>{String(nutrition.calories)}</td>
             <td>{String(nutrition.gramsProtein)}</td>
             <td>{String(nutrition.gramsTotalCarbs)}</td>

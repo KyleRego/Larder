@@ -4,7 +4,8 @@ public enum FoodSortOptions
 {
     AnyOrder,
     Name, Name_Desc,
-    Servings, Servings_Desc,
+    Quantity, Quantity_Desc,
+    ServingSize, ServingSize_Desc,
     Calories, Calories_Desc,
     GramsProtein, GramsProtein_Desc,
     GramsTotalFat, GramsTotalFat_Desc,

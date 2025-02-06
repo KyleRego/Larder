@@ -1,8 +1,10 @@
 export enum FoodSortOptions {
     Name = "Name",
     Name_Desc = "Name_Desc",
-    Servings = "Servings",
-    Servings_Desc = "Servings_Desc",
+    Quantity = "Quantity",
+    Quantity_Desc = "Quantity_Desc",
+    ServingSize = "ServingSize",
+    ServingSize_Desc = "ServingSize_Desc",
     Calories = "Calories",
     Calories_Desc = "Calories_Desc",
     GramsProtein = "GramsProtein",

@@ -60,7 +60,7 @@ function ItemRow({item} : {item: ItemDto}) : ReactNode {
 
     return (
         <tr id={item.id!} onClick={handleRowClick} role="button">
-            <th scope="row" style={{maxWidth: "10rem", overflowX: "hidden"}}>
+            <th scope="row">
                 {item.name}
             </th>
             <td>

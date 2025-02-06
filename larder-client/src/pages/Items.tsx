@@ -40,10 +40,12 @@ export default function Items() {
                 <SearchBox handleOnChange={handleSearchChange} />
             </div>
 
-            <div className="table-responsive flex-grow-1 container">
-                {renderCurrentTable()}
+            <div className="flex-grow-1 container">
+                <div className="table-responsive  px-0">
+                    {renderCurrentTable()}
+                </div>
             </div>
-
+            
             <ActionBar>
                 <div className="d-flex justify-content-center">
                     <Link className="btn btn-outline-light text-black border-black" to={"/items/new"}>
