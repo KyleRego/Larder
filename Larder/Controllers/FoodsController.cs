@@ -35,9 +35,9 @@ public class FoodsController(IFoodService foodService) : AppControllerBase
 
             return new ApiResponse<ItemDto>(result, "Food eaten!", ApiResponseType.Success);
         }
-        catch(ApplicationException)
+        catch(ApplicationException e)
         {
-            return UnprocessableEntity();
+            return UnprocessableEntity(FromError(e));
         }
     }
 }

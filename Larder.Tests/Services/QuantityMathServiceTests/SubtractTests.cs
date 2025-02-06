@@ -1,7 +1,5 @@
-using Larder.Dtos;
 using Larder.Models;
 using Larder.Services.Impl;
-using Larder.Services.Interface;
 using Larder.Tests.Repository;
 
 namespace Larder.Tests.Services.QuantityMathServiceTests;
@@ -11,8 +9,10 @@ public class SubtractTests : ServiceTestsBase
     [Fact]
     public async void SubtractUnitlessQuantitiesSubtractsTheAmount()
     {
+        MockUnitRepository unitData = new();
+        UnitService unitService = new(mSP.Object, unitData);
         UnitConversionService unitConversionService = new(mSP.Object,
-                new MockUnitRepository(), new MockUnitConversionRepository());
+                unitData, new MockUnitConversionRepository());
 
         Quantity minuend = new()
         {
@@ -24,7 +24,7 @@ public class SubtractTests : ServiceTestsBase
             UnitId = null, Unit = null, Amount = 3.5
         };
 
-        QuantityMathService sut = new(mSP.Object, unitConversionService);
+        QuantityMathService sut = new(mSP.Object, unitService, unitConversionService);
         Quantity result = await sut.Subtract(minuend, subtrahend);
 
         Assert.Equal(2.5, result.Amount);
@@ -35,6 +35,7 @@ public class SubtractTests : ServiceTestsBase
     public async void SubtractQuantityWithSameUnitSubtractsTheAmount()
     {
         MockUnitRepository unitData = new();
+        UnitService unitService = new(mSP.Object, unitData);
         UnitConversionService unitConversionService = new(mSP.Object,
                 unitData, new MockUnitConversionRepository());
 
@@ -54,7 +55,7 @@ public class SubtractTests : ServiceTestsBase
             UnitId = unit.Id
         };
 
-        QuantityMathService sut = new(mSP.Object, unitConversionService);
+        QuantityMathService sut = new(mSP.Object, unitService, unitConversionService);
 
         Quantity result = await sut.Subtract(minuend, subtrahend);
 
@@ -66,6 +67,7 @@ public class SubtractTests : ServiceTestsBase
     public async void SubtractQuantityWithCompatibleUnitsDoesConversion()
     {
         MockUnitRepository unitData = new();
+        UnitService unitService = new(mSP.Object, unitData);
         UnitConversionService unitConversionService = new(mSP.Object,
                 unitData, new MockUnitConversionRepository());
 
@@ -86,7 +88,7 @@ public class SubtractTests : ServiceTestsBase
             Unit = grams
         };
 
-        QuantityMathService sut = new(mSP.Object, unitConversionService);
+        QuantityMathService sut = new(mSP.Object, unitService, unitConversionService);
 
         Quantity result = await sut.Subtract(minuend, subtrahend);
 

@@ -35,7 +35,7 @@ public class ConvertQuantityTests : ServiceTestsBase
         };
 
         Quantity result = QuantityMathService.ConvertQuantity(
-            quantity, _gramsToMilligramsConversion, _milligramsUnit);
+            quantity, _gramsToMilligramsConversion, UnitDto.FromEntity(_milligramsUnit));
 
         Assert.Equal(_milligramsUnit.Id, result.UnitId);
         Assert.Equal(10 * 1000, result.Amount);
@@ -52,7 +52,7 @@ public class ConvertQuantityTests : ServiceTestsBase
         };
 
         Quantity result = QuantityMathService.ConvertQuantity(
-            quantity, _gramsToMilligramsConversion, _gramsUnit);
+            quantity, _gramsToMilligramsConversion, UnitDto.FromEntity(_gramsUnit));
 
         Assert.Equal(_gramsUnit.Id, result.UnitId);
         Assert.Equal(10000 / 1000, result.Amount);

@@ -5,9 +5,11 @@ using Larder.Services.Interface;
 namespace Larder.Services.Impl;
 
 public class QuantityMathService(IServiceProviderWrapper serviceProvider,
+                                    IUnitService unitService,
                                     IUnitConversionService unitConvService)
                         : AppServiceBase(serviceProvider), IQuantityMathService
 {
+    private readonly IUnitService _unitService = unitService;
     private readonly IUnitConversionService _unitConvService = unitConvService;
 
     /// <summary>
@@ -20,7 +22,7 @@ public class QuantityMathService(IServiceProviderWrapper serviceProvider,
     /// <exception cref="ApplicationException"></exception>
     public async Task<Quantity> Subtract(Quantity minuend, Quantity subtrahend)
     {
-        if (minuend.Unit == null && subtrahend.Unit == null)
+        if (minuend.UnitId == null && subtrahend.UnitId == null)
         {
             return new()
             {
@@ -28,7 +30,7 @@ public class QuantityMathService(IServiceProviderWrapper serviceProvider,
                 Amount = minuend.Amount - subtrahend.Amount
             };
         }
-        else if (minuend.Unit != null && minuend.UnitId == subtrahend.UnitId)
+        else if (minuend.UnitId != null && minuend.UnitId == subtrahend.UnitId)
         {
             return new()
             {
@@ -36,13 +38,15 @@ public class QuantityMathService(IServiceProviderWrapper serviceProvider,
                 Amount = minuend.Amount - subtrahend.Amount
             };
         }
-        else if (minuend.Unit != null && minuend.Unit.Type == subtrahend.Unit?.Type)
+        else if (minuend.UnitId != null && subtrahend.UnitId != null)
         {
             UnitConversionDto conversion = await _unitConvService
                                         .FindConversion(minuend, subtrahend) ??
                 throw new ApplicationException("There is no compatible unit conversion");
 
-            Quantity convertedSubtrahend = ConvertQuantity(subtrahend, conversion, minuend.Unit);
+            UnitDto minuendUnit = (await _unitService.GetUnit(minuend.UnitId))!;
+
+            Quantity convertedSubtrahend = ConvertQuantity(subtrahend, conversion, minuendUnit);
 
             return new()
             {
@@ -66,7 +70,7 @@ public class QuantityMathService(IServiceProviderWrapper serviceProvider,
     /// <returns></returns>
     public static Quantity ConvertQuantity(Quantity quantity,
                                             UnitConversionDto conversion,
-                                            Unit desiredUnit)
+                                            UnitDto desiredUnit)
     {
         if (quantity.Unit == null)
             throw new ApplicationException("Quantity must have a unit to be converted");

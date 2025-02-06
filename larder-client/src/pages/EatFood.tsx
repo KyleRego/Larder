@@ -35,19 +35,21 @@ export default function EatFood({}) {
     }
 
     function updateEatFoodDto(quantityEaten: QuantityDto) {
-        setEatFoodDto({...eatFoodDto, quantityEaten: quantityEaten})
+        const newEatFoodDto = {...eatFoodDto, quantityEaten: quantityEaten};
+        setEatFoodDto(newEatFoodDto);
     }
 
     async function postEatFood(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        const itemId: string = item?.id!
-        setEatFoodDto({...eatFoodDto, itemId: itemId});
+        const itemId: string = id!;
+        const newEatFoodDto = {...eatFoodDto, itemId: itemId}
+        setEatFoodDto(newEatFoodDto);
 
         const res: ItemDto | null = await handleRequest<ItemDto>({
             method: "post",
             url: `/api/Foods/EatFood/${itemId}`,
-            data: eatFoodDto
+            data: newEatFoodDto
         });
 
         if (res) {
