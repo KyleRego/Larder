@@ -36,11 +36,13 @@ export default function NewUnit() {
                     <Link to={"/units"}>Units</Link>
                 </li>
                 <li className="breadcrumb-item active">
-                    New unit
+                    <h1 className="fs-6 d-inline">
+                        New unit
+                    </h1>
                 </li>
             </BreadCrumbs>
 
-            <div className="flex-grow-1 container">
+            <div className="my-4 flex-grow-1 container">
                 <UnitForm unit={null} handleSubmit={handleSubmit} />
             </div>
 

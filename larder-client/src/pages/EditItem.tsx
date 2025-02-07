@@ -53,11 +53,13 @@ export default function EditItem() {
                 <Link to={`/items/${item.id}`}>{item.name}</Link>
             </li>
             <li className="breadcrumb-item active">
-                Editing item
+                <h1 className="d-inline fs-6">
+                    Editing item
+                </h1>
             </li>
         </BreadCrumbs>
 
-        <div className="container flex-grow-1">
+        <div className="my-2 container flex-grow-1">
             <ItemForm initialItem={item} submitFormItem={submitFormItem} />
         </div>
 

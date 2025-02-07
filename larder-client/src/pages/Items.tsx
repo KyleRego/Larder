@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import SearchBox from "../components/SearchBox";
 import FoodsTable from "../components/tables/FoodsTable";
 import ActionBar from "../ActionBar";
+import BreadCrumbs from "../Breadcrumbs";
 
 enum TableVersions {
     AllItems = "All Items",
@@ -32,9 +33,15 @@ export default function Items() {
 
     return (
         <div className="h-100 d-flex flex-column">
-            <div className="mt-2 container d-flex align-items-end column-gap-5 flex-wrap row-gap-1 px-4 pt-2 pb-4">
-                <h1>Items</h1>
+            <BreadCrumbs>
+                <li className="breadcrumb-item active">
+                    <h1 className="fs-6 d-inline">
+                        Items
+                    </h1>
+                </li>
+            </BreadCrumbs>
 
+            <div className="container my-2 d-flex align-items-center column-gap-5 flex-wrap row-gap-1">
                 <TableVersionDropdown currentVariant={currentTable} setCurrentTable={setCurrentTable} />
 
                 <SearchBox handleOnChange={handleSearchChange} />

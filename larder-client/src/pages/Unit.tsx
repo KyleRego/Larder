@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { useApiRequest } from "../hooks/useApiRequest";
 import BreadCrumbs from "../Breadcrumbs";
 import ActionBar from "../ActionBar";
+import UnitCard from "../components/cards/UnitCard";
 
 export default function UnitPage() {
     const [unit, setUnit] = useState<UnitDto | null>(null);
@@ -71,17 +72,14 @@ export default function UnitPage() {
                     <Link to={"/units"}>Units</Link>
                 </li>
                 <li className="breadcrumb-item active">
-                    {unit.name}
+                    <h1 className="fs-6 d-inline">
+                        {unit.name}
+                    </h1>
                 </li>
             </BreadCrumbs>
 
-            <div className="container flex-grow-1">
-                <h1>
-                    {unit.name}
-                </h1>
-                <div className="mt-4">
-                    <p>Type: {UnitDto.getType(unit)}</p>
-                </div>
+            <div className="my-4 container flex-grow-1">
+                <UnitCard unit={unit} />
 
                 <div className="mt-4">
                     <h2 className="fs-3">Unit Conversions:</h2>
@@ -108,7 +106,10 @@ export default function UnitPage() {
 
             <ActionBar>
                 <div className="d-flex justify-content-center">
-                    <EditLink path={`/units/${unit.id}/edit`} title="Edit unit" />
+                    <Link className="btn btn-outline-light border-black text-black"
+                        to={`/units/${unit.id}/edit`} title={`Edit ${unit.name}`}>
+                            {`Edit ${unit.name}`}
+                    </Link>
                 </div>
             </ActionBar>
         </div>

@@ -14,8 +14,8 @@ $secondary: #F5A9B8;
   }
 }
 
-.new-element {
-  animation: slideIn 0.5s ease-out;
+ol.breadcrumb {
+  margin: 0;
 }
 
 .table td, .table th {
@@ -23,6 +23,12 @@ $secondary: #F5A9B8;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 200px;
+}
+
+@media (max-width: 640px) {
+  th[scope='row'] {
+    max-width: 150px;
+  }
 }
 
 .sticky-column {

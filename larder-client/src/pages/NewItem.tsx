@@ -38,7 +38,9 @@ export default function NewItem() {
                 <Link to={"/items"}>Items</Link>
             </li>
             <li className="breadcrumb-item active">
-                New item
+                <h1 className="fs-6 d-inline">
+                    New item
+                </h1>
             </li>
         </BreadCrumbs>
         

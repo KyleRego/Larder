@@ -65,14 +65,14 @@ export default function EatFood({}) {
                 <Link to={"/items"}>Items</Link>
             </li>
             <li className="breadcrumb-item">
-                <h1 className="d-inline fs-6">
-                    <Link to={`/items/${item.id}`}>
-                        {item.name}
-                    </Link>
-                </h1>
+                <Link to={`/items/${item.id}`}>
+                    {item.name}
+                </Link>
             </li>
-            <li className="breadcrumb-item">
-                Eating item
+            <li className="breadcrumb-item active">
+                <h1 className="d-inline fs-6">
+                    Eating food
+                </h1>
             </li>
         </BreadCrumbs>
 

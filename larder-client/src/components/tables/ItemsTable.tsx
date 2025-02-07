@@ -25,7 +25,7 @@ export default function ItemsTable({searchParam} : {searchParam: string }) {
     
     return (
         <table className="table table-striped table-hover">
-            <caption>
+            <caption className="sticky-caption">
                 Your items
             </caption>
             <thead>
@@ -33,7 +33,8 @@ export default function ItemsTable({searchParam} : {searchParam: string }) {
                     <SortingTableHeader<ItemSortOptions> ascending={ItemSortOptions.Name}
                                             descending={ItemSortOptions.Name_Desc}
                                             sortOrder={sortOrder} setSortOrder={setSortOrder}
-                                            headerText="Name" />
+                                            headerText="Name"
+                                            stickyColumn={true} />
                     <SortingTableHeader<ItemSortOptions> ascending={ItemSortOptions.Amount}
                                             descending={ItemSortOptions.Amount_Desc}
                                             sortOrder={sortOrder} setSortOrder={setSortOrder}
@@ -60,7 +61,7 @@ function ItemRow({item} : {item: ItemDto}) : ReactNode {
 
     return (
         <tr id={item.id!} onClick={handleRowClick} role="button">
-            <th scope="row">
+            <th scope="row" className="sticky-column">
                 {item.name}
             </th>
             <td>

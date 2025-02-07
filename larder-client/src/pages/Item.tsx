@@ -35,15 +35,17 @@ export default function Item() {
     return (
         <div className="d-flex h-100 flex-column">
             <BreadCrumbs>
-                <li className="breadcrumb-item" aria-current="page">
+                <li className="breadcrumb-item">
                     <Link to={"/items"}>Items</Link>
                 </li>
                 <li className="breadcrumb-item active">
-                    <h1 className="d-inline fs-6">{item.name}</h1>
+                    <h1 className="d-inline fs-6">
+                        {item.name}
+                    </h1>
                 </li>
             </BreadCrumbs>
 
-            <div className="container flex-grow-1 d-flex align-items-start column-gap-3 row-gap-3 flex-wrap my-4">
+            <div className="my-2 container flex-grow-1 d-flex align-items-start column-gap-3 row-gap-3 flex-wrap my-4">
             
                 <div className="d-flex flex-row flex-md-column column-gap-3 align-items-center row-gap-3 flex-wrap">
                     <ItemCard item={item} />
@@ -60,15 +62,16 @@ export default function Item() {
             <ActionBar>
                 <div className="d-flex justify-content-center">
                     <div className="btn-group">
-                            <Link className="btn btn-outline-light text-black border-black"
-                                    to={`/items/${item.id}/edit`}>
-                                Edit
+                            <Link   className="btn btn-outline-light text-black border-black"
+                                    to={`/items/${item.id}/edit`}
+                                    title={`Edit ${item.name}`} >
+                                {`Edit ${item.name}`}
                             </Link>
 
                             {item.nutrition &&
                             <Link to={`/items/${item.id}/eat`} title={`Eat ${item.name}`}
                                     className="btn btn-outline-light text-black border-black">
-                                Eat food
+                                Eat {`${item.name}`}
                             </Link>
                             }
                     </div>

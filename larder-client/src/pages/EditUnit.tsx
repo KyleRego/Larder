@@ -62,11 +62,13 @@ export default function EditUnit() {
                     <Link to={`/units/${unit.id}`}>{unit.name}</Link>
                 </li>
                 <li className="breadcrumb-item active">
-                    Editing unit
+                    <h1 className="fs-6 d-inline">
+                        Editing unit    
+                    </h1>
                 </li>
             </BreadCrumbs>
 
-            <div className="container flex-grow-1">
+            <div className="my-4 container flex-grow-1">
                 <UnitForm unit={unit} handleSubmit={handleSubmit} />
             </div>
 

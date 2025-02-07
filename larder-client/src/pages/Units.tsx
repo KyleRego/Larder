@@ -7,6 +7,7 @@ import { apiClient } from "../util/axios";
 import { UnitSortOptions } from "../types/UnitSortOptions";
 import SearchBox from "../components/SearchBox";
 import ActionBar from "../ActionBar";
+import BreadCrumbs from "../Breadcrumbs";
 
 export default function Units() {
     const { units, setUnits } = useContext(UnitsContext);
@@ -30,9 +31,15 @@ export default function Units() {
 
     return (
         <div className="h-100 d-flex flex-column">
-            <div className="container mt-2 d-flex align-items-end column-gap-5 flex-wrap row-gap-1 px-4 pt-2 pb-4">
-                <h1>Units</h1>
+            <BreadCrumbs>
+                <li className="breadcrumb-item active">
+                    <h1 className="fs-6 d-inline">
+                        Units
+                    </h1>
+                </li>
+            </BreadCrumbs>
 
+            <div className="container my-2 d-flex">
                 <SearchBox handleOnChange={handleSearchChange} /> 
             </div>
 

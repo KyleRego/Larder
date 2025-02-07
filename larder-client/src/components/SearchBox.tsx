@@ -1,13 +1,14 @@
 export default function SearchBox({handleOnChange} 
     : {handleOnChange : React.ChangeEventHandler<HTMLInputElement>}) {
     return (
-        <div className="d-flex flex-column align-items-start">
-            <label htmlFor="search">Search:</label>
+        <div className="form-floating">
             <input id="search"
-                    className="form-control-sm"
+                    className="form-control form-control-sm"
                     type="search" 
                     onChange={handleOnChange}
+                    placeholder=""
             />
+            <label htmlFor="search" className="form-label">Search:</label>
         </div>
     );
 }

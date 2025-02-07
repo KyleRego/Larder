@@ -28,7 +28,7 @@ export default function FoodsTable({searchParam} : {searchParam: string }) {
     return (
         <table className="table table-striped table-hover">
             <caption className="sticky-caption">
-                Your foods
+                Your foods (items with a nutrition component)
             </caption>
             <thead>
                 <tr>
@@ -81,9 +81,9 @@ function NutritionRow({item, nutrition}
 
     return (
         <tr role="button" onClick={handleRowClick} id={itemId} >
-            <td scope="row" className="sticky-column">
+            <th scope="row" className="sticky-column">
                 {item.name}
-            </td>
+            </th>
             <td>
                 {item.quantity !== null ? <QuantitySpan quantity={item.quantity} /> : "N/a"}
             </td>
