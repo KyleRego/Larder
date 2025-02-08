@@ -66,7 +66,7 @@ export default function EditItem() {
         <ActionBar>
             <div className="d-flex justify-content-center">
                 <button type="submit" form="item-form"
-                        className="btn btn-outline-light text-black border-black"
+                        className="btn btn-outline-light"
                         id="item-form-submit">
                     Update item
                 </button>

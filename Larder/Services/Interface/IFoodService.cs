@@ -11,5 +11,5 @@ public interface IFoodService
 
     public Task<(ItemDto, ItemDto)> EatFood(EatFoodDto dto);
 
-    public Task<List<ItemDto>> ConsumedFoods();
+    public Task<List<ItemDto>> ConsumedFoods(DateTime day);
 }

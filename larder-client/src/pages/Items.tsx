@@ -55,7 +55,7 @@ export default function Items() {
             
             <ActionBar>
                 <div className="d-flex justify-content-center">
-                    <Link className="btn btn-outline-light text-black border-black" to={"/items/new"}>
+                    <Link className="btn btn-outline-light" to={"/items/new"}>
                         New item
                     </Link>
                 </div>

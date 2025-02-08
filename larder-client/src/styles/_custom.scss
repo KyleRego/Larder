@@ -25,6 +25,11 @@ ol.breadcrumb {
   max-width: 200px;
 }
 
+.btn.btn-outline-light {
+  color: rgba(var(--bs-black-rgb), var(--bs-text-opacity)) !important;
+  border-color: rgba(var(--bs-black-rgb), var(--bs-border-opacity)) !important;
+}
+
 @media (max-width: 640px) {
   th[scope='row'] {
     max-width: 150px;

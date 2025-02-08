@@ -17,6 +17,7 @@ export default function NewItem() {
             nutrition: null,
             ingredient: null,
             quantity: { amount: 1, unitId: null, unitName: null },
+            consumedTime: null
         }
     }
 
@@ -51,7 +52,7 @@ export default function NewItem() {
         <ActionBar>
             <div className="d-flex justify-content-center">
                 <button type="submit" form="item-form"
-                        className="btn btn-outline-light text-black border-black"
+                        className="btn btn-outline-light"
                         id="item-form-submit">
                     Create item
                 </button>

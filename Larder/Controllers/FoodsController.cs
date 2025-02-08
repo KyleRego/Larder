@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Larder.Dtos;
 using Larder.Services.Interface;
 using Larder.Models.SortOptions;
+using System.Globalization;
 
 namespace Larder.Controllers;
 
@@ -39,5 +40,19 @@ public class FoodsController(IFoodService foodService) : AppControllerBase
         {
             return UnprocessableEntity(FromError(e));
         }
+    }
+
+    [HttpGet("ConsumedFoods")]
+    public async Task<ActionResult<List<ItemDto>>> ConsumedFoods(string day)
+    {
+        if (!DateTime.TryParseExact(day, "yyyy-MM-dd",
+                                    CultureInfo.InvariantCulture,
+                                    DateTimeStyles.None,
+                                    out DateTime parsedDay))
+        {
+            return BadRequest("Day query parameter was not valid format:");
+        }
+
+        return await _foodService.ConsumedFoods(parsedDay);
     }
 }

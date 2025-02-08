@@ -11,16 +11,21 @@ namespace Larder.Repository.Impl;
 public class FoodRepository(AppDbContext dbContext)
             : RepositoryBase<Item, FoodSortOptions>(dbContext), IFoodRepository
 {
-    public Task<List<Item>> GetConsumedFoods(string userId)
+    public async Task<List<Item>> GetConsumedFoods(string userId, DateTime day)
     {
-        var query = _dbContext.Items
-                                .Include(item => item.Nutrition)
-                                .Include(item => item.ConsumedTime)
-                                .Where(item => item.UserId == userId
-            && item.Nutrition != null && item.ConsumedTime != null);
+        var startOfDay = day.Date;
+        var endOfDay = startOfDay.AddDays(1);
 
-        return query.OrderByDescending(
-            item => item.ConsumedTime!.ConsumedAt).ToListAsync();
+        // TODO: This needs to include the consumed food Nutrition
+        List<Item> consumedFoods = await _dbContext.Items
+                        .Include(item => item.ConsumedTime)
+                        .Where(item => item.UserId == userId
+                            && item.ConsumedTime != null).ToListAsync();
+
+        // FIXME: This comparison needs to be pushed into the database to do
+        return [.. consumedFoods.Where(item =>
+            item.ConsumedTime!.ConsumedAt >= startOfDay
+            && item.ConsumedTime.ConsumedAt < endOfDay)];
     }
 
     public async Task<Item> FindOrCreateBy(string userId, string name)

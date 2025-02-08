@@ -64,13 +64,15 @@ public class FoodService(  IServiceProviderWrapper serviceProvider,
         };
         eatenFoodResult.ConsumedTime = consumedTime;
 
+        await _foodData.Insert(eatenFoodResult);
+
         return (ItemDto.FromEntity(updatedFood),
                     ItemDto.FromEntity(eatenFoodResult));
     }
 
-    public async Task<List<ItemDto>> ConsumedFoods()
+    public async Task<List<ItemDto>> ConsumedFoods(DateTime day)
     {
-        List<Item> items = await _foodData.GetConsumedFoods(CurrentUserId());
+        List<Item> items = await _foodData.GetConsumedFoods(CurrentUserId(), day);
 
         return [.. items.Select(ItemDto.FromEntity)];
     }

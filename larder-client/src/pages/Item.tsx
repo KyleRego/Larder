@@ -62,7 +62,7 @@ export default function Item() {
             <ActionBar>
                 <div className="d-flex justify-content-center">
                     <div className="btn-group">
-                            <Link   className="btn btn-outline-light text-black border-black"
+                            <Link   className="btn btn-outline-light"
                                     to={`/items/${item.id}/edit`}
                                     title={`Edit ${item.name}`} >
                                 {`Edit ${item.name}`}
@@ -70,7 +70,7 @@ export default function Item() {
 
                             {item.nutrition &&
                             <Link to={`/items/${item.id}/eat`} title={`Eat ${item.name}`}
-                                    className="btn btn-outline-light text-black border-black">
+                                    className="btn btn-outline-light">
                                 Eat {`${item.name}`}
                             </Link>
                             }

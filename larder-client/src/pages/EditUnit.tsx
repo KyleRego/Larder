@@ -76,7 +76,7 @@ export default function EditUnit() {
                 <div className="d-flex justify-content-between">
                     <span className="invisible btn">Delete unit</span>
                     <button type="submit" form="unit-form"
-                        className="btn btn-outline-light text-black border-black">
+                        className="btn btn-outline-light">
                         Update unit
                     </button>
 

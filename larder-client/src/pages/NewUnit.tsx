@@ -49,7 +49,7 @@ export default function NewUnit() {
             <ActionBar>
                 <div className="d-flex justify-content-center">
                     <button type="submit" form="unit-form"
-                        className="btn btn-outline-light text-black border-black">
+                        className="btn btn-outline-light">
                         Create unit
                     </button>
                 </div>

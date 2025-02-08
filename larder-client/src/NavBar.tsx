@@ -21,7 +21,7 @@ export function NavBar() {
     }
 
     const logoutBtn =   <button id="logout-btn" onClick={handleLogout} type="button"
-                                className="btn btn-outline-light text-black border-black">
+                                className="btn btn-outline-light">
                             Log out
                         </button>;
 
@@ -44,6 +44,7 @@ export function NavBar() {
                         <li className="nav-item"><Link className="nav-link" to="/items">Items</Link></li>
                         <li className="nav-item"><Link className="nav-link" to="/items/new">New item</Link></li>
                         <li className="nav-item"><Link className="nav-link" to="/units">Units</Link></li>
+                        <li className="nav-item"><Link className="nav-link" to="/food-log">Food log</Link></li>
                     </ul>
                     <div className="d-none d-lg-block">
                         {logoutBtn}
@@ -52,9 +53,9 @@ export function NavBar() {
                 </> :
                 <>
                 <div className="d-flex column-gap-3">
-                    <Link id="login-btn" to="/login" className="btn btn-outline-light text-black border-black">Login</Link>
+                    <Link id="login-btn" to="/login" className="btn btn-outline-light">Login</Link>
               
-                    <Link id="register-btn" to="/register" className="btn btn-outline-light text-black border-black">Register</Link>  
+                    <Link id="register-btn" to="/register" className="btn btn-outline-light">Register</Link>  
                 </div> 
                 </>
                 }          

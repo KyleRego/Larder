@@ -3,7 +3,6 @@ import { UnitDto } from "../types/UnitDto";
 import { apiClient } from "../util/axios";
 import { useParams } from "react-router";
 import Loading from "../components/Loading";
-import EditLink from "../components/EditLink";
 import UnitConversionForm from "../components/UnitConversionForm";
 import { UnitConversionDto } from "../types/UnitConversionDto";
 import UnitConversionDiv from "../components/UnitConversion";

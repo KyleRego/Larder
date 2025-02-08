@@ -9,7 +9,8 @@ public class DemoService(   UserManager<ApplicationUser> userManager,
                             SignInManager<ApplicationUser> signInManager,
                             IUnitService unitService,
                             IUnitConversionService unitConversionService,
-                            IItemService itemService)
+                            IItemService itemService,
+                            IFoodService foodService)
                                                         : IDemoService
 {
     private readonly UserManager<ApplicationUser> _userManager = userManager;
@@ -19,6 +20,7 @@ public class DemoService(   UserManager<ApplicationUser> userManager,
     private readonly IUnitConversionService _unitConversionService
                                                     = unitConversionService;
     private readonly IItemService _itemService = itemService;
+    private readonly IFoodService _foodService = foodService;
 
     private static readonly List<UnitDto> _demoUnits = [
         new() { Name="mg", Type=UnitType.Mass },
@@ -128,6 +130,18 @@ public class DemoService(   UserManager<ApplicationUser> userManager,
             }
         };
 
-        await _itemService.CreateItems([butter, riceBox, apples]);
+        List<ItemDto> createdItems =
+            await _itemService.CreateItems([butter, riceBox, apples]);
+
+        ItemDto createdApples = createdItems.First(item => item.Name == apples.Name);
+
+        EatFoodDto eatApple = new()
+        {
+            ItemId = createdApples.Id!,
+            QuantityEaten = QuantityDto.One()
+        };
+
+        await _foodService.EatFood(eatApple);
+
     }
 }

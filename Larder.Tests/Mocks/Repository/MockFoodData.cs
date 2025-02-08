@@ -66,7 +66,7 @@ public class MockFoodData : MockRepositoryBase, IFoodRepository
         throw new NotImplementedException();
     }
 
-    public Task<List<Item>> GetConsumedFoods(string userId)
+    public Task<List<Item>> GetConsumedFoods(string userId, DateTime day)
     {
         throw new NotImplementedException();
     }

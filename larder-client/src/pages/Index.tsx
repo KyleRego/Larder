@@ -34,7 +34,7 @@ export default function Index() {
             <ActionBar>
                 {authed === false &&
                     <button onClick={handleCreateDemo}
-                        type="button" className="btn btn-lg btn-outline-light text-black border-black">
+                        type="button" className="btn btn-outline-light">
                     Try it out!
                 </button>
                 }
