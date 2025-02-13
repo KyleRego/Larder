@@ -38,7 +38,7 @@ public class EatFoodTests : ServiceTestsBase
 
         Assert.Equal(expectedNewQuantity.Amount, foodLeftOver.Quantity?.Amount);
 
-        Assert.Equal("apples", consumedFood.Name);
+        Assert.Equal("Apples", consumedFood.Name);
 
         Item eatenFood = (await _foodData.Get(mockUserId, consumedFood.Id!))!;
 

@@ -1,5 +1,3 @@
-using Larder.Models.ItemComponents;
-
 namespace Larder.Models.Builders;
 
 public class ItemBuilder(string userId, string name,
@@ -10,7 +8,7 @@ public class ItemBuilder(string userId, string name,
     private readonly string? _description = description;
     private string _id = Guid.NewGuid().ToString();
     private Quantity _quantity = Quantity.One();
-    private readonly List<Action<Item>> _componentSetters = [];
+    private NutritionBuilder? _nutritionBuilder;
 
     public ItemBuilder WithId(string id)
     {
@@ -34,19 +32,9 @@ public class ItemBuilder(string userId, string name,
         return this;
     }
 
-    public ItemBuilder WithNutrition(double calories, double gramsProtein)
+    public ItemBuilder WithNutrition(NutritionBuilder nutritionBuilder)
     {
-        _componentSetters.Add(item =>
-        {
-            item.Nutrition = new Nutrition
-            {
-                Item = item,
-                ItemId = item.Id,
-                Calories = calories,
-                GramsProtein = gramsProtein
-            };
-        });
-
+        _nutritionBuilder = nutritionBuilder;
         return this;
     }
 
@@ -58,9 +46,9 @@ public class ItemBuilder(string userId, string name,
             Quantity = _quantity
         };
 
-        foreach (var setter in _componentSetters)
+        if (_nutritionBuilder is not null)
         {
-            setter(item);
+            item.Nutrition = _nutritionBuilder.Build(item);
         }
 
         return item;

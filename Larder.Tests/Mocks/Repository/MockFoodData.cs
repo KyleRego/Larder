@@ -1,6 +1,5 @@
 using Larder.Models;
 using Larder.Models.Builders;
-using Larder.Models.ItemComponents;
 using Larder.Models.SortOptions;
 using Larder.Repository.Interface;
 
@@ -13,15 +12,21 @@ public class MockFoodData : MockRepositoryBase, IFoodRepository
     public MockFoodData()
     {
         Item apples = new ItemBuilder(testUserId, "Apples")
+            .WithId("apples")
             .WithQuantity(4)
-            .WithNutrition(100, 2)
+            .WithNutrition(new NutritionBuilder()
+                .WithCalories(100)
+                .WithProtein(2))
             .Build();
 
         Unit grams = new(testUserId, "grams", UnitType.Mass);
 
         Item peanutButter = new ItemBuilder(testUserId, "Peanut Butter")
+            .WithId("peanut-butter")
             .WithQuantity(189, grams)
-            .WithNutrition(190, 8)
+            .WithNutrition(new NutritionBuilder()
+                    .WithCalories(190)
+                    .WithProtein(2))
             .Build();
 
         foodItems.AddRange([apples, peanutButter]);
