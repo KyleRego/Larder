@@ -39,17 +39,8 @@ public class QuantityService(IServiceProviderWrapper serviceProvider,
         }
         else if (minuend.UnitId != null && subtrahend.UnitId != null)
         {
-            UnitDto minuendUnit = await _unitService.GetUnit(minuend.UnitId)
-                ?? throw new ApplicationException("Unit not found for the minuend");
-            UnitDto subtrahendUnit = await _unitService.GetUnit(subtrahend.UnitId)
-                ?? throw new ApplicationException("Unit not found for the subtrahend");
+            QuantityDto convertedSubtrahend = await Convert(subtrahend, minuend.UnitId);
 
-            if (minuendUnit.Type != subtrahendUnit.Type)
-                throw new ApplicationException
-                    ("Cannot subtract quantities of different unit type");
-
-            QuantityDto convertedSubtrahend = await Convert(subtrahend, minuendUnit.Id!);
-// TODO: This needs to be simplified after its dependency API changes
             return new()
             {
                 UnitId = minuend.UnitId,
@@ -58,16 +49,15 @@ public class QuantityService(IServiceProviderWrapper serviceProvider,
         }
         else
         {
-            throw new ApplicationException();
+            throw new ApplicationException("");
         }
     }
 
     /// <summary>
-    /// Attempts to convert quantity to a quantity with unit specified by unitId
+    /// Converts quantity to a specified unit
     /// </summary>
     /// <param name="quantity"></param>
-    /// <param name="conversion"></param>
-    /// <param name="targetUnit"></param>
+    /// <param name="desiredUnitId">ID of unit to convert quantity to</param>
     /// <returns></returns>
     public async Task<QuantityDto> Convert(QuantityDto quantity,
                                             string desiredUnitId)
@@ -76,12 +66,12 @@ public class QuantityService(IServiceProviderWrapper serviceProvider,
             throw new ApplicationException("Quantity must have a unit to be converted");
 
         if (quantity.UnitId == desiredUnitId)
-            return (QuantityDto)quantity;
+            return quantity;
 
         UnitConversionDto conversion = await _unitConvService
                                     .FindConversion(quantity.UnitId, desiredUnitId) ??
             throw new ApplicationException(
-                "There is no unit conversion configured for these units");
+$"There is a no unit conversion between units with IDs {quantity.UnitId} and {desiredUnitId}");
 
         if (quantity.UnitId == conversion.UnitId && desiredUnitId == conversion.TargetUnitId)
         {

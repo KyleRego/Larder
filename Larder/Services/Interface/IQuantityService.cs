@@ -1,5 +1,4 @@
 using Larder.Dtos;
-using Larder.Models.Interface;
 
 namespace Larder.Services.Interface;
 
