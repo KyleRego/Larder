@@ -7,54 +7,55 @@ namespace Larder.Tests.Services.QuantityMathServiceTests;
 
 public class ConvertQuantityTests : ServiceTestsBase
 {
-    private readonly Unit _gramsUnit;
-    private readonly Unit _milligramsUnit;
-    private readonly UnitConversionDto _gramsToMilligramsConversion;
-
-    public ConvertQuantityTests()
+    [Fact]
+    public async void TestConvertingGramsToMilligrams()
     {
         MockUnitData unitData = new();
-        MockUnitConversionData unitConversionData = new();
+        UnitService unitService = new(mSP.Object, unitData);
+        UnitConversionService unitConversionService = new(mSP.Object,
+                unitData, new MockUnitConversionData());
 
-        _gramsUnit = unitData.Get(mockUserId, "grams").GetAwaiter().GetResult()!;
-        _milligramsUnit = unitData.Get(mockUserId, "milligrams").GetAwaiter().GetResult()!;
+        Unit grams = (await unitData.Get(mockUserId, "grams"))!;
+        Unit milligrams = (await unitData.Get(mockUserId, "milligrams"))!;
 
-        _gramsToMilligramsConversion = UnitConversionDto.FromEntity(
-            unitConversionData.FindByUnitIdsEitherWay(
-                mockUserId, _gramsUnit.Id, _milligramsUnit.Id).GetAwaiter().GetResult()!);
-    }
-
-    [Fact]
-    public void TestConvertingGramsToMilligrams()
-    {
-        Quantity quantity = new()
+        QuantityDto quantity = new()
         {
             Amount = 10,
-            Unit = _gramsUnit,
-            UnitId = _gramsUnit.Id
+            UnitId = grams.Id
         };
 
-        QuantityDto result = QuantityMathService.ConvertQuantity(
-            quantity, _gramsToMilligramsConversion, UnitDto.FromEntity(_milligramsUnit));
+        QuantityService sut = new(mSP.Object, unitService, unitConversionService);
 
-        Assert.Equal(_milligramsUnit.Id, result.UnitId);
+        QuantityDto result = await sut.Convert(
+            quantity, milligrams.Id);
+
+        Assert.Equal(milligrams.Id, result.UnitId);
         Assert.Equal(10 * 1000, result.Amount);
     }
 
     [Fact]
-    public void TestConvertingMilligramsToGrams()
+    public async void TestConvertingMilligramsToGrams()
     {
-        Quantity quantity = new()
+        MockUnitData unitData = new();
+        UnitService unitService = new(mSP.Object, unitData);
+        UnitConversionService unitConversionService = new(mSP.Object,
+                unitData, new MockUnitConversionData());
+
+        Unit grams = (await unitData.Get(mockUserId, "grams"))!;
+        Unit milligrams = (await unitData.Get(mockUserId, "milligrams"))!;
+
+        QuantityDto quantity = new()
         {
             Amount = 10000,
-            Unit = _milligramsUnit,
-            UnitId = _milligramsUnit.Id
+            UnitId = milligrams.Id
         };
 
-        QuantityDto result = QuantityMathService.ConvertQuantity(
-            quantity, _gramsToMilligramsConversion, UnitDto.FromEntity(_gramsUnit));
+        QuantityService sut = new(mSP.Object, unitService, unitConversionService);
 
-        Assert.Equal(_gramsUnit.Id, result.UnitId);
+        QuantityDto result = await sut.Convert(
+            quantity, grams.Id);
+
+        Assert.Equal(grams.Id, result.UnitId);
         Assert.Equal(10000 / 1000, result.Amount);
     }
 }

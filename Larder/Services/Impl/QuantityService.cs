@@ -1,14 +1,12 @@
 using Larder.Dtos;
-using Larder.Models;
-using Larder.Models.Interface;
 using Larder.Services.Interface;
 
 namespace Larder.Services.Impl;
 
-public class QuantityMathService(IServiceProviderWrapper serviceProvider,
+public class QuantityService(IServiceProviderWrapper serviceProvider,
                                     IUnitService unitService,
                                     IUnitConversionService unitConvService)
-                        : AppServiceBase(serviceProvider), IQuantityMathService
+                        : AppServiceBase(serviceProvider), IQuantityService
 {
     private readonly IUnitService _unitService = unitService;
     private readonly IUnitConversionService _unitConvService = unitConvService;
@@ -21,7 +19,7 @@ public class QuantityMathService(IServiceProviderWrapper serviceProvider,
     /// <param name="subtrahend"></param>
     /// <returns></returns>
     /// <exception cref="ApplicationException"></exception>
-    public async Task<QuantityDto> Subtract(IQuantity minuend, IQuantity subtrahend)
+    public async Task<QuantityDto> Subtract(QuantityDto minuend, QuantityDto subtrahend)
     {
         if (minuend.UnitId == null && subtrahend.UnitId == null)
         {
@@ -42,23 +40,16 @@ public class QuantityMathService(IServiceProviderWrapper serviceProvider,
         else if (minuend.UnitId != null && subtrahend.UnitId != null)
         {
             UnitDto minuendUnit = await _unitService.GetUnit(minuend.UnitId)
-                ?? throw new ApplicationException("Unit not found for unit ID 1");
+                ?? throw new ApplicationException("Unit not found for the minuend");
             UnitDto subtrahendUnit = await _unitService.GetUnit(subtrahend.UnitId)
-                ?? throw new ApplicationException("Unit not found for unit ID 2");
+                ?? throw new ApplicationException("Unit not found for the subtrahend");
 
             if (minuendUnit.Type != subtrahendUnit.Type)
-            {
                 throw new ApplicationException
                     ("Cannot subtract quantities of different unit type");
-            }
 
-            UnitConversionDto conversion = await _unitConvService
-                                        .FindConversion(minuend.UnitId, subtrahend.UnitId) ??
-                throw new ApplicationException(
-                    "There is no unit conversion configured for these units");
-
-            QuantityDto convertedSubtrahend = ConvertQuantity(subtrahend, conversion, minuendUnit);
-
+            QuantityDto convertedSubtrahend = await Convert(subtrahend, minuendUnit.Id!);
+// TODO: This needs to be simplified after its dependency API changes
             return new()
             {
                 UnitId = minuend.UnitId,
@@ -72,39 +63,47 @@ public class QuantityMathService(IServiceProviderWrapper serviceProvider,
     }
 
     /// <summary>
-    /// Uses conversion to convert quantity to a quantity of unit targetUnit
+    /// Attempts to convert quantity to a quantity with unit specified by unitId
     /// </summary>
     /// <param name="quantity"></param>
     /// <param name="conversion"></param>
     /// <param name="targetUnit"></param>
     /// <returns></returns>
-    public static QuantityDto ConvertQuantity(IQuantity quantity,
-                                            UnitConversionDto conversion,
-                                            UnitDto desiredUnit)
+    public async Task<QuantityDto> Convert(QuantityDto quantity,
+                                            string desiredUnitId)
     {
         if (quantity.UnitId == null)
             throw new ApplicationException("Quantity must have a unit to be converted");
 
-        if (quantity.UnitId == desiredUnit.Id)
+        if (quantity.UnitId == desiredUnitId)
             return (QuantityDto)quantity;
 
-        if (quantity.UnitId == conversion.UnitId && desiredUnit.Id == conversion.TargetUnitId)
+        UnitConversionDto conversion = await _unitConvService
+                                    .FindConversion(quantity.UnitId, desiredUnitId) ??
+            throw new ApplicationException(
+                "There is no unit conversion configured for these units");
+
+        if (quantity.UnitId == conversion.UnitId && desiredUnitId == conversion.TargetUnitId)
         {
-            return new()
+            QuantityDto result = new()
             {
-                UnitId = desiredUnit.Id,
+                UnitId = desiredUnitId,
                 Amount = quantity.Amount * conversion.TargetUnitsPerUnit
             };
+
+            return result;
         }
-        else if (quantity.UnitId == conversion.TargetUnitId && desiredUnit.Id == conversion.UnitId)
+        else if (quantity.UnitId == conversion.TargetUnitId && desiredUnitId == conversion.UnitId)
         {
             double inverseTargetUnitsPerUnit = 1 / conversion.TargetUnitsPerUnit;
 
-            return new()
+            QuantityDto result = new()
             {
-                UnitId = desiredUnit.Id,
+                UnitId = desiredUnitId,
                 Amount = quantity.Amount * inverseTargetUnitsPerUnit
             };
+
+            return result;
         }
         else
         {
@@ -113,7 +112,8 @@ public class QuantityMathService(IServiceProviderWrapper serviceProvider,
         }
     }
 
-    public async Task<QuantityDto> SubtractUpToZero(IQuantity minuend, IQuantity subtrahend)
+    public async Task<QuantityDto> SubtractUpToZero(QuantityDto minuend,
+                                                        QuantityDto subtrahend)
     {
         QuantityDto fullSubtractResult = await Subtract(minuend, subtrahend);
 
@@ -128,5 +128,15 @@ public class QuantityMathService(IServiceProviderWrapper serviceProvider,
         {
             return fullSubtractResult;
         }
+    }
+
+    public async Task<double> Divide(QuantityDto dividend, QuantityDto divisor)
+    {
+        if (dividend.UnitId == null && divisor.UnitId == null)
+            return dividend.Amount / divisor.Amount;
+
+        QuantityDto convertedDivisor = await Convert(divisor, dividend.UnitId!);
+
+        return dividend.Amount / convertedDivisor.Amount;
     }
 }

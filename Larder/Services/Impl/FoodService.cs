@@ -8,12 +8,12 @@ using Larder.Services.Interface;
 namespace Larder.Services.Impl;
 
 public class FoodService(  IServiceProviderWrapper serviceProvider,
-                                IQuantityMathService quantityMathService,
+                                IQuantityService quantityMathService,
                                 IFoodRepository foodRepository)
                         : AppServiceBase(serviceProvider), IFoodService
 {
     private readonly IFoodRepository _foodData = foodRepository;
-    private readonly IQuantityMathService _quantityMathService
+    private readonly IQuantityService _quantityMathService
                                             = quantityMathService;
 
     public async Task<List<ItemDto>> GetFoods(FoodSortOptions sortBy,
@@ -31,45 +31,54 @@ public class FoodService(  IServiceProviderWrapper serviceProvider,
 
         Nutrition nutrition = foodItem.Nutrition
             ?? throw new ApplicationException(
-                $"Food with id {dto.ItemId} has no nutrition component");
+                $"Food with ID {dto.ItemId} has no Nutrition component");
 
-        Quantity foodQuantity = foodItem.Quantity;
-        Quantity eatFoodQuantity = Quantity.FromDto(dto.QuantityEaten);
+        QuantityDto foodQuantity = QuantityDto.FromEntity(foodItem.Quantity);
 
         QuantityDto quantityLeft = await _quantityMathService
-                    .SubtractUpToZero(foodQuantity, eatFoodQuantity);
+                    .SubtractUpToZero(foodQuantity, dto.QuantityEaten);
         foodItem.Quantity = Quantity.FromDto(quantityLeft);
 
-        Quantity quantityEaten;
-        if (quantityLeft.Amount == 0)
-        {
-            quantityEaten = foodQuantity;
-        }
-        else
-        {
-            quantityEaten = eatFoodQuantity;
-        }
+        QuantityDto quantityEaten =
+            (quantityLeft.Amount == 0) ? foodQuantity : dto.QuantityEaten;
+
+        double servingsConsumed = await _quantityMathService.Divide(
+                    quantityEaten, QuantityDto.FromEntity(nutrition.ServingSize));
 
         Item updatedFood = await _foodData.Update(foodItem);
 
-        Item eatenFoodResult = new(CurrentUserId(),
-                    $"{foodItem.Name} - Eaten")
+        Item consumedFoodResult = new(CurrentUserId(), foodItem.Name)
         {
-            Quantity = quantityEaten
+            Quantity = Quantity.FromDto(quantityEaten)
         };
+        Nutrition consumedNutrition = new()
+        {
+            Item = consumedFoodResult,
+            Calories = nutrition.Calories * servingsConsumed,
+            GramsProtein = nutrition.GramsProtein * servingsConsumed,
+            GramsDietaryFiber = nutrition.GramsDietaryFiber * servingsConsumed,
+            GramsSaturatedFat = nutrition.GramsSaturatedFat * servingsConsumed,
+            GramsTotalCarbs = nutrition.GramsTotalCarbs * servingsConsumed,
+            GramsTotalFat = nutrition.GramsTotalFat * servingsConsumed,
+            GramsTotalSugars = nutrition.GramsTotalSugars * servingsConsumed,
+            GramsTransFat = nutrition.GramsTransFat * servingsConsumed,
+            MilligramsCholesterol = nutrition.MilligramsCholesterol * servingsConsumed,
+            MilligramsSodium = nutrition.MilligramsSodium * servingsConsumed
+        };
+        consumedFoodResult.Nutrition = consumedNutrition;
         ConsumedTime consumedTime = new()
         {
-            ConsumedAt = DateTimeOffset.Now,
-            Item = eatenFoodResult
+            Item = consumedFoodResult,
+            ConsumedAt = DateTimeOffset.Now 
         };
-        eatenFoodResult.ConsumedTime = consumedTime;
+        consumedFoodResult.ConsumedTime = consumedTime;
 
-        await _foodData.Insert(eatenFoodResult);
+        await _foodData.Insert(consumedFoodResult);
 
         return (ItemDto.FromEntity(updatedFood),
-                    ItemDto.FromEntity(eatenFoodResult));
+                    ItemDto.FromEntity(consumedFoodResult));
     }
-
+ 
     public async Task<List<ItemDto>> ConsumedFoods(DateTime day)
     {
         List<Item> items = await _foodData.GetConsumedFoods(CurrentUserId(), day);

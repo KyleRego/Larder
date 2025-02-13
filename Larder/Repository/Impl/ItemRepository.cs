@@ -25,7 +25,8 @@ public class ItemRepository(AppDbContext dbContext)
                                                     ItemSortOptions sortBy,
                                                     string? search)
     {
-        var query = _dbContext.Items.Where(item => item.UserId == userId);
+        var query = _dbContext.Items.Where(item =>
+            item.UserId == userId && item.ConsumedTime == null);
 
         if (search != null)
         {

@@ -26,7 +26,7 @@ public class FoodsController(IFoodService foodService) : AppControllerBase
 
     [HttpPost("EatFood/{id}")]
     public async Task<ActionResult<ApiResponse<ItemDto>>>
-                                ConsumeServings(string id, EatFoodDto dto)
+                                EatFood(string id, EatFoodDto dto)
     {
         if (dto.ItemId != id) return BadRequest();
 

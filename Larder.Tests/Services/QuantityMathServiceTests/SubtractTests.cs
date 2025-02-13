@@ -15,17 +15,17 @@ public class SubtractTests : ServiceTestsBase
         UnitConversionService unitConversionService = new(mSP.Object,
                 unitData, new MockUnitConversionData());
 
-        Quantity minuend = new()
+        QuantityDto minuend = new()
         {
-           UnitId = null, Unit = null, Amount = 6 
+           UnitId = null, Amount = 6 
         };
 
-        Quantity subtrahend = new()
+        QuantityDto subtrahend = new()
         {
-            UnitId = null, Unit = null, Amount = 3.5
+            UnitId = null, Amount = 3.5
         };
 
-        QuantityMathService sut = new(mSP.Object, unitService, unitConversionService);
+        QuantityService sut = new(mSP.Object, unitService, unitConversionService);
         QuantityDto result = await sut.Subtract(minuend, subtrahend);
 
         Assert.Equal(2.5, result.Amount);
@@ -42,21 +42,19 @@ public class SubtractTests : ServiceTestsBase
 
         Unit unit = (await unitData.Get(mockUserId, "pounds"))!;
 
-        Quantity minuend = new()
+        QuantityDto minuend = new()
         {
             Amount = 104,
-            Unit = unit,
             UnitId = unit.Id
         };
 
-        Quantity subtrahend = new()
+        QuantityDto subtrahend = new()
         {
             Amount = 78,
-            Unit = unit,
             UnitId = unit.Id
         };
 
-        QuantityMathService sut = new(mSP.Object, unitService, unitConversionService);
+        QuantityService sut = new(mSP.Object, unitService, unitConversionService);
 
         QuantityDto result = await sut.Subtract(minuend, subtrahend);
 
@@ -75,21 +73,19 @@ public class SubtractTests : ServiceTestsBase
         Unit grams = (await unitData.Get(mockUserId, "grams"))!;
         Unit milligrams = (await unitData.Get(mockUserId, "milligrams"))!;
 
-        Quantity minuend = new()
+        QuantityDto minuend = new()
         {
             Amount = 2000,
-            UnitId = milligrams.Id,
-            Unit = milligrams
+            UnitId = milligrams.Id
         };
 
-        Quantity subtrahend = new()
+        QuantityDto subtrahend = new()
         {
             Amount = 1,
-            UnitId = grams.Id,
-            Unit = grams
+            UnitId = grams.Id
         };
 
-        QuantityMathService sut = new(mSP.Object, unitService, unitConversionService);
+        QuantityService sut = new(mSP.Object, unitService, unitConversionService);
 
         QuantityDto result = await sut.Subtract(minuend, subtrahend);
 

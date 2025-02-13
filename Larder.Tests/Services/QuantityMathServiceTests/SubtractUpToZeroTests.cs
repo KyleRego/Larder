@@ -17,7 +17,7 @@ public class SubtractUpToZeroTests : ServiceTestsBase
         UnitService unitService = new(mSP.Object, unitData);
         UnitConversionService unitConversionService = new(mSP.Object,
                 unitData, new MockUnitConversionData());
-        QuantityMathService sut = new(mSP.Object, unitService, unitConversionService);
+        QuantityService sut = new(mSP.Object, unitService, unitConversionService);
 
         QuantityDto result = await sut.SubtractUpToZero(minuend, subtrahend);
     
@@ -37,7 +37,7 @@ public class SubtractUpToZeroTests : ServiceTestsBase
         UnitService unitService = new(mSP.Object, unitData);
         UnitConversionService unitConversionService = new(mSP.Object,
                 unitData, new MockUnitConversionData());
-        QuantityMathService sut = new(mSP.Object, unitService, unitConversionService);
+        QuantityService sut = new(mSP.Object, unitService, unitConversionService);
 
         QuantityDto result = await sut.SubtractUpToZero(minuend, subtrahend);
     

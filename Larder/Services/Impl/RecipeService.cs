@@ -10,13 +10,13 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
                                     IRecipeRepository recipeData,
                                     IIngredientRepository ingredientData,
                                     IFoodRepository foodData,
-                                    IQuantityMathService quantMathService)
+                                    IQuantityService quantMathService)
                      : AppServiceBase(serviceProvider), IRecipeService
 {
     private readonly IRecipeRepository _recipeData = recipeData;
     private readonly IIngredientRepository _ingredientData = ingredientData;
     private readonly IFoodRepository _foodData = foodData;
-    private readonly IQuantityMathService _quantMathService = quantMathService;
+    private readonly IQuantityService _quantMathService = quantMathService;
 
     public async Task CookRecipe(CookRecipeDto cookRecipeDto)
     {
@@ -26,8 +26,8 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
 
         foreach(RecipeIngredient recipeIngredient in recipe.RecipeIngredients)
         {
-            Quantity quantNeeded = recipeIngredient.Quantity;
-            Quantity quantAvail = recipeIngredient.QuantityAvailable();
+            QuantityDto quantNeeded = QuantityDto.FromEntity(recipeIngredient.Quantity);
+            QuantityDto quantAvail = QuantityDto.FromEntity(recipeIngredient.QuantityAvailable());
 
             recipeIngredient.SetItemQuantity(
                 Quantity.FromDto(await _quantMathService.Subtract(quantAvail, quantNeeded))
