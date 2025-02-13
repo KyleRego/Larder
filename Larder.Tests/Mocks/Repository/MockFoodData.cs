@@ -7,10 +7,14 @@ namespace Larder.Tests.Mocks.Repository;
 
 public class MockFoodData : MockRepositoryBase, IFoodRepository
 {
-    private readonly List<Item> foodItems = [];
+    private readonly List<Item> foods = [];
 
     public MockFoodData()
     {
+        MockUnitData unitData = new();
+        Unit grams = unitData.Get(testUserId, "grams").GetAwaiter().GetResult()!;
+        Unit breadSlices = unitData.Get(testUserId, "bread-slices").GetAwaiter().GetResult()!;
+
         Item apples = new ItemBuilder(testUserId, "Apples")
             .WithId("apples")
             .WithQuantity(4)
@@ -18,8 +22,6 @@ public class MockFoodData : MockRepositoryBase, IFoodRepository
                 .WithCalories(100)
                 .WithProtein(2))
             .Build();
-
-        Unit grams = new(testUserId, "grams", UnitType.Mass);
 
         Item peanutButter = new ItemBuilder(testUserId, "Peanut Butter")
             .WithId("peanut-butter")
@@ -29,7 +31,24 @@ public class MockFoodData : MockRepositoryBase, IFoodRepository
                     .WithProtein(2))
             .Build();
 
-        foodItems.AddRange([apples, peanutButter]);
+        Item wheatBread = new ItemBuilder(testUserId, "Wheat bread")
+            .WithId("wheat-bread")
+            .WithQuantity(21, breadSlices)
+            .WithNutrition(new NutritionBuilder()
+                    .WithServingSize(1, breadSlices)
+                    .WithCalories(60)
+                    .WithTotalFat(1)
+                    .WithSaturatedFat(0)
+                    .WithTransFat(0)
+                    .WithCholesterol(0)
+                    .WithSodium(100)
+                    .WithTotalCarbs(12)
+                    .WithDietaryFiber(2)
+                    .WithTotalSugars(1)
+                    .WithProtein(3))
+            .Build();
+
+        foods.AddRange([apples, peanutButter, wheatBread]);
     }
 
     public Task Delete(Item entity)
@@ -44,7 +63,7 @@ public class MockFoodData : MockRepositoryBase, IFoodRepository
 
     public Task<Item?> Get(string userId, string id)
     {
-        Item? food = foodItems.FirstOrDefault(item =>
+        Item? food = foods.FirstOrDefault(item =>
             item.Id == id && item.UserId == userId);
 
         return Task<Item?>.FromResult(food);
@@ -62,7 +81,7 @@ public class MockFoodData : MockRepositoryBase, IFoodRepository
 
     public Task<Item> Insert(Item newEntity)
     {
-        foodItems.Add(newEntity);
+        foods.Add(newEntity);
 
         return Task<Item>.FromResult(newEntity);
     }

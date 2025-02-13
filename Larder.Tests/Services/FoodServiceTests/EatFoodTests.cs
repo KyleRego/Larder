@@ -1,5 +1,6 @@
 using Larder.Dtos;
 using Larder.Models;
+using Larder.Models.ItemComponents;
 using Larder.Services.Impl;
 using Larder.Tests.Mocks.Repository;
 
@@ -16,9 +17,9 @@ public class EatFoodTests : ServiceTestsBase
 
     public EatFoodTests()
     {
-        _unitService = new(mSP.Object, _unitData);
-        _unitConversionService = new(mSP.Object, _unitData, _unitConversionData);
-        _quantityService = new(mSP.Object, _unitService, _unitConversionService);
+        _unitService = new(_serviceProvider.Object, _unitData);
+        _unitConversionService = new(_serviceProvider.Object, _unitData, _unitConversionData);
+        _quantityService = new(_serviceProvider.Object, _unitService, _unitConversionService);
     }
 
     [Fact]
@@ -30,17 +31,17 @@ public class EatFoodTests : ServiceTestsBase
             QuantityEaten = new() { Amount = 1 }
         };
 
-        QuantityDto expectedNewQuantity = new() { Amount = 3 };
+        QuantityDto expectedLeftOverApples = new() { Amount = 3 };
 
-        FoodService sut = new(mSP.Object, _quantityService, _foodData);
+        FoodService sut = new(_serviceProvider.Object, _quantityService, _foodData);
 
-        (ItemDto foodLeftOver, ItemDto consumedFood) = await sut.EatFood(dto);
+        (ItemDto applesLeftOver, ItemDto eatenApple) = await sut.EatFood(dto);
 
-        Assert.Equal(expectedNewQuantity.Amount, foodLeftOver.Quantity?.Amount);
+        Assert.Equal(expectedLeftOverApples.Amount, applesLeftOver.Quantity?.Amount);
 
-        Assert.Equal("Apples", consumedFood.Name);
+        Assert.Equal("Apples", eatenApple.Name);
 
-        Item eatenFood = (await _foodData.Get(mockUserId, consumedFood.Id!))!;
+        Item eatenFood = (await _foodData.Get(testUserId, eatenApple.Id!))!;
 
         Assert.NotNull(eatenFood.ConsumedTime);
         Assert.NotNull(eatenFood.Nutrition);
@@ -49,5 +50,46 @@ public class EatFoodTests : ServiceTestsBase
         Assert.Equal(1, eatenFood.Nutrition.ServingSize.Amount);
         Assert.Equal(100, eatenFood.Nutrition.Calories);
         Assert.Equal(2, eatenFood.Nutrition.GramsProtein);
+    }
+
+    [Fact]
+    public async void EatBreadSlices()
+    {
+        Unit breadSlices = (await _unitData.Get(testUserId, "bread-slices"))!;
+
+        QuantityDto quantityToEat = new() { Amount = 3, UnitId = breadSlices.Id };
+
+        EatFoodDto dto = new()
+        {
+            ItemId = "wheat-bread",
+            QuantityEaten = quantityToEat
+        };
+
+        QuantityDto expectedLeftOverBread = new() { Amount = 18, UnitId = breadSlices.Id };
+
+        FoodService sut = new(_serviceProvider.Object, _quantityService, _foodData);
+
+        (ItemDto breadLeftOver, ItemDto eatenBread) = await sut.EatFood(dto);
+
+        // Assert expected quantities
+        Assert.Equal(expectedLeftOverBread.Amount, breadLeftOver.Quantity?.Amount);
+        Assert.Equal(expectedLeftOverBread.UnitId, breadLeftOver.Quantity?.UnitId);
+        Assert.Equal(quantityToEat.Amount, eatenBread.Quantity?.Amount);
+        Assert.Equal(quantityToEat.UnitId, eatenBread.Quantity?.UnitId);
+    
+        // Assert expected nutrition on eaten bread
+        Assert.NotNull(eatenBread.Nutrition);
+        NutritionDto nutrition = eatenBread.Nutrition;
+        Assert.Equal(nutrition.ServingSize.Amount, quantityToEat.Amount);
+        Assert.Equal(nutrition.ServingSize.UnitId, quantityToEat.UnitId);
+        Assert.Equal(3 * 60, nutrition.Calories);
+        Assert.Equal(3 * 1, nutrition.GramsTotalFat);
+        Assert.Equal(0, nutrition.GramsSaturatedFat);
+        Assert.Equal(0, nutrition.GramsSaturatedFat);
+        Assert.Equal(3 * 100, nutrition.MilligramsSodium);
+        Assert.Equal(3 * 3, nutrition.GramsProtein);
+        Assert.Equal(2 * 3, nutrition.GramsDietaryFiber);
+        Assert.Equal(1 * 3, nutrition.GramsTotalSugars);
+        Assert.Equal(12 * 3, nutrition.GramsTotalCarbs);
     }
 }

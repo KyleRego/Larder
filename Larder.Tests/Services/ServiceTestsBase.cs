@@ -10,13 +10,13 @@ namespace Larder.Tests.Services;
 
 public abstract class ServiceTestsBase
 {
-    protected readonly Mock<IServiceProviderWrapper> mSP;
-    protected static readonly string mockUserId = TestUser.TestUserId();
-    protected readonly Claim mockUserClaim = TestUser.TestUserClaim();
+    protected readonly Mock<IServiceProviderWrapper> _serviceProvider;
+    protected static readonly string testUserId = TestUser.TestUserId();
+    protected readonly Claim testUserClaim = TestUser.TestUserClaim();
 
     public ServiceTestsBase()
     {
-        mSP = new Mock<IServiceProviderWrapper>();
+        _serviceProvider = new Mock<IServiceProviderWrapper>();
 
         var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
         var mockAuthorizationService = new Mock<IAuthorizationService>();
@@ -27,7 +27,7 @@ public abstract class ServiceTestsBase
                                             .Returns(mockHttpContext.Object);
         mockHttpContext.Setup(_ => _.User).Returns(mockClaimsPrincipal.Object);
         mockClaimsPrincipal.Setup(_ => _.FindFirst(ClaimTypes.NameIdentifier))
-                                                    .Returns(mockUserClaim);
+                                                    .Returns(testUserClaim);
 
         mockAuthorizationService.Setup(_ =>
                                 _.AuthorizeAsync(mockClaimsPrincipal.Object,
@@ -35,9 +35,9 @@ public abstract class ServiceTestsBase
                                         UserCanAccessEntityRequirement.Name))
                                 .ReturnsAsync(AuthorizationResult.Success());
 
-        mSP.Setup(_ => _.GetRequiredService<IHttpContextAccessor>())
+        _serviceProvider.Setup(_ => _.GetRequiredService<IHttpContextAccessor>())
                                     .Returns(mockHttpContextAccessor.Object);
-        mSP.Setup(_ => _.GetRequiredService<IAuthorizationService>())
+        _serviceProvider.Setup(_ => _.GetRequiredService<IAuthorizationService>())
                                     .Returns(mockAuthorizationService.Object);
     }
 }

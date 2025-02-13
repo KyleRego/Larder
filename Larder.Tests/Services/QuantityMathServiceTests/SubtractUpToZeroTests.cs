@@ -14,10 +14,10 @@ public class SubtractUpToZeroTests : ServiceTestsBase
         QuantityDto subtrahend = new() { Amount = 7, UnitId = null };
 
         MockUnitData unitData = new();
-        UnitService unitService = new(mSP.Object, unitData);
-        UnitConversionService unitConversionService = new(mSP.Object,
+        UnitService unitService = new(_serviceProvider.Object, unitData);
+        UnitConversionService unitConversionService = new(_serviceProvider.Object,
                 unitData, new MockUnitConversionData());
-        QuantityService sut = new(mSP.Object, unitService, unitConversionService);
+        QuantityService sut = new(_serviceProvider.Object, unitService, unitConversionService);
 
         QuantityDto result = await sut.SubtractUpToZero(minuend, subtrahend);
     
@@ -28,16 +28,16 @@ public class SubtractUpToZeroTests : ServiceTestsBase
     public async void MinuendUnitIsKept()
     {
         MockUnitData unitData = new();
-        Unit grams = (await unitData.Get(mockUserId, "grams"))!;
-        Unit milligrams = (await unitData.Get(mockUserId, "milligrams"))!;
+        Unit grams = (await unitData.Get(testUserId, "grams"))!;
+        Unit milligrams = (await unitData.Get(testUserId, "milligrams"))!;
 
         QuantityDto minuend = new() { Amount = 300, UnitId = milligrams.Id };
         QuantityDto subtrahend = new() { Amount = 1, UnitId = grams.Id };
         
-        UnitService unitService = new(mSP.Object, unitData);
-        UnitConversionService unitConversionService = new(mSP.Object,
+        UnitService unitService = new(_serviceProvider.Object, unitData);
+        UnitConversionService unitConversionService = new(_serviceProvider.Object,
                 unitData, new MockUnitConversionData());
-        QuantityService sut = new(mSP.Object, unitService, unitConversionService);
+        QuantityService sut = new(_serviceProvider.Object, unitService, unitConversionService);
 
         QuantityDto result = await sut.SubtractUpToZero(minuend, subtrahend);
     

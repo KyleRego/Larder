@@ -22,8 +22,12 @@ public class MockUnitData : MockRepositoryBase, IUnitRepository
         {
             Id = "pounds"
         };
+        Unit breadSlices = new(testUserId, "bread slices", UnitType.Mass)
+        {
+            Id="bread-slices"
+        };
 
-        units.AddRange([grams, milligrams, pounds]);
+        units.AddRange([grams, milligrams, pounds, breadSlices]);
     }
 
     public Task Delete(Unit entity)

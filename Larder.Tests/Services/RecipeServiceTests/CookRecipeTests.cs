@@ -111,7 +111,7 @@ public class CookRecipeTests : ServiceTestsBase
 
         var mockIngredientData = new Mock<IIngredientRepository>();
 
-        RecipeService sut = new(mSP.Object,
+        RecipeService sut = new(_serviceProvider.Object,
                                 mockRecipeData.Object,
                                 mockIngredientData.Object,
                                 mockFoodData.Object,

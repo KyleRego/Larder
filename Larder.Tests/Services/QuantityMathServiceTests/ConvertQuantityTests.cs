@@ -11,12 +11,12 @@ public class ConvertQuantityTests : ServiceTestsBase
     public async void TestConvertingGramsToMilligrams()
     {
         MockUnitData unitData = new();
-        UnitService unitService = new(mSP.Object, unitData);
-        UnitConversionService unitConversionService = new(mSP.Object,
+        UnitService unitService = new(_serviceProvider.Object, unitData);
+        UnitConversionService unitConversionService = new(_serviceProvider.Object,
                 unitData, new MockUnitConversionData());
 
-        Unit grams = (await unitData.Get(mockUserId, "grams"))!;
-        Unit milligrams = (await unitData.Get(mockUserId, "milligrams"))!;
+        Unit grams = (await unitData.Get(testUserId, "grams"))!;
+        Unit milligrams = (await unitData.Get(testUserId, "milligrams"))!;
 
         QuantityDto quantity = new()
         {
@@ -24,7 +24,7 @@ public class ConvertQuantityTests : ServiceTestsBase
             UnitId = grams.Id
         };
 
-        QuantityService sut = new(mSP.Object, unitService, unitConversionService);
+        QuantityService sut = new(_serviceProvider.Object, unitService, unitConversionService);
 
         QuantityDto result = await sut.Convert(
             quantity, milligrams.Id);
@@ -37,12 +37,12 @@ public class ConvertQuantityTests : ServiceTestsBase
     public async void TestConvertingMilligramsToGrams()
     {
         MockUnitData unitData = new();
-        UnitService unitService = new(mSP.Object, unitData);
-        UnitConversionService unitConversionService = new(mSP.Object,
+        UnitService unitService = new(_serviceProvider.Object, unitData);
+        UnitConversionService unitConversionService = new(_serviceProvider.Object,
                 unitData, new MockUnitConversionData());
 
-        Unit grams = (await unitData.Get(mockUserId, "grams"))!;
-        Unit milligrams = (await unitData.Get(mockUserId, "milligrams"))!;
+        Unit grams = (await unitData.Get(testUserId, "grams"))!;
+        Unit milligrams = (await unitData.Get(testUserId, "milligrams"))!;
 
         QuantityDto quantity = new()
         {
@@ -50,7 +50,7 @@ public class ConvertQuantityTests : ServiceTestsBase
             UnitId = milligrams.Id
         };
 
-        QuantityService sut = new(mSP.Object, unitService, unitConversionService);
+        QuantityService sut = new(_serviceProvider.Object, unitService, unitConversionService);
 
         QuantityDto result = await sut.Convert(
             quantity, grams.Id);

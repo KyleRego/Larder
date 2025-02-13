@@ -4,6 +4,7 @@ namespace Larder.Models.Builders;
 
 public class NutritionBuilder
 {
+    private Quantity _servingSize = Quantity.One();
     private double _calories;
     private double _gramsProtein;
     private double _gramsTotalFat;
@@ -14,6 +15,22 @@ public class NutritionBuilder
     private double _gramsTotalCarbs;
     private double _gramsDietaryFiber;
     private double _gramsTotalSugars;
+
+    public NutritionBuilder WithServingSize(Quantity servingSize)
+    {
+        _servingSize = servingSize;
+        return this;
+    }
+
+    public NutritionBuilder WithServingSize(double amount, Unit unit)
+    {
+        _servingSize = new()
+        {
+            Amount = amount,
+            UnitId = unit?.Id
+        };
+        return this;
+    }
 
     public NutritionBuilder WithCalories(double calories)
     {

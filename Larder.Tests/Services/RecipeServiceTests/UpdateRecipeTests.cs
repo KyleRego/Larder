@@ -16,7 +16,7 @@ public class RecipeServiceTests : ServiceTestsBase
         var foodRepository = new Mock<IFoodRepository>();
         var quantityMathService = new Mock<IQuantityService>();
 
-        RecipeService sut = new(mSP.Object, recipeRepository.Object,
+        RecipeService sut = new(_serviceProvider.Object, recipeRepository.Object,
                                     ingredientRepository.Object,
                                     foodRepository.Object,
                                     quantityMathService.Object);
@@ -45,9 +45,9 @@ public class RecipeServiceTests : ServiceTestsBase
         var quantityMathService = new Mock<IQuantityService>();
 
         string id = "made_up_id";
-        recipeRepository.Setup(r => r.Get(mockUserId, id)).ReturnsAsync((Recipe?)null);
+        recipeRepository.Setup(r => r.Get(testUserId, id)).ReturnsAsync((Recipe?)null);
 
-        RecipeService sut = new(mSP.Object, recipeRepository.Object,
+        RecipeService sut = new(_serviceProvider.Object, recipeRepository.Object,
                                     ingredientRepository.Object,
                                     foodRepository.Object,
                                     quantityMathService.Object);

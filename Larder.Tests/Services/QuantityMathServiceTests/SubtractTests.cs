@@ -11,8 +11,8 @@ public class SubtractTests : ServiceTestsBase
     public async void SubtractUnitlessQuantitiesSubtractsTheAmount()
     {
         MockUnitData unitData = new();
-        UnitService unitService = new(mSP.Object, unitData);
-        UnitConversionService unitConversionService = new(mSP.Object,
+        UnitService unitService = new(_serviceProvider.Object, unitData);
+        UnitConversionService unitConversionService = new(_serviceProvider.Object,
                 unitData, new MockUnitConversionData());
 
         QuantityDto minuend = new()
@@ -25,7 +25,7 @@ public class SubtractTests : ServiceTestsBase
             UnitId = null, Amount = 3.5
         };
 
-        QuantityService sut = new(mSP.Object, unitService, unitConversionService);
+        QuantityService sut = new(_serviceProvider.Object, unitService, unitConversionService);
         QuantityDto result = await sut.Subtract(minuend, subtrahend);
 
         Assert.Equal(2.5, result.Amount);
@@ -36,11 +36,11 @@ public class SubtractTests : ServiceTestsBase
     public async void SubtractQuantityWithSameUnitSubtractsTheAmount()
     {
         MockUnitData unitData = new();
-        UnitService unitService = new(mSP.Object, unitData);
-        UnitConversionService unitConversionService = new(mSP.Object,
+        UnitService unitService = new(_serviceProvider.Object, unitData);
+        UnitConversionService unitConversionService = new(_serviceProvider.Object,
                 unitData, new MockUnitConversionData());
 
-        Unit unit = (await unitData.Get(mockUserId, "pounds"))!;
+        Unit unit = (await unitData.Get(testUserId, "pounds"))!;
 
         QuantityDto minuend = new()
         {
@@ -54,7 +54,7 @@ public class SubtractTests : ServiceTestsBase
             UnitId = unit.Id
         };
 
-        QuantityService sut = new(mSP.Object, unitService, unitConversionService);
+        QuantityService sut = new(_serviceProvider.Object, unitService, unitConversionService);
 
         QuantityDto result = await sut.Subtract(minuend, subtrahend);
 
@@ -66,12 +66,12 @@ public class SubtractTests : ServiceTestsBase
     public async void SubtractQuantityWithCompatibleUnitsDoesConversion()
     {
         MockUnitData unitData = new();
-        UnitService unitService = new(mSP.Object, unitData);
-        UnitConversionService unitConversionService = new(mSP.Object,
+        UnitService unitService = new(_serviceProvider.Object, unitData);
+        UnitConversionService unitConversionService = new(_serviceProvider.Object,
                 unitData, new MockUnitConversionData());
 
-        Unit grams = (await unitData.Get(mockUserId, "grams"))!;
-        Unit milligrams = (await unitData.Get(mockUserId, "milligrams"))!;
+        Unit grams = (await unitData.Get(testUserId, "grams"))!;
+        Unit milligrams = (await unitData.Get(testUserId, "milligrams"))!;
 
         QuantityDto minuend = new()
         {
@@ -85,7 +85,7 @@ public class SubtractTests : ServiceTestsBase
             UnitId = grams.Id
         };
 
-        QuantityService sut = new(mSP.Object, unitService, unitConversionService);
+        QuantityService sut = new(_serviceProvider.Object, unitService, unitConversionService);
 
         QuantityDto result = await sut.Subtract(minuend, subtrahend);
 
