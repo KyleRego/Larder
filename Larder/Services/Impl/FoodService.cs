@@ -42,6 +42,8 @@ public class FoodService(  IServiceProviderWrapper serviceProvider,
         QuantityDto quantityEaten =
             (quantityLeft.Amount == 0) ? foodQuantity : dto.QuantityEaten;
 
+        // TODO: if nutrition serving size is missing unit, catch
+        // the error and rethrow with a more helpful message here
         double servingsConsumed = await _quantityMathService.Divide(
                     quantityEaten, QuantityDto.FromEntity(nutrition.ServingSize));
 
@@ -54,6 +56,7 @@ public class FoodService(  IServiceProviderWrapper serviceProvider,
         Nutrition consumedNutrition = new()
         {
             Item = consumedFoodResult,
+            ServingSize = Quantity.FromDto(quantityEaten),
             Calories = nutrition.Calories * servingsConsumed,
             GramsProtein = nutrition.GramsProtein * servingsConsumed,
             GramsDietaryFiber = nutrition.GramsDietaryFiber * servingsConsumed,

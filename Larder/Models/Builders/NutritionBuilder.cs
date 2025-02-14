@@ -98,6 +98,7 @@ public class NutritionBuilder
         {
             Item = item,
             ItemId = item.Id,
+            ServingSize = _servingSize,
             Calories = _calories,
             GramsProtein = _gramsProtein,
             GramsTotalFat = _gramsTotalFat,

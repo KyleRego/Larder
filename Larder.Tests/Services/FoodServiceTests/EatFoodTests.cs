@@ -80,6 +80,7 @@ public class EatFoodTests : ServiceTestsBase
         // Assert expected nutrition on eaten bread
         Assert.NotNull(eatenBread.Nutrition);
         NutritionDto nutrition = eatenBread.Nutrition;
+        
         Assert.Equal(nutrition.ServingSize.Amount, quantityToEat.Amount);
         Assert.Equal(nutrition.ServingSize.UnitId, quantityToEat.UnitId);
         Assert.Equal(3 * 60, nutrition.Calories);
