@@ -7,9 +7,6 @@ public interface IFoodService
 {
     public Task<List<ItemDto>> GetFoods(FoodSortOptions sortOrder,
                                                     string? search);
-
-
-    public Task<(ItemDto, ItemDto)> EatFood(EatFoodDto dto);
-
-    public Task<List<ItemDto>> ConsumedFoods(DateTime day);
+    public Task<List<ItemDto>> GetConsumedFoods(DateTime day);
+    public Task<(ItemDto leftOverFood, ItemDto eatenFood)> EatFood(EatFoodDto dto);
 }

@@ -12,9 +12,7 @@ public abstract class RepositoryBase<T, TSortOptions>(AppDbContext dbContext)
 {
     protected readonly AppDbContext _dbContext = dbContext;
     protected readonly DbSet<T> _dbSet = dbContext.Set<T>();
-
     public abstract Task<T?> Get(string userId, string id);
-
     public abstract Task<List<T>> GetAll(string userId,
                                             TSortOptions sortBy,
                                             string? search);

@@ -1,6 +1,5 @@
 using Larder.Dtos;
 using Larder.Models;
-using Larder.Models.ItemComponents;
 using Larder.Services.Impl;
 using Larder.Tests.Mocks.Repository;
 
@@ -69,11 +68,11 @@ public class EatFoodTests : ServiceTestsBase
 
         FoodService sut = new(_serviceProvider.Object, _quantityService, _foodData);
 
-        (ItemDto breadLeftOver, ItemDto eatenBread) = await sut.EatFood(dto);
+        (ItemDto leftOverBread, ItemDto eatenBread) = await sut.EatFood(dto);
 
         // Assert expected quantities
-        Assert.Equal(expectedLeftOverBread.Amount, breadLeftOver.Quantity?.Amount);
-        Assert.Equal(expectedLeftOverBread.UnitId, breadLeftOver.Quantity?.UnitId);
+        Assert.Equal(expectedLeftOverBread.Amount, leftOverBread.Quantity?.Amount);
+        Assert.Equal(expectedLeftOverBread.UnitId, leftOverBread.Quantity?.UnitId);
         Assert.Equal(quantityToEat.Amount, eatenBread.Quantity?.Amount);
         Assert.Equal(quantityToEat.UnitId, eatenBread.Quantity?.UnitId);
     

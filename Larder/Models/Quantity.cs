@@ -7,12 +7,28 @@ namespace Larder.Models;
 [Owned]
 public class Quantity : IQuantity
 {
+    public double Amount { get; set; }
+
+    public string? UnitId { get; set; }
+
+    public Unit? Unit { get; set; }
+
     public static Quantity FromDto(QuantityDto dto)
     {
         return new()
         {
             Amount = dto.Amount,
             UnitId = string.IsNullOrWhiteSpace(dto.UnitId) ? null : dto.UnitId
+        };
+    }
+
+    public static explicit operator QuantityDto(Quantity quantity)
+    {
+        return new QuantityDto
+        {
+            Amount = quantity.Amount,
+            UnitId = quantity.UnitId,
+            UnitName = quantity.Unit?.Name
         };
     }
 
@@ -33,10 +49,4 @@ public class Quantity : IQuantity
             UnitId = null
         };
     }
-
-    public double Amount { get; set; }
-
-    public string? UnitId { get; set; }
-
-    public Unit? Unit { get; set; }
 }

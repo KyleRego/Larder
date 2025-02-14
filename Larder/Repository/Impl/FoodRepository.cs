@@ -5,6 +5,7 @@ using Larder.Models;
 using Larder.Models.ItemComponents;
 using Larder.Repository.Interface;
 using Larder.Models.SortOptions;
+using Larder.Dtos;
 
 namespace Larder.Repository.Impl;
 

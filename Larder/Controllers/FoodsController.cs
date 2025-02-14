@@ -53,6 +53,6 @@ public class FoodsController(IFoodService foodService) : AppControllerBase
             return BadRequest("Day query parameter was not valid format:");
         }
 
-        return await _foodService.ConsumedFoods(parsedDay);
+        return await _foodService.GetConsumedFoods(parsedDay);
     }
 }

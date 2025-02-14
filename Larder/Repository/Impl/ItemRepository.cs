@@ -4,10 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Larder.Repository.Impl;
 
+using Larder.Dtos;
 using Larder.Models.SortOptions;
 using Larder.Repository.Interface;
-
-
 
 public class ItemRepository(AppDbContext dbContext)
             : RepositoryBase<Item, ItemSortOptions>(dbContext), IItemRepository
