@@ -26,7 +26,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
 
         foreach(RecipeIngredient recipeIngredient in recipe.RecipeIngredients)
         {
-            QuantityDto quantNeeded = QuantityDto.FromEntity(recipeIngredient.Quantity);
+            QuantityDto quantNeeded = QuantityDto.FromEntity(recipeIngredient.DefaultQuantity);
             QuantityDto quantAvail = QuantityDto.FromEntity(recipeIngredient.QuantityAvailable());
 
             recipeIngredient.SetItemQuantity(
@@ -66,7 +66,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
         
             RecipeIngredient recipeIngredient = new(CurrentUserId(), recipe.Id, ingItem.Id)
             {
-                Quantity = quantity
+                DefaultQuantity = quantity
             };
 
             recipeIngredients.Add(recipeIngredient);
@@ -130,7 +130,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
             RecipeIngredient newRecipeIngredient
                             = new(CurrentUserId(), recipe.Id,ingItem.Id)
             {
-                Quantity = Quantity.FromDto(ingDto.Quantity)
+                DefaultQuantity = Quantity.FromDto(ingDto.Quantity)
             };
             newRecipeIngredients.Add(newRecipeIngredient);
         }

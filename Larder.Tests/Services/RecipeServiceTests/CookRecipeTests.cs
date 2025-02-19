@@ -16,10 +16,8 @@ public class CookRecipeTests : ServiceTestsBase
         string userId = TestUser.TestUserId();
         Unit tablespoons = TestUnits.TableSpoons();
 
-        Recipe recipe = new(userId, "Chicken and rice")
-        {
-            ServingsProduced = 1
-        };
+        Recipe recipe = new(userId, "Chicken and rice");
+
         Item foodItemCreated = new(userId, recipe.Name)
         {
             Quantity = new() { Amount = 1 }
@@ -57,13 +55,13 @@ public class CookRecipeTests : ServiceTestsBase
 
         RecipeIngredient riceRecIng = new(userId, recipe.Id, rice.Id)
         {
-            Quantity = new() { Amount = 1 },
+            DefaultQuantity = new() { Amount = 1 },
             Ingredient = rice.Ingredient
         };
 
         RecipeIngredient butRecIng = new(userId, recipe.Id, butter.Id)
         {
-            Quantity = new()
+            DefaultQuantity = new()
             {
                 Amount = 4,
                 Unit = tablespoons,
@@ -86,12 +84,12 @@ public class CookRecipeTests : ServiceTestsBase
         var mockQuantMathService = new Mock<IQuantityService>();
         mockQuantMathService.Setup(
             m => m.Subtract(
-                It.IsAny<QuantityDto>(), QuantityDto.FromEntity(riceRecIng.Quantity)))
+                It.IsAny<QuantityDto>(), QuantityDto.FromEntity(riceRecIng.DefaultQuantity)))
             .ReturnsAsync((QuantityDto)
                 new() { Amount = 1 });
         mockQuantMathService.Setup(
             m => m.Subtract(QuantityDto.FromEntity(butter.Quantity),
-                        QuantityDto.FromEntity(butRecIng.Quantity)))
+                        QuantityDto.FromEntity(butRecIng.DefaultQuantity)))
             .ReturnsAsync((QuantityDto)
                 new()
                 {

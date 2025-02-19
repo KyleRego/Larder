@@ -12,8 +12,6 @@ public class Recipe(string userId, string name) : UserOwnedEntity(userId)
     [Required(AllowEmptyStrings = false)]
     public string Name { get; set; } = name;
 
-    public int ServingsProduced { get; set; }
-
     public List<RecipeIngredient> RecipeIngredients { get; set; } = [];
 
     public List<Ingredient> Ingredients { get; set; } = [];

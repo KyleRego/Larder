@@ -45,7 +45,7 @@ public class IngredientRepository(AppDbContext dbContext)
                             .Include(item => item.Ingredient)
                             .ThenInclude(ing => ing!.Recipes)
                             .ThenInclude(ing => ing!.RecipeIngredients)
-                            .ThenInclude(ing => ing!.Quantity)
+                            .ThenInclude(ing => ing!.DefaultQuantity)
                             .FirstOrDefaultAsync(
             item => item.Id == id && item.UserId == userId
                                     && item.Ingredient != null);

@@ -19,7 +19,7 @@ public class RecipeIngredient(  string userId,
     public string RecipeId { get; set; } = recipeId;
 
     [ForeignKey(nameof(RecipeId))]
-    public Recipe? Recipe { get; set; }
+    public Recipe Recipe { get; set; } = null!;
 
     [Required]
     public string IngredientId { get; set; } = ingredientId;
@@ -27,7 +27,8 @@ public class RecipeIngredient(  string userId,
     [ForeignKey(nameof(IngredientId))]
     public Ingredient Ingredient { get; set; } = null!;
 
-    public required Quantity Quantity { get; set; } = new() { Amount = 1 };
+    public required Quantity DefaultQuantity { get; set; }
+                                        = Quantity.One();
 
     public Quantity QuantityAvailable()
     {
