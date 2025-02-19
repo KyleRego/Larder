@@ -1,5 +1,5 @@
 using Larder.Models;
-using Larder.Repository.Impl;
+using Larder.Models.SortOptions;
 using Larder.Repository.Interface;
 
 namespace Larder.Tests.Mocks.Repository;
@@ -44,10 +44,10 @@ public class MockUnitData : MockRepositoryBase, IUnitRepository
         Unit? unit = units.FirstOrDefault(u =>
             u.UserId == userId && u.Id == id);
 
-        return Task<Unit?>.FromResult(unit);
+        return Task.FromResult(unit);
     }
 
-    public Task<List<Unit>> GetAll(string userId, UnitSortOptions sortBy, string? search)
+    public Task<List<Unit>> GetAll(string userId, UnitSortOptions sortOption = UnitSortOptions.AnyOrder, string? search = null)
     {
         throw new NotImplementedException();
     }

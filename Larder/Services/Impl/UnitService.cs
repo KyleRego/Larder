@@ -1,6 +1,7 @@
 using System.Linq;
 using Larder.Dtos;
 using Larder.Models;
+using Larder.Models.SortOptions;
 using Larder.Repository.Impl;
 using Larder.Repository.Interface;
 using Larder.Services.Interface;

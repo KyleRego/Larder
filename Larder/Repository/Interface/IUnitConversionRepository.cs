@@ -4,7 +4,7 @@ using Larder.Models.SortOptions;
 namespace Larder.Repository.Interface;
 
 public interface IUnitConversionRepository
-                : IRepositoryBase<UnitConversion, UnitConversionSortOptions>
+                : IRepositoryBase<UnitConversion>
 {
     public Task<UnitConversion?> FindByUnitIdsEitherWay(string userId,
                                                         string unitId1,

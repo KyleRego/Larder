@@ -9,36 +9,8 @@ using Larder.Models.SortOptions;
 namespace Larder.Repository.Impl;
 
 public class IngredientRepository(AppDbContext dbContext)
-    : RepositoryBase<Item, IngredientSortOptions>(dbContext),
-                                                IIngredientRepository
+            : ItemRepository(dbContext), IIngredientRepository
 {
-    public async Task<Item> FindOrCreateBy(string userId, string name)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ApplicationException("ingredient name cannot be null or whitespace");
-        
-        Item? item = _dbContext.Items.FirstOrDefault(item =>
-            item.UserId == userId && item.Name == name && item.Ingredient != null);
-
-        if (item != null) return item;
-
-        item = new(userId, name, null)
-        {
-            Quantity = new() { Amount = 1 }
-        };
-
-        Ingredient ing = new()
-        {
-            Item = item
-        };
-        item.Ingredient = ing;
-
-        _dbContext.Items.Add(item);
-        await _dbContext.SaveChangesAsync();
-
-        return item;
-    }
-
     public override async Task<Item?> Get(string userId, string id)
     {
         return await _dbContext.Items
@@ -51,9 +23,9 @@ public class IngredientRepository(AppDbContext dbContext)
                                     && item.Ingredient != null);
     }
 
-    public override async Task<List<Item>> GetAll(string userId,
-                                                IngredientSortOptions sortBy,
-                                                                string? search)
+    public async Task<List<Item>> GetAll(string userId,
+                IngredientSortOptions sortBy = IngredientSortOptions.AnyOrder,
+                                string? search = null)
     {
         var searchQuery = _dbContext.Items
                                     .Include(item => item.Ingredient)

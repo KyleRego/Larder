@@ -6,16 +6,13 @@ using Larder.Models;
 
 namespace Larder.Repository.Impl;
 
-public abstract class RepositoryBase<T, TSortOptions>(AppDbContext dbContext)
-                                : IRepositoryBase<T, TSortOptions>
-                                            where T : EntityBase
+public abstract class RepositoryBase<T>(AppDbContext dbContext)
+                                : IRepositoryBase<T>
+                                            where T : UserOwnedEntity
 {
     protected readonly AppDbContext _dbContext = dbContext;
     protected readonly DbSet<T> _dbSet = dbContext.Set<T>();
     public abstract Task<T?> Get(string userId, string id);
-    public abstract Task<List<T>> GetAll(string userId,
-                                            TSortOptions sortBy,
-                                            string? search);
 
     public async Task<T> Insert(T newEntity)
     {

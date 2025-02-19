@@ -34,7 +34,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
             );
         }
 
-        Item foodItem = await _foodData.FindOrCreateBy(CurrentUserId(), recipe.Name);
+        Item foodItem = await _foodData.FindOrCreate(CurrentUserId(), recipe.Name);
         ArgumentNullException.ThrowIfNull(foodItem.Nutrition);
 
         await _recipeData.Update(recipe);
@@ -54,7 +54,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
                 ingredientDto.Quantity.UnitId = null;
             }
 
-            Item ingItem = await _ingredientData.FindOrCreateBy(
+            Item ingItem = await _ingredientData.FindOrCreate(
                                 CurrentUserId(), ingredientDto.Name);
             ArgumentNullException.ThrowIfNull(ingItem.Ingredient);
 
@@ -125,7 +125,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
         {
             Item ingItem = recipe.Ingredients.FirstOrDefault(ing =>
                                             ing.Item.Name == ingDto.Name)?.Item
-                ?? await _ingredientData.FindOrCreateBy(CurrentUserId(), ingDto.Name);
+                ?? await _ingredientData.FindOrCreate(CurrentUserId(), ingDto.Name);
 
             RecipeIngredient newRecipeIngredient
                             = new(CurrentUserId(), recipe.Id,ingItem.Id)

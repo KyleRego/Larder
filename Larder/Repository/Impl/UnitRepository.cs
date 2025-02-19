@@ -1,24 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Larder.Data;
 using Larder.Models;
+using Larder.Models.SortOptions;
+using Larder.Repository.Interface;
 
 namespace Larder.Repository.Impl;
 
-using System.Linq;
-using Larder.Repository.Interface;
-
-public enum UnitSortOptions
-{
-    AnyOrder,
-    Name,
-    Name_Desc,
-    Type,
-    Type_Desc
-}
-
 public class UnitRepository(AppDbContext dbContext)
-                            : RepositoryBase<Unit, UnitSortOptions>(dbContext),
-                                                                IUnitRepository
+                            : RepositoryBase<Unit>(dbContext),
+                                IUnitRepository
 {
     public override async Task<Unit?> Get(string userId, string id)
     {
@@ -29,8 +19,9 @@ public class UnitRepository(AppDbContext dbContext)
                             unit => unit.Id == id && unit.UserId == userId);
     }
 
-    public override async Task<List<Unit>> GetAll(string userId,
-                                    UnitSortOptions sortBy, string? search)
+    public async Task<List<Unit>> GetAll(string userId,
+                                    UnitSortOptions sortBy = UnitSortOptions.AnyOrder,
+                                    string? search = null)
     {
         var searchQuery = _dbContext.Units.Where(unit => unit.UserId == userId);
 

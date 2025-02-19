@@ -1,5 +1,5 @@
 using Larder.Dtos;
-using Larder.Repository.Impl;
+using Larder.Models.SortOptions;
 
 namespace Larder.Services.Interface;
 

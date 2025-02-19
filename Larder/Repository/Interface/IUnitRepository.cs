@@ -1,9 +1,11 @@
 using Larder.Models;
-using Larder.Repository.Impl;
+using Larder.Models.SortOptions;
 
 namespace Larder.Repository.Interface;
 
-public interface IUnitRepository : IRepositoryBase<Unit, UnitSortOptions>
+public interface IUnitRepository : IRepositoryBase<Unit>
 {
-
+    public Task<List<Unit>> GetAll(string userId,
+                UnitSortOptions sortOption=UnitSortOptions.AnyOrder,
+                string? search = null);
 }

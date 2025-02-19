@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Larder.Dtos;
 using Larder.Services.Interface;
-using Larder.Repository.Impl;
+using Larder.Models.SortOptions;
 
 namespace Larder.Controllers;
 

@@ -37,15 +37,10 @@ public class MockUnitConversionData : MockRepositoryBase,
             uc.UnitId == unitId2 && uc.TargetUnitId == unitId1)
         );
 
-        return Task<UnitConversion?>.FromResult(result);
+        return Task.FromResult(result);
     }
 
     public Task<UnitConversion?> Get(string userId, string id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<UnitConversion>> GetAll(string userId, UnitConversionSortOptions sortBy, string? search)
     {
         throw new NotImplementedException();
     }

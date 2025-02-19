@@ -8,8 +8,8 @@ using Larder.Models.SortOptions;
 namespace Larder.Repository.Impl;
 
 public class RecipeRepository(AppDbContext dbContext)
-                : RepositoryBase<Recipe, RecipeSortOptions>(dbContext),
-                                                        IRecipeRepository
+                : RepositoryBase<Recipe>(dbContext),
+                                IRecipeRepository
 {
     /// <summary>
     /// Get recipe, eager load recipe ingredients and ingredients
@@ -25,8 +25,9 @@ public class RecipeRepository(AppDbContext dbContext)
                 .FirstOrDefaultAsync(r => r.Id == id && r.UserId == userId);
     }
 
-    public override async Task<List<Recipe>> GetAll(string userId,
-                                RecipeSortOptions sortBy, string? search)
+    public async Task<List<Recipe>> GetAll(string userId,
+                        RecipeSortOptions sortBy = RecipeSortOptions.AnyOrder, 
+                        string? search = null)
     {
         var searchQuery = _dbContext.Recipes.Where(recipe => recipe.UserId == userId);
 

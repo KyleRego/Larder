@@ -5,10 +5,8 @@ using Larder.Repository.Interface;
 
 namespace Larder.Tests.Mocks.Repository;
 
-public class MockFoodData : MockRepositoryBase, IFoodRepository
+public class MockFoodData : MockItemRepository, IFoodRepository
 {
-    private readonly List<Item> foods = [];
-
     public MockFoodData()
     {
         MockUnitData unitData = new();
@@ -48,28 +46,12 @@ public class MockFoodData : MockRepositoryBase, IFoodRepository
                     .WithProtein(3))
             .Build();
 
-        foods.AddRange([apples, peanutButter, wheatBread]);
+        _items.AddRange([apples, peanutButter, wheatBread]);
     }
 
-    public Task Delete(Item entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Item> FindOrCreateBy(string userId, string name)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Item?> Get(string userId, string id)
-    {
-        Item? food = foods.FirstOrDefault(item =>
-            item.Id == id && item.UserId == userId);
-
-        return Task<Item?>.FromResult(food);
-    }
-
-    public Task<List<Item>> GetAll(string userId, FoodSortOptions sortBy, string? search)
+    public Task<List<Item>> GetAll(string userId,
+                FoodSortOptions sortOption = FoodSortOptions.AnyOrder,
+                string? search = null)
     {
         throw new NotImplementedException();
     }
@@ -77,22 +59,5 @@ public class MockFoodData : MockRepositoryBase, IFoodRepository
     public Task<List<Item>> GetConsumedFoods(string userId, DateTime day)
     {
         throw new NotImplementedException();
-    }
-
-    public Task<Item> Insert(Item newEntity)
-    {
-        foods.Add(newEntity);
-
-        return Task<Item>.FromResult(newEntity);
-    }
-
-    public Task<List<Item>> InsertAll(List<Item> newEntities)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Item> Update(Item editedEntity)
-    {
-        return Task<Item>.FromResult(editedEntity);
     }
 }

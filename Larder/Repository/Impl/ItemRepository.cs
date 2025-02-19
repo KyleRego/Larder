@@ -4,13 +4,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Larder.Repository.Impl;
 
-using Larder.Dtos;
+using Larder.Models.Builders;
 using Larder.Models.SortOptions;
 using Larder.Repository.Interface;
 
 public class ItemRepository(AppDbContext dbContext)
-            : RepositoryBase<Item, ItemSortOptions>(dbContext), IItemRepository
+            : RepositoryBase<Item>(dbContext), IItemRepository
 {
+    public async Task<Item> FindOrCreate(string userId, string name)
+    {
+        Item? existing = await Get(userId, name);
+        if (existing != null) return existing;
+
+        Item newItem = new ItemBuilder(userId, name).Build();
+        await Insert(newItem);
+        return newItem;
+    }
+
     public override async Task<Item?> Get(string userId, string id)
     {
         return await _dbContext.Items
@@ -20,9 +30,9 @@ public class ItemRepository(AppDbContext dbContext)
                             item => item.Id == id && item.UserId == userId);
     }
 
-    public override async Task<List<Item>> GetAll(string userId,
-                                                    ItemSortOptions sortBy,
-                                                    string? search)
+    public async Task<List<Item>> GetAll(string userId,
+                            ItemSortOptions sortBy = ItemSortOptions.AnyOrder,
+                            string? search = null)
     {
         var query = _dbContext.Items.Where(item =>
             item.UserId == userId && item.ConsumedTime == null);

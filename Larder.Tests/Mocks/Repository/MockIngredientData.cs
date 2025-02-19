@@ -5,7 +5,7 @@ using Larder.Repository.Interface;
 
 namespace Larder.Tests.Mocks.Repository;
 
-public class MockIngredientData : MockRepositoryBase, IIngredientRepository
+public class MockIngredientData : MockItemRepository, IIngredientRepository
 {
     private readonly List<Item> _ingredients = [];
 
@@ -30,40 +30,12 @@ public class MockIngredientData : MockRepositoryBase, IIngredientRepository
                             .WithServingSize(1))
                         .Build();
 
-        _ingredients = [butter, rice];
+        _items.AddRange([butter, rice]);
     }
 
-    public Task Delete(Item entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Item> FindOrCreateBy(string userId, string name)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Item?> Get(string userId, string id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<Item>> GetAll(string userId, IngredientSortOptions sortBy, string? search)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Item> Insert(Item newEntity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<Item>> InsertAll(List<Item> newEntities)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Item> Update(Item editedEntity)
+    public Task<List<Item>> GetAll(string userId,
+                        IngredientSortOptions sortBy,
+                        string? search)
     {
         throw new NotImplementedException();
     }

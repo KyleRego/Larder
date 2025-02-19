@@ -10,7 +10,7 @@ using Larder.Dtos;
 namespace Larder.Repository.Impl;
 
 public class FoodRepository(AppDbContext dbContext)
-            : RepositoryBase<Item, FoodSortOptions>(dbContext), IFoodRepository
+            : ItemRepository(dbContext), IFoodRepository
 {
     public async Task<List<Item>> GetConsumedFoods(string userId, DateTime day)
     {
@@ -29,33 +29,6 @@ public class FoodRepository(AppDbContext dbContext)
             && item.ConsumedTime.ConsumedAt < endOfDay)];
     }
 
-    public async Task<Item> FindOrCreateBy(string userId, string name)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ApplicationException("Name cannot be null or whitespace");
-
-        Item? foodItem = await _dbContext.Items.FirstOrDefaultAsync(item =>
-            item.UserId == userId && item.Name == name
-                            && item.Nutrition != null);
-
-        if (foodItem != null) return foodItem;
-
-        foodItem = new(userId, name, null)
-        {
-            Quantity = new() { Amount = 1 }
-        };
-        Nutrition food = new()
-        {
-            Item = foodItem,
-        };
-        foodItem.Nutrition = food;
-
-        _dbContext.Items.Add(foodItem);
-        await _dbContext.SaveChangesAsync();
-
-        return foodItem;
-    }
-
     public override async Task<Item?> Get(string userId, string id)
     {
         return await _dbContext.Items.Include(item => item.Nutrition)
@@ -64,8 +37,8 @@ public class FoodRepository(AppDbContext dbContext)
             item.Id == id && item.UserId == userId && item.Nutrition != null);
     }
 
-    public override Task<List<Item>> GetAll(string userId,
-                            FoodSortOptions sortBy, string? search)
+    public Task<List<Item>> GetAll(string userId,
+            FoodSortOptions sortBy = FoodSortOptions.AnyOrder, string? search = null)
     {
         var query = _dbContext.Items
                                 .Include(item => item.Nutrition)

@@ -1,17 +1,13 @@
 using Larder.Data;
 using Larder.Models;
 using Microsoft.EntityFrameworkCore;
+using Larder.Repository.Interface;
 
 namespace Larder.Repository.Impl;
 
-using Larder.Models.SortOptions;
-using Larder.Repository.Interface;
-
-
-
 public class UnitConversionRepository(AppDbContext dbContext)
-        : RepositoryBase<UnitConversion, UnitConversionSortOptions>(dbContext),
-                                            IUnitConversionRepository
+        : RepositoryBase<UnitConversion>(dbContext),
+                                IUnitConversionRepository
 {
     public async Task<UnitConversion?> FindByUnitIdsEitherWay(string userId,
                                                                 string unitId1,
@@ -32,11 +28,5 @@ public class UnitConversionRepository(AppDbContext dbContext)
                     .Include(uc => uc.Unit)
                     .Include(uc => uc.TargetUnit).FirstOrDefaultAsync(
                                 uc => uc.Id == id && uc.UserId == userId); 
-    }
-
-    public override Task<List<UnitConversion>> GetAll(string userId,
-                            UnitConversionSortOptions sortBy, string? search)
-    {
-        throw new NotImplementedException();
     }
 }
