@@ -22,7 +22,7 @@ public class NutritionBuilder
         return this;
     }
 
-    public NutritionBuilder WithServingSize(double amount, Unit unit)
+    public NutritionBuilder WithServingSize(double amount, Unit? unit = null)
     {
         _servingSize = new()
         {

@@ -2,14 +2,6 @@ using Larder.Models;
 
 namespace Larder.Dtos;
 
-public class RecipeIngredientDto
-{
-    public string? Id { get; set; }
-    public required string Name { get; set; }
-
-    public required QuantityDto Quantity { get; set; }
-}
-
 public class RecipeDto
 {
     public string? Id { get; set; }
@@ -39,4 +31,12 @@ public class RecipeDto
 
         return recipeDto;
     }
+}
+
+public class RecipeIngredientDto
+{
+    public string? Id { get; set; }
+    public required string Name { get; set; }
+
+    public required QuantityDto Quantity { get; set; }
 }
