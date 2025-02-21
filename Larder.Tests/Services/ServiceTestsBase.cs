@@ -2,7 +2,7 @@ using System.Security.Claims;
 using Larder.Models;
 using Larder.Policies.Requirements;
 using Larder.Services;
-using Larder.Tests.TestData;
+using Larder.Tests.Mocks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 
@@ -11,8 +11,8 @@ namespace Larder.Tests.Services;
 public abstract class ServiceTestsBase
 {
     protected readonly Mock<IServiceProviderWrapper> _serviceProvider;
-    protected static readonly string testUserId = TestUser.TestUserId();
-    protected readonly Claim testUserClaim = TestUser.TestUserClaim();
+    protected static readonly string testUserId = TestUserData.TestUserId();
+    protected readonly Claim testUserClaim = TestUserData.TestUserClaim();
 
     public ServiceTestsBase()
     {
@@ -39,12 +39,5 @@ public abstract class ServiceTestsBase
                                     .Returns(mockHttpContextAccessor.Object);
         _serviceProvider.Setup(_ => _.GetRequiredService<IAuthorizationService>())
                                     .Returns(mockAuthorizationService.Object);
-    }
-
-    protected static T UntaskResult<T>(Task<T?> task)
-    {
-        T? result = task.GetAwaiter().GetResult();
-        ArgumentNullException.ThrowIfNull(result);
-        return result;
     }
 }

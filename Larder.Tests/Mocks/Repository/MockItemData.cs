@@ -14,12 +14,12 @@ public class MockItemData : MockRepositoryBase, IItemRepository
     {
         _unitData = unitData;
 
-        Unit butterSticks = _unitData.Get(testUserId, "butter-sticks")
-                                    .GetAwaiter().GetResult()!;
-        Unit grams = _unitData.Get(testUserId, "grams")
-                                    .GetAwaiter().GetResult()!;
-        Unit breadSlices = _unitData.Get(testUserId, "bread-slices")
-                                    .GetAwaiter().GetResult()!;
+        Unit butterSticks = Helpers.Untask(
+            _unitData.Get(testUserId, "butter-sticks"));
+        Unit grams = Helpers.Untask(
+            _unitData.Get(testUserId, "grams"));      
+        Unit breadSlices = Helpers.Untask(
+            _unitData.Get(testUserId, "bread-slices"));
 
         Item apples = new ItemBuilder(testUserId, "Apples")
             .WithId("apples")

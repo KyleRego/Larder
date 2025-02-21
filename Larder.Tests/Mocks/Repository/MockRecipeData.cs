@@ -19,18 +19,17 @@ public class MockRecipeData
         _unitData = unitData;
         _recipes = [];
 
-        Unit tablespoons = _unitData.Get(testUserId, "tablespoons")
-                            .GetAwaiter().GetResult()!;
-        Unit grams = _unitData.Get(testUserId, "grams")
-                            .GetAwaiter().GetResult()!;
+        Unit tablespoons = Helpers.Untask(
+            _unitData.Get(testUserId, "tablespoons"));
+        Unit grams = Helpers.Untask(
+            _unitData.Get(testUserId, "grams"));
 
-        Item butter = _itemData.Get(testUserId, "butter")
-                            .GetAwaiter().GetResult()!;
-        Item boxRice = _itemData.Get(testUserId, "box-rice")
-                            .GetAwaiter().GetResult()!;
-        Item chickenLegQuarters = _itemData
-                            .Get(testUserId, "chicken-leg-quarters")
-                            .GetAwaiter().GetResult()!;
+        Item butter = Helpers.Untask(
+            _itemData.Get(testUserId, "butter"));      
+        Item boxRice = Helpers.Untask(
+            _itemData.Get(testUserId, "box-rice"));
+        Item chickenLegQuarters = Helpers.Untask(
+                _itemData.Get(testUserId, "chicken-leg-quarters"));
 
         Recipe chickenAndRice = new RecipeBuilder(testUserId, "Chicken and rice")
                             .WithId("chicken-and-rice")

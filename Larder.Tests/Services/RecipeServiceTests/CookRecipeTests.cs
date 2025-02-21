@@ -10,9 +10,9 @@ public class CookRecipeTests : RecipeServiceTestsBase
     [Fact]
     public async void CookChickenAndRice()
     {
-        Unit tablespoons = UntaskResult(
+        Unit tablespoons = Helpers.Untask(
             _unitData.Get(testUserId, "tablespoons"));
-        Unit grams = UntaskResult(
+        Unit grams = Helpers.Untask(
             _unitData.Get(testUserId, "grams"));
 
         CookRecipeDto input = new()

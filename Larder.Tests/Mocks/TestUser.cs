@@ -1,13 +1,13 @@
 using System.Security.Claims;
 
-namespace Larder.Tests.TestData;
+namespace Larder.Tests.Mocks;
 
-public static class TestUser
+public static class TestUserData
 {
     private static readonly string _testUserId
-                        = Guid.NewGuid().ToString();
+                = Guid.NewGuid().ToString();
     private static readonly Claim _testUserClaim
-                        = new(ClaimTypes.NameIdentifier, TestUserId());
+        = new(ClaimTypes.NameIdentifier, TestUserId());
 
     public static string TestUserId()
     {
