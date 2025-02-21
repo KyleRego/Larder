@@ -51,17 +51,11 @@ public class FoodService(  IServiceProviderWrapper serviceProvider,
         QuantityDto quantityEaten =
             (quantityLeftOver.Amount == 0) ? initialQuantity : dto.QuantityEaten;
 
-        double servingsConsumed;
-        try
-        {
-            servingsConsumed = await _quantityService.Divide(
+        if (nutrition.ServingSize.Amount == 0)
+            throw new ApplicationException($"A serving size amount of 0 cannot be used in division");
+
+        double servingsConsumed = await _quantityService.Divide(
                     quantityEaten, (QuantityDto)nutrition.ServingSize);
-        }
-        catch (ApplicationException e)
-        {
-            throw new ApplicationException(
-                $"{e.Message} - Does the Nutrition have a serving size?");
-        }
 
         foodItem.Quantity = Quantity.FromDto(quantityLeftOver);
 

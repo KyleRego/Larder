@@ -59,18 +59,15 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
             ingredientItem.Quantity = Quantity.FromDto(quantityRemaining);
 
             Nutrition nutrition = ingredientItem.Nutrition;
-            double ingredientServingsCooked;
-            try
-            {
-                ingredientServingsCooked = await _quantityService.Divide(
+
+            if (nutrition.ServingSize.Amount == 0)
+                throw new ApplicationException(
+                    $"Item with ID {cookedItemId} has a serving size amount of 0; this cannot be used in division"
+                );
+
+            double ingredientServingsCooked = await _quantityService.Divide(
                         quantityCooked,
                         (QuantityDto)nutrition.ServingSize);
-            }
-            catch (ApplicationException e)
-            {
-                throw new ApplicationException(
-                    $"{e.Message} - Does ingredient item with ID {cookedItemId} have a serving size?");
-            }
 
             nutritionBuilder
                 .WithCalories(nutrition.Calories * ingredientServingsCooked / foodServingsMade)
