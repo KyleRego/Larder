@@ -10,12 +10,12 @@ namespace Larder.Services.Impl;
 
 public class RecipeService(IServiceProviderWrapper serviceProvider,
                                     IRecipeRepository recipeData,
-                                    IIngredientRepository ingredientData,
+                                    IItemRepository itemData,
                                     IQuantityService quantityService)
                      : AppServiceBase(serviceProvider), IRecipeService
 {
     private readonly IRecipeRepository _recipeData = recipeData;
-    private readonly IIngredientRepository _ingredientData = ingredientData;
+    private readonly IItemRepository _itemData = itemData;
     private readonly IQuantityService _quantityService = quantityService;
 
     public async Task<ItemDto> CookRecipe(CookRecipeDto cookRecipeDto)
@@ -83,7 +83,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
         }
 
         Item newFood = cookedFoodBuilder.WithNutrition(nutritionBuilder).Build();
-        Item insertedFood = await _ingredientData.Insert(newFood);
+        Item insertedFood = await _itemData.Insert(newFood);
 
         await _recipeData.Update(recipe);
         return ItemDto.FromEntity(insertedFood);
@@ -102,9 +102,8 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
                 ingredientDto.Quantity.UnitId = null;
             }
 
-            Item ingItem = await _ingredientData.FindOrCreate(
+            Item ingItem = await _itemData.FindOrCreate(
                                 CurrentUserId(), ingredientDto.Name);
-            ArgumentNullException.ThrowIfNull(ingItem.Ingredient);
 
             Quantity quantity = new()
             {
@@ -173,7 +172,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
         {
             Item ingItem = recipe.Ingredients.FirstOrDefault(item =>
                                             item.Name == ingDto.Name)
-                ?? await _ingredientData.FindOrCreate(CurrentUserId(), ingDto.Name);
+                ?? await _itemData.FindOrCreate(CurrentUserId(), ingDto.Name);
 
             RecipeIngredient newRecipeIngredient
                             = new(CurrentUserId(), recipe.Id,ingItem.Id)

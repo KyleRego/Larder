@@ -9,7 +9,7 @@ public class EatFoodTests : ServiceTestsBase
 {
     private readonly MockUnitData _unitData;
     private readonly MockUnitConversionData _unitConversionData;
-    private readonly MockFoodData _foodData;
+    private readonly MockItemData _itemData;
     private readonly UnitService _unitService;
     private readonly UnitConversionService _unitConversionService;
     private readonly QuantityService _quantityService;
@@ -18,7 +18,7 @@ public class EatFoodTests : ServiceTestsBase
     {
         _unitData = new MockUnitData();
         _unitConversionData = new MockUnitConversionData(_unitData);
-        _foodData = new MockFoodData(_unitData);
+        _itemData = new MockItemData(_unitData);
         _unitService = new(_serviceProvider.Object, _unitData);
         _unitConversionService = new(_serviceProvider.Object, _unitData, _unitConversionData);
         _quantityService = new(_serviceProvider.Object, _unitService, _unitConversionService);
@@ -35,7 +35,7 @@ public class EatFoodTests : ServiceTestsBase
 
         QuantityDto expectedLeftOverApples = new() { Amount = 3 };
 
-        FoodService sut = new(_serviceProvider.Object, _quantityService, _foodData);
+        FoodService sut = new(_serviceProvider.Object, _quantityService, _itemData);
 
         (ItemDto applesLeftOver, ItemDto eatenApple) = await sut.EatFood(dto);
 
@@ -43,7 +43,7 @@ public class EatFoodTests : ServiceTestsBase
 
         Assert.Equal("Apples", eatenApple.Name);
 
-        Item eatenFood = (await _foodData.Get(testUserId, eatenApple.Id!))!;
+        Item eatenFood = (await _itemData.Get(testUserId, eatenApple.Id!))!;
 
         Assert.NotNull(eatenFood.ConsumedTime);
         Assert.NotNull(eatenFood.Nutrition);
@@ -69,7 +69,7 @@ public class EatFoodTests : ServiceTestsBase
 
         QuantityDto expectedLeftOverBread = new() { Amount = 18, UnitId = breadSlices.Id };
 
-        FoodService sut = new(_serviceProvider.Object, _quantityService, _foodData);
+        FoodService sut = new(_serviceProvider.Object, _quantityService, _itemData);
 
         (ItemDto leftOverBread, ItemDto eatenBread) = await sut.EatFood(dto);
 

@@ -7,8 +7,8 @@ public class MockUnitConversionData : MockRepositoryBase,
                                         IUnitConversionRepository
 {
     private readonly List<UnitConversion> unitConversions = [];
-    private readonly MockUnitData _unitData;
-    public MockUnitConversionData(MockUnitData unitData)
+    private readonly IUnitRepository _unitData;
+    public MockUnitConversionData(IUnitRepository unitData)
     {
         _unitData = unitData;
 

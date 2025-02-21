@@ -1,0 +1,152 @@
+using Larder.Models;
+using Larder.Models.Builders;
+using Larder.Models.SortOptions;
+using Larder.Repository.Interface;
+
+namespace Larder.Tests.Mocks.Repository;
+
+public class MockItemData : MockRepositoryBase, IItemRepository
+{
+    protected readonly IUnitRepository _unitData;
+    protected readonly List<Item> _items = [];
+
+    public MockItemData(IUnitRepository unitData)
+    {
+        _unitData = unitData;
+
+        Unit butterSticks = _unitData.Get(testUserId, "butter-sticks")
+                                    .GetAwaiter().GetResult()!;
+        Unit grams = _unitData.Get(testUserId, "grams")
+                                    .GetAwaiter().GetResult()!;
+        Unit breadSlices = _unitData.Get(testUserId, "bread-slices")
+                                    .GetAwaiter().GetResult()!;
+
+        Item apples = new ItemBuilder(testUserId, "Apples")
+            .WithId("apples")
+            .WithQuantity(4)
+            .WithNutrition(new NutritionBuilder()
+                .WithCalories(100)
+                .WithProtein(2))
+            .Build();
+
+        Item peanutButter = new ItemBuilder(testUserId, "Peanut Butter")
+            .WithId("peanut-butter")
+            .WithQuantity(189, grams)
+            .WithNutrition(new NutritionBuilder()
+                    .WithCalories(190)
+                    .WithProtein(2))
+            .Build();
+
+        Item wheatBread = new ItemBuilder(testUserId, "Wheat bread")
+            .WithId("wheat-bread")
+            .WithQuantity(21, breadSlices)
+            .WithNutrition(new NutritionBuilder()
+                    .WithServingSize(1, breadSlices)
+                    .WithCalories(60)
+                    .WithTotalFat(1)
+                    .WithSaturatedFat(0)
+                    .WithTransFat(0)
+                    .WithCholesterol(0)
+                    .WithSodium(100)
+                    .WithTotalCarbs(12)
+                    .WithDietaryFiber(2)
+                    .WithTotalSugars(1)
+                    .WithProtein(3))
+            .Build();
+
+        Item butter = new ItemBuilder(testUserId, "Butter")
+                        .WithId("butter")
+                        .WithQuantity(4, butterSticks)
+                        .WithNutrition(new NutritionBuilder()
+                            .WithCalories(100)
+                            .WithTotalFat(11)
+                            .WithTransFat(0)
+                            .WithCholesterol(30)
+                            .WithSodium(90)
+                            .WithTotalCarbs(0)
+                            .WithProtein(0)
+                            .WithServingSize(14, grams))
+                        .Build();
+        Item rice = new ItemBuilder(testUserId, "Box rice")
+                        .WithId("box-rice")
+                        .WithQuantity(7 * 56, grams)
+                        .WithNutrition(new NutritionBuilder()
+                            .WithCalories(190)
+                            .WithTotalCarbs(41)
+                            .WithDietaryFiber(1)
+                            .WithTotalSugars(1)
+                            .WithProtein(5)
+                            .WithSodium(730)
+                            .WithServingSize(56, grams))
+                        .Build();
+        Item chickenLegQuarters = new ItemBuilder(testUserId, "Chicken leg quarters")
+                        .WithId("chicken-leg-quarters")
+                        .WithQuantity(4)
+                        .WithNutrition(new NutritionBuilder()
+                            .WithCalories(475)
+                            .WithProtein(62)
+                            .WithTotalFat(23)
+                            .WithSaturatedFat(6.3)
+                            .WithSodium(253))
+                        .Build();
+
+        _items.AddRange([
+            apples, peanutButter, wheatBread, butter, rice, chickenLegQuarters
+        ]);
+    }
+
+    public Task Delete(Item entity)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Item> FindOrCreate(string userId, string name)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Item?> Get(string userId, string id)
+    {
+        Item? item = _items.FirstOrDefault(item =>
+            item.Id == id && item.UserId == userId);
+
+        return Task.FromResult(item);
+    }
+
+    public Task<List<Item>> GetAll(string userId, ItemSortOptions sortOption = ItemSortOptions.AnyOrder, string? search = null)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<Item>> GetAll(string userId, FoodSortOptions sortOption = FoodSortOptions.AnyOrder, string? search = null)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<Item>> GetAll(string userId, IngredientSortOptions sortOption = IngredientSortOptions.AnyOrder, string? search = null)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<Item>> GetConsumedFoods(string userId, DateTime day)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Item> Insert(Item newEntity)
+    {
+        _items.Add(newEntity);
+
+        return Task.FromResult(newEntity);
+    }
+
+    public Task<List<Item>> InsertAll(List<Item> newEntities)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Item> Update(Item editedEntity)
+    {
+        return Task.FromResult(editedEntity);
+    }
+}

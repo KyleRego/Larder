@@ -10,10 +10,10 @@ namespace Larder.Services.Impl;
 
 public class FoodService(  IServiceProviderWrapper serviceProvider,
                                 IQuantityService quantityService,
-                                IFoodRepository foodRepository)
+                                IItemRepository itemData)
                         : AppServiceBase(serviceProvider), IFoodService
 {
-    private readonly IFoodRepository _foodData = foodRepository;
+    private readonly IItemRepository _itemData = itemData;
     private readonly IQuantityService _quantityService
                                             = quantityService;
 
@@ -21,7 +21,7 @@ public class FoodService(  IServiceProviderWrapper serviceProvider,
                                                         string? search)
     {
         List<Item> foodItems =
-            await _foodData.GetAll(CurrentUserId(), sortBy, search);
+            await _itemData.GetAll(CurrentUserId(), sortBy, search);
 
         return [.. foodItems.Select(ItemDto.FromEntity)];
     }
@@ -29,14 +29,14 @@ public class FoodService(  IServiceProviderWrapper serviceProvider,
     public async Task<List<ItemDto>> GetConsumedFoods(DateTime day)
     {
         List<Item> eatenFoodItems
-            = await _foodData.GetConsumedFoods(CurrentUserId(), day);
+            = await _itemData.GetConsumedFoods(CurrentUserId(), day);
 
         return [.. eatenFoodItems.Select(ItemDto.FromEntity)];
     }
 
     public async Task<(ItemDto leftOverFood, ItemDto eatenFood)> EatFood(EatFoodDto dto)
     {
-        Item foodItem = await _foodData.Get(CurrentUserId(), dto.ItemId)
+        Item foodItem = await _itemData.Get(CurrentUserId(), dto.ItemId)
             ?? throw new ApplicationException($"Food with ID {dto.ItemId} not found");
 
         QuantityDto initialQuantity = (QuantityDto)foodItem.Quantity;
@@ -59,7 +59,7 @@ public class FoodService(  IServiceProviderWrapper serviceProvider,
 
         foodItem.Quantity = Quantity.FromDto(quantityLeftOver);
 
-        Item leftOverFood = await _foodData.Update(foodItem);
+        Item leftOverFood = await _itemData.Update(foodItem);
 
         Item eatenFood = new ItemBuilder(CurrentUserId(), leftOverFood.Name)
                             .WithQuantity(Quantity.FromDto(quantityEaten))
@@ -83,7 +83,7 @@ public class FoodService(  IServiceProviderWrapper serviceProvider,
         };
         eatenFood.ConsumedTime = consumedTime;
 
-        await _foodData.Insert(eatenFood);
+        await _itemData.Insert(eatenFood);
 
         return (ItemDto.FromEntity(leftOverFood), ItemDto.FromEntity(eatenFood));
     }

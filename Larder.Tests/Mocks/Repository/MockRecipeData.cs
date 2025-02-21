@@ -8,14 +8,14 @@ namespace Larder.Tests.Mocks.Repository;
 public class MockRecipeData 
     : MockRepositoryBase, IRecipeRepository
 {
-    private readonly MockIngredientData _ingredientData;
-    private readonly MockUnitData _unitData;
+    private readonly IItemRepository _itemData;
+    private readonly IUnitRepository _unitData;
     private readonly List<Recipe> _recipes;
 
-    public MockRecipeData(MockIngredientData ingredientData,
-                            MockUnitData unitData)
+    public MockRecipeData(IItemRepository itemData,
+                            IUnitRepository unitData)
     {
-        _ingredientData = ingredientData;
+        _itemData = itemData;
         _unitData = unitData;
         _recipes = [];
 
@@ -24,11 +24,11 @@ public class MockRecipeData
         Unit grams = _unitData.Get(testUserId, "grams")
                             .GetAwaiter().GetResult()!;
 
-        Item butter = _ingredientData.Get(testUserId, "butter")
+        Item butter = _itemData.Get(testUserId, "butter")
                             .GetAwaiter().GetResult()!;
-        Item boxRice = _ingredientData.Get(testUserId, "box-rice")
+        Item boxRice = _itemData.Get(testUserId, "box-rice")
                             .GetAwaiter().GetResult()!;
-        Item chickenLegQuarters = _ingredientData
+        Item chickenLegQuarters = _itemData
                             .Get(testUserId, "chicken-leg-quarters")
                             .GetAwaiter().GetResult()!;
 

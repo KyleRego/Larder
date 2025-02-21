@@ -27,14 +27,11 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<IUnitRepository, UnitRepository>();
 builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
-builder.Services.AddScoped<IIngredientRepository, IngredientRepository>();
-builder.Services.AddScoped<IFoodRepository, FoodRepository>();
 builder.Services.AddScoped<IUnitConversionRepository,
                                                 UnitConversionRepository>();
 
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
-builder.Services.AddScoped<IIngredientService, IngredientService>();
 builder.Services.AddScoped<IFoodService, FoodService>();
 builder.Services.AddScoped<IUnitService, UnitService>();
 builder.Services.AddScoped<IUnitConversionService, UnitConversionService>();
@@ -57,7 +54,7 @@ if (builder.Environment.IsDevelopment())
 }
 else if (builder.Environment.IsProduction())
 {
-    // from an environment variable
+    // From an environment variable
     string databasePath = builder.Configuration["LARDER_DATABASE_PATH"]
                                         ?? throw new ApplicationException();
 

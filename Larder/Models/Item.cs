@@ -31,7 +31,6 @@ public class Item(string userId, string name, string? description = null)
     public required Quantity Quantity { get; set; }
 
     public Nutrition? Nutrition { get; set; }
-    public Ingredient? Ingredient { get; set; }
 
     public ConsumedTime? ConsumedTime { get; set; }
     // TODO: Allow uploading an image for the item

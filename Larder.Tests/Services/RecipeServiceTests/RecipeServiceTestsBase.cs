@@ -8,7 +8,7 @@ public abstract class RecipeServiceTestsBase : ServiceTestsBase
 {
     protected readonly MockUnitData _unitData = new();
     protected readonly MockUnitConversionData _unitConversionData;
-    protected readonly MockIngredientData _ingredientData;
+    protected readonly MockItemData _itemData;
     protected readonly MockRecipeData _recipeData;
     protected readonly IUnitService _unitService;
     protected readonly IQuantityService _quantityService;
@@ -17,8 +17,8 @@ public abstract class RecipeServiceTestsBase : ServiceTestsBase
     public RecipeServiceTestsBase()
     {
         _unitConversionData = new(_unitData);
-        _ingredientData = new(_unitData);
-        _recipeData = new(_ingredientData, _unitData);
+        _itemData = new(_unitData);
+        _recipeData = new(_itemData, _unitData);
         _unitService = new UnitService(_serviceProvider.Object, _unitData);
         _unitConversionService = new UnitConversionService(
             _serviceProvider.Object, _unitData, _unitConversionData);
@@ -28,7 +28,7 @@ public abstract class RecipeServiceTestsBase : ServiceTestsBase
         _sut = new RecipeService(
             _serviceProvider.Object,
             _recipeData,
-            _ingredientData,
+            _itemData,
             _quantityService);
     }
 }
