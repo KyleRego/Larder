@@ -10,28 +10,24 @@ public class MockUnitData : MockRepositoryBase, IUnitRepository
 
     public MockUnitData()
     {
-        Unit grams = new(testUserId, "grams", UnitType.Mass)
+        var unitTups = new (string Name, UnitType Type)[]
         {
-            Id = "grams"
-        };
-        Unit milligrams = new(testUserId, "milligrams", UnitType.Mass)
-        {
-            Id = "milligrams"
-        };
-        Unit pounds = new(testUserId, "pounds", UnitType.Weight)
-        {
-            Id = "pounds"
-        };
-        Unit breadSlices = new(testUserId, "bread slices", UnitType.Mass)
-        {
-            Id="bread-slices"
-        };
-        Unit butterSticks = new(testUserId, "butter sticks", UnitType.Mass)
-        {
-            Id="butter-sticks"
+            ("grams", UnitType.Mass),
+            ("milligrams", UnitType.Mass),
+            ("pounds", UnitType.Weight),
+            ("bread slices", UnitType.Mass),
+            ("butter sticks", UnitType.Volume),
+            ("tablespoons", UnitType.Volume),
+            ("cups", UnitType.Volume)
         };
 
-        units.AddRange([grams, milligrams, pounds, breadSlices, butterSticks]);
+        foreach (var (name, type) in unitTups)
+        {
+            units.Add(new Unit(testUserId, name, type)
+            {
+                Id = name.Replace(" ", "-")
+            });
+        }
     }
 
     public Task Delete(Unit entity)

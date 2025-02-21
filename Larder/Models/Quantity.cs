@@ -41,7 +41,7 @@ public class Quantity : IQuantity
         };
     }
 
-    public static Quantity Scalar(int amount)
+    public static Quantity Scalar(double amount)
     {
         return new()
         {

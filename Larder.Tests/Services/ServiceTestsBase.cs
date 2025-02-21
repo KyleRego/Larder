@@ -40,4 +40,11 @@ public abstract class ServiceTestsBase
         _serviceProvider.Setup(_ => _.GetRequiredService<IAuthorizationService>())
                                     .Returns(mockAuthorizationService.Object);
     }
+
+    protected static T UntaskResult<T>(Task<T?> task)
+    {
+        T? result = task.GetAwaiter().GetResult();
+        ArgumentNullException.ThrowIfNull(result);
+        return result;
+    }
 }

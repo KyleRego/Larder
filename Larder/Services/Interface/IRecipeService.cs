@@ -10,6 +10,6 @@ public interface IRecipeService
                                                 string? searchName);
     public Task<RecipeDto> CreateRecipe(RecipeDto recipeDto);
     public Task<RecipeDto> UpdateRecipe(RecipeDto recipeDto);
-    public Task CookRecipe(CookRecipeDto cookRecipeDto);
+    public Task<ItemDto> CookRecipe(CookRecipeDto cookRecipeDto);
     public Task DeleteRecipe(string id);
 }

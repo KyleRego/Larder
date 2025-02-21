@@ -35,4 +35,5 @@ public class QuantityDto : IQuantity
             Amount = amount, UnitId = null, UnitName = null
         };
     }
+
 }

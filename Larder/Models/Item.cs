@@ -35,4 +35,7 @@ public class Item(string userId, string name, string? description = null)
 
     public ConsumedTime? ConsumedTime { get; set; }
     // TODO: Allow uploading an image for the item
+
+    public List<RecipeIngredient> RecipeIngredients { get; set; } = [];
+    public List<Recipe> Recipes { get; set; } = [];
 }

@@ -4,6 +4,7 @@ public class CookRecipeDto
 {
     public required string RecipeId { get; set; }
     public required List<CookRecipeIngredientDto> Ingredients { get; set; }
+    public required int ServingsProduced { get; set; }
 }
 
 public class CookRecipeIngredientDto

@@ -2,19 +2,13 @@ namespace Larder.Models.Builders;
 
 public class ItemBuilder(string userId, string name,
                                 string? description = null)
+    : BuilderBase<ItemBuilder>
 {
     private readonly string _userId = userId;
     private readonly string _name = name;
     private readonly string? _description = description;
-    private string _id = Guid.NewGuid().ToString();
     private Quantity _quantity = Quantity.One();
     private NutritionBuilder? _nutritionBuilder;
-
-    public ItemBuilder WithId(string id)
-    {
-        _id = id;
-        return this;
-    }
 
     public ItemBuilder WithQuantity(Quantity quantity)
     {

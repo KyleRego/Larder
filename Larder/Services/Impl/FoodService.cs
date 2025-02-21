@@ -9,13 +9,13 @@ using Larder.Services.Interface;
 namespace Larder.Services.Impl;
 
 public class FoodService(  IServiceProviderWrapper serviceProvider,
-                                IQuantityService quantityMathService,
+                                IQuantityService quantityService,
                                 IFoodRepository foodRepository)
                         : AppServiceBase(serviceProvider), IFoodService
 {
     private readonly IFoodRepository _foodData = foodRepository;
-    private readonly IQuantityService _quantityMathService
-                                            = quantityMathService;
+    private readonly IQuantityService _quantityService
+                                            = quantityService;
 
     public async Task<List<ItemDto>> GetFoods(FoodSortOptions sortBy,
                                                         string? search)
@@ -45,7 +45,7 @@ public class FoodService(  IServiceProviderWrapper serviceProvider,
             ?? throw new ApplicationException(
                 $"Food with ID {dto.ItemId} has no Nutrition component");
 
-        QuantityDto quantityLeftOver = await _quantityMathService
+        QuantityDto quantityLeftOver = await _quantityService
             .SubtractUpToZero(initialQuantity, dto.QuantityEaten);
 
         QuantityDto quantityEaten =
@@ -54,8 +54,8 @@ public class FoodService(  IServiceProviderWrapper serviceProvider,
         double servingsConsumed;
         try
         {
-            servingsConsumed = await _quantityMathService.Divide(
-                    quantityEaten, QuantityDto.FromEntity(nutrition.ServingSize));
+            servingsConsumed = await _quantityService.Divide(
+                    quantityEaten, (QuantityDto)nutrition.ServingSize);
         }
         catch (ApplicationException e)
         {

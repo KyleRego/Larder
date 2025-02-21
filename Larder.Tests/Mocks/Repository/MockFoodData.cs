@@ -7,11 +7,10 @@ namespace Larder.Tests.Mocks.Repository;
 
 public class MockFoodData : MockItemRepository, IFoodRepository
 {
-    public MockFoodData()
+    public MockFoodData(MockUnitData unitData) : base(unitData)
     {
-        MockUnitData unitData = new();
-        Unit grams = unitData.Get(testUserId, "grams").GetAwaiter().GetResult()!;
-        Unit breadSlices = unitData.Get(testUserId, "bread-slices").GetAwaiter().GetResult()!;
+        Unit grams = _unitData.Get(testUserId, "grams").GetAwaiter().GetResult()!;
+        Unit breadSlices = _unitData.Get(testUserId, "bread-slices").GetAwaiter().GetResult()!;
 
         Item apples = new ItemBuilder(testUserId, "Apples")
             .WithId("apples")

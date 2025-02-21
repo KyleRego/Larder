@@ -7,15 +7,18 @@ namespace Larder.Tests.Services.FoodServiceTests;
 
 public class EatFoodTests : ServiceTestsBase
 {
-    private readonly MockFoodData _foodData = new();
-    private readonly MockUnitData _unitData = new();
-    private readonly MockUnitConversionData _unitConversionData = new();
+    private readonly MockUnitData _unitData;
+    private readonly MockUnitConversionData _unitConversionData;
+    private readonly MockFoodData _foodData;
     private readonly UnitService _unitService;
     private readonly UnitConversionService _unitConversionService;
     private readonly QuantityService _quantityService;
 
     public EatFoodTests()
     {
+        _unitData = new MockUnitData();
+        _unitConversionData = new MockUnitConversionData(_unitData);
+        _foodData = new MockFoodData(_unitData);
         _unitService = new(_serviceProvider.Object, _unitData);
         _unitConversionService = new(_serviceProvider.Object, _unitData, _unitConversionData);
         _quantityService = new(_serviceProvider.Object, _unitService, _unitConversionService);

@@ -1,5 +1,7 @@
 using Larder.Dtos;
 using Larder.Models;
+using Larder.Models.Builders;
+using Larder.Models.ItemComponents;
 using Larder.Models.SortOptions;
 using Larder.Repository.Interface;
 using Larder.Services.Interface;
@@ -9,36 +11,85 @@ namespace Larder.Services.Impl;
 public class RecipeService(IServiceProviderWrapper serviceProvider,
                                     IRecipeRepository recipeData,
                                     IIngredientRepository ingredientData,
-                                    IFoodRepository foodData,
-                                    IQuantityService quantMathService)
+                                    IQuantityService quantityService)
                      : AppServiceBase(serviceProvider), IRecipeService
 {
     private readonly IRecipeRepository _recipeData = recipeData;
     private readonly IIngredientRepository _ingredientData = ingredientData;
-    private readonly IFoodRepository _foodData = foodData;
-    private readonly IQuantityService _quantMathService = quantMathService;
+    private readonly IQuantityService _quantityService = quantityService;
 
-    public async Task CookRecipe(CookRecipeDto cookRecipeDto)
+    public async Task<ItemDto> CookRecipe(CookRecipeDto cookRecipeDto)
     {
         Recipe recipe = await _recipeData.Get(CurrentUserId(),
                                             cookRecipeDto.RecipeId)
-            ?? throw new ApplicationException("Recipe was not found");
+            ?? throw new ApplicationException(
+                $"Recipe with ID {cookRecipeDto.RecipeId} not found");
 
-        foreach(RecipeIngredient recipeIngredient in recipe.RecipeIngredients)
+        double foodServingsMade = cookRecipeDto.ServingsProduced;
+        ItemBuilder cookedFoodBuilder = new ItemBuilder(CurrentUserId(), recipe.Name)
+                            .WithQuantity(foodServingsMade);
+        NutritionBuilder nutritionBuilder = new NutritionBuilder()
+                            .WithServingSize(1);
+
+        foreach(CookRecipeIngredientDto cookedIngredient in cookRecipeDto.Ingredients)
         {
-            QuantityDto quantNeeded = QuantityDto.FromEntity(recipeIngredient.DefaultQuantity);
-            QuantityDto quantAvail = QuantityDto.FromEntity(recipeIngredient.QuantityAvailable());
+            string cookedItemId = cookedIngredient.IngredientItemId;
 
-            recipeIngredient.SetItemQuantity(
-                Quantity.FromDto(await _quantMathService.Subtract(quantAvail, quantNeeded))
+            Item ingredientItem = recipe.Ingredients
+                .FirstOrDefault(item => item.Id == cookedItemId)
+                ?? throw new ApplicationException(
+                $"Recipe is missing an ingredient item with ID ${cookedItemId}"
             );
+
+            if (ingredientItem.Nutrition == null)
+            {
+                throw new ApplicationException(
+                    $"Ingredient item with ID ${cookedItemId} has no Nutrition component"
+                );
+            }
+
+            QuantityDto quantityCooked = await _quantityService.SubtractUpToZero(
+                                (QuantityDto)ingredientItem.Quantity,
+                                    cookedIngredient.QuantityCooked);
+
+            QuantityDto quantityRemaining = await _quantityService.Subtract(
+                                (QuantityDto)ingredientItem.Quantity,
+                                    quantityCooked);
+
+            ingredientItem.Quantity = Quantity.FromDto(quantityRemaining);
+
+            Nutrition nutrition = ingredientItem.Nutrition;
+            double ingredientServingsCooked;
+            try
+            {
+                ingredientServingsCooked = await _quantityService.Divide(
+                        quantityCooked,
+                        (QuantityDto)nutrition.ServingSize);
+            }
+            catch (ApplicationException e)
+            {
+                throw new ApplicationException(
+                    $"{e.Message} - Does ingredient item with ID {cookedItemId} have a serving size?");
+            }
+
+            nutritionBuilder
+                .WithCalories(nutrition.Calories * ingredientServingsCooked / foodServingsMade)
+                .WithProtein(nutrition.GramsProtein * ingredientServingsCooked / foodServingsMade)
+                .WithDietaryFiber(nutrition.GramsDietaryFiber * ingredientServingsCooked / foodServingsMade)
+                .WithSaturatedFat(nutrition.GramsSaturatedFat * ingredientServingsCooked / foodServingsMade)
+                .WithTotalCarbs(nutrition.GramsTotalCarbs * ingredientServingsCooked / foodServingsMade)
+                .WithTotalFat(nutrition.GramsTotalFat * ingredientServingsCooked / foodServingsMade)
+                .WithTotalSugars(nutrition.GramsTotalSugars * ingredientServingsCooked / foodServingsMade)
+                .WithTransFat(nutrition.GramsTransFat * ingredientServingsCooked / foodServingsMade)
+                .WithCholesterol(nutrition.MilligramsCholesterol * ingredientServingsCooked / foodServingsMade)
+                .WithSodium(nutrition.MilligramsSodium * ingredientServingsCooked / foodServingsMade);
         }
 
-        Item foodItem = await _foodData.FindOrCreate(CurrentUserId(), recipe.Name);
-        ArgumentNullException.ThrowIfNull(foodItem.Nutrition);
+        Item newFood = cookedFoodBuilder.WithNutrition(nutritionBuilder).Build();
+        Item insertedFood = await _ingredientData.Insert(newFood);
 
         await _recipeData.Update(recipe);
-        await _foodData.Update(foodItem);
+        return ItemDto.FromEntity(insertedFood);
     }
 
     public async Task<RecipeDto> CreateRecipe(RecipeDto recipeDto)
@@ -123,8 +174,8 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
 
         foreach(RecipeIngredientDto ingDto in recipeDto.Ingredients)
         {
-            Item ingItem = recipe.Ingredients.FirstOrDefault(ing =>
-                                            ing.Item.Name == ingDto.Name)?.Item
+            Item ingItem = recipe.Ingredients.FirstOrDefault(item =>
+                                            item.Name == ingDto.Name)
                 ?? await _ingredientData.FindOrCreate(CurrentUserId(), ingDto.Name);
 
             RecipeIngredient newRecipeIngredient

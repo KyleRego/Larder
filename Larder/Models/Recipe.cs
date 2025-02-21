@@ -14,7 +14,7 @@ public class Recipe(string userId, string name) : UserOwnedEntity(userId)
 
     public List<RecipeIngredient> RecipeIngredients { get; set; } = [];
 
-    public List<Ingredient> Ingredients { get; set; } = [];
+    public List<Item> Ingredients { get; set; } = [];
 
     public List<RecipeStep> Steps { get; set; } = [];
 }

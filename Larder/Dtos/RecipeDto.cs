@@ -22,7 +22,7 @@ public class RecipeDto
             RecipeIngredientDto riDto = new()
             {
                 Id = recipeIngredient.Id,
-                Name = recipeIngredient.Ingredient.Item.Name,
+                Name = recipeIngredient.Ingredient.Name,
                 Quantity = QuantityDto.FromEntity(recipeIngredient.DefaultQuantity)
             };
 

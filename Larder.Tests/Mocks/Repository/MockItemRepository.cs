@@ -4,8 +4,10 @@ using Larder.Repository.Interface;
 
 namespace Larder.Tests.Mocks.Repository;
 
-public class MockItemRepository : MockRepositoryBase, IItemRepository
+public class MockItemRepository(MockUnitData unitData)
+    : MockRepositoryBase, IItemRepository
 {
+    protected readonly MockUnitData _unitData = unitData;
     protected readonly List<Item> _items = [];
 
     public Task Delete(Item entity)
