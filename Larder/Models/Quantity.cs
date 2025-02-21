@@ -1,11 +1,10 @@
 using Larder.Dtos;
-using Larder.Models.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace Larder.Models;
 
 [Owned]
-public class Quantity : IQuantity
+public class Quantity
 {
     public double Amount { get; set; }
 
