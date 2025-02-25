@@ -5,6 +5,7 @@ namespace Larder.Dtos;
 
 public class NutritionDto
 {
+    // Is Id needed for this?
     public string? Id { get; set; }
 
     public required QuantityDto ServingSize { get; set; }

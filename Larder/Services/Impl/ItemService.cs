@@ -1,6 +1,6 @@
 using Larder.Dtos;
 using Larder.Models;
-using Larder.Models.ItemComponents;
+using Larder.Models.Builders;
 using Larder.Models.SortOptions;
 using Larder.Repository.Interface;
 using Larder.Services.Interface;
@@ -9,16 +9,10 @@ namespace Larder.Services.Impl;
 
 public class ItemService(IServiceProviderWrapper serviceProvider,
                                         IItemRepository itemData)
-                            : AppServiceBase(serviceProvider), IItemService
+        : CrudServiceBase<ItemDto, Item>(serviceProvider, itemData),
+        IItemService
 {
     private readonly IItemRepository _itemData = itemData;
-
-    public async Task<ItemDto> CreateItem(ItemDto itemDto)
-    {
-        Item item = await _itemData.Insert(Item.FromDto(itemDto, CurrentUserId()));
-
-        return ItemDto.FromEntity(item);
-    }
 
     public async Task<List<ItemDto>> CreateItems(List<ItemDto> itemDtos)
     {
@@ -30,21 +24,10 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
         return [.. insertedItems.Select(ItemDto.FromEntity)];
     }
 
-    public async Task DeleteItem(string id)
+    public async Task<ItemDto> FindOrCreate(string name)
     {
-        Item item = await _itemData.Get(CurrentUserId(), id) ??
-            throw new ApplicationException("No item to delete with that id");
-    
-        await _itemData.Delete(item);
-    }
-
-    public async Task<ItemDto?> GetItem(string id)
-    {
-        Item? item = await _itemData.Get(CurrentUserId(), id);
-
-        if (item == null) return null;
-
-        return ItemDto.FromEntity(item);
+        Item item = await _itemData.FindOrCreate(CurrentUserId(), name);
+        return MapToDto(item);
     }
 
     public async Task<List<ItemDto>> GetItems(ItemSortOptions sortBy,
@@ -58,20 +41,49 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
         return items.Select(ItemDto.FromEntity).ToList();
     }
 
-    public async Task<ItemDto> UpdateItem(ItemDto itemDto)
+    protected override ItemDto MapToDto(Item item)
     {
-        ArgumentNullException.ThrowIfNull(itemDto.Id);
+        ItemDto itemDto = new()
+        {
+            Id = item.Id,
+            Name = item.Name,
+            Description = item.Description,
+            Nutrition = (item.Nutrition != null)
+                        ? NutritionDto.FromEntity(item.Nutrition)
+                        : null,
 
-        Item item = await _itemData.Get(CurrentUserId(), itemDto.Id) ??
-            throw new ApplicationException("Item to update not found");
+            Quantity = (item.Quantity != null)
+                ? QuantityDto.FromEntity(item.Quantity)
+                : null
+        };
 
-        item.Name = itemDto.Name;
-        if (itemDto.Quantity != null)
-            item.Quantity = Quantity.FromDto(itemDto.Quantity);
+        return itemDto;
+    }
 
-        item.Description = itemDto.Description;
-        item.Nutrition = (itemDto.Nutrition != null) ? Nutrition.FromDto(itemDto.Nutrition, item) : null;
-        
-        return ItemDto.FromEntity(await _itemData.Update(item));
+    protected override Task<Item> MapToEntity(ItemDto dto)
+    {
+        ItemBuilder builder = new(CurrentUserId(), dto.Name, dto.Description);
+
+        if (dto.Quantity != null)
+            builder = builder.WithQuantity(dto.Quantity);
+
+        var nutrition = dto.Nutrition;
+
+        if (nutrition != null)
+        {
+            builder.WithNutrition(new NutritionBuilder()
+                .WithCalories(nutrition.Calories)
+                .WithCholesterol(nutrition.MilligramsCholesterol)
+                .WithDietaryFiber(nutrition.GramsDietaryFiber)
+                .WithProtein(nutrition.GramsProtein)
+                .WithSaturatedFat(nutrition.GramsSaturatedFat)
+                .WithSodium(nutrition.MilligramsSodium)
+                .WithTotalCarbs(nutrition.GramsTotalCarbs)
+                .WithTransFat(nutrition.GramsTransFat)
+                .WithServingSize(nutrition.ServingSize)
+            );
+        }
+
+        return Task.FromResult(builder.Build());
     }
 }

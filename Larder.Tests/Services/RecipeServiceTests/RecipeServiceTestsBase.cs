@@ -1,3 +1,4 @@
+using Larder.Repository.Interface;
 using Larder.Services.Impl;
 using Larder.Services.Interface;
 using Larder.Tests.Mocks.Repository;
@@ -6,9 +7,10 @@ namespace Larder.Tests.Services.RecipeServiceTests;
 
 public abstract class RecipeServiceTestsBase : ServiceTestsBase
 {
-    protected readonly MockUnitData _unitData = new();
-    protected readonly MockUnitConversionData _unitConversionData;
-    protected readonly MockItemData _itemData;
+    protected readonly IUnitRepository _unitData = new MockUnitData();
+    protected readonly IUnitConversionRepository _unitConversionData;
+    protected readonly IItemRepository _itemData;
+    protected readonly IItemService _itemService;
     protected readonly MockRecipeData _recipeData;
     protected readonly IUnitService _unitService;
     protected readonly IQuantityService _quantityService;
@@ -16,8 +18,9 @@ public abstract class RecipeServiceTestsBase : ServiceTestsBase
     protected readonly IRecipeService _sut;
     public RecipeServiceTestsBase()
     {
-        _unitConversionData = new(_unitData);
-        _itemData = new(_unitData);
+        _unitConversionData = new MockUnitConversionData(_unitData);
+        _itemData = new MockItemData(_unitData);
+        _itemService = new ItemService(_serviceProvider.Object, _itemData);
         _recipeData = new(_itemData, _unitData);
         _unitService = new UnitService(_serviceProvider.Object, _unitData);
         _unitConversionService = new UnitConversionService(
@@ -28,7 +31,7 @@ public abstract class RecipeServiceTestsBase : ServiceTestsBase
         _sut = new RecipeService(
             _serviceProvider.Object,
             _recipeData,
-            _itemData,
+            _itemService,
             _quantityService);
     }
 }

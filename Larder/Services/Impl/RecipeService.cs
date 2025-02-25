@@ -10,12 +10,12 @@ namespace Larder.Services.Impl;
 
 public class RecipeService(IServiceProviderWrapper serviceProvider,
                                     IRecipeRepository recipeData,
-                                    IItemRepository itemData,
+                                    IItemService itemService,
                                     IQuantityService quantityService)
-                     : AppServiceBase(serviceProvider), IRecipeService
+    : CrudServiceBase<RecipeDto, Recipe>(serviceProvider, recipeData), IRecipeService
 {
     private readonly IRecipeRepository _recipeData = recipeData;
-    private readonly IItemRepository _itemData = itemData;
+    private readonly IItemService _itemService = itemService;
     private readonly IQuantityService _quantityService = quantityService;
 
     public async Task<ItemDto> CookRecipe(CookRecipeDto cookRecipeDto)
@@ -82,65 +82,12 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
                 .WithSodium(nutrition.MilligramsSodium * ingredientServingsCooked / foodServingsMade);
         }
 
-        Item newFood = cookedFoodBuilder.WithNutrition(nutritionBuilder).Build();
-        Item insertedFood = await _itemData.Insert(newFood);
+        ItemDto newFood = cookedFoodBuilder.WithNutrition(nutritionBuilder)
+                                        .BuildDto();
+        ItemDto insertedFood = await _itemService.Add(newFood);
 
         await _recipeData.Update(recipe);
-        return ItemDto.FromEntity(insertedFood);
-    }
-
-    public async Task<RecipeDto> CreateRecipe(RecipeDto recipeDto)
-    {
-        Recipe recipe = new(CurrentUserId(), recipeDto.Name);
-
-        List<RecipeIngredient> recipeIngredients = [];
-
-        foreach (RecipeIngredientDto ingredientDto in recipeDto.Ingredients)
-        {
-            if (ingredientDto.Quantity.UnitId == "")
-            {
-                ingredientDto.Quantity.UnitId = null;
-            }
-
-            Item ingItem = await _itemData.FindOrCreate(
-                                CurrentUserId(), ingredientDto.Name);
-
-            Quantity quantity = new()
-            {
-                Amount = ingredientDto.Quantity.Amount,
-                UnitId = ingredientDto.Quantity.UnitId
-            };
-        
-            RecipeIngredient recipeIngredient = new(CurrentUserId(), recipe.Id, ingItem.Id)
-            {
-                DefaultQuantity = quantity
-            };
-
-            recipeIngredients.Add(recipeIngredient);
-        }
-
-        recipe.RecipeIngredients = recipeIngredients;
-
-        await _recipeData.Insert(recipe);
-
-        return recipeDto;
-    }
-
-    public async Task DeleteRecipe(string id)
-    {
-        Recipe recipe = await _recipeData.Get(CurrentUserId(), id)
-            ?? throw new ApplicationException("recipe to delete not found");
-    
-        await _recipeData.Delete(recipe);
-    }
-
-    public async Task<RecipeDto?> GetRecipe(string id)
-    {
-        Recipe? recipe = await _recipeData.Get(CurrentUserId(), id);
-
-        if (recipe == null) return null;
-
-        return RecipeDto.FromEntity(recipe);
+        return insertedFood;
     }
 
     public async Task<List<RecipeDto>> GetRecipes(RecipeSortOptions sortBy, string? searchName)
@@ -156,34 +103,62 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
         return recipeDtos;
     }
 
-    public async Task<RecipeDto> UpdateRecipe(RecipeDto recipeDto)
+    protected override RecipeDto MapToDto(Recipe recipe)
     {
-        if (recipeDto.Id == null)
-                    throw new ApplicationException("recipe Id was missing");
-    
-        Recipe recipe = await _recipeData.Get(CurrentUserId(), recipeDto.Id)
-                    ?? throw new ApplicationException("recipe not found");
-
-        recipe.Name = recipeDto.Name;
-
-        List<RecipeIngredient> newRecipeIngredients = [];
-
-        foreach(RecipeIngredientDto ingDto in recipeDto.Ingredients)
+        RecipeDto recipeDto = new()
         {
-            Item ingItem = recipe.Ingredients.FirstOrDefault(item =>
-                                            item.Name == ingDto.Name)
-                ?? await _itemData.FindOrCreate(CurrentUserId(), ingDto.Name);
+            Id = recipe.Id,
+            Name = recipe.Name,
+            Ingredients = []
+        };
 
-            RecipeIngredient newRecipeIngredient
-                            = new(CurrentUserId(), recipe.Id,ingItem.Id)
+        foreach (RecipeIngredient recipeIngredient
+                        in recipe.RecipeIngredients)
+        {
+            RecipeIngredientDto riDto = new()
             {
-                DefaultQuantity = Quantity.FromDto(ingDto.Quantity)
+                Id = recipeIngredient.Id,
+                Name = recipeIngredient.Ingredient.Name,
+                Quantity = (QuantityDto)recipeIngredient.DefaultQuantity
             };
-            newRecipeIngredients.Add(newRecipeIngredient);
+
+            recipeDto.Ingredients.Add(riDto);
         }
 
-        recipe.RecipeIngredients = newRecipeIngredients;
+        return recipeDto;
+    }
 
-        return RecipeDto.FromEntity(await _recipeData.Update(recipe));
+    protected async override Task<Recipe> MapToEntity(RecipeDto recipeDto)
+    {
+        Recipe recipe = new(CurrentUserId(), recipeDto.Name);
+
+        List<RecipeIngredient> recipeIngredients = [];
+
+        foreach (RecipeIngredientDto ingredientDto in recipeDto.Ingredients)
+        {
+            if (ingredientDto.Quantity.UnitId == "")
+            {
+                ingredientDto.Quantity.UnitId = null;
+            }
+
+            ItemDto ingItem = await _itemService.FindOrCreate(ingredientDto.Name);
+
+            Quantity quantity = new()
+            {
+                Amount = ingredientDto.Quantity.Amount,
+                UnitId = ingredientDto.Quantity.UnitId
+            };
+
+            RecipeIngredient recipeIngredient = new(CurrentUserId(), recipe.Id, ingItem.Id!)
+            {
+                DefaultQuantity = quantity
+            };
+
+            recipeIngredients.Add(recipeIngredient);
+        }
+
+        recipe.RecipeIngredients = recipeIngredients;
+        
+        return recipe;
     }
 }

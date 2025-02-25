@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
 using Larder.Dtos;
-using Larder.Repository;
 using Larder.Services.Interface;
 using Larder.Models.SortOptions;
 
@@ -15,7 +14,7 @@ public class RecipesController(IRecipeService recipeService)
     [HttpGet("{id}")]
     public async Task<ActionResult<RecipeDto>> Show(string id)
     {
-        RecipeDto? recipe = await _recipeService.GetRecipe(id);
+        RecipeDto? recipe = await _recipeService.Get(id);
 
         if (recipe == null) return NotFound();
 
@@ -38,13 +37,13 @@ public class RecipesController(IRecipeService recipeService)
     [HttpPost]
     public async Task<ActionResult<RecipeDto>> Create(RecipeDto recipe)
     {
-        return await _recipeService.CreateRecipe(recipe);
+        return await _recipeService.Add(recipe);
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(string id)
     {
-        await _recipeService.DeleteRecipe(id);
+        await _recipeService.Delete(id);
 
         return Ok();
     }
@@ -57,7 +56,7 @@ public class RecipesController(IRecipeService recipeService)
 
         try
         {
-            return await _recipeService.UpdateRecipe(recipe);
+            return await _recipeService.Update(recipe);
         }
         catch (ApplicationException)
         {

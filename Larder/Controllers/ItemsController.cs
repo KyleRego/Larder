@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+
 using Larder.Dtos;
-using Larder.Repository;
 using Larder.Services.Interface;
 using Larder.Models.SortOptions;
 
@@ -17,7 +17,7 @@ public class ItemsController(IItemService itemService) : AppControllerBase
     {
         try
         {
-            ItemDto item = await _itemService.CreateItem(itemDto);
+            ItemDto item = await _itemService.Add(itemDto);
             return new ApiResponse<ItemDto>(item, "Item created", ApiResponseType.Success);
         }
         catch (ApplicationException e)
@@ -31,7 +31,7 @@ public class ItemsController(IItemService itemService) : AppControllerBase
     {
         try
         {
-            ItemDto? itemDto = await _itemService.GetItem(id);
+            ItemDto? itemDto = await _itemService.Get(id);
 
             if (itemDto == null) return NotFound();
 
@@ -74,7 +74,7 @@ public class ItemsController(IItemService itemService) : AppControllerBase
 
         try
         {
-            ItemDto result = await _itemService.UpdateItem(itemDto);
+            ItemDto result = await _itemService.Update(itemDto);
             return new ApiResponse<ItemDto>(result,
                 $"Item \"{result.Name}\" was successfully updated",
                 ApiResponseType.Success);
@@ -90,7 +90,7 @@ public class ItemsController(IItemService itemService) : AppControllerBase
     {
         try
         {
-            await _itemService.DeleteItem(id);
+            await _itemService.Delete(id);
             return Ok();
         }
         catch(ApplicationException e)

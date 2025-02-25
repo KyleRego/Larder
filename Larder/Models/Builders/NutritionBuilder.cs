@@ -1,3 +1,4 @@
+using Larder.Dtos;
 using Larder.Models.ItemComponents;
 
 namespace Larder.Models.Builders;
@@ -19,6 +20,16 @@ public class NutritionBuilder
     public NutritionBuilder WithServingSize(Quantity servingSize)
     {
         _servingSize = servingSize;
+        return this;
+    }
+
+    public NutritionBuilder WithServingSize(QuantityDto servingSize)
+    {
+        _servingSize = new()
+        {
+            Amount = servingSize.Amount,
+            UnitId = servingSize.UnitId
+        };
         return this;
     }
 
@@ -99,6 +110,24 @@ public class NutritionBuilder
             Item = item,
             ItemId = item.Id,
             ServingSize = _servingSize,
+            Calories = _calories,
+            GramsProtein = _gramsProtein,
+            GramsTotalFat = _gramsTotalFat,
+            GramsSaturatedFat = _gramsSaturatedFat,
+            GramsTransFat = _gramsTransFat,
+            MilligramsCholesterol = _milligramsCholesterol,
+            MilligramsSodium = _milligramsSodium,
+            GramsTotalCarbs = _gramsTotalCarbs,
+            GramsDietaryFiber = _gramsDietaryFiber,
+            GramsTotalSugars = _gramsTotalSugars
+        };
+    }
+
+    public NutritionDto BuildDto()
+    {
+        return new NutritionDto
+        {
+            ServingSize = (QuantityDto)_servingSize,
             Calories = _calories,
             GramsProtein = _gramsProtein,
             GramsTotalFat = _gramsTotalFat,

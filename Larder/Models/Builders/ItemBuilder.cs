@@ -1,3 +1,5 @@
+using Larder.Dtos;
+
 namespace Larder.Models.Builders;
 
 public class ItemBuilder(string userId, string name,
@@ -13,6 +15,16 @@ public class ItemBuilder(string userId, string name,
     public ItemBuilder WithQuantity(Quantity quantity)
     {
         _quantity = quantity;
+        return this;
+    }
+
+    public ItemBuilder WithQuantity(QuantityDto quantity)
+    {
+        _quantity = new()
+        {
+            Amount = quantity.Amount,
+            UnitId = quantity.UnitId
+        };
         return this;
     }
 
@@ -40,11 +52,29 @@ public class ItemBuilder(string userId, string name,
             Quantity = _quantity
         };
 
-        if (_nutritionBuilder is not null)
+        if (_nutritionBuilder != null)
         {
             item.Nutrition = _nutritionBuilder.Build(item);
         }
 
         return item;
+    }
+
+    public ItemDto BuildDto()
+    {
+        ItemDto dto = new()
+        {
+            Id = _id,
+            Name = _name,
+            Description = _description,
+            Quantity = (QuantityDto)_quantity
+        };
+
+        if (_nutritionBuilder != null)
+        {
+            dto.Nutrition = _nutritionBuilder.BuildDto();
+        }
+
+        return dto;
     }
 }
