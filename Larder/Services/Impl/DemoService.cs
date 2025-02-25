@@ -1,5 +1,6 @@
 using Larder.Dtos;
 using Larder.Models;
+using Larder.Models.Builders;
 using Larder.Services.Interface;
 using Microsoft.AspNetCore.Identity;
 
@@ -130,10 +131,32 @@ public class DemoService(   UserManager<ApplicationUser> userManager,
             }
         };
 
-        List<ItemDto> createdItems =
-            await _itemService.CreateItems([butter, riceBox, apples]);
+        ItemDto toasterPastries = new()
+        {
+            Name = "Toaster Pastries",
+            Description = "Great Value",
+            Quantity = QuantityDto.Scalar(12),
+            Nutrition = new()
+            {
+                ServingSize = QuantityDto.Scalar(2),
+                Calories = 360,
+                GramsProtein = 3,
+                GramsTotalFat = 9,
+                GramsSaturatedFat = 4.5,
+                MilligramsSodium = 370,
+                GramsTotalCarbs = 67,
+                GramsDietaryFiber = 1,
+                GramsTotalSugars = 38
+            }
+        };
 
-        ItemDto createdApples = createdItems.First(item => item.Name == apples.Name);
+        List<ItemDto> createdItems =
+            await _itemService.CreateItems([butter, riceBox, apples, toasterPastries]);
+
+        ItemDto createdApples = createdItems
+                    .First(item => item.Name == apples.Name);
+        ItemDto createdToasterPastries = createdItems
+                    .First(item => item.Name == toasterPastries.Name);
 
         EatFoodDto eatApple = new()
         {
@@ -141,7 +164,14 @@ public class DemoService(   UserManager<ApplicationUser> userManager,
             QuantityEaten = QuantityDto.One()
         };
 
+        EatFoodDto eatToasterPastries = new()
+        {
+            ItemId = createdToasterPastries.Id!,
+            QuantityEaten = QuantityDto.Scalar(3)
+        };
+
         await _foodService.EatFood(eatApple);
+        await _foodService.EatFood(eatToasterPastries);
 
     }
 }

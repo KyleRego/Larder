@@ -1,9 +1,10 @@
 import { NutritionDto } from "../../types/NutritionDto";
+import QuantitySpan from "../QuantitySpan";
 
 export default function NutritionTable({nutrition} : {nutrition: NutritionDto}) {
     return <table className="table">
         <caption>
-            Nutrition per serving size quantity
+            Nutrition per <QuantitySpan quantity={nutrition.servingSize} />
         </caption>
         <thead>
         <tr>

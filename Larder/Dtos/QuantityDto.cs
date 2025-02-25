@@ -34,5 +34,4 @@ public class QuantityDto
             Amount = amount, UnitId = null, UnitName = null
         };
     }
-
 }

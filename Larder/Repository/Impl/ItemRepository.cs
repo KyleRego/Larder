@@ -209,6 +209,7 @@ public class ItemRepository(AppDbContext dbContext)
         // TODO: This needs to include the consumed food Nutrition
         List<Item> consumedFoods = await _dbContext.Items
                         .Include(item => item.ConsumedTime)
+                        .Include(item => item.Nutrition)
                         .Where(item => item.UserId == userId
                             && item.ConsumedTime != null).ToListAsync();
 

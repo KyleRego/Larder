@@ -3,6 +3,8 @@ import BreadCrumbs from "../Breadcrumbs";
 import { ItemDto } from "../types/ItemDto";
 import { apiClient } from "../util/axios";
 import Loading from "../components/Loading";
+import QuantitySpan from "../components/QuantitySpan";
+import NutritionTable from "../components/tables/NutritionTable";
 
 export default function FoodLog() {
     const [consumedFoods, setConsumedFoods] = useState<ItemDto[] | null>(null);
@@ -38,7 +40,7 @@ export default function FoodLog() {
         </BreadCrumbs>
 
         <div className="my-4 container">
-            <div className="d-flex column-gap-3 align-items-center">
+            <div className="d-flex justify-content-between column-gap-3 align-items-center">
                 <button onClick={() => changeDate(-1)}
                         className="btn btn-outline-light"
                         type="button">
@@ -54,16 +56,37 @@ export default function FoodLog() {
                 </button>
             </div>
 
-            {consumedFoods === null ?
+            <div className="my-4">
+                {consumedFoods === null ?
                 <Loading />
-            :
-                <div>
-                    {consumedFoods.map(f => {
-                        return <li>{f.name} </li>
-                    })}
-                </div>
-            }
-
+                :
+                    <ol className="list-group">
+                        {consumedFoods.map(f => <ListItem key={f.id} f={f} />)}
+                    </ol>
+                }
+            </div>
         </div>
     </div>
+}
+
+function ListItem({f} : {f: ItemDto}) {
+    const [expanded, setExpanded] = useState<boolean>(false);
+
+    return <li className="list-group-item">
+            <div className="d-flex justify-content-between align-items-center"
+                role="button" onClick={() => setExpanded(!expanded)} >
+                <div className="fs-5 d-flex column-gap-1">
+                    <QuantitySpan quantity={f.quantity!} />
+                    {f.name}
+                </div>
+                <div>
+                    {expanded ? "➖" : "➕"}
+                </div>
+            </div>
+            { expanded === true &&
+            <div>
+                <NutritionTable nutrition={f.nutrition!} />
+            </div>
+            }
+        </li>;
 }
