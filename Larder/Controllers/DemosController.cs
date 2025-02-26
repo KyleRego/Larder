@@ -16,7 +16,7 @@ public class DemosController(IDemoService demoService) : AppControllerBase
             await _demoService.CreateDemo();
             return new ApiResponse<object>(
                 "Demo set up successfully! Thank you for trying Larder 🤍 it is a work in progress!",
-                                                ApiResponseType.Success);
+                ApiResponseType.Success);
         }
         catch (ApplicationException e)
         {

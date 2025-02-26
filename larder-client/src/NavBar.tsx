@@ -41,11 +41,19 @@ export function NavBar() {
                 </div>
                 <div className={`collapse navbar-collapse ${collapsed === false && "show"}`} id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li className="nav-item"><Link className="nav-link" to="/items">Items</Link></li>
-                        <li className="nav-item"><Link className="nav-link" to="/items/new">New item</Link></li>
-                        <li className="nav-item"><Link className="nav-link" to="/units">Units</Link></li>
-                        <li className="nav-item"><Link className="nav-link" to="/food-log">Food log</Link></li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/items">Items</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/units">Units</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/food-log">Food log</Link>
+                        </li>
+
+                        <NewSomethingDropdown />
                     </ul>
+                    
                     <div className="d-none d-lg-block">
                         {logoutBtn}
                     </div>
@@ -62,4 +70,35 @@ export function NavBar() {
             </div>
         </nav>
     );
+}
+
+function NewSomethingDropdown() {
+    const [expanded, setExpanded] = useState(false);
+
+    const newSomethings: string[][] = [
+        ["item", "items/new"],
+        ["unit", "units/new"]
+    ];
+    
+    const dropdownOptions = newSomethings.map((data, index) => {
+        return <li
+                key={index}
+                role="button">
+            <Link className="dropdown-item" to={data[1]}>New {data[0]}</Link>
+        </li>;
+    });
+    
+        return <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" title="New dropdown"
+                    href="#"
+                    role="button"
+                           
+                            onClick={() => setExpanded(!expanded)}>
+                    ➕
+                </a>
+                <ul className={`dropdown-menu ${expanded === true ? "d-block" : "d-none"}`}
+                    style={{maxWidth: "12rem"}}   >
+                    {dropdownOptions}
+                </ul>
+            </li>;
 }
