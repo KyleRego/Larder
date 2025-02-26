@@ -72,8 +72,8 @@ public class DemoService(   UserManager<ApplicationUser> userManager,
             TargetUnitsPerUnit = 16
         };
 
-        await _unitConversionService.CreateUnitConversion(gramsConversion);
-        await _unitConversionService.CreateUnitConversion(cupsConversion);
+        await _unitConversionService.Add(gramsConversion);
+        await _unitConversionService.Add(cupsConversion);
 
         ItemDto butter = new()
         {

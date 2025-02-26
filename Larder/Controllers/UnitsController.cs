@@ -36,7 +36,7 @@ public class UnitsController(IUnitService service) : AppControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<UnitDto>> Show(string id)
     {
-        UnitDto? result = await _service.GetUnit(id);
+        UnitDto? result = await _service.Get(id);
 
         return (result == null) ? NotFound() : result;
     }
@@ -46,7 +46,7 @@ public class UnitsController(IUnitService service) : AppControllerBase
     {
         try
         {
-            UnitDto unit = await _service.CreateUnit(dto);
+            UnitDto unit = await _service.Add(dto);
             return new ApiResponse<UnitDto>(unit, "Unit created",
                                                     ApiResponseType.Success);
         }
@@ -64,7 +64,7 @@ public class UnitsController(IUnitService service) : AppControllerBase
 
         try
         {
-            UnitDto resultDto = await _service.UpdateUnit(dto);
+            UnitDto resultDto = await _service.Update(dto);
             return new ApiResponse<UnitDto>(resultDto, "Unit updated",
                                                 ApiResponseType.Success);
         }
@@ -79,7 +79,7 @@ public class UnitsController(IUnitService service) : AppControllerBase
     {
         try
         {
-            await _service.DeleteUnit(id);
+            await _service.Delete(id);
 
             return Ok(
                 new ApiResponse<object>("Unit deleted",

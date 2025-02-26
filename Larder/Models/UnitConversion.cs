@@ -14,5 +14,5 @@ public class UnitConversion(string userId,
 
     public double TargetUnitsPerUnit { get; set; } = targetUnitsPerUnit;
 
-    public required UnitType UnitType { get; set; }
+    public UnitType? UnitType { get; set; }
 }

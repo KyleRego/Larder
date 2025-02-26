@@ -9,19 +9,11 @@ using Larder.Services.Interface;
 namespace Larder.Services.Impl;
 
 public class UnitService(IServiceProviderWrapper serviceProvider,
-                                                    IUnitRepository repository)
-                        : AppServiceBase(serviceProvider), IUnitService
+                            IUnitRepository unitData)
+        : CrudServiceBase<UnitDto, Unit>(serviceProvider, unitData),
+                        IUnitService
 {
-    private readonly IUnitRepository _unitData = repository;
-
-    public async Task<UnitDto> CreateUnit(UnitDto dto)
-    {
-        Unit unit = new(CurrentUserId(), dto.Name, dto.Type); 
-
-        Unit insertedUnit = await _unitData.Insert(unit);
-
-        return UnitDto.FromEntity(insertedUnit);
-    }
+    private readonly IUnitRepository _unitData = unitData;
 
     public async Task<List<UnitDto>> CreateUnits(List<UnitDto> unitDtos)
     {
@@ -31,23 +23,6 @@ public class UnitService(IServiceProviderWrapper serviceProvider,
         List<Unit> insertedUnits = await _unitData.InsertAll(units);
 
         return [ .. insertedUnits.Select(UnitDto.FromEntity) ];
-    }
-
-    public async Task DeleteUnit(string id)
-    {
-        Unit unit = await _unitData.Get(CurrentUserId(), id)
-            ?? throw new ApplicationException("Unit was not found.");
-
-        await _unitData.Delete(unit);
-    }
-
-    public async Task<UnitDto?> GetUnit(string id)
-    {
-        Unit? entity = await _unitData.Get(CurrentUserId(), id);
-
-        if (entity == null) return null;
-
-        return UnitDto.FromEntity(entity);
     }
 
     public async Task<List<UnitDto>> GetUnits(UnitSortOptions sortOrder,
@@ -65,19 +40,23 @@ public class UnitService(IServiceProviderWrapper serviceProvider,
 
         return dtos;
     }
-
-    public async Task<UnitDto> UpdateUnit(UnitDto dto)
+    protected override UnitDto MapToDto(Unit entity)
     {
-        ArgumentNullException.ThrowIfNull(dto.Id);
+        return new()
+        {
+            Id = entity.Id,
+            Name = entity.Name,
+            Type = entity.Type
+        };
+    }
 
-        Unit entity = await _unitData.Get(CurrentUserId(), dto.Id)
-            ?? throw new ApplicationException("unit not found");
+    protected override Task<Unit> MapToEntity(UnitDto dto)
+    {
+        Unit unit = new(CurrentUserId(), dto.Name, dto.Type);
 
-        entity.Name = dto.Name;
-        entity.Type = dto.Type;
+        if (dto.Id != null)
+            unit.Id = dto.Id;
 
-        Unit updatedUnit = await _unitData.Update(entity);
-
-        return UnitDto.FromEntity(updatedUnit);
+        return Task.FromResult(unit);
     }
 }

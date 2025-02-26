@@ -17,7 +17,7 @@ public abstract class QuantityServiceTests : ServiceTestsBase
         _unitConversionData = new(_unitData);
         _unitService = new UnitService(_serviceProvider.Object, _unitData);
         _unitConversionService = new UnitConversionService(
-            _serviceProvider.Object, _unitData, _unitConversionData);
+            _serviceProvider.Object, _unitService, _unitConversionData);
         _sut = new QuantityService(
             _serviceProvider.Object, _unitService, _unitConversionService);
     }

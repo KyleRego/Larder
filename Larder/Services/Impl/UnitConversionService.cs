@@ -7,15 +7,17 @@ namespace Larder.Services.Impl;
 
 public class UnitConversionService(
                                 IServiceProviderWrapper serviceProvider,
-                                IUnitRepository unitData,
+                                IUnitService unitService,
                                 IUnitConversionRepository unitConversionData)
-                    : AppServiceBase(serviceProvider), IUnitConversionService
+        : CrudServiceBase<UnitConversionDto, UnitConversion>
+            (serviceProvider, unitConversionData),
+        IUnitConversionService
 {
-    private readonly IUnitRepository _unitData = unitData;
+    private readonly IUnitService _unitService = unitService;
     private readonly IUnitConversionRepository _unitConversionData
                                                         = unitConversionData;
 
-    private static void CheckConversionValid(Unit unit1, Unit unit2)
+    private static void CheckConversionValid(UnitDto unit1, UnitDto unit2)
     {
         if (unit1.Type != unit2.Type) {
             throw new ApplicationException($"""
@@ -38,25 +40,25 @@ public class UnitConversionService(
         double targetUnitsPerUnit = dto.TargetUnitsPerUnit;
         string userId = CurrentUserId();
 
-        Unit unit = await _unitData.Get(userId, dto.UnitId)
+        UnitDto unit = await _unitService.Get(dto.UnitId)
                 ?? throw new ApplicationException(
                     $"Unit with ID {dto.UnitId} not found.");
 
-        Unit targetUnit = await _unitData.Get(userId, dto.TargetUnitId)
+        UnitDto targetUnit = await _unitService.Get(dto.TargetUnitId)
                 ?? throw new ApplicationException(
                     $"Unit with Target ID {dto.TargetUnitId} not found.");
 
         CheckConversionValid(unit, targetUnit);
 
         UnitConversion? existingConversion = await _unitConversionData
-                    .FindByUnitIdsEitherWay(userId, unit.Id, targetUnit.Id);
+            .FindByUnitIdsEitherWay(userId, unit.Id!, targetUnit.Id!);
 
         if (existingConversion != null)
             throw new ApplicationException(
                 "A conversion already exists for those units.");
 
         UnitConversion unitConversion
-            = new(userId, unit.Id, targetUnit.Id, targetUnitsPerUnit)
+            = new(userId, unit.Id!, targetUnit.Id!, targetUnitsPerUnit)
         {
             UnitType = targetUnit.Type
         };
@@ -94,20 +96,39 @@ public class UnitConversionService(
                 ?? throw new ApplicationException(
                     "Unit conversion to update was not found.");
 
-        Unit unit = await _unitData.Get(CurrentUserId(), dto.UnitId)
+        UnitDto unit = await _unitService.Get(dto.UnitId)
                 ?? throw new ApplicationException("Unit not found");
 
-        Unit targetUnit = await _unitData.Get(CurrentUserId(), dto.TargetUnitId)
+        UnitDto targetUnit = await _unitService.Get(dto.TargetUnitId)
                 ?? throw new ApplicationException("Target unit not found");
 
         CheckConversionValid(unit, targetUnit);
 
-        unitConversion.UnitId = unit.Id;
-        unitConversion.TargetUnitId = targetUnit.Id;
+        unitConversion.UnitId = unit.Id!;
+        unitConversion.TargetUnitId = targetUnit.Id!;
         unitConversion.TargetUnitsPerUnit = dto.TargetUnitsPerUnit;
 
         await _unitConversionData.Update(unitConversion);
 
         return UnitConversionDto.FromEntity(unitConversion);
+    }
+
+    protected override UnitConversionDto MapToDto(UnitConversion entity)
+    {
+        return new()
+        {
+            Id = entity.Id,
+            UnitId = entity.UnitId,
+            TargetUnitId = entity.TargetUnitId,
+            TargetUnitsPerUnit = entity.TargetUnitsPerUnit
+        };
+    }
+
+    protected override Task<UnitConversion> MapToEntity(UnitConversionDto dto)
+    {
+        UnitConversion entity = new(CurrentUserId(), dto.UnitId,
+            dto.TargetUnitId, dto.TargetUnitsPerUnit);
+
+        return Task.FromResult(entity);
     }
 }

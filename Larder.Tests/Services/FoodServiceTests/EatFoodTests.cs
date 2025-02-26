@@ -20,7 +20,7 @@ public class EatFoodTests : ServiceTestsBase
         _unitConversionData = new MockUnitConversionData(_unitData);
         _itemData = new MockItemData(_unitData);
         _unitService = new(_serviceProvider.Object, _unitData);
-        _unitConversionService = new(_serviceProvider.Object, _unitData, _unitConversionData);
+        _unitConversionService = new(_serviceProvider.Object, _unitService, _unitConversionData);
         _quantityService = new(_serviceProvider.Object, _unitService, _unitConversionService);
     }
 

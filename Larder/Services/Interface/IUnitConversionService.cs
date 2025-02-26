@@ -4,9 +4,8 @@ using Larder.Models;
 namespace Larder.Services.Interface;
 
 public interface IUnitConversionService
+    : ICrudServiceBase<UnitConversionDto, UnitConversion>
 {
-    public Task<UnitConversionDto> CreateUnitConversion(UnitConversionDto dto);
-    public Task<UnitConversionDto> UpdateUnitConversion(UnitConversionDto dto);
-    public Task DeleteUnitConversion(string id);
-    public Task<UnitConversionDto?> FindConversion(string unitId1, string unitId2);
+    public Task<UnitConversionDto?>
+        FindConversion(string unitId1, string unitId2);
 }

@@ -17,7 +17,7 @@ public class UnitConversionsController(IUnitConversionService service)
     {
         try
         {
-            UnitConversionDto unitConv = await _service.CreateUnitConversion(dto);
+            UnitConversionDto unitConv = await _service.Add(dto);
 
             return new ApiResponse<UnitConversionDto>(
                 unitConv, "Unit conversion created", ApiResponseType.Success);
@@ -35,7 +35,7 @@ public class UnitConversionsController(IUnitConversionService service)
 
         try
         {
-            UnitConversionDto resultDto = await _service.UpdateUnitConversion(dto);
+            UnitConversionDto resultDto = await _service.Update(dto);
             return new ApiResponse<UnitConversionDto>(
                 resultDto, "Unit conversion updated", ApiResponseType.Success);
         }
@@ -50,7 +50,7 @@ public class UnitConversionsController(IUnitConversionService service)
     {
         try
         {
-            await _service.DeleteUnitConversion(id);
+            await _service.Delete(id);
             return new ApiResponse<object>(
                 "Unit conversion deleted", ApiResponseType.Success
             );

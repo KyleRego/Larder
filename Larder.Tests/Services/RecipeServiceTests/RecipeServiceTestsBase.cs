@@ -24,7 +24,7 @@ public abstract class RecipeServiceTestsBase : ServiceTestsBase
         _recipeData = new(_itemData, _unitData);
         _unitService = new UnitService(_serviceProvider.Object, _unitData);
         _unitConversionService = new UnitConversionService(
-            _serviceProvider.Object, _unitData, _unitConversionData);
+            _serviceProvider.Object, _unitService, _unitConversionData);
         _quantityService = new QuantityService(
             _serviceProvider.Object, _unitService, _unitConversionService);
         
