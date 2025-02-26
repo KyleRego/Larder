@@ -8,7 +8,7 @@ using Larder.Models.SortOptions;
 namespace Larder.Repository.Impl;
 
 public class RecipeRepository(AppDbContext dbContext)
-                : RepositoryBase<Recipe>(dbContext),
+                : CrudRepositoryBase<Recipe>(dbContext),
                                 IRecipeRepository
 {
     /// <summary>

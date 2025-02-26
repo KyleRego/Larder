@@ -14,16 +14,6 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
 {
     private readonly IItemRepository _itemData = itemData;
 
-    public async Task<List<ItemDto>> CreateItems(List<ItemDto> itemDtos)
-    {
-        string userId = CurrentUserId();
-        List<Item> items = [.. itemDtos.Select(dto => Item.FromDto(dto, userId))];
-
-        IEnumerable<Item> insertedItems = await _itemData.InsertAll(items);
-
-        return [.. insertedItems.Select(ItemDto.FromEntity)];
-    }
-
     public async Task<ItemDto> FindOrCreate(string name)
     {
         Item item = await _itemData.FindOrCreate(CurrentUserId(), name);

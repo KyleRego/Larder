@@ -6,7 +6,7 @@ using Larder.Repository.Interface;
 namespace Larder.Repository.Impl;
 
 public class UnitConversionRepository(AppDbContext dbContext)
-        : RepositoryBase<UnitConversion>(dbContext),
+        : CrudRepositoryBase<UnitConversion>(dbContext),
                                 IUnitConversionRepository
 {
     public async Task<UnitConversion?> FindByUnitIdsEitherWay(string userId,

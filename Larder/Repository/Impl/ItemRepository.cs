@@ -9,7 +9,7 @@ using Larder.Models.SortOptions;
 using Larder.Repository.Interface;
 
 public class ItemRepository(AppDbContext dbContext)
-            : RepositoryBase<Item>(dbContext), IItemRepository
+            : CrudRepositoryBase<Item>(dbContext), IItemRepository
 {
     public async Task<Item> FindOrCreate(string userId, string name)
     {

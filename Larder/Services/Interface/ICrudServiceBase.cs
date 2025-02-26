@@ -8,6 +8,7 @@ public interface ICrudServiceBase<TDto, TEntity>
 {
     public Task<TDto?> Get(string id);
     public Task<TDto> Add(TDto dto);
+    public Task<List<TDto>> AddAll(List<TDto> dtos);
     public Task<TDto> Update(TDto dto);
     public Task Delete(string id);
 }

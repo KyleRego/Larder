@@ -3,7 +3,7 @@ using Larder.Models.SortOptions;
 
 namespace Larder.Repository.Interface;
 
-public interface IUnitRepository : IRepositoryBase<Unit>
+public interface IUnitRepository : ICrudRepositoryBase<Unit>
 {
     public Task<List<Unit>> GetAll(string userId,
                 UnitSortOptions sortOption=UnitSortOptions.AnyOrder,

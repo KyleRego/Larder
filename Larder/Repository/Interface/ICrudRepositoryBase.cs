@@ -2,7 +2,7 @@ using Larder.Models;
 
 namespace Larder.Repository.Interface;
 
-public interface IRepositoryBase<T> where T : UserOwnedEntity
+public interface ICrudRepositoryBase<T> where T : UserOwnedEntity
 {
     public Task<T?> Get(string userId, string id);
     public Task<T> Insert(T newEntity);

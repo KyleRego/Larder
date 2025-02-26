@@ -8,6 +8,5 @@ public interface IItemService : ICrudServiceBase<ItemDto, Item>
 {
     public Task<List<ItemDto>> GetItems(ItemSortOptions sortBy,
                                                 string? search);
-    public Task<List<ItemDto>> CreateItems(List<ItemDto> itemDtos);
     public Task<ItemDto> FindOrCreate(string name);
 }

@@ -151,7 +151,7 @@ public class DemoService(   UserManager<ApplicationUser> userManager,
         };
 
         List<ItemDto> createdItems =
-            await _itemService.CreateItems([butter, riceBox, apples, toasterPastries]);
+            await _itemService.AddAll([butter, riceBox, apples, toasterPastries]);
 
         ItemDto createdApples = createdItems
                     .First(item => item.Name == apples.Name);

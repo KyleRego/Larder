@@ -7,13 +7,13 @@ namespace Larder.Services.Impl;
 
 public abstract class CrudServiceBase<TDto, TEntity>
                         (IServiceProviderWrapper serviceProvider,
-                        IRepositoryBase<TEntity> repository)
+                        ICrudRepositoryBase<TEntity> repository)
         : AppServiceBase(serviceProvider),
             ICrudServiceBase<TDto, TEntity>
     where TDto : EntityDto<TEntity>
     where TEntity : UserOwnedEntity
 {
-    protected readonly IRepositoryBase<TEntity>
+    protected readonly ICrudRepositoryBase<TEntity>
         _repository = repository;
 
     protected abstract Task<TEntity> MapToEntity(TDto dto);
@@ -45,5 +45,20 @@ public abstract class CrudServiceBase<TDto, TEntity>
         TEntity entity = await MapToEntity(dto);
         TEntity updatedEntity = await _repository.Update(entity);
         return MapToDto(updatedEntity);
+    }
+
+    public async Task<List<TDto>> AddAll(List<TDto> dtos)
+    {
+        List<TEntity> entities = [];
+
+        foreach (TDto dto in dtos)
+        {
+            TEntity ntt = await MapToEntity(dto);
+            entities.Add(ntt);
+        }
+
+        List<TEntity> inserted = await _repository.InsertAll(entities);
+
+        return [.. inserted.Select(MapToDto)];
     }
 }

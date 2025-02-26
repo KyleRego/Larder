@@ -7,7 +7,7 @@ using Larder.Repository.Interface;
 namespace Larder.Repository.Impl;
 
 public class UnitRepository(AppDbContext dbContext)
-                            : RepositoryBase<Unit>(dbContext),
+                            : CrudRepositoryBase<Unit>(dbContext),
                                 IUnitRepository
 {
     public override async Task<Unit?> Get(string userId, string id)

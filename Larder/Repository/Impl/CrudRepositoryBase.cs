@@ -6,8 +6,8 @@ using Larder.Models;
 
 namespace Larder.Repository.Impl;
 
-public abstract class RepositoryBase<T>(AppDbContext dbContext)
-                                : IRepositoryBase<T>
+public abstract class CrudRepositoryBase<T>(AppDbContext dbContext)
+                                : ICrudRepositoryBase<T>
                                             where T : UserOwnedEntity
 {
     protected readonly AppDbContext _dbContext = dbContext;

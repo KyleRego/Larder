@@ -3,7 +3,7 @@ using Larder.Models.SortOptions;
 
 namespace Larder.Repository.Interface;
 
-public interface IItemRepository : IRepositoryBase<Item>
+public interface IItemRepository : ICrudRepositoryBase<Item>
 {
     public Task<Item> FindOrCreate(string userId, string name);
     public Task<List<Item>> GetAll(string userId,
