@@ -2,7 +2,7 @@ using Larder.Models;
 
 namespace Larder.Dtos;
 
-public class UnitDto
+public class UnitDto : EntityDto<Unit>
 {
     public string? Id { get; set; }
     public required string Name { get; set; }

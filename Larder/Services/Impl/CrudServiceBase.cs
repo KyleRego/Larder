@@ -1,3 +1,4 @@
+using Larder.Dtos;
 using Larder.Models;
 using Larder.Repository.Interface;
 using Larder.Services.Interface;
@@ -5,11 +6,11 @@ using Larder.Services.Interface;
 namespace Larder.Services.Impl;
 
 public abstract class CrudServiceBase<TDto, TEntity>
-                (IServiceProviderWrapper serviceProvider,
-                IRepositoryBase<TEntity> repository)
-                    : AppServiceBase(serviceProvider),
-                        ICrudServiceBase<TDto, TEntity>
-    where TDto : class
+                        (IServiceProviderWrapper serviceProvider,
+                        IRepositoryBase<TEntity> repository)
+        : AppServiceBase(serviceProvider),
+            ICrudServiceBase<TDto, TEntity>
+    where TDto : EntityDto<TEntity>
     where TEntity : UserOwnedEntity
 {
     protected readonly IRepositoryBase<TEntity>

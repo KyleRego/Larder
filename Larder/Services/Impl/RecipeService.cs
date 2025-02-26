@@ -31,7 +31,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
         NutritionBuilder nutritionBuilder = new NutritionBuilder()
                             .WithServingSize(1);
 
-        foreach(CookRecipeIngredientDto cookedIngredient in cookRecipeDto.Ingredients)
+        foreach (CookRecipeIngredientDto cookedIngredient in cookRecipeDto.Ingredients)
         {
             string cookedItemId = cookedIngredient.IngredientItemId;
 
@@ -158,7 +158,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
         }
 
         recipe.RecipeIngredients = recipeIngredients;
-        
+
         return recipe;
     }
 }
