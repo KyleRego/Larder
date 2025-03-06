@@ -5,7 +5,7 @@ public class LoginTest : UITestBase
     [Test]
     public void TestUserCanLogin()
     {
-        driver.LoginTestUser(false);
+        _driver.LoginTestUser(false);
 
         AssertMessage("You are now logged in.");
     }

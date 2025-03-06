@@ -5,13 +5,13 @@ public class RegisterTest : UITestBase
     [Test]
     public void TestUserCanRegister()
     {
-        IWebElement registerBtn = driver.FindElement(By.Id("register-btn"));
+        IWebElement registerBtn = _driver.FindElement(By.Id("register-btn"));
 
         registerBtn.Click();
 
-        IWebElement emailInput = driver.FindElement(By.Id("email"));
-        IWebElement passwordInput = driver.FindElement(By.Id("password"));
-        IWebElement submitBtn = driver.FindElement(By.Id("submit-register"));
+        IWebElement emailInput = _driver.FindElement(By.Id("email"));
+        IWebElement passwordInput = _driver.FindElement(By.Id("password"));
+        IWebElement submitBtn = _driver.FindElement(By.Id("submit-register"));
 
         string email = RandomEmail();
         string password = RandomPassword();

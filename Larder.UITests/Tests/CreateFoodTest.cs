@@ -7,12 +7,12 @@ public class CreateFoodTest : UITestBase
     {
         string foodItemName = $"Test food rice box {Guid.NewGuid()}";
 
-        driver.LoginTestUser();
+        _driver.LoginTestUser();
 
-        IWebElement newItemLink = driver.FindElement(By.LinkText("New item"));
+        IWebElement newItemLink = _driver.FindElement(By.LinkText("New item"));
         newItemLink.Click();
 
-        IWebElement isFoodToggle = driver.FindElement(By.CssSelector("[for='is-nutrition-toggle']"));
+        IWebElement isFoodToggle = _driver.FindElement(By.CssSelector("[for='is-nutrition-toggle']"));
         isFoodToggle.Click();
 
         SendKeysToInput("name-input", foodItemName);
@@ -33,15 +33,15 @@ public class CreateFoodTest : UITestBase
         SendKeysToInput("milligramsSodium-input", "570");
         SendKeysToInput("milligramsCholesterol-input", "50");
 
-        IWebElement submitBtn = driver.FindElement(By.Id("item-form-submit"));
+        IWebElement submitBtn = _driver.FindElement(By.Id("item-form-submit"));
         submitBtn.Click();
 
-        AssertMessage("Item created");
+        AssertMessage("Successfully created record");
     }
 
     private void SendKeysToInput(string inputId, string keys)
     {
-        IWebElement input = driver.FindElement(By.Id(inputId));
+        IWebElement input = _driver.FindElement(By.Id(inputId));
         input.Clear();
         input.SendKeys(keys);
     }

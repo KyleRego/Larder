@@ -5,15 +5,15 @@ public class LogoutTest : UITestBase
     [Test]
     public void TestUserCanLogout()
     {
-        driver.LoginTestUser();
+        _driver.LoginTestUser();
 
         try
         {
-            IWebElement logoutBtn = driver.FindElement(By.CssSelector(".d-none.d-lg-block #logout-btn"));
+            IWebElement logoutBtn = _driver.FindElement(By.CssSelector(".d-none.d-lg-block #logout-btn"));
             logoutBtn.Click();
         } catch
         {
-            IWebElement logoutBtn = driver.FindElement(By.CssSelector(".d-lg-none #logout-btn"));
+            IWebElement logoutBtn = _driver.FindElement(By.CssSelector(".d-lg-none #logout-btn"));
             logoutBtn.Click();  
         }
 
