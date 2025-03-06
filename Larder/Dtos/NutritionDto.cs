@@ -5,9 +5,6 @@ namespace Larder.Dtos;
 
 public class NutritionDto
 {
-    // Is Id needed for this?
-    public string? Id { get; set; }
-
     public required QuantityDto ServingSize { get; set; }
 
     public double Calories { get; set; }
@@ -31,7 +28,6 @@ public class NutritionDto
     {
         return new()
         {
-            Id = food.Id,
             ServingSize = QuantityDto.FromEntity(food.ServingSize),
 
             Calories = food.Calories,
@@ -49,13 +45,5 @@ public class NutritionDto
             GramsTotalSugars = food.GramsTotalSugars,
 
         };
-    }
-
-    // TODO: Remove this
-    public static NutritionDto FromEntity(Item foodItem)
-    {
-        ArgumentNullException.ThrowIfNull(foodItem.Nutrition);
-
-        return FromEntity(foodItem.Nutrition);
     }
 }

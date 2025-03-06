@@ -4,7 +4,6 @@ namespace Larder.Dtos;
 
 public class UnitDto : EntityDto<Unit>
 {
-    public string? Id { get; set; }
     public required string Name { get; set; }
     public required UnitType Type { get; set; }
     public List<UnitConversionDto> Conversions { get; set; } = [];

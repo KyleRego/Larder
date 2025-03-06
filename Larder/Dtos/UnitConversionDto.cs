@@ -4,7 +4,6 @@ namespace Larder.Dtos;
 
 public class UnitConversionDto : EntityDto<UnitConversion>
 {
-    public string? Id { get; set; }
     public required string UnitId { get; set; }
     public required string TargetUnitId { get; set; }
     public required double TargetUnitsPerUnit { get; set; }

@@ -1,63 +1,11 @@
 using Larder.Dtos;
+using Larder.Models;
 using Larder.Services.Interface;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Larder.Controllers;
 
-using UnitConversionActionResult
-                        = Task<ActionResult<ApiResponse<UnitConversionDto>>>;
-
 public class UnitConversionsController(IUnitConversionService service)
-                                                            : AppControllerBase
+    : CrudControllerBase<UnitConversionDto, UnitConversion>(service)
 {
     private readonly IUnitConversionService _service = service;
-
-    [HttpPost]
-    public async UnitConversionActionResult Create(UnitConversionDto dto)
-    {
-        try
-        {
-            UnitConversionDto unitConv = await _service.Add(dto);
-
-            return new ApiResponse<UnitConversionDto>(
-                unitConv, "Unit conversion created", ApiResponseType.Success);
-        }
-        catch (ApplicationException e)
-        {
-            return UnprocessableEntity(FromError(e));
-        }
-    }
-
-    [HttpPut("{id}")]
-    public async UnitConversionActionResult Update(UnitConversionDto dto, string id)
-    {
-        if (dto.Id == null || dto.Id != id) return BadRequest();
-
-        try
-        {
-            UnitConversionDto resultDto = await _service.Update(dto);
-            return new ApiResponse<UnitConversionDto>(
-                resultDto, "Unit conversion updated", ApiResponseType.Success);
-        }
-        catch (ApplicationException e)
-        {
-            return UnprocessableEntity(FromError(e));
-        }
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<ActionResult<ApiResponse<object>>> Delete(string id)
-    {
-        try
-        {
-            await _service.Delete(id);
-            return new ApiResponse<object>(
-                "Unit conversion deleted", ApiResponseType.Success
-            );
-        }
-        catch (ApplicationException e)
-        {
-            return UnprocessableEntity(FromError(e));
-        }   
-    }
 }
