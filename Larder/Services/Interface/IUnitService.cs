@@ -9,4 +9,5 @@ public interface IUnitService : ICrudServiceBase<UnitDto, Unit>
     public Task<List<UnitDto>> GetUnits(UnitSortOptions sortOrder,
                                                     string? search);
     public Task<List<UnitDto>> CreateUnits(List<UnitDto> unitDtos);
+    public Task<UnitType> GetUnitType(string unitId);
 }

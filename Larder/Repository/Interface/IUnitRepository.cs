@@ -8,4 +8,6 @@ public interface IUnitRepository : ICrudRepositoryBase<Unit>
     public Task<List<Unit>> GetAll(string userId,
                 UnitSortOptions sortOption=UnitSortOptions.AnyOrder,
                 string? search = null);
+
+    public Task<Unit?> GetUnitOnly(string userId, string id);
 }

@@ -54,6 +54,9 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
     {
         ItemBuilder builder = new(CurrentUserId(), dto.Name, dto.Description);
 
+        if (dto.Id != null)
+            builder = builder.WithId(dto.Id);
+
         if (dto.Quantity != null)
             builder = builder.WithQuantity(dto.Quantity);
 

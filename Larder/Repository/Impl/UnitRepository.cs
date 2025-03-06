@@ -19,6 +19,12 @@ public class UnitRepository(AppDbContext dbContext)
                             unit => unit.Id == id && unit.UserId == userId);
     }
 
+    public async Task<Unit?> GetUnitOnly(string userId, string id)
+    {
+        return await _dbContext.Units.FirstOrDefaultAsync(
+            unit => unit.UserId == userId && unit.Id == id);
+    }
+
     public async Task<List<Unit>> GetAll(string userId,
                                     UnitSortOptions sortBy = UnitSortOptions.AnyOrder,
                                     string? search = null)

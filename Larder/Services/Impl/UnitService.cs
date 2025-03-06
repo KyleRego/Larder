@@ -1,8 +1,6 @@
-using System.Linq;
 using Larder.Dtos;
 using Larder.Models;
 using Larder.Models.SortOptions;
-using Larder.Repository.Impl;
 using Larder.Repository.Interface;
 using Larder.Services.Interface;
 
@@ -25,6 +23,14 @@ public class UnitService(IServiceProviderWrapper serviceProvider,
         return [ .. insertedUnits.Select(UnitDto.FromEntity) ];
     }
 
+    public async Task<UnitType> GetUnitType(string unitId)
+    {
+        Unit unit = await _unitData.GetUnitOnly(CurrentUserId(), unitId)
+            ?? throw new ApplicationException($"No unit found with ID {unitId}");
+
+        return unit.Type;
+    }
+
     public async Task<List<UnitDto>> GetUnits(UnitSortOptions sortOrder,
                                                                 string? search)
     {
@@ -40,19 +46,28 @@ public class UnitService(IServiceProviderWrapper serviceProvider,
 
         return dtos;
     }
+
     protected override UnitDto MapToDto(Unit entity)
     {
         return new()
         {
             Id = entity.Id,
             Name = entity.Name,
-            Type = entity.Type
+            Type = entity.Type,
+            Conversions = [.. entity.Conversions.Select(UnitConversionDto.FromEntity)]
         };
     }
 
     protected override Task<Unit> MapToEntity(UnitDto dto)
     {
-        Unit unit = new(CurrentUserId(), dto.Name, dto.Type);
+        string userId = CurrentUserId();
+        Unit unit = new(userId, dto.Name, dto.Type)
+        {
+            Conversions = [.. dto.Conversions.Select(convDto =>
+                new UnitConversion(userId, convDto.UnitId,
+                            convDto.TargetUnitId, convDto.TargetUnitsPerUnit)
+            )]
+        };
 
         if (dto.Id != null)
             unit.Id = dto.Id;

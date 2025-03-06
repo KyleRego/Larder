@@ -36,7 +36,7 @@ public class CreateFoodTest : UITestBase
         IWebElement submitBtn = _driver.FindElement(By.Id("item-form-submit"));
         submitBtn.Click();
 
-        AssertMessage("Successfully created record");
+        AssertMessage("Successfully created item");
     }
 
     private void SendKeysToInput(string inputId, string keys)

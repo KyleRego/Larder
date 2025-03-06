@@ -84,7 +84,10 @@ function NewSomethingDropdown() {
         return <li
                 key={index}
                 role="button">
-            <Link className="dropdown-item" to={data[1]}>New {data[0]}</Link>
+            <Link className="dropdown-item" to={data[1]}
+                onClick={() => setExpanded(!expanded)}>
+                New {data[0]}
+            </Link>
         </li>;
     });
     

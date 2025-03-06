@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { UnitDto } from "../types/UnitDto";
-import { apiClient } from "../util/axios";
 import { useParams } from "react-router";
 import Loading from "../components/Loading";
 import UnitConversionForm from "../components/UnitConversionForm";
@@ -20,11 +19,18 @@ export default function UnitPage() {
     const { handleRequest } = useApiRequest();
 
     useEffect(() => {
-        apiClient.get<UnitDto>(`/api/units/${id}`).then(res => {
-            setUnit(res.data);
-        }).catch(error => {
-            console.error(error);
-        })
+        async function getUnit() {
+            const res = await handleRequest<UnitDto>({
+                method: "get",
+                url: `/api/units/${id}`
+            });
+
+            if (res) {
+                setUnit(res);
+            }
+        }
+
+        getUnit();
     }, [refreshCounter]);
 
     if (unit === null) {

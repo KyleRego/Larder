@@ -10,6 +10,7 @@ import { ApiResponse } from "../types/ApiResponse";
 import ActionBar from "../ActionBar";
 import BreadCrumbs from "../Breadcrumbs";
 import { Link } from "react-router-dom";
+import { useApiRequest } from "../hooks/useApiRequest";
 
 export default function EditUnit() {
     const [unit, setUnit] = useState<UnitDto | null>(null);
@@ -17,14 +18,22 @@ export default function EditUnit() {
     const unitId = id as string;
     const navigate = useNavigate();
     const { setMessage } = useContext(MessageContext);
+    const { handleRequest } = useApiRequest();
 
     useEffect(() => {
-        apiClient.get<UnitDto>(`/api/units/${id}`).then(res => {
-            setUnit(res.data);
-        }).catch(error => {
-            console.error(error);
-        })
-    }, []);
+        async function getUnit() {
+            const res = await handleRequest<UnitDto>({
+                method: "get",
+                url: `/api/units/${id}`
+            });
+
+            if (res) {
+                setUnit(res);
+            }
+        }
+
+        getUnit();
+    }, [id]);
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();

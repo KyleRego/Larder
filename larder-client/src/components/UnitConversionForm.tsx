@@ -33,7 +33,7 @@ export default function UnitConversionForm({handleSubmit, handleCancel, initialU
 
                         <div>
                             <label htmlFor="targetUnitsPerUnit" hidden>Target units per unit:</label>
-                            <input id="targetUnitsPerUnit" defaultValue={unitConversion?.targetUnitsPerUnit}
+                            <input id="targetUnitsPerUnit"
                                     name="targetUnitsPerUnit"
                                     title="Target units per unit" min="1" step="any" type="number"
                                     className="form-control" required

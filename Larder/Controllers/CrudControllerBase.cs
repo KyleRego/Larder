@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Larder.Dtos;
 using Larder.Models;
 using Larder.Services.Interface;
@@ -12,6 +13,8 @@ public abstract class CrudControllerBase<TDto, TEntity>
     where TEntity : UserOwnedEntity
 {
     private readonly ICrudServiceBase<TDto, TEntity> _crudService = crudService;
+    private static readonly string entityName =
+        Regex.Replace(typeof(TEntity).Name, "(?<!^)([A-Z])", " $1").ToLower();
 
     [HttpPost]
     public async Task<ActionResult<ApiResponse<TDto>>> Create(TDto dto)
@@ -20,7 +23,7 @@ public abstract class CrudControllerBase<TDto, TEntity>
         {
             TDto resultDto = await _crudService.Add(dto);
             return new ApiResponse<TDto>(resultDto,
-                "Successfully created record",
+                $"Successfully created {entityName}",
                 ApiResponseType.Success);
         }
         catch (ApplicationException e)
@@ -55,7 +58,7 @@ public abstract class CrudControllerBase<TDto, TEntity>
         {
             TDto resultDto = await _crudService.Update(dto);
             return new ApiResponse<TDto>(resultDto,
-                "Update successful",
+                $"Updated {entityName} successfully",
                 ApiResponseType.Success);
         }
         catch (ApplicationException e)

@@ -12,7 +12,8 @@ export default function ItemsTable({searchParam} : {searchParam: string }) {
     const [sortOrder, setSortOrder] = useState(ItemSortOptions.Name);
 
     useEffect(() => {
-        apiClient.get<ItemDto[]>("/api/items", { params: {search: searchParam, sortOrder: sortOrder}})
+        apiClient.get<ItemDto[]>("/api/items",
+            { params: {search: searchParam, sortOrder: sortOrder}})
             .then(res => setItems(res.data))
             .catch(error => console.log(error));
     }, [searchParam, sortOrder])
