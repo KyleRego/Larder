@@ -70,13 +70,14 @@ public class ItemRepository(AppDbContext dbContext)
         return await query.ToListAsync();
     }
 
-    public Task<List<Item>> GetAll(string userId,
+    public Task<List<Item>> GetAllFoods(string userId,
             FoodSortOptions sortBy = FoodSortOptions.AnyOrder, string? search = null)
     {
         var query = _dbContext.Items
                                 .Include(item => item.Nutrition)
                                 .Where(item =>
-            item.UserId == userId && item.Nutrition != null);
+            item.UserId == userId && item.Nutrition != null
+            && item.ConsumedTime == null);
 
         query = (search == null) ? query : query.Where(
             food => food.Name.Contains(search)
@@ -169,7 +170,7 @@ public class ItemRepository(AppDbContext dbContext)
         return query.ToListAsync();
     }
 
-    public async Task<List<Item>> GetAll(string userId,
+    public async Task<List<Item>> GetAllIngredients(string userId,
                 IngredientSortOptions sortBy = IngredientSortOptions.AnyOrder,
                                 string? search = null)
     {

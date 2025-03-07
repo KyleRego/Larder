@@ -118,12 +118,12 @@ public class MockItemData : MockRepositoryBase, IItemRepository
         throw new NotImplementedException();
     }
 
-    public Task<List<Item>> GetAll(string userId, FoodSortOptions sortOption = FoodSortOptions.AnyOrder, string? search = null)
+    public Task<List<Item>> GetAllFoods(string userId, FoodSortOptions sortOption = FoodSortOptions.AnyOrder, string? search = null)
     {
         throw new NotImplementedException();
     }
 
-    public Task<List<Item>> GetAll(string userId, IngredientSortOptions sortOption = IngredientSortOptions.AnyOrder, string? search = null)
+    public Task<List<Item>> GetAllIngredients(string userId, IngredientSortOptions sortOption = IngredientSortOptions.AnyOrder, string? search = null)
     {
         throw new NotImplementedException();
     }

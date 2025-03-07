@@ -9,10 +9,10 @@ public interface IItemRepository : ICrudRepositoryBase<Item>
     public Task<List<Item>> GetAll(string userId,
                 ItemSortOptions sortOption=ItemSortOptions.AnyOrder,
                 string? search = null);
-    public Task<List<Item>> GetAll(string userId,
+    public Task<List<Item>> GetAllFoods(string userId,
                 FoodSortOptions sortOption=FoodSortOptions.AnyOrder,
                 string? search = null);
-    public Task<List<Item>> GetAll(string userId,
+    public Task<List<Item>> GetAllIngredients(string userId,
                 IngredientSortOptions sortOption=IngredientSortOptions.AnyOrder,
                 string? search = null);
     public Task<List<Item>> GetConsumedFoods(string userId, DateTime day);

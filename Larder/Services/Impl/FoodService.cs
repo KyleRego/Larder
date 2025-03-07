@@ -21,7 +21,7 @@ public class FoodService(  IServiceProviderWrapper serviceProvider,
                                                         string? search)
     {
         List<Item> foodItems =
-            await _itemData.GetAll(CurrentUserId(), sortBy, search);
+            await _itemData.GetAllFoods(CurrentUserId(), sortBy, search);
 
         return [.. foodItems.Select(ItemDto.FromEntity)];
     }

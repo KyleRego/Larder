@@ -1,4 +1,5 @@
 using Larder.Dtos;
+using Larder.Models.ItemComponents;
 
 namespace Larder.Models.Builders;
 
@@ -11,6 +12,7 @@ public class ItemBuilder(string userId, string name,
     private readonly string? _description = description;
     private Quantity _quantity = Quantity.One();
     private NutritionBuilder? _nutritionBuilder;
+    private ConsumedTimeBuilder? _consumedTimeBuilder;
 
     public ItemBuilder WithQuantity(Quantity quantity)
     {
@@ -44,6 +46,12 @@ public class ItemBuilder(string userId, string name,
         return this;
     }
 
+    public ItemBuilder WithConsumedTime(ConsumedTimeBuilder consumedTimeBuilder)
+    {
+        _consumedTimeBuilder = consumedTimeBuilder;
+        return this;
+    }
+
     public Item Build()
     {
         Item item = new(_userId, _name, _description)
@@ -53,9 +61,10 @@ public class ItemBuilder(string userId, string name,
         };
 
         if (_nutritionBuilder != null)
-        {
             item.Nutrition = _nutritionBuilder.Build(item);
-        }
+
+        if (_consumedTimeBuilder != null)
+            item.ConsumedTime = _consumedTimeBuilder.Build(item);
 
         return item;
     }
@@ -71,9 +80,7 @@ public class ItemBuilder(string userId, string name,
         };
 
         if (_nutritionBuilder != null)
-        {
             dto.Nutrition = _nutritionBuilder.BuildDto();
-        }
 
         return dto;
     }
