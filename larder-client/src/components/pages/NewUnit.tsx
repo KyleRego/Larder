@@ -1,13 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
-import UnitForm from "../components/UnitForm";
-import { UnitType } from "../types/UnitType";
-import { apiClient } from "../util/axios";
-import { UnitDto } from "../types/UnitDto";
-import { ApiResponse } from "../types/ApiResponse";
+import UnitForm from "../forms/UnitForm";
+import { UnitType } from "../../types/dtos/UnitType";
+import { apiClient } from "../../util/axios";
+import { UnitDto } from "../../types/dtos/UnitDto";
+import { ApiResponse } from "../../types/ApiResponse";
 import { useContext } from "react";
-import { MessageContext } from "../contexts/MessageContext";
-import BreadCrumbs from "../Breadcrumbs";
-import ActionBar from "../ActionBar";
+import { MessageContext } from "../../contexts/MessageContext";
+import BreadCrumbs from "../layout/Breadcrumbs";
+import ActionBar from "../layout/ActionBar";
 
 export default function NewUnit() {
     const navigate = useNavigate();

@@ -1,10 +1,10 @@
 import { ReactNode, useEffect, useState } from "react";
-import { ItemDto } from "../../types/ItemDto";
+import { ItemDto } from "../../types/dtos/ItemDto";
 import { FoodSortOptions } from "../../types/FoodSortOptions";
 import SortingTableHeader from "../SortingTableHeader";
 import { useNavigate } from "react-router";
 import { apiClient } from "../../util/axios";
-import { NutritionDto } from "../../types/NutritionDto";
+import { NutritionDto } from "../../types/dtos/NutritionDto";
 import Loading from "../Loading";
 import QuantitySpan from "../QuantitySpan";
 

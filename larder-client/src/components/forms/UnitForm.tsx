@@ -1,5 +1,5 @@
-import { UnitDto } from "../types/UnitDto";
-import { UnitType } from "../types/UnitType";
+import { UnitDto } from "../../types/dtos/UnitDto";
+import { UnitType } from "../../types/dtos/UnitType";
 
 export default function UnitForm({unit, handleSubmit}: {
                 unit: UnitDto | null,

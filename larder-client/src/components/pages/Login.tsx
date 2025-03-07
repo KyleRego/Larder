@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { AuthedContext } from "../contexts/AuthedContext";
-import { apiClient } from "../util/axios";
+import { AuthedContext } from "../../contexts/AuthedContext";
+import { apiClient } from "../../util/axios";
 import { Link, useNavigate } from "react-router-dom";
-import { ApiResponseType } from "../types/ApiResponse";
-import { MessageContext } from "../contexts/MessageContext";
+import { ApiResponseType } from "../../types/ApiResponse";
+import { MessageContext } from "../../contexts/MessageContext";
 
 export default function Login() {
     const { setAuthed } = useContext(AuthedContext);

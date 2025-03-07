@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import BreadCrumbs from "../Breadcrumbs";
-import { ItemDto } from "../types/ItemDto";
-import { apiClient } from "../util/axios";
-import Loading from "../components/Loading";
-import QuantitySpan from "../components/QuantitySpan";
-import NutritionTable from "../components/tables/NutritionTable";
+import BreadCrumbs from "../layout/Breadcrumbs";
+import { ItemDto } from "../../types/dtos/ItemDto";
+import { apiClient } from "../../util/axios";
+import Loading from "../Loading";
+import QuantitySpan from "../QuantitySpan";
+import NutritionTable from "../tables/NutritionTable";
 
 export default function FoodLog() {
     const [consumedFoods, setConsumedFoods] = useState<ItemDto[] | null>(null);

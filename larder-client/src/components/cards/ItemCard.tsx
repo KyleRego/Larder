@@ -1,4 +1,4 @@
-import { ItemDto } from "../../types/ItemDto";
+import { ItemDto } from "../../types/dtos/ItemDto";
 import QuantitySpan from "../QuantitySpan";
 
 export default function ItemCard({item} : {item: ItemDto}) {

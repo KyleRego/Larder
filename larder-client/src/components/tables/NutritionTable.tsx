@@ -1,4 +1,4 @@
-import { NutritionDto } from "../../types/NutritionDto";
+import { NutritionDto } from "../../types/dtos/NutritionDto";
 import QuantitySpan from "../QuantitySpan";
 
 export default function NutritionTable({nutrition} : {nutrition: NutritionDto}) {

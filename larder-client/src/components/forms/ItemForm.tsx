@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { ItemDto } from "../types/ItemDto";
-import { NutritionDto } from "../types/NutritionDto";
+import { ItemDto } from "../../types/ItemDto";
+import { NutritionDto } from "../../types/NutritionDto";
 import QuantityInput from "./QuantityInput";
-import { QuantityDto } from "../types/QuantityDto";
+import { QuantityDto } from "../../types/dtos/QuantityDto";
 import NutritionInput from "./NutritionInput";
 
 export default function ItemForm({initialItem, submitFormItem}

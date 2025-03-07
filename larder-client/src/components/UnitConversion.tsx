@@ -1,9 +1,9 @@
 import { ReactNode, useContext, useState } from "react";
-import { UnitConversionDto } from "../types/UnitConversionDto";
+import { UnitConversionDto } from "../types/dtos/UnitConversionDto";
 import { UnitsContext } from "../contexts/UnitsContext";
 import { MdEdit } from "react-icons/md";
-import UnitConversionForm from "./UnitConversionForm";
-import { UnitDto } from "../types/UnitDto";
+import UnitConversionForm from "./forms/UnitConversionForm";
+import { UnitDto } from "../types/dtos/UnitDto";
 import Loading from "./Loading";
 import { useApiRequest } from "../hooks/useApiRequest";
 

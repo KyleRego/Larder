@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { AuthedContext } from "../contexts/AuthedContext";
-import { useApiRequest } from "../hooks/useApiRequest";
+import { AuthedContext } from "../../contexts/AuthedContext";
+import { useApiRequest } from "../../hooks/useApiRequest";
 import { useNavigate } from "react-router";
-import ActionBar from "../ActionBar";
+import ActionBar from "../layout/ActionBar";
 
 export default function Index() {
     const { authed, setAuthed } = useContext(AuthedContext)

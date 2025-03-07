@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { UnitDto } from "../types/UnitDto";
+import { UnitDto } from "../../types/dtos/UnitDto";
 import { useParams } from "react-router";
-import Loading from "../components/Loading";
-import UnitConversionForm from "../components/UnitConversionForm";
-import { UnitConversionDto } from "../types/UnitConversionDto";
-import UnitConversionDiv from "../components/UnitConversion";
+import Loading from "../Loading";
+import UnitConversionForm from "../forms/UnitConversionForm";
+import { UnitConversionDto } from "../../types/dtos/UnitConversionDto";
+import UnitConversionDiv from "../UnitConversion";
 import { Link } from "react-router-dom";
-import { useApiRequest } from "../hooks/useApiRequest";
-import BreadCrumbs from "../Breadcrumbs";
-import ActionBar from "../ActionBar";
-import UnitCard from "../components/cards/UnitCard";
+import { useApiRequest } from "../../hooks/useApiRequest";
+import BreadCrumbs from "../layout/Breadcrumbs";
+import ActionBar from "../layout/ActionBar";
+import UnitCard from "../cards/UnitCard";
 
 export default function UnitPage() {
     const [unit, setUnit] = useState<UnitDto | null>(null);

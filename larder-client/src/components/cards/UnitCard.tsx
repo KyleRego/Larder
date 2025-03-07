@@ -1,4 +1,4 @@
-import { UnitDto } from "../../types/UnitDto";
+import { UnitDto } from "../../types/dtos/UnitDto";
 
 export default function UnitCard({unit} : {unit: UnitDto}) {
     return <div className="card">

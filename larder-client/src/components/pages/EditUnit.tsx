@@ -1,16 +1,16 @@
 import { useContext, useEffect, useState } from "react";
-import { UnitDto } from "../types/UnitDto";
+import { UnitDto } from "../../types/dtos/UnitDto";
 import { useNavigate, useParams } from "react-router";
-import { apiClient } from "../util/axios";
-import Loading from "../components/Loading";
-import { UnitType } from "../types/UnitType";
-import UnitForm from "../components/UnitForm";
-import { MessageContext } from "../contexts/MessageContext";
-import { ApiResponse } from "../types/ApiResponse";
-import ActionBar from "../ActionBar";
-import BreadCrumbs from "../Breadcrumbs";
+import { apiClient } from "../../util/axios";
+import Loading from "../Loading";
+import { UnitType } from "../../types/dtos/UnitType";
+import UnitForm from "../forms/UnitForm";
+import { MessageContext } from "../../contexts/MessageContext";
+import { ApiResponse } from "../../types/ApiResponse";
+import ActionBar from "../layout/ActionBar";
+import BreadCrumbs from "../layout/Breadcrumbs";
 import { Link } from "react-router-dom";
-import { useApiRequest } from "../hooks/useApiRequest";
+import { useApiRequest } from "../../hooks/useApiRequest";
 
 export default function EditUnit() {
     const [unit, setUnit] = useState<UnitDto | null>(null);

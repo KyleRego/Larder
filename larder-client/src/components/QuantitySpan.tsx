@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { QuantityDto } from "../types/QuantityDto";
+import { QuantityDto } from "../types/dtos/QuantityDto";
 import { UnitsContext } from "../contexts/UnitsContext";
 
 export default function QuantitySpan({quantity} : {

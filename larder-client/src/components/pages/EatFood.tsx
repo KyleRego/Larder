@@ -1,13 +1,13 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import Loading from "../components/Loading";
-import { ItemDto } from "../types/ItemDto";
+import Loading from "../Loading";
+import { ItemDto } from "../../types/dtos/ItemDto";
 import { useEffect, useState } from "react";
-import { useApiRequest } from "../hooks/useApiRequest";
+import { useApiRequest } from "../../hooks/useApiRequest";
 import QuantityInput from "../forms/QuantityInput";
-import { QuantityDto } from "../types/QuantityDto";
-import { EatFoodDto } from "../types/EatFoodDto";
-import BreadCrumbs from "../Breadcrumbs";
-import ActionBar from "../ActionBar";
+import { QuantityDto } from "../../types/dtos/QuantityDto";
+import { EatFoodDto } from "../../types/dtos/EatFoodDto";
+import BreadCrumbs from "../layout/Breadcrumbs";
+import ActionBar from "../layout/ActionBar";
 
 export default function EatFood({}) {
     const { id } = useParams<{id: string}>();

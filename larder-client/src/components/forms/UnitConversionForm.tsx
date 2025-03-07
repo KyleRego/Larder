@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { UnitConversionDto } from "../types/UnitConversionDto";
+import { UnitConversionDto } from "../../types/dtos/UnitConversionDto";
 import UnitsSelect from "./UnitsSelect";
 
 export default function UnitConversionForm({handleSubmit, handleCancel, initialUnitConversion}

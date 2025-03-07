@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { QuantityDto } from "../types/QuantityDto";
-import UnitsSelect from "../components/UnitsSelect";
+import { QuantityDto } from "../../types/dtos/QuantityDto";
+import UnitsSelect from "./UnitsSelect";
 
 export default function QuantityInput(
         { quantityLabel, initialQuantity, handleQuantityChange }

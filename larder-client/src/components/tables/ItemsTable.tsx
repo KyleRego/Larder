@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import { ItemDto } from "../../types/ItemDto";
+import { ItemDto } from "../../types/dtos/ItemDto";
 import { ItemSortOptions } from "../../types/ItemSortOptions";
 import SortingTableHeader from "../SortingTableHeader";
 import { apiClient } from "../../util/axios";

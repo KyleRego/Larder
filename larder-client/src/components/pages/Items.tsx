@@ -1,10 +1,10 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import ItemsTable from "../components/tables/ItemsTable";
+import ItemsTable from "../tables/ItemsTable";
 import { Link } from "react-router-dom";
-import SearchBox from "../components/SearchBox";
-import FoodsTable from "../components/tables/FoodsTable";
-import ActionBar from "../ActionBar";
-import BreadCrumbs from "../Breadcrumbs";
+import SearchBox from "../SearchBox";
+import FoodsTable from "../tables/FoodsTable";
+import ActionBar from "../layout/ActionBar";
+import BreadCrumbs from "../layout/Breadcrumbs";
 
 enum TableVersions {
     AllItems = "All Items",

@@ -1,12 +1,12 @@
 import { useNavigate, useParams } from "react-router";
 import ItemForm from "../forms/ItemForm";
 import { useEffect, useState } from "react";
-import { ItemDto } from "../types/ItemDto";
-import { useApiRequest } from "../hooks/useApiRequest";
-import Loading from "../components/Loading";
+import { ItemDto } from "../../types/dtos/ItemDto";
+import { useApiRequest } from "../../hooks/useApiRequest";
+import Loading from "../Loading";
 import { Link } from "react-router-dom";
-import BreadCrumbs from "../Breadcrumbs";
-import ActionBar from "../ActionBar";
+import BreadCrumbs from "../layout/Breadcrumbs";
+import ActionBar from "../layout/ActionBar";
 
 export default function EditItem() {
     const { handleRequest } = useApiRequest();

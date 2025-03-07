@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { MessageContext } from "../contexts/MessageContext";
-import { ApiResponseType } from "../types/ApiResponse";
+import { MessageContext } from "../../contexts/MessageContext";
+import { ApiResponseType } from "../../types/ApiResponse";
 
 export default function MessageDisplay() {
     const { message, setMessage } = useContext(MessageContext)

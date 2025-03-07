@@ -1,18 +1,18 @@
 import { createBrowserRouter } from 'react-router-dom';
-import App from './App';
-import Index from './pages/Index';
-import NewItem from './pages/NewItem';
-import Items from './pages/Items';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Units from './pages/Units';
-import NewUnit from './pages/NewUnit';
-import UnitPage from './pages/Unit';
-import EditUnit from './pages/EditUnit';
-import Item from './pages/Item';
-import EditItem from './pages/EditItem';
-import EatFood from './pages/EatFood';
-import FoodLog from './pages/FoodLog';
+import App from './components/layout/App';
+import Index from './components/pages/Index';
+import NewItem from './components/pages/NewItem';
+import Items from './components/pages/Items';
+import Login from './components/pages/Login';
+import Register from './components/pages/Register';
+import Units from './components/pages/Units';
+import NewUnit from './components/pages/NewUnit';
+import UnitPage from './components/pages/Unit';
+import EditUnit from './components/pages/EditUnit';
+import Item from './components/pages/Item';
+import EditItem from './components/pages/EditItem';
+import EatFood from './components/pages/EatFood';
+import FoodLog from './components/pages/FoodLog';
 
 export const router = createBrowserRouter([{
     path: "/",

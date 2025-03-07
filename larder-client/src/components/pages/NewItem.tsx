@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import ItemForm from "../forms/ItemForm";
-import { ItemDto } from "../types/ItemDto";
-import { useApiRequest } from "../hooks/useApiRequest";
-import ActionBar from "../ActionBar";
-import BreadCrumbs from "../Breadcrumbs";
+import { ItemDto } from "../../types/ItemDto";
+import { useApiRequest } from "../../hooks/useApiRequest";
+import ActionBar from "../layout/ActionBar";
+import BreadCrumbs from "../layout/Breadcrumbs";
 
 export default function NewItem() {
     const { handleRequest } = useApiRequest();

@@ -1,13 +1,13 @@
 import { Outlet } from 'react-router';
 import { useEffect, useState } from 'react';
-import { UnitsContext } from './contexts/UnitsContext';
-import { apiClient } from './util/axios';
-import { UnitDto } from './types/UnitDto';
-import { AuthedContext } from './contexts/AuthedContext';
+import { UnitsContext } from '../../contexts/UnitsContext';
+import { apiClient } from '../../util/axios';
+import { UnitDto } from '../../types/dtos/UnitDto';
+import { AuthedContext } from '../../contexts/AuthedContext';
 import { NavBar } from './NavBar';
-import { MessageContext } from './contexts/MessageContext';
-import MessageDisplay from './components/MessageDisplay';
-import { Message } from './types/Message';
+import { MessageContext } from '../../contexts/MessageContext';
+import MessageDisplay from './MessageDisplay';
+import { Message } from '../../types/Message';
 
 export default function App() {
     const [authed, setAuthed] = useState(false);

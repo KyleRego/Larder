@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ItemDto } from "../types/ItemDto";
-import { useApiRequest } from "../hooks/useApiRequest";
-import Loading from "../components/Loading";
-import NutritionCard from "../components/cards/NutritionCard";
-import ItemCard from "../components/cards/ItemCard";
-import BreadCrumbs from "../Breadcrumbs";
-import ActionBar from "../ActionBar";
+import { ItemDto } from "../../types/dtos/ItemDto";
+import { useApiRequest } from "../../hooks/useApiRequest";
+import Loading from "../Loading";
+import NutritionCard from "../cards/NutritionCard";
+import ItemCard from "../cards/ItemCard";
+import BreadCrumbs from "../layout/Breadcrumbs";
+import ActionBar from "../layout/ActionBar";
 
 export default function Item() {
     const { id } = useParams<{id: string}>();

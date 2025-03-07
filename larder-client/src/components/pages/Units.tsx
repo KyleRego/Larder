@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
-import UnitsTable from "../components/tables/UnitsTable";
+import UnitsTable from "../tables/UnitsTable";
 import { useContext, useEffect, useState } from "react";
-import { UnitsContext } from "../contexts/UnitsContext";
-import { UnitDto } from "../types/UnitDto";
-import { apiClient } from "../util/axios";
-import { UnitSortOptions } from "../types/UnitSortOptions";
-import SearchBox from "../components/SearchBox";
-import ActionBar from "../ActionBar";
-import BreadCrumbs from "../Breadcrumbs";
+import { UnitsContext } from "../../contexts/UnitsContext";
+import { UnitDto } from "../../types/dtos/UnitDto";
+import { apiClient } from "../../util/axios";
+import { UnitSortOptions } from "../../types/UnitSortOptions";
+import SearchBox from "../SearchBox";
+import ActionBar from "../layout/ActionBar";
+import BreadCrumbs from "../layout/Breadcrumbs";
 
 export default function Units() {
     const { units, setUnits } = useContext(UnitsContext);
