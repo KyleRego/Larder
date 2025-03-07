@@ -6,11 +6,12 @@ namespace Larder.Controllers;
 [ApiController, Authorize, Route("api/[controller]")]
 public abstract class AppControllerBase : Controller
 {
-    protected ApiResponse<object> FromError(ApplicationException e)
+    protected ApiResponse<T?> FromError<T>(ApplicationException e)
     {
         return new(
+            default,
             e.Message,
-            ApiResponseType.Danger
+            ApiResponseType.Warning
         );
     }
 }

@@ -19,20 +19,10 @@ export default function MessageDisplay() {
             borderCss = "border-success";
             btnCss = "btn-outline-success"
             break;
-        case ApiResponseType.Info:
-            bgColorCss = "bg-info";
-            borderCss = "border-info";
-            btnCss = "btn-outline-info"
-            break;
         case ApiResponseType.Warning:
             bgColorCss = "bg-warning-subtle";
             borderCss = "border-warning";
             btnCss = "btn-warning"
-            break;
-        case ApiResponseType.Danger:
-            bgColorCss = "bg-danger";
-            borderCss = "border-black";
-            btnCss = "btn-primary"
             break;
     }
 

@@ -1,9 +1,9 @@
 export enum ApiResponseType {
-    Success, Danger, Warning, Info
+    Success, Warning
 }
 
 export type ApiResponse<T> = {
-    data: T,
+    data: T | null,
     message: string,
     type: ApiResponseType
 }

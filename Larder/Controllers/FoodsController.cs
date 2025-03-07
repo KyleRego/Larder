@@ -26,7 +26,7 @@ public class FoodsController(IFoodService foodService) : AppControllerBase
     }
 
     [HttpPost("EatFood/{id}")]
-    public async Task<ActionResult<ApiResponse<ItemDto>>>
+    public async Task<ActionResult<ApiResponse<ItemDto?>>>
                                 EatFood(string id, EatFoodDto dto)
     {
         if (dto.ItemId != id) return BadRequest();
@@ -35,11 +35,11 @@ public class FoodsController(IFoodService foodService) : AppControllerBase
         {
             (ItemDto updatedFood, ItemDto eatenFood) = await _foodService.EatFood(dto);
 
-            return new ApiResponse<ItemDto>(updatedFood, "Food eaten!", ApiResponseType.Success);
+            return new ApiResponse<ItemDto?>(updatedFood, "Food eaten!", ApiResponseType.Success);
         }
         catch(ApplicationException e)
         {
-            return UnprocessableEntity(FromError(e));
+            return UnprocessableEntity(FromError<ItemDto>(e));
         }
     }
 

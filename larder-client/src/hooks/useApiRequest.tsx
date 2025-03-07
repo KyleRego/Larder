@@ -30,19 +30,19 @@ export function useApiRequest() {
                             break;
                         case 401:
                             setMessage({ text: "Unauthorized access.",
-                                            type: ApiResponseType.Danger });
+                                            type: ApiResponseType.Warning });
                             break;
                         default:
                             setMessage({ text: "An unexpected error occurred.",
-                                            type: ApiResponseType.Danger });
+                                            type: ApiResponseType.Warning });
                     }
                 } else {
                     setMessage({ text: "A network error occurred; please try again.",
-                                            type: ApiResponseType.Danger });
+                                            type: ApiResponseType.Warning });
                 }
             } else {
                 setMessage({ text: "An unexpected error occurred.",
-                                            type: ApiResponseType.Danger });
+                                            type: ApiResponseType.Warning });
             }
 
             return null;

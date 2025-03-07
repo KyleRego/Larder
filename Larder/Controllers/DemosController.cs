@@ -14,13 +14,14 @@ public class DemosController(IDemoService demoService) : AppControllerBase
         try
         {
             await _demoService.CreateDemo();
+
             return new ApiResponse<object>(
                 "Demo set up successfully! Thank you for trying Larder 🤍 it is a work in progress!",
                 ApiResponseType.Success);
         }
         catch (ApplicationException e)
         {
-            return UnprocessableEntity(FromError(e));
+            return UnprocessableEntity(FromError<object>(e));
         }
     }
 }

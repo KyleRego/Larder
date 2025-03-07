@@ -45,18 +45,16 @@ public class UnitConversionService(
         string targetUnitId = dto.TargetUnitId;
 
         if (string.IsNullOrWhiteSpace(unitId) || string.IsNullOrWhiteSpace(targetUnitId))
-        {
-            throw new ApplicationException("A unit conversion must be between two units");
-        } else if (unitId == targetUnitId)
-        {
-            throw new ApplicationException("A unit conversion cannot be made for a unit and itself");
-        }
+            throw new ApplicationException("A unit conversion must be between two units.");
+
+        if (unitId == targetUnitId)
+            throw new ApplicationException("A unit conversion cannot be made for a unit and itself.");
 
         UnitType unitType1 = await _unitService.GetUnitType(unitId);
         UnitType unitType2 = await _unitService.GetUnitType(targetUnitId);
 
         if (unitType1 != unitType2)
-            throw new ApplicationException("A unit conversion cannot be created between units of different types");
+            throw new ApplicationException("A unit conversion cannot be created between units of different types.");
 
         UnitConversion entity = new(CurrentUserId(), unitId,
                         targetUnitId!, dto.TargetUnitsPerUnit);

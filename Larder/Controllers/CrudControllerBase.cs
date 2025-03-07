@@ -17,23 +17,22 @@ public abstract class CrudControllerBase<TDto, TEntity>
         Regex.Replace(typeof(TEntity).Name, "(?<!^)([A-Z])", " $1").ToLower();
 
     [HttpPost]
-    public async Task<ActionResult<ApiResponse<TDto>>> Create(TDto dto)
+    public async Task<ActionResult<ApiResponse<TDto?>>> Create(TDto dto)
     {
         try
         {
             TDto resultDto = await _crudService.Add(dto);
-            return new ApiResponse<TDto>(resultDto,
-                $"Successfully created {entityName}",
-                ApiResponseType.Success);
+            return new ApiResponse<TDto?>(
+                resultDto, $"Successfully created {entityName}", ApiResponseType.Success);
         }
         catch (ApplicationException e)
         {
-            return UnprocessableEntity(new {error = e.Message});
+            return FromError<TDto>(e);
         }
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ApiResponse<TDto>>> Show(string id)
+    public async Task<ActionResult<ApiResponse<TDto?>>> Show(string id)
     {
         try
         {
@@ -41,43 +40,44 @@ public abstract class CrudControllerBase<TDto, TEntity>
 
             if (resultDto == null) return NotFound();
 
-            return new ApiResponse<TDto>(resultDto, "", ApiResponseType.Success);
+            return new ApiResponse<TDto?>(resultDto, "", ApiResponseType.Success);
         }
         catch (ApplicationException)
         {
-            return UnprocessableEntity();
+            return NotFound();
         }
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<ApiResponse<TDto>>> Update(TDto dto, string id)
+    public async Task<ActionResult<ApiResponse<TDto?>>> Update(TDto dto, string id)
     {
         if (dto.Id != id) return BadRequest();
 
         try
         {
             TDto resultDto = await _crudService.Update(dto);
-            return new ApiResponse<TDto>(resultDto,
-                $"Updated {entityName} successfully",
-                ApiResponseType.Success);
+
+            return new ApiResponse<TDto?>(
+                resultDto, $"Updated {entityName} successfully", ApiResponseType.Success);
         }
         catch (ApplicationException e)
         {
-            return UnprocessableEntity(new {error = e.Message});
+            return FromError<TDto?>(e);
         }
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(string id)
+    public async Task<ActionResult<ApiResponse<object?>>> Delete(string id)
     {
         try
         {
             await _crudService.Delete(id);
+
             return Ok();
         }
         catch(ApplicationException e)
         {
-            return UnprocessableEntity(new { error = e.Message }); 
+            return FromError<object>(e); 
         }
     }
 }

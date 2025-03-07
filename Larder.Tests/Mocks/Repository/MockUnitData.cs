@@ -48,6 +48,17 @@ public class MockUnitData : MockRepositoryBase, IUnitRepository
         throw new NotImplementedException();
     }
 
+    public Task<Unit?> GetUnitOnly(string userId, string id)
+    {
+        Unit? unit = units.FirstOrDefault(u =>
+            u.UserId == userId && u.Id == id);
+
+        if (unit != null)
+            Assert.Empty(unit.Conversions);
+
+        return Task.FromResult(unit);
+    }
+
     public Task<Unit> Insert(Unit newEntity)
     {
         throw new NotImplementedException();
