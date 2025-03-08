@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Configuration;
-using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace Larder.UITests.Extension;
 
@@ -34,4 +34,54 @@ public static class ChromeDriverExtension
             shooMessageBtn.Click();
         }
     }
+
+    public static void ClickNewSomethingDropdown(this IWebDriver driver)
+    {
+        IWebElement dropdown;
+        try
+        {
+            dropdown = driver.FindElement(By.CssSelector(".d-none.d-lg-block #new-something-dropdown"));
+        }
+        catch
+        {
+            dropdown = driver.FindElement(By.CssSelector(".d-lg-none #new-something-dropdown"));
+        }
+        dropdown.Click();
+    }
+
+    public static void ClickLinkByText(this IWebDriver driver, string text)
+    {
+        IWebElement link = driver.FindElement(By.LinkText(text));
+        link.Click();
+    }
+
+    public static void FillTextInput(
+        this IWebDriver driver, string inputName, string keys)
+    {
+        IWebElement input = driver.FindElement(By.CssSelector($"input[name='{inputName}']"));
+        input.SendKeys(keys);
+    }
+
+    public static void SelectOptionByText(
+        this IWebDriver driver, string selectName, string optionText)
+    {
+        IWebElement selectElement =
+            driver.FindElement(By.CssSelector($"select[name='{selectName}']"));
+        SelectElement select = new(selectElement);
+        select.SelectByText(optionText);
+    }
+
+    public static void ClickButtonByText(this IWebDriver driver, string buttonText)
+    {
+        var buttons = driver.FindElements(By.TagName("button"));
+        foreach (IWebElement button in buttons)
+        {
+            if (button.Text.Trim() == buttonText)
+            {
+                button.Click();
+                return;
+            }
+        }
+    }
+
 }

@@ -1,6 +1,6 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 
-import { UnitDto } from "../types/UnitDto";
+import { UnitDto } from "../types/dtos/UnitDto";
 
 interface UnitsContextType {
     units: UnitDto[];

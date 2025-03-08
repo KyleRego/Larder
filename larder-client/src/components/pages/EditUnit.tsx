@@ -3,10 +3,8 @@ import { UnitDto } from "../../types/dtos/UnitDto";
 import { useNavigate, useParams } from "react-router";
 import { apiClient } from "../../util/axios";
 import Loading from "../Loading";
-import { UnitType } from "../../types/dtos/UnitType";
 import UnitForm from "../forms/UnitForm";
 import { MessageContext } from "../../contexts/MessageContext";
-import { ApiResponse } from "../../types/ApiResponse";
 import ActionBar from "../layout/ActionBar";
 import BreadCrumbs from "../layout/Breadcrumbs";
 import { Link } from "react-router-dom";
@@ -35,20 +33,16 @@ export default function EditUnit() {
         getUnit();
     }, [id]);
 
-    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        const name = formData.get("name") as string;
-        const unitType = parseInt(formData.get("type") as string) as UnitType;
-
-        const editedUnit = new UnitDto(unitId, name, unitType, []);
-
-        apiClient.put<ApiResponse<UnitDto>>(`/api/units/${unitId}`, editedUnit).then(res => {
-            setMessage({text: res.data.message, type: res.data.type})
-            navigate(`/units/${res.data.data.id}`);
-        }).catch(error => {
-            console.error(error);
+    async function handleSubmit(unit: UnitDto) {
+        const res = await handleRequest<UnitDto>({
+            method: "put",
+            url: `/api/units/${unitId}`,
+            data: unit
         });
+
+        if (res) {
+            navigate(`/units/${unit.id}`);
+        }
     }
 
     async function handleDelete() {
@@ -77,8 +71,8 @@ export default function EditUnit() {
                 </li>
             </BreadCrumbs>
 
-            <div className="my-4 container flex-grow-1">
-                <UnitForm unit={unit} handleSubmit={handleSubmit} />
+            <div className="mt-3 container flex-grow-1">
+                <UnitForm initialUnit={unit} handleSubmit={handleSubmit} />
             </div>
 
             <ActionBar>

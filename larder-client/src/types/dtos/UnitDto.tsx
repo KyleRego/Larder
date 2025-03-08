@@ -1,5 +1,5 @@
 import { UnitConversionDto } from "./UnitConversionDto";
-import { UnitType } from "./UnitType"
+import { UnitType } from "./UnitType";
 
 export class UnitDto {
     id: string | null;

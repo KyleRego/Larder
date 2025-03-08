@@ -2,9 +2,6 @@ import { useEffect, useState } from "react";
 import { UnitDto } from "../../types/dtos/UnitDto";
 import { useParams } from "react-router";
 import Loading from "../Loading";
-import UnitConversionForm from "../forms/UnitConversionForm";
-import { UnitConversionDto } from "../../types/dtos/UnitConversionDto";
-import UnitConversionDiv from "../UnitConversion";
 import { Link } from "react-router-dom";
 import { useApiRequest } from "../../hooks/useApiRequest";
 import BreadCrumbs from "../layout/Breadcrumbs";
@@ -13,9 +10,7 @@ import UnitCard from "../cards/UnitCard";
 
 export default function UnitPage() {
     const [unit, setUnit] = useState<UnitDto | null>(null);
-    const [adding, setAdding] = useState<Boolean>(false)
     const { id } = useParams<{ id: string }>();
-    const [refreshCounter, setRefreshCounter] = useState(0);
     const { handleRequest } = useApiRequest();
 
     useEffect(() => {
@@ -31,43 +26,10 @@ export default function UnitPage() {
         }
 
         getUnit();
-    }, [refreshCounter]);
+    }, [id]);
 
     if (unit === null) {
         return <Loading />
-    }
-
-    const unitConversions = unit.conversions.map(uc => {
-        return (
-            <div key={uc.id} className="mt-2">
-                <UnitConversionDiv unitConversion={uc} parentRefresh={() => setRefreshCounter(refreshCounter + 1)} />
-            </div>
-        );
-    });
-
-    async function handleCreateConversion(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-
-        const formData = new FormData(e.currentTarget);
-        const targetUnitsPerUnit = parseFloat(formData.get("targetUnitsPerUnit") as string)
-
-        const newUnitConversion: UnitConversionDto = {
-            id: null,
-            unitId: unit!.id!,
-            targetUnitsPerUnit: targetUnitsPerUnit,
-            targetUnitId: formData.get("targetUnitId") as string
-        };
-
-        const res = await handleRequest<UnitConversionDto>({
-            method: "post",
-            url: "/api/UnitConversions",
-            data: newUnitConversion
-        });
-
-        if (res) {
-            setAdding(false);
-            setRefreshCounter(refreshCounter + 1);
-        }
     }
 
     return (
@@ -83,30 +45,8 @@ export default function UnitPage() {
                 </li>
             </BreadCrumbs>
 
-            <div className="my-4 container flex-grow-1">
+            <div className="flex-grow-1 container my-4">
                 <UnitCard unit={unit} />
-
-                <div className="mt-4">
-                    <h2 className="fs-3">Unit Conversions:</h2>
-
-                    <div className="mt-4 d-flex flex-column align-items-start">
-                        {unitConversions}
-                    </div>
-
-                    <div className="mt-2 d-flex justify-content-start">
-                    { adding ? (
-                        <UnitConversionForm handleSubmit={handleCreateConversion}
-                                            initialUnitConversion={null}
-                                            handleCancel={() => setAdding(false)} />
-                    ) : (
-                        <button onClick={() => setAdding(true)} 
-                                className="btn btn-outline-primary"
-                                type="button">
-                            Add conversion
-                        </button> 
-                    )}
-                    </div>
-                </div>
             </div>
 
             <ActionBar>

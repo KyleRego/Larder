@@ -24,7 +24,7 @@ export default function Index() {
             <div className="container flex-grow-1">
                 <h1 className="my-4">Larder</h1>
                 <p className="mb-4">
-                    Larder is an inventory taking app with a focus on foods, ingredients, cooking, and nutrition. It is free and open source: <a href="https://github.com/KyleRego/Larder">Larder source code</a>
+                    Larder is an inventory-taking application for meticulously analyzing the cost and nutrition of foods and ingredients as they are bought, cooked, and consumed. It is free and open source: <a href="https://github.com/KyleRego/Larder">Larder source code</a>
                 </p>
                 <p className="">
                     Larder is not ready to use yet! It is being developed - please check back later.

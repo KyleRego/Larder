@@ -1,32 +1,24 @@
 import { Link, useNavigate } from "react-router-dom";
 import UnitForm from "../forms/UnitForm";
-import { UnitType } from "../../types/dtos/UnitType";
-import { apiClient } from "../../util/axios";
 import { UnitDto } from "../../types/dtos/UnitDto";
-import { ApiResponse } from "../../types/ApiResponse";
-import { useContext } from "react";
-import { MessageContext } from "../../contexts/MessageContext";
 import BreadCrumbs from "../layout/Breadcrumbs";
 import ActionBar from "../layout/ActionBar";
+import { useApiRequest } from "../../hooks/useApiRequest";
 
 export default function NewUnit() {
     const navigate = useNavigate();
-    const { setMessage } = useContext(MessageContext);
+    const { handleRequest } = useApiRequest();
 
-    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        const name = formData.get("name") as string;
-        const unitType = parseInt(formData.get("type") as string) as UnitType;
-
-        const newUnit = new UnitDto(null, name, unitType, []);
-
-        apiClient.post<ApiResponse<UnitDto>>("/api/units", newUnit).then(res => {
-            setMessage({text: res.data.message, type: res.data.type})
-            navigate("/units");
-        }).catch(error => {
-            console.error(error);
+    async function handleSubmit(unit: UnitDto) {
+        const res = await handleRequest<UnitDto>({
+            method: "post",
+            url: "/api/units",
+            data: unit
         });
+
+        if (res) {
+            navigate(`/units/${res.id}`);
+        }
     }
 
     return (
@@ -43,7 +35,7 @@ export default function NewUnit() {
             </BreadCrumbs>
 
             <div className="my-4 flex-grow-1 container">
-                <UnitForm unit={null} handleSubmit={handleSubmit} />
+                <UnitForm initialUnit={null} handleSubmit={handleSubmit} />
             </div>
 
             <ActionBar>

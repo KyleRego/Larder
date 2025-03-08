@@ -12,6 +12,7 @@ export function NavBar() {
     const { setMessage } = useContext(MessageContext);
 
     function handleLogout() {
+        // TODO: Use handleApiRequest here
         apiClient.post("/logout").then(() => {
             setAuthed(false);
             setCollapsed(true);
@@ -31,7 +32,10 @@ export function NavBar() {
                 <Link to="/" className="navbar-brand">Larder</Link>
                 {authed === true ?
                 <>
-                <div className="d-flex column-gap-3">
+                <div className="d-flex column-gap-3 align-items-center">
+                    <div className="d-lg-none">
+                        <NewSomethingDropdown />
+                    </div>
                     <button onClick={() => setCollapsed(!collapsed)} className="navbar-toggler" type="button" title="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
@@ -50,12 +54,13 @@ export function NavBar() {
                         <li className="nav-item">
                             <Link className="nav-link" to="/food-log">Food log</Link>
                         </li>
-
-                        <NewSomethingDropdown />
                     </ul>
                     
                     <div className="d-none d-lg-block">
-                        {logoutBtn}
+                        <div className="d-flex align-items-center column-gap-5">
+                            <NewSomethingDropdown />
+                            {logoutBtn}
+                        </div>
                     </div>
                 </div>
                 </> :
@@ -81,27 +86,20 @@ function NewSomethingDropdown() {
     ];
     
     const dropdownOptions = newSomethings.map((data, index) => {
-        return <li
-                key={index}
-                role="button">
-            <Link className="dropdown-item" to={data[1]}
-                onClick={() => setExpanded(!expanded)}>
-                New {data[0]}
-            </Link>
-        </li>;
+        return <Link className="dropdown-item" key={index} to={data[1]} onClick={() => setExpanded(!expanded)}>New {data[0]}</Link>;
     });
     
-        return <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle" title="New dropdown"
-                    href="#"
-                    role="button"
-                           
-                            onClick={() => setExpanded(!expanded)}>
-                    ➕
-                </a>
-                <ul className={`dropdown-menu ${expanded === true ? "d-block" : "d-none"}`}
-                    style={{maxWidth: "12rem"}}   >
-                    {dropdownOptions}
-                </ul>
-            </li>;
+    return <div className="nav-item dropdown" id="new-something-dropdown">
+            <a className="nav-link dropdown-toggle" title="New dropdown"
+                href="#"
+                role="button"
+                        
+                        onClick={() => setExpanded(!expanded)}>
+                ➕
+            </a>
+            <div className={`dropdown-menu ${expanded === true ? "d-block" : "d-none"}`}
+                style={{maxWidth: "12rem"}}   >
+                {dropdownOptions}
+            </div>
+        </div>;
 }

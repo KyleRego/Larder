@@ -19,7 +19,7 @@ export default function QuantitySpan({quantity} : {
         }
     }
 
-    var text: string = `${quantity.amount}`;
+    let text: string = `${quantity.amount}`;
     if (quantity.unitName) text += ` ${quantity.unitName}`;
 
     return <span>{text}</span>;
