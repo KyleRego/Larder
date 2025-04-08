@@ -31,5 +31,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             .HasOne(uc => uc.TargetUnit)
             .WithMany(u => u.TargetConversions)
             .HasForeignKey(uc => uc.TargetUnitId);
+
+        modelBuilder.Entity<Item>()
+            .HasOne(i => i.ContainedIn)
+            .WithMany(c => c.Items)
+            .HasForeignKey(i => i.ContainedInId)
+            .OnDelete(DeleteBehavior.Restrict);
+
     }
 }

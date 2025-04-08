@@ -8,6 +8,8 @@ public class ItemDto : EntityDto<Item>
     public string? Description { get; set; }
     public NutritionDto? Nutrition { get; set; }
     public QuantityDto? Quantity { get; set; }
+    public bool IsContainer { get; set; }
+    public List<ItemDto> ContainedItems { get; set; } = [];
 
     public static ItemDto FromEntity(Item item)
     {

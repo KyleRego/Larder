@@ -13,6 +13,7 @@ public class ItemBuilder(string userId, string name,
     private Quantity _quantity = Quantity.One();
     private NutritionBuilder? _nutritionBuilder;
     private ConsumedTimeBuilder? _consumedTimeBuilder;
+    private List<Item>? _containedItems;
 
     public ItemBuilder WithQuantity(Quantity quantity)
     {
@@ -52,6 +53,18 @@ public class ItemBuilder(string userId, string name,
         return this;
     }
 
+    public ItemBuilder WithContainer()
+    {
+        _containedItems = [];
+        return this;
+    }
+
+    public ItemBuilder WithContainedItems(List<Item> items)
+    {
+        _containedItems = items;
+        return this;
+    }
+
     public Item Build()
     {
         Item item = new(_userId, _name, _description)
@@ -66,9 +79,17 @@ public class ItemBuilder(string userId, string name,
         if (_consumedTimeBuilder != null)
             item.ConsumedTime = _consumedTimeBuilder.Build(item);
 
+        if (_containedItems != null)
+            item.Container = new Container()
+            {
+                Item = item,
+                Items = _containedItems
+            };
+
         return item;
     }
 
+    // Maybe this shouldn't exist...
     public ItemDto BuildDto()
     {
         ItemDto dto = new()

@@ -27,6 +27,8 @@ public class ItemRepository(AppDbContext dbContext)
                                 .Include(item => item.Nutrition)
                                 .Include(item => item.Quantity)
                                 .Include(item => item.Recipes)
+                                .Include(item => item.Container)
+                                .ThenInclude(container => container!.Items)
                                 .FirstOrDefaultAsync(
                             item => item.Id == id && item.UserId == userId);
     }

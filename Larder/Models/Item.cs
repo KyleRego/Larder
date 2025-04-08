@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using Larder.Dtos;
 using Larder.Models.ItemComponents;
 
@@ -33,8 +34,17 @@ public class Item(string userId, string name, string? description = null)
     public Nutrition? Nutrition { get; set; }
 
     public ConsumedTime? ConsumedTime { get; set; }
+
     // TODO: Allow uploading an image for the item
 
     public List<RecipeIngredient> RecipeIngredients { get; set; } = [];
     public List<Recipe> Recipes { get; set; } = [];
+
+    public Container? Container { get; set; }
+
+    public string? ContainedInId { get; set; }
+
+    [ForeignKey(nameof(ContainedInId))]
+    public Container? ContainedIn { get; set; }
+
 }

@@ -90,8 +90,15 @@ public class MockItemData : MockRepositoryBase, IItemRepository
                             .WithSodium(253))
                         .Build();
 
+        Item pencil = new ItemBuilder(testUserId, "Black pencil").Build();
+        Item notebook = new ItemBuilder(testUserId, "Composition notebook").Build();
+        Item backpack = new ItemBuilder(testUserId, "Backpack")
+                .WithId("backpack")
+                .WithContainedItems([pencil, notebook]).Build();
+
         _items.AddRange([
-            apples, peanutButter, wheatBread, butter, rice, chickenLegQuarters
+            apples, peanutButter, wheatBread, butter, rice, chickenLegQuarters,
+            pencil, notebook, backpack
         ]);
     }
 
@@ -113,17 +120,23 @@ public class MockItemData : MockRepositoryBase, IItemRepository
         return Task.FromResult(item);
     }
 
-    public Task<List<Item>> GetAll(string userId, ItemSortOptions sortOption = ItemSortOptions.AnyOrder, string? search = null)
+    public Task<List<Item>> GetAll(string userId,
+                                ItemSortOptions sortOption = ItemSortOptions.AnyOrder,
+                                string? search = null)
+    {
+        return Task.FromResult<List<Item>>([.. _items]);
+    }
+
+    public Task<List<Item>> GetAllFoods(string userId,
+                                    FoodSortOptions sortOption = FoodSortOptions.AnyOrder,
+                                    string? search = null)
     {
         throw new NotImplementedException();
     }
 
-    public Task<List<Item>> GetAllFoods(string userId, FoodSortOptions sortOption = FoodSortOptions.AnyOrder, string? search = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<Item>> GetAllIngredients(string userId, IngredientSortOptions sortOption = IngredientSortOptions.AnyOrder, string? search = null)
+    public Task<List<Item>> GetAllIngredients(string userId,
+                                    IngredientSortOptions sortOption = IngredientSortOptions.AnyOrder,
+                                    string? search = null)
     {
         throw new NotImplementedException();
     }

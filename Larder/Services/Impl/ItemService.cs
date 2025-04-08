@@ -10,7 +10,7 @@ namespace Larder.Services.Impl;
 public class ItemService(IServiceProviderWrapper serviceProvider,
                                         IItemRepository itemData)
         : CrudServiceBase<ItemDto, Item>(serviceProvider, itemData),
-        IItemService
+            IItemService
 {
     private readonly IItemRepository _itemData = itemData;
 
@@ -18,6 +18,11 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
     {
         Item item = await _itemData.FindOrCreate(CurrentUserId(), name);
         return MapToDto(item);
+    }
+
+    public Task<List<ItemDto>> GetItems()
+    {
+        return GetItems(ItemSortOptions.AnyOrder, null);
     }
 
     public async Task<List<ItemDto>> GetItems(ItemSortOptions sortBy,
@@ -31,6 +36,9 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
         return items.Select(ItemDto.FromEntity).ToList();
     }
 
+    // To prevent the recursion becoming a problem if there was a cycle
+    // this could delegate to MapToDtoSafe(Item item, HashSet<string> visited)
+    // see https://chatgpt.com/c/67f57e7b-a978-8002-9974-621fb5315262 (if Kyle)
     protected override ItemDto MapToDto(Item item)
     {
         ItemDto itemDto = new()
@@ -44,14 +52,23 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
 
             Quantity = (item.Quantity != null)
                 ? QuantityDto.FromEntity(item.Quantity)
-                : null
+                : null,
+
+            IsContainer = item.Container != null,
+
+            ContainedItems = item.Container != null ?
+                [.. item.Container.Items.Select(MapToDto)] : [],
         };
 
         return itemDto;
     }
 
-    protected override Task<Item> MapToEntity(ItemDto dto)
+    protected async override Task<Item> MapToEntity(ItemDto dto)
     {
+        string userId = CurrentUserId();
+
+        Item? existing = (dto.Id != null) ? await _itemData.Get(userId, dto.Id) : null;
+
         ItemBuilder builder = new(CurrentUserId(), dto.Name, dto.Description);
 
         if (dto.Id != null)
@@ -77,6 +94,21 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
             );
         }
 
-        return Task.FromResult(builder.Build());
+        if (dto.IsContainer)
+            AddContainer(builder, existing);
+
+        return builder.Build();
+    }
+
+    private static void AddContainer(ItemBuilder builder, Item? existing)
+    {
+        if (existing?.Container == null)
+        {
+            builder.WithContainer();
+        }
+        else if (existing?.Container != null)
+        {
+            builder.WithContainedItems(existing.Container.Items);
+        }
     }
 }

@@ -43,7 +43,9 @@ public abstract class CrudServiceBase<TDto, TEntity>
     public async Task<TDto> Update(TDto dto)
     {
         TEntity entity = await MapToEntity(dto);
+
         TEntity updatedEntity = await _repository.Update(entity);
+
         return MapToDto(updatedEntity);
     }
 
