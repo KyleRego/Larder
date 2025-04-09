@@ -129,8 +129,14 @@ public class MockItemData : MockRepositoryBase, IItemRepository
         return Task.FromResult<List<Item>>([.. _items]);
     }
 
-    public Task<List<Item>> GetAllFoods(string userId,
-                                    FoodSortOptions sortOption = FoodSortOptions.AnyOrder,
+    public Task<List<Item>> GetAllContainers(string userId)
+    {
+        return Task.FromResult<List<Item>>(
+            [.. _items.Where(item => item.Container != null)]);
+    }
+
+    public Task<List<Item>> GetAllFoods(
+        string userId, FoodSortOptions sortOption = FoodSortOptions.AnyOrder,
                                     string? search = null)
     {
         throw new NotImplementedException();

@@ -72,6 +72,13 @@ public class ItemRepository(AppDbContext dbContext)
         return await query.ToListAsync();
     }
 
+    public Task<List<Item>> GetAllContainers(string userId)
+    {
+        return _dbContext.Items.Where(
+            item => item.UserId == userId && item.Container != null)
+                                .ToListAsync();
+    }
+
     public Task<List<Item>> GetAllFoods(string userId,
             FoodSortOptions sortBy = FoodSortOptions.AnyOrder, string? search = null)
     {

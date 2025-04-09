@@ -12,13 +12,29 @@ public abstract class ItemRepositoryTestsBase : RepositoryTestBase
     protected int _numEatenFoods;
     protected int _numFoods;
     protected int _numTotalItems;
+    protected int _numContainers;
 
     public ItemRepositoryTestsBase()
     {
         SetupGenericItems();
         SetupFoods();
         SetupConsumedFoods();
+        SetupContainers();
         _sut = new ItemRepository(_dbContext);
+    }
+
+    private void SetupContainers()
+    {
+        Item backpack = new ItemBuilder(testUserId, "Backpack", "Item which holds books")
+            .WithContainer()
+            .Build();
+
+        Item[] containers = [backpack];
+
+        _numContainers += containers.Length;
+
+        _dbContext.AddRange(containers);
+        _dbContext.SaveChanges();
     }
 
     private void SetupGenericItems()

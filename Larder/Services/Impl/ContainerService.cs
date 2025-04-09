@@ -1,3 +1,4 @@
+using Larder.Dtos;
 using Larder.Models;
 using Larder.Repository.Interface;
 using Larder.Services.Interface;
@@ -10,7 +11,15 @@ public class ContainerService(IServiceProviderWrapper serviceProvider,
 {
     private readonly IItemRepository _itemData = itemData;
 
-    public async Task PutItemInContainer(string containerItemId, string itemId)
+    public async Task<List<ItemDto>> GetContainers()
+    {
+        List<Item> containers =
+            await _itemData.GetAllContainers(CurrentUserId());
+
+        return [.. containers.Select(ItemDto.FromEntity)];
+    }
+
+    public async Task<ItemDto> PutItemInContainer(string containerItemId, string itemId)
     {
         string userId = CurrentUserId();
 
@@ -25,10 +34,12 @@ public class ContainerService(IServiceProviderWrapper serviceProvider,
 
         containerItem.Container.Items.Add(item);
 
-        await _itemData.Update(containerItem);
+        Item updatedContainer = await _itemData.Update(containerItem);
+
+        return ItemDto.FromEntity(updatedContainer);
     }
 
-    public async Task RemoveItemFromContainer(string containerItemId, string itemId)
+    public async Task<ItemDto> RemoveItemFromContainer(string containerItemId, string itemId)
     {
         string userId = CurrentUserId();
 
@@ -43,6 +54,8 @@ public class ContainerService(IServiceProviderWrapper serviceProvider,
 
         containerItem.Container.Items.Remove(item);
 
-        await _itemData.Update(containerItem);
+        Item updatedContainer = await _itemData.Update(containerItem);
+
+        return ItemDto.FromEntity(updatedContainer);
     }
 }

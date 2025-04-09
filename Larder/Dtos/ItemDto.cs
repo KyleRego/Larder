@@ -22,7 +22,10 @@ public class ItemDto : EntityDto<Item>
                         ? NutritionDto.FromEntity(item.Nutrition) : null,
 
             Quantity = (item.Quantity != null)
-                ? QuantityDto.FromEntity(item.Quantity) : null
+                ? QuantityDto.FromEntity(item.Quantity) : null,
+            
+            ContainedItems = item.Container != null
+                ? [.. item.Container.Items.Select(FromEntity)] : [],
         };
 
         return itemDto;
