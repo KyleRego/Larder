@@ -90,8 +90,10 @@ public class MockItemData : MockRepositoryBase, IItemRepository
                             .WithSodium(253))
                         .Build();
 
-        Item pencil = new ItemBuilder(testUserId, "Black pencil").Build();
-        Item notebook = new ItemBuilder(testUserId, "Composition notebook").Build();
+        Item pencil = new ItemBuilder(testUserId, "Black pencil")
+                        .WithId("black-pencil").Build();
+        Item notebook = new ItemBuilder(testUserId, "Composition notebook")
+                        .WithId("composition-notebook").Build();
         Item backpack = new ItemBuilder(testUserId, "Backpack")
                 .WithId("backpack")
                 .WithContainedItems([pencil, notebook]).Build();

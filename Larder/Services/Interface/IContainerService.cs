@@ -1,8 +1,9 @@
+using Larder.Dtos;
+
 namespace Larder.Services.Interface;
 
 public interface IContainerService
 {
-    Task<bool> PutItemInContainer(string containerItemId, string itemId);
-    Task<bool> RemoveItemFromContainer(string containerItemId, string itemId);
-
+    Task PutItemInContainer(string containerItemId, string itemId);
+    Task RemoveItemFromContainer(string containerItemId, string itemId);
 }
