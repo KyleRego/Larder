@@ -2,7 +2,7 @@ using Larder.Models;
 using Larder.Models.SortOptions;
 using Larder.Repository.Interface;
 
-namespace Larder.Tests.Mocks.Repository;
+namespace Larder.Tests.Services.MockRepository;
 
 public class MockUnitData : MockRepositoryBase, IUnitRepository
 {

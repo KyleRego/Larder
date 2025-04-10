@@ -3,7 +3,7 @@ using Larder.Repository.Impl;
 using Larder.Repository.Interface;
 using Larder.Services.Impl;
 using Larder.Services.Interface;
-using Larder.Tests.Mocks.Repository;
+using Larder.Tests.Services.MockRepository;
 
 namespace Larder.Tests.Services.ItemServiceTests;
 

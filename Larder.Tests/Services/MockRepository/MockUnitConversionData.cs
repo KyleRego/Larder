@@ -1,7 +1,7 @@
 using Larder.Models;
 using Larder.Repository.Interface;
 
-namespace Larder.Tests.Mocks.Repository;
+namespace Larder.Tests.Services.MockRepository;
 
 public class MockUnitConversionData : MockRepositoryBase,
                                         IUnitConversionRepository

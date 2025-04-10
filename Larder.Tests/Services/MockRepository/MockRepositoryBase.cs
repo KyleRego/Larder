@@ -1,4 +1,4 @@
-namespace Larder.Tests.Mocks.Repository;
+namespace Larder.Tests.Services.MockRepository;
 
 public abstract class MockRepositoryBase
 {

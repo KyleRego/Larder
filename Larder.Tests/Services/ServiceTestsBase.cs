@@ -1,10 +1,9 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Larder.Models;
 using Larder.Policies.Requirements;
 using Larder.Services;
-using Larder.Tests.Mocks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 
 namespace Larder.Tests.Services;
 

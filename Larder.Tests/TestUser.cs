@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace Larder.Tests.Mocks;
+namespace Larder.Tests;
 
 public static class TestUserData
 {

@@ -3,7 +3,7 @@ using Larder.Models.Builders;
 using Larder.Models.SortOptions;
 using Larder.Repository.Interface;
 
-namespace Larder.Tests.Mocks.Repository;
+namespace Larder.Tests.Services.MockRepository;
 
 public class MockItemData : MockRepositoryBase, IItemRepository
 {

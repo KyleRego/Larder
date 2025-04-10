@@ -1,9 +1,7 @@
-using Larder.Data;
-using Larder.Models;
-using Larder.Tests.Mocks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Larder.Data;
+using Larder.Models;
 
 namespace Larder.Tests.Repository;
 
