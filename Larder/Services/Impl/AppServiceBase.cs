@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace Larder.Services;
+namespace Larder.Services.Impl;
 
 public abstract class AppServiceBase(IServiceProviderWrapper serviceProvider)
 {

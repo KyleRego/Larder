@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Larder.Models;
 using Larder.Policies.Requirements;
-using Larder.Services;
+using Larder.Services.Impl;
 
 namespace Larder.Tests.Services;
 

@@ -1,4 +1,4 @@
-namespace Larder.Services;
+namespace Larder.Services.Impl;
 
 // Wraps IServiceProvider to be able to mock GetRequiredService<T>
 // "Extension methods may not be used in setup
