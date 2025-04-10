@@ -1,6 +1,6 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Larder.Data;
+using Larder.Repository.Impl;
 using Larder.Models;
 
 namespace Larder.Tests.Repository;

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Larder.Models;
 using Larder.Models.ItemComponents;
 
-namespace Larder.Data;
+namespace Larder.Repository.Impl;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options)
                                 : IdentityDbContext<ApplicationUser>(options)
