@@ -32,6 +32,7 @@ public abstract class ItemRepositoryTestsBase : RepositoryTestBase
         Item[] containers = [backpack];
 
         _numContainers += containers.Length;
+        _numTotalItems += _numContainers;
 
         _dbContext.AddRange(containers);
         _dbContext.SaveChanges();

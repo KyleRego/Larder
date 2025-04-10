@@ -29,13 +29,13 @@ public class Item(string userId, string name, string? description = null)
 
     public string? Description { get; set; } = description;
 
+    public string? ImagePath { get; set; }
+
     public required Quantity Quantity { get; set; }
 
     public Nutrition? Nutrition { get; set; }
 
     public ConsumedTime? ConsumedTime { get; set; }
-
-    // TODO: Allow uploading an image for the item
 
     public List<RecipeIngredient> RecipeIngredients { get; set; } = [];
     public List<Recipe> Recipes { get; set; } = [];
