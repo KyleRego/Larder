@@ -10,6 +10,9 @@ export default function ItemCard({item} : {item: ItemDto}) {
                     <p className="card-text">
                         {item.description}
                     </p>
+                    <div className="d-flex justify-content-center">
+                        <img src={`${import.meta.env.VITE_API_ORIGIN}/api/Items/${item.id}/image`} alt="Item Image" />
+                    </div>
                 </div>
             </div>;
 }

@@ -124,7 +124,7 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
         image.Mutate(x => x.Resize(new ResizeOptions
         {
             Size = new Size(128, 128),
-            Mode = ResizeMode.Max
+            Mode = ResizeMode.Crop
         }));
 
         using MemoryStream ms = new();
@@ -136,5 +136,20 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
         Item updatedItem = await _itemData.Update(item);
 
         return ItemDto.FromEntity(updatedItem);
+    }
+
+    public async Task<ItemImageDto?> GetItemImage(string itemId)
+    {
+        string userId = CurrentUserId();
+
+        Item item = await _itemData.Get(userId, itemId);
+
+        return (item.ImageData != null && item.ImageContentType != null)
+            ? new ItemImageDto()
+            {
+                ImageData = item.ImageData,
+                ImageContentType = item.ImageContentType
+            }
+            : null;
     }
 }

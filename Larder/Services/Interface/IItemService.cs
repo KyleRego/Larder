@@ -11,4 +11,5 @@ public interface IItemService : ICrudServiceBase<ItemDto, Item>
                                                 string? search);
     public Task<ItemDto> FindOrCreate(string name);
     public Task<ItemDto> SetItemImage(string itemId, IFormFile image);
+    public Task<ItemImageDto?> GetItemImage(string itemId);
 }

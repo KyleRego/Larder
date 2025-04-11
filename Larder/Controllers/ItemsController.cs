@@ -45,4 +45,14 @@ public class ItemsController(IItemService itemService)
 
         return new ApiResponse<ItemDto?>(result, "Item image updated", ApiResponseType.Success);
     }
+
+    [HttpGet("{id}/image")]
+    public async Task<IActionResult> GetItemImage(string id)
+    {
+        ItemImageDto? image = await _itemService.GetItemImage(id);
+        if (image == null)
+            return NotFound();
+
+        return File(image.ImageData, image.ImageContentType);
+    }
 }
