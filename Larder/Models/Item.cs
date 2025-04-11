@@ -29,7 +29,8 @@ public class Item(string userId, string name, string? description = null)
 
     public string? Description { get; set; } = description;
 
-    public byte[]? ThumbnailImage { get; set; }
+    public byte[]? ImageData { get; set; }
+    public string? ImageContentType { get; set; }
 
     public required Quantity Quantity { get; set; }
 

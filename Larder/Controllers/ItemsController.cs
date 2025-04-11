@@ -37,12 +37,12 @@ public class ItemsController(IItemService itemService)
     }
 
     [HttpPost("{id}/image")]
-    public async Task<IActionResult> UploadItemImage(string id, [FromForm] IFormFile imageFile)
+    public async Task<ActionResult<ApiResponse<ItemDto?>>> UploadItemImage(string id, [FromForm] IFormFile imageFile)
     {
         if (imageFile == null || imageFile.Length == 0) return BadRequest();
 
-        await _itemService.SetItemImage(id, imageFile);
+        ItemDto result = await _itemService.SetItemImage(id, imageFile);
 
-        return Ok();
+        return new ApiResponse<ItemDto?>(result, "Item image updated", ApiResponseType.Success);
     }
 }

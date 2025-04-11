@@ -120,17 +120,19 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
 
         Item item = await _itemData.Get(userId, itemId);
 
-        using var image = await Image.LoadAsync(imageFile.OpenReadStream());
+        using Image image = await Image.LoadAsync(imageFile.OpenReadStream());
         image.Mutate(x => x.Resize(new ResizeOptions
         {
             Size = new Size(128, 128),
             Mode = ResizeMode.Max
         }));
 
-        using var ms = new MemoryStream();
+        using MemoryStream ms = new();
         await image.SaveAsJpegAsync(ms);
 
-        item.ThumbnailImage = ms.ToArray();
+        item.ImageData = ms.ToArray();
+        item.ImageContentType = imageFile.ContentType;
+
         Item updatedItem = await _itemData.Update(item);
 
         return ItemDto.FromEntity(updatedItem);
