@@ -7,6 +7,7 @@ import NutritionCard from "../cards/NutritionCard";
 import ItemCard from "../cards/ItemCard";
 import BreadCrumbs from "../layout/Breadcrumbs";
 import ActionBar from "../layout/ActionBar";
+import SetItemImageCard from "../cards/SetItemImageCard";
 
 export default function Item() {
     const { id } = useParams<{id: string}>();
@@ -47,16 +48,11 @@ export default function Item() {
 
             <div className="my-2 container flex-grow-1 d-flex align-items-start column-gap-3 row-gap-3 flex-wrap my-4">
             
-                <div className="d-flex flex-row flex-md-column column-gap-3 align-items-center row-gap-3 flex-wrap">
-                    <ItemCard item={item} />
-                </div>
-                
-                {item.nutrition &&
-                    <div className="d-flex flex-row flex-md-column column-gap-3 align-items-center row-gap-3 flex-wrap">
-                        <NutritionCard nutrition={item.nutrition} />
-                        
-                    </div>
-                }
+                <ItemCard item={item} />
+
+                {item.nutrition && <NutritionCard nutrition={item.nutrition} />}
+
+                <SetItemImageCard itemId={item.id!} />
             </div>
 
             <ActionBar>

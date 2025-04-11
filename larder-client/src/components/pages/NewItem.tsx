@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import ItemForm from "../forms/ItemForm";
-import { ItemDto } from "../../types/ItemDto";
+import { ItemDto } from "../../types/dtos/ItemDto";
 import { useApiRequest } from "../../hooks/useApiRequest";
 import ActionBar from "../layout/ActionBar";
 import BreadCrumbs from "../layout/Breadcrumbs";
@@ -15,7 +15,6 @@ export default function NewItem() {
             name: "",
             description: "",
             nutrition: null,
-            ingredient: null,
             quantity: { amount: 1, unitId: null, unitName: null },
             consumedTime: null
         }

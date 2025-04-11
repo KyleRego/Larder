@@ -37,9 +37,9 @@ public class ItemsController(IItemService itemService)
     }
 
     [HttpPost("{id}/image")]
-    public async Task<IActionResult> UploadItemImage(string id, UploadItemImageDto dto)
+    public async Task<IActionResult> UploadItemImage(string id, [FromForm] IFormFile imageFile)
     {
-        IFormFile imageFile = dto.ImageFile;
+        if (imageFile == null || imageFile.Length == 0) return BadRequest();
 
         await _itemService.SetItemImage(id, imageFile);
 

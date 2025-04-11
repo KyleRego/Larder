@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { ItemDto } from "../../types/ItemDto";
-import { NutritionDto } from "../../types/NutritionDto";
+import { ItemDto } from "../../types/dtos/ItemDto";
+import { NutritionDto } from "../../types/dtos/NutritionDto";
 import QuantityInput from "./QuantityInput";
 import { QuantityDto } from "../../types/dtos/QuantityDto";
 import NutritionInput from "./NutritionInput";
