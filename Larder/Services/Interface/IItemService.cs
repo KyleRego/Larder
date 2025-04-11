@@ -10,4 +10,5 @@ public interface IItemService : ICrudServiceBase<ItemDto, Item>
     public Task<List<ItemDto>> GetItems(ItemSortOptions sortBy,
                                                 string? search);
     public Task<ItemDto> FindOrCreate(string name);
+    public Task<ItemDto> SetItemImage(string itemId, IFormFile image);
 }

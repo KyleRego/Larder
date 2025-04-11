@@ -12,7 +12,13 @@ public abstract class CrudRepositoryBase<T>(AppDbContext dbContext)
 {
     protected readonly AppDbContext _dbContext = dbContext;
     protected readonly DbSet<T> _dbSet = dbContext.Set<T>();
-    public abstract Task<T?> Get(string userId, string id);
+    public async Task<T> Get(string userId, string id)
+    {
+        return await GetOrNull(userId, id)
+            ?? throw new ApplicationException($"{typeof(T).Name} with ID {id} not found");
+    }
+
+    public abstract Task<T?> GetOrNull(string userId, string id);
 
     public async Task<T> Insert(T newEntity)
     {

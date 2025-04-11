@@ -65,7 +65,12 @@ public class MockUnitConversionData : MockRepositoryBase,
         return Task.FromResult(result);
     }
 
-    public Task<UnitConversion?> Get(string userId, string id)
+    public Task<UnitConversion> Get(string userId, string id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<UnitConversion?> GetOrNull(string userId, string id)
     {
         throw new NotImplementedException();
     }

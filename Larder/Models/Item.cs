@@ -29,7 +29,7 @@ public class Item(string userId, string name, string? description = null)
 
     public string? Description { get; set; } = description;
 
-    public string? ImagePath { get; set; }
+    public byte[]? ThumbnailImage { get; set; }
 
     public required Quantity Quantity { get; set; }
 

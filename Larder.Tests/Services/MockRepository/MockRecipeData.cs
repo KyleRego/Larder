@@ -47,11 +47,16 @@ public class MockRecipeData
         throw new NotImplementedException();
     }
 
-    public Task<Recipe?> Get(string userId, string id)
+    public Task<Recipe?> GetOrNull(string userId, string id)
     {
         return Task.FromResult(
             _recipes.FirstOrDefault(recipe =>
                 recipe.UserId == userId && id == recipe.Id));
+    }
+
+    public Task<Recipe> Get(string userId, string id)
+    {
+        return GetOrNull(userId, id)!;
     }
 
     public Task<List<Recipe>> GetAll(string userId, RecipeSortOptions sortOption = RecipeSortOptions.AnyOrder, string? search = null)

@@ -114,12 +114,17 @@ public class MockItemData : MockRepositoryBase, IItemRepository
         throw new NotImplementedException();
     }
 
-    public Task<Item?> Get(string userId, string id)
+    public Task<Item?> GetOrNull(string userId, string id)
     {
         Item? item = _items.FirstOrDefault(item =>
             item.Id == id && item.UserId == userId);
 
         return Task.FromResult(item);
+    }
+
+    public Task<Item> Get(string userId, string id)
+    {
+        return GetOrNull(userId, id)!;
     }
 
     public Task<List<Item>> GetAll(string userId,

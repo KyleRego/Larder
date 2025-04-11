@@ -35,12 +35,17 @@ public class MockUnitData : MockRepositoryBase, IUnitRepository
         throw new NotImplementedException();
     }
 
-    public Task<Unit?> Get(string userId, string id)
+    public Task<Unit?> GetOrNull(string userId, string id)
     {
         Unit? unit = units.FirstOrDefault(u =>
             u.UserId == userId && u.Id == id);
 
         return Task.FromResult(unit);
+    }
+
+    public Task<Unit> Get(string userId, string id)
+    {
+        return GetOrNull(userId, id)!;
     }
 
     public Task<List<Unit>> GetAll(string userId, UnitSortOptions sortOption = UnitSortOptions.AnyOrder, string? search = null)

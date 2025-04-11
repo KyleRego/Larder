@@ -17,7 +17,7 @@ public class RecipeRepository(AppDbContext dbContext)
     /// <param name="userId"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    public override async Task<Recipe?> Get(string userId, string id)
+    public override async Task<Recipe?> GetOrNull(string userId, string id)
     {
         return await _dbContext.Recipes
                                 .Include(r => r.RecipeIngredients)

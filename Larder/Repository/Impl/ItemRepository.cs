@@ -21,7 +21,7 @@ public class ItemRepository(AppDbContext dbContext)
         return newItem;
     }
 
-    public override async Task<Item?> Get(string userId, string id)
+    public override async Task<Item?> GetOrNull(string userId, string id)
     {
         return await _dbContext.Items
                                 .Include(item => item.Nutrition)

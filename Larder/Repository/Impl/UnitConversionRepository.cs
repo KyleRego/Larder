@@ -22,7 +22,7 @@ public class UnitConversionRepository(AppDbContext dbContext)
         );
     }
 
-    public async override Task<UnitConversion?> Get(string userId, string id)
+    public async override Task<UnitConversion?> GetOrNull(string userId, string id)
     {
         return await _dbContext.UnitConversions
                     .Include(uc => uc.Unit)

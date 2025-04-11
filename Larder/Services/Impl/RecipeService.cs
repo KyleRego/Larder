@@ -21,9 +21,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
     public async Task<ItemDto> CookRecipe(CookRecipeDto cookRecipeDto)
     {
         Recipe recipe = await _recipeData.Get(CurrentUserId(),
-                                            cookRecipeDto.RecipeId)
-            ?? throw new ApplicationException(
-                $"Recipe with ID {cookRecipeDto.RecipeId} not found");
+                                            cookRecipeDto.RecipeId);
 
         double foodServingsMade = cookRecipeDto.ServingsProduced;
         ItemBuilder cookedFoodBuilder = new ItemBuilder(CurrentUserId(), recipe.Name)
@@ -82,8 +80,7 @@ public class RecipeService(IServiceProviderWrapper serviceProvider,
                 .WithSodium(nutrition.MilligramsSodium * ingredientServingsCooked / foodServingsMade);
         }
 
-        ItemDto newFood = cookedFoodBuilder.WithNutrition(nutritionBuilder)
-                                        .BuildDto();
+        ItemDto newFood = cookedFoodBuilder.WithNutrition(nutritionBuilder).BuildDto();
         ItemDto insertedFood = await _itemService.Add(newFood);
 
         await _recipeData.Update(recipe);

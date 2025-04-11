@@ -10,7 +10,7 @@ public class UnitRepository(AppDbContext dbContext)
                             : CrudRepositoryBase<Unit>(dbContext),
                                 IUnitRepository
 {
-    public override async Task<Unit?> Get(string userId, string id)
+    public override async Task<Unit?> GetOrNull(string userId, string id)
     {
         return await _dbContext.Units
                         .Include(u => u.Conversions)

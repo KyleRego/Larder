@@ -4,6 +4,8 @@ using Larder.Models.Builders;
 using Larder.Models.SortOptions;
 using Larder.Repository.Interface;
 using Larder.Services.Interface;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace Larder.Services.Impl;
 
@@ -110,5 +112,27 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
         {
             builder.WithContainedItems(existing.Container.Items);
         }
+    }
+
+    public async Task<ItemDto> SetItemImage(string itemId, IFormFile imageFile)
+    {
+        string userId = CurrentUserId();
+
+        Item item = await _itemData.Get(userId, itemId);
+
+        using var image = await Image.LoadAsync(imageFile.OpenReadStream());
+        image.Mutate(x => x.Resize(new ResizeOptions
+        {
+            Size = new Size(128, 128),
+            Mode = ResizeMode.Max
+        }));
+
+        using var ms = new MemoryStream();
+        await image.SaveAsJpegAsync(ms);
+
+        item.ThumbnailImage = ms.ToArray();
+        Item updatedItem = await _itemData.Update(item);
+
+        return ItemDto.FromEntity(updatedItem);
     }
 }
