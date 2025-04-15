@@ -12,7 +12,7 @@ enum TableVersions {
     Ingredients = "Ingredients"
 }
 
-export default function Items() {
+export default function ItemsTables() {
     const [currentTable, setCurrentTable] = useState<TableVersions>(TableVersions.AllItems);
     const [searchParam, setSearchParam] = useState("");
 

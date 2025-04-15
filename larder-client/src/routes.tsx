@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import App from './components/layout/App';
 import Index from './components/pages/Index';
 import NewItem from './components/pages/NewItem';
-import Items from './components/pages/Items';
+import ItemsTables from './components/pages/Items';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Units from './components/pages/Units';
@@ -22,7 +22,7 @@ export const router = createBrowserRouter([{
         { path: '/', element: <Index /> },
         { path: '/login', element: <Login /> },
         { path: '/register', element: <Register />},
-        { path: '/items', element: <Items /> },
+        { path: '/items', element: <ItemsTables /> },
         { path: '/items/new', element: <NewItem /> },
         { path: '/items/:id', element: <Item /> },
         { path: '/items/:id/edit', element: <EditItem /> },
