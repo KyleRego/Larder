@@ -13,6 +13,7 @@ import Item from './components/pages/Item';
 import EditItem from './components/pages/EditItem';
 import EatFood from './components/pages/EatFood';
 import FoodLog from './components/pages/FoodLog';
+import ItemsGrid from './components/pages/ItemsGrid';
 
 export const router = createBrowserRouter([{
     path: "/",
@@ -30,6 +31,7 @@ export const router = createBrowserRouter([{
         { path: '/units/:id', element: <UnitPage /> },
         { path: '/units/:id/edit', element: <EditUnit /> },
         { path: '/units/new', element: <NewUnit /> },
-        { path: '/food-log', element: <FoodLog /> }
+        { path: '/food-log', element: <FoodLog /> },
+        { path: '/items-grid', element: <ItemsGrid /> }
     ]
 }]);
