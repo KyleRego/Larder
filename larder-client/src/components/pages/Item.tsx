@@ -61,7 +61,7 @@ export default function Item() {
                             <Link   className="btn btn-outline-light"
                                     to={`/items/${item.id}/edit`}
                                     title={`Edit ${item.name}`} >
-                                {`Edit ${item.name}`}
+                                Edit item
                             </Link>
 
                             {item.nutrition &&

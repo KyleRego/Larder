@@ -15,6 +15,11 @@ public class ItemBuilder(string userId, string name,
     private ConsumedTimeBuilder? _consumedTimeBuilder;
     private List<Item>? _containedItems;
 
+    public ItemBuilder(string userId, string name) : this(userId, name, null)
+    {
+        
+    }
+
     public ItemBuilder WithQuantity(Quantity quantity)
     {
         _quantity = quantity;

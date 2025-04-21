@@ -1,12 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+
 using Larder.Repository.Impl;
 using Larder.Repository.Interface;
 using Larder.Services.Impl;
 using Larder.Services.Interface;
 using Larder.Policies.Requirements;
 using Larder.Policies.Handlers;
+using Larder.Models;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +18,7 @@ builder.Services.AddAuthorizationBuilder()
                 .AddPolicy(UserCanAccessEntityRequirement.Name, policy =>
     policy.Requirements.Add(new UserCanAccessEntityRequirement()));
 
-builder.Services.AddIdentityApiEndpoints<Larder.Models.ApplicationUser>()
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
                 .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddControllers();
@@ -91,40 +93,34 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseCors(corsPolicyName);
-app.UseAuthorization();
 
-app.MapIdentityApi<Larder.Models.ApplicationUser>();
-app.MapPost("/logout", async (SignInManager<Larder.Models.ApplicationUser>
-                                                            signInManager) =>
-                                    {
-                                        await signInManager.SignOutAsync();
-                                        return Results.Ok();
-                                    })
-                                    .WithOpenApi()
-                                    .RequireAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapIdentityApi<ApplicationUser>();
+
+app.MapPost("/logout", async (SignInManager<ApplicationUser> signInManager) =>
+{
+    await signInManager.SignOutAsync();
+    return Results.Ok();
+})
+    .WithOpenApi()
+    .RequireAuthorization();
 
 app.MapGet("/", context =>
 {
     context.Response.Redirect("/swagger");
     return Task.CompletedTask;
 });
-
 app.MapControllers();
 
-using (IServiceScope scope = app.Services.CreateScope())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
-    AppDbContext? dbContext = scope.ServiceProvider.GetService<AppDbContext>();
-
-    if (dbContext == null)
-    {
-        throw new ApplicationException();
-    }
-    else
-    {
-        dbContext.Database.Migrate();    
-    }
+    using IServiceScope scope = app.Services.CreateScope();
+    AppDbContext dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.Migrate();
 }
 
 app.Run();
+
+public partial class Program { }
