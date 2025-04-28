@@ -5,10 +5,9 @@ using Larder.Repository.Interface;
 
 namespace Larder.Tests.Services.MockRepository;
 
-public class MockItemData : MockRepositoryBase, IItemRepository
+public class MockItemData : MockCrudRepositoryBase<Item>, IItemRepository
 {
     protected readonly IUnitRepository _unitData;
-    protected readonly List<Item> _items = [];
 
     public MockItemData(IUnitRepository unitData)
     {
@@ -98,15 +97,10 @@ public class MockItemData : MockRepositoryBase, IItemRepository
                 .WithId("backpack")
                 .WithContainedItems([pencil, notebook]).Build();
 
-        _items.AddRange([
+        _records.AddRange([
             apples, peanutButter, wheatBread, butter, rice, chickenLegQuarters,
             pencil, notebook, backpack
         ]);
-    }
-
-    public Task Delete(Item entity)
-    {
-        throw new NotImplementedException();
     }
 
     public Task<Item> FindOrCreate(string userId, string name)
@@ -114,30 +108,17 @@ public class MockItemData : MockRepositoryBase, IItemRepository
         throw new NotImplementedException();
     }
 
-    public Task<Item?> GetOrNull(string userId, string id)
-    {
-        Item? item = _items.FirstOrDefault(item =>
-            item.Id == id && item.UserId == userId);
-
-        return Task.FromResult(item);
-    }
-
-    public Task<Item> Get(string userId, string id)
-    {
-        return GetOrNull(userId, id)!;
-    }
-
     public Task<List<Item>> GetAll(string userId,
                                 ItemSortOptions sortOption = ItemSortOptions.AnyOrder,
                                 string? search = null)
     {
-        return Task.FromResult<List<Item>>([.. _items]);
+        return Task.FromResult<List<Item>>([.. _records]);
     }
 
     public Task<List<Item>> GetAllContainers(string userId)
     {
         return Task.FromResult<List<Item>>(
-            [.. _items.Where(item => item.Container != null)]);
+            [.. _records.Where(item => item.Container != null)]);
     }
 
     public Task<List<Item>> GetAllFoods(
@@ -159,20 +140,4 @@ public class MockItemData : MockRepositoryBase, IItemRepository
         throw new NotImplementedException();
     }
 
-    public Task<Item> Insert(Item newEntity)
-    {
-        _items.Add(newEntity);
-
-        return Task.FromResult(newEntity);
-    }
-
-    public Task<List<Item>> InsertAll(List<Item> newEntities)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Item> Update(Item editedEntity)
-    {
-        return Task.FromResult(editedEntity);
-    }
 }

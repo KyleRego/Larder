@@ -4,10 +4,8 @@ using Larder.Repository.Interface;
 
 namespace Larder.Tests.Services.MockRepository;
 
-public class MockUnitData : MockRepositoryBase, IUnitRepository
+public class MockUnitData : MockCrudRepositoryBase<Unit>, IUnitRepository
 {
-    private readonly List<Unit> units = [];
-
     public MockUnitData()
     {
         var unitTups = new (string Name, UnitType Type)[]
@@ -23,29 +21,11 @@ public class MockUnitData : MockRepositoryBase, IUnitRepository
 
         foreach (var (name, type) in unitTups)
         {
-            units.Add(new Unit(testUserId, name, type)
+            _records.Add(new Unit(testUserId, name, type)
             {
                 Id = name.Replace(" ", "-")
             });
         }
-    }
-
-    public Task Delete(Unit entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Unit?> GetOrNull(string userId, string id)
-    {
-        Unit? unit = units.FirstOrDefault(u =>
-            u.UserId == userId && u.Id == id);
-
-        return Task.FromResult(unit);
-    }
-
-    public Task<Unit> Get(string userId, string id)
-    {
-        return GetOrNull(userId, id)!;
     }
 
     public Task<List<Unit>> GetAll(string userId, UnitSortOptions sortOption = UnitSortOptions.AnyOrder, string? search = null)
@@ -55,27 +35,12 @@ public class MockUnitData : MockRepositoryBase, IUnitRepository
 
     public Task<Unit?> GetUnitOnly(string userId, string id)
     {
-        Unit? unit = units.FirstOrDefault(u =>
+        Unit? unit = _records.FirstOrDefault(u =>
             u.UserId == userId && u.Id == id);
 
         if (unit != null)
             Assert.Empty(unit.Conversions);
 
         return Task.FromResult(unit);
-    }
-
-    public Task<Unit> Insert(Unit newEntity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<Unit>> InsertAll(List<Unit> newEntities)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Unit> Update(Unit editedEntity)
-    {
-        throw new NotImplementedException();
     }
 }

@@ -10,4 +10,5 @@ public interface ICrudRepositoryBase<T> where T : UserOwnedEntity
     public Task<List<T>> InsertAll(List<T> newEntities);
     public Task<T> Update(T editedEntity);
     public Task Delete(T entity);
+    public void Detach(T entity);
 }

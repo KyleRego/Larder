@@ -1,8 +1,6 @@
 using System.Net;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Larder.Models;
-using Larder.Repository.Impl;
 
 namespace Larder.IntegrationTests;
 
@@ -11,9 +9,9 @@ public abstract class IntegrationTestBase : IClassFixture<TestAppFactory<Program
     protected readonly HttpClient _client;
     protected readonly IServiceScope _scope;
     protected readonly AppDbContext _dbContext;
-    protected readonly string _testUserEmail = "testuser@example.com";
-    protected readonly string _testUserPassword = "Test1234!";
     protected ApplicationUser _testUser = null!;
+    private readonly string _testUserEmail = "testuser@example.com";
+    private readonly string _testUserPassword = "Test1234!";
 
     protected IntegrationTestBase(TestAppFactory<Program> factory)
     {

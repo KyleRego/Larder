@@ -1,6 +1,3 @@
-using Larder.Controllers;
-using Larder.Dtos;
-
 namespace Larder.IntegrationTests.Items;
 
 public class CreateItemTest (TestAppFactory<Program> factory) : IntegrationTestBase(factory)

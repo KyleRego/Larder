@@ -5,19 +5,16 @@ using Larder.Repository.Interface;
 
 namespace Larder.Tests.Services.MockRepository;
 
-public class MockRecipeData 
-    : MockRepositoryBase, IRecipeRepository
+public class MockRecipeData : MockCrudRepositoryBase<Recipe>, IRecipeRepository
 {
     private readonly IItemRepository _itemData;
     private readonly IUnitRepository _unitData;
-    private readonly List<Recipe> _recipes;
 
     public MockRecipeData(IItemRepository itemData,
                             IUnitRepository unitData)
     {
         _itemData = itemData;
         _unitData = unitData;
-        _recipes = [];
 
         Unit tablespoons = Helpers.Untask(
             _unitData.Get(testUserId, "tablespoons"));
@@ -38,44 +35,12 @@ public class MockRecipeData
                             .WithIngredient(chickenLegQuarters, 4)
                             .Build();
 
-        _recipes.Add(chickenAndRice);
+        _records.Add(chickenAndRice);
                                 
-    }
-
-    public Task Delete(Recipe entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Recipe?> GetOrNull(string userId, string id)
-    {
-        return Task.FromResult(
-            _recipes.FirstOrDefault(recipe =>
-                recipe.UserId == userId && id == recipe.Id));
-    }
-
-    public Task<Recipe> Get(string userId, string id)
-    {
-        return GetOrNull(userId, id)!;
     }
 
     public Task<List<Recipe>> GetAll(string userId, RecipeSortOptions sortOption = RecipeSortOptions.AnyOrder, string? search = null)
     {
         throw new NotImplementedException();
-    }
-
-    public Task<Recipe> Insert(Recipe newEntity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<Recipe>> InsertAll(List<Recipe> newEntities)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Recipe> Update(Recipe editedEntity)
-    {
-        return Task.FromResult(editedEntity);
     }
 }

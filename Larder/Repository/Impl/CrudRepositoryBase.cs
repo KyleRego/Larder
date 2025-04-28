@@ -60,4 +60,9 @@ public abstract class CrudRepositoryBase<T>(AppDbContext dbContext)
 
         await _dbContext.SaveChangesAsync();
     }
+
+    public void Detach(T entity)
+    {
+        _dbContext.Entry(entity).State = EntityState.Detached;
+    }
 }

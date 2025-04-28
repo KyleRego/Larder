@@ -70,6 +70,7 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
         string userId = CurrentUserId();
 
         Item? existing = (dto.Id != null) ? await _itemData.Get(userId, dto.Id) : null;
+        if (existing != null) _itemData.Detach(existing);
 
         ItemBuilder builder = new(CurrentUserId(), dto.Name, dto.Description);
 

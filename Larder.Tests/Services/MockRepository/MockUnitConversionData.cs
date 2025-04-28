@@ -3,10 +3,9 @@ using Larder.Repository.Interface;
 
 namespace Larder.Tests.Services.MockRepository;
 
-public class MockUnitConversionData : MockRepositoryBase,
+public class MockUnitConversionData : MockCrudRepositoryBase<UnitConversion>,
                                         IUnitConversionRepository
 {
-    private readonly List<UnitConversion> unitConversions = [];
     private readonly IUnitRepository _unitData;
     public MockUnitConversionData(IUnitRepository unitData)
     {
@@ -42,51 +41,21 @@ public class MockUnitConversionData : MockRepositoryBase,
                 Id = "butter-sticks-to-grams"
             };
 
-        unitConversions.AddRange(
+        _records.AddRange(
             [gramsToMilligrams,
             tablespoonsToButtersticks,
             gramsToButtersticks]);
     }
 
-    public Task Delete(UnitConversion entity)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<UnitConversion?> FindByUnitIdsEitherWay
         (string userId, string unitId1, string unitId2)
     {
-        UnitConversion? result = unitConversions
+        UnitConversion? result = _records
             .FirstOrDefault(uc => uc.UserId == userId &&
                 (uc.UnitId == unitId1 && uc.TargetUnitId == unitId2 ||
                 uc.UnitId == unitId2 && uc.TargetUnitId == unitId1)
         );
 
         return Task.FromResult(result);
-    }
-
-    public Task<UnitConversion> Get(string userId, string id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<UnitConversion?> GetOrNull(string userId, string id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<UnitConversion> Insert(UnitConversion newEntity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<UnitConversion>> InsertAll(List<UnitConversion> newEntities)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<UnitConversion> Update(UnitConversion editedEntity)
-    {
-        throw new NotImplementedException();
     }
 }

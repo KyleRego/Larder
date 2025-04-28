@@ -1,7 +1,3 @@
-using Larder.Dtos;
-using Larder.Models;
-using Larder.Models.Builders;
-
 namespace Larder.IntegrationTests.Items;
 
 public class ItemIndexTest(TestAppFactory<Program> factory) : IntegrationTestBase(factory)
