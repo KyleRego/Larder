@@ -6,7 +6,7 @@ using Larder.Repository.Impl;
 
 namespace Larder.IntegrationTests;
 
-public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram>
+public class TestAppFactory<TProgram> : WebApplicationFactory<TProgram>
                                                             where TProgram : class
 {
     private SqliteConnection _connection = null!;

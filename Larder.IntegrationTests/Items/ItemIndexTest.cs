@@ -1,11 +1,10 @@
-using System.Net.Http.Json;
 using Larder.Dtos;
 using Larder.Models;
 using Larder.Models.Builders;
 
 namespace Larder.IntegrationTests.Items;
 
-public class ItemIndexTest(CustomWebApplicationFactory<Program> factory) : IntegrationTestBase(factory)
+public class ItemIndexTest(TestAppFactory<Program> factory) : IntegrationTestBase(factory)
 {
     [Fact]
     public async Task GetItems_ReturnsSeededItem()

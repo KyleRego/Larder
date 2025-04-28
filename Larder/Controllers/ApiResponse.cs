@@ -6,6 +6,12 @@ public class ApiResponse<T>
     public string Message { get; set; }
     public ApiResponseType Type { get; set; }
 
+    // This parameterless constructor is needed for System.Text.Json deserialization
+    public ApiResponse()
+    {
+        Message = "";
+    }
+
     public ApiResponse(T data, string msg, ApiResponseType type)
     {
         Data = data;

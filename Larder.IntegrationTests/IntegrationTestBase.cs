@@ -6,7 +6,7 @@ using Larder.Repository.Impl;
 
 namespace Larder.IntegrationTests;
 
-public abstract class IntegrationTestBase : IClassFixture<CustomWebApplicationFactory<Program>>
+public abstract class IntegrationTestBase : IClassFixture<TestAppFactory<Program>>
 {
     protected readonly HttpClient _client;
     protected readonly IServiceScope _scope;
@@ -15,7 +15,7 @@ public abstract class IntegrationTestBase : IClassFixture<CustomWebApplicationFa
     protected readonly string _testUserPassword = "Test1234!";
     protected ApplicationUser _testUser = null!;
 
-    protected IntegrationTestBase(CustomWebApplicationFactory<Program> factory)
+    protected IntegrationTestBase(TestAppFactory<Program> factory)
     {
         _client = factory.CreateClient(new WebApplicationFactoryClientOptions
         {
