@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Larder.Controllers;
 
 public class ApiResponse<T>
@@ -6,16 +8,11 @@ public class ApiResponse<T>
     public string Message { get; set; }
     public ApiResponseType Type { get; set; }
 
-    // This parameterless constructor is needed for System.Text.Json deserialization
-    public ApiResponse()
-    {
-        Message = "";
-    }
-
-    public ApiResponse(T data, string msg, ApiResponseType type)
+    [JsonConstructor]
+    public ApiResponse(T data, string message, ApiResponseType type)
     {
         Data = data;
-        Message = msg;
+        Message = message;
         Type = type;
     }
 
