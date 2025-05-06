@@ -1,4 +1,4 @@
-namespace Larder.IntegrationTests.Items;
+namespace Larder.RequestTests.Items;
 
 public class UpdateItemTests(TestAppFactory<Program> factory) : IntegrationTestBase(factory)
 {

@@ -2,7 +2,7 @@ using System.Net;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 
-namespace Larder.IntegrationTests;
+namespace Larder.RequestTests;
 
 public abstract class IntegrationTestBase : IClassFixture<TestAppFactory<Program>>
 {

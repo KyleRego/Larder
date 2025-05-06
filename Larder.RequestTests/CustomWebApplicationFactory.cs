@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-namespace Larder.IntegrationTests;
+namespace Larder.RequestTests;
 
 public class TestAppFactory<TProgram> : WebApplicationFactory<TProgram>
                                                             where TProgram : class
