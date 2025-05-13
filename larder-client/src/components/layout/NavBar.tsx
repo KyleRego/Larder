@@ -6,7 +6,7 @@ import { MessageContext } from "../../contexts/MessageContext";
 import { ApiResponseType } from "../../types/ApiResponse";
 
 export function NavBar() {
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(true);
     const { authed, setAuthed } = useContext(AuthedContext);
     const navigate = useNavigate();
     const { setMessage } = useContext(MessageContext);
