@@ -3,23 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using Larder.Dtos;
 using Larder.Services.Interface;
 using Larder.Models.SortOptions;
+using Larder.Models;
 
 namespace Larder.Controllers;
 
 public class RecipesController(IRecipeService recipeService)
-                                        : AppControllerBase
+                                        : CrudControllerBase<RecipeDto, Recipe>(recipeService)
 {
     private readonly IRecipeService _recipeService = recipeService;
-
-    [HttpGet("{id}")]
-    public async Task<ActionResult<RecipeDto>> Show(string id)
-    {
-        RecipeDto? recipe = await _recipeService.Get(id);
-
-        if (recipe == null) return NotFound();
-
-        return recipe;
-    }
 
     [HttpGet]
     public async Task<List<RecipeDto>> Index(string? sortOrder, string? search)
@@ -31,36 +22,6 @@ public class RecipesController(IRecipeService recipeService)
         else
         {
             return await _recipeService.GetRecipes(RecipeSortOptions.AnyOrder, search);
-        }
-    }
-
-    [HttpPost]
-    public async Task<ActionResult<RecipeDto>> Create(RecipeDto recipe)
-    {
-        return await _recipeService.Add(recipe);
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(string id)
-    {
-        await _recipeService.Delete(id);
-
-        return Ok();
-    }
-
-    [HttpPut("{id}")]
-    public async Task<ActionResult<RecipeDto>>
-                            Update([FromBody]RecipeDto recipe, string id)
-    {
-        if (recipe.Id != id) return BadRequest();
-
-        try
-        {
-            return await _recipeService.Update(recipe);
-        }
-        catch (ApplicationException)
-        {
-            return NotFound();
         }
     }
 }

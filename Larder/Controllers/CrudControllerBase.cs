@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using Larder.Dtos;
 using Larder.Models;
@@ -15,6 +17,31 @@ public abstract class CrudControllerBase<TDto, TEntity>
     private readonly ICrudServiceBase<TDto, TEntity> _crudService = crudService;
     private static readonly string entityName =
         Regex.Replace(typeof(TEntity).Name, "(?<!^)([A-Z])", " $1").ToLower();
+
+    [HttpGet("meta")]
+    public ActionResult<IEnumerable<FieldMeta>> GetMeta()
+    {
+        var dtoType = typeof(TDto);
+        var props = dtoType
+            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+            .Select(p =>
+            {
+                var required = p.GetCustomAttribute<RequiredAttribute>() != null;
+                var strLen   = p.GetCustomAttribute<StringLengthAttribute>()?.MaximumLength;
+                var isEnum   = p.PropertyType.IsEnum;
+                return new FieldMeta
+                {
+                    Name       = p.Name,
+                    DataType   = isEnum 
+                                   ? $"Enum:{p.PropertyType.Name}"
+                                   : p.PropertyType.Name,
+                    IsRequired = required
+                };
+            })
+            .ToList();
+
+        return Ok(props);
+    }
 
     [HttpPost]
     public async Task<ActionResult<ApiResponse<TDto?>>> Create(TDto dto)

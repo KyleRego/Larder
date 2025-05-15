@@ -9,7 +9,7 @@ namespace Larder.Models;
 /// </summary>
 public class Recipe(string userId, string name) : UserOwnedEntity(userId)
 {
-    [Required(AllowEmptyStrings = false)]
+    [Required]
     public string Name { get; set; } = name;
 
     public List<RecipeIngredient> RecipeIngredients { get; set; } = [];
