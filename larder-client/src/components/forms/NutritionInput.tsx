@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NutritionDto } from "../../types/NutritionDto";
+import { NutritionDto } from "../../types/dtos/NutritionDto";
 import QuantityInput from "./QuantityInput";
 import { QuantityDto } from "../../types/dtos/QuantityDto";
 
