@@ -13,4 +13,11 @@ public abstract class AppServiceBase(IServiceProviderWrapper serviceProvider)
                             .FindFirst(ClaimTypes.NameIdentifier)?.Value
             ?? throw new ApplicationException("Current user id is missing");
     }
+
+    protected void RestrictAccessToMe()
+    {
+        string? email = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
+
+        if (email != "regoky@outlook.com") throw new ApplicationException("This feature is restricted");
+    }
 }

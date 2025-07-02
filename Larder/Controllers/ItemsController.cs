@@ -41,9 +41,15 @@ public class ItemsController(IItemService itemService)
     {
         if (imageFile == null || imageFile.Length == 0) return BadRequest();
 
-        ItemDto result = await _itemService.SetItemImage(id, imageFile);
-
-        return new ApiResponse<ItemDto?>(result, "Item image updated", ApiResponseType.Success);
+        try
+        {
+            ItemDto result = await _itemService.SetItemImage(id, imageFile);
+            return new ApiResponse<ItemDto?>(result, "Item image updated", ApiResponseType.Success);
+        }
+        catch (ApplicationException e)
+        {
+            return UnprocessableEntity(FromError<ItemDto>(e));
+        }
     }
 
     [HttpGet("{id}/image")]

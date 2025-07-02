@@ -117,6 +117,8 @@ public class ItemService(IServiceProviderWrapper serviceProvider,
 
     public async Task<ItemDto> SetItemImage(string itemId, IFormFile imageFile)
     {
+        RestrictAccessToMe();
+
         string userId = CurrentUserId();
 
         Item item = await _itemData.Get(userId, itemId);
